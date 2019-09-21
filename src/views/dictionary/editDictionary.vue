@@ -4,7 +4,9 @@
             <h3>[ci tiao ming cheng]</h3>
             <h1>词条名称</h1>
         </div>
-        <div></div>
+        <div>
+            <h4 class="block">词条分类</h4>
+        </div>
         <div style="display: flex" v-show="false">
             <div id="demo" style="width: 100%;padding: 20px">
                 <template v-for="item in wiki">
@@ -37,17 +39,6 @@
         name: 'editor',
         data() {
             return {
-                form: {
-                    title: '',
-                    plate1: '',
-                    plate2: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
                 isInit: false,
                 formLabelWidth: '120px',
                 dialogVisible: true,
@@ -308,5 +299,8 @@
         width: 100px;
         float: right;
         margin-right: 10px;
+    }
+    .block{
+        width: 100px;
     }
 </style>
