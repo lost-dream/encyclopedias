@@ -33,7 +33,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // if the custom status is not true, it is judged as an error.
-    if (!res.status) {
+    if (res.status === 'fail') {
       Message({
         message: res.msg || 'error',
         type: 'error',
