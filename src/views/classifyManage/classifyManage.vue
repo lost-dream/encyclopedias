@@ -28,14 +28,11 @@ export default {
 	},
 	methods: {
 		getList() {
-			console.log(11111)
 			categoryAttributeTemplate({
 				pageNumber:1,
 				pageSize:10
 			}).then(res =>{
-                // 注册成功
-                alert('注册成功!')
-                this.$router.push('/login')
+                
                 console.log(res)
             })
             .catch(res=>{

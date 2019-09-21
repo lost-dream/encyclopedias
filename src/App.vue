@@ -14,13 +14,11 @@
   </div>
 </template>
 <script>
-import NavMenu from '@/components/NavMenu'
 import Header from '@/components/TopHeader'
 
 export default {
   name: 'app',
   components: {
-    'navmenu': NavMenu,
     'vheader': Header
   }
 }
