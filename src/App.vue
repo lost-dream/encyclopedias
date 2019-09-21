@@ -5,9 +5,6 @@
         <vheader />
       </el-header>
       <el-container>
-        <el-aside width="200px">
-          <navmenu></navmenu>
-        </el-aside>
         <el-main>
         <!-- Body -->
          <router-view></router-view>

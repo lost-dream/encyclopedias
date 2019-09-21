@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import classifyManagerRouter from './classifyManagerRouter'
+import dictionaryRouter from './dictionaryRouter'
 
 
 
@@ -11,7 +12,9 @@ Vue.use(Router)
  * all roles can be accessed
  */
 export const constantRoutes = [
-	...classifyManagerRouter
+	...classifyManagerRouter,
+    ...dictionaryRouter
+
 ]
 
 /**
