@@ -9,11 +9,11 @@ module.exports = [
 	
 	//二级路由
 	{
-		name: 'Form',
+		name: '多级路由',
 		id: 'form',
 		sub: [
-			{name: 'Radio 单选框',componentName: 'FormRadio'},
-			{name: 'Checkbox 多选框',componentName: 'FormCheckbox'}
+			{name: '子路由1',componentName: 'classifyManager1'},
+			{name: '子路由2',componentName: 'classifyManager2'}
 		]
 	}
 ]

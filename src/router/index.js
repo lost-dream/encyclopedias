@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import classifyManagerRouter from './classifyManagerRouter'
 import categoryManagerRouter from './categoryManagerRouter'
+import dictionaryRouter from './dictionaryRouter'
 
 
 
@@ -13,7 +14,8 @@ Vue.use(Router)
  */
 export const constantRoutes = [
   ...classifyManagerRouter,
-  ...categoryManagerRouter
+  ...categoryManagerRouter,
+  ...dictionaryRouter
 ]
 
 /**

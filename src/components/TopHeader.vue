@@ -3,17 +3,17 @@
     <el-col :span="24"
     	
       <div class="head-wrap">
-      	
-      	信息百科
+      	<img src="../assets/logo.png"/>
+      	<span class="title">信息百科</span>
       	<el-input
       		style='width: 500px;'
 			    placeholder="请输入内容"
 			    prefix-icon="el-icon-search"
 			    clearable
-			    v-model="searchContent">
+			    v-model="content">
 			  </el-input>
-      	<el-button style='margin: 0 20px;' type="primary">进入词条</el-button>
-      	<el-button type="danger">全站搜索</el-button>
+      	<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>
+      	<el-button @click="searchTotalStation" type="danger">全站搜索</el-button>
       </div>
     </el-col>
   </el-row>
@@ -22,20 +22,35 @@
 	export default {
     data () {
       return {
-        searchContent: ''
+        content: ''
       }
     },
     methods: {
-      
+      search() {
+      	this.content = this.content.trim()
+      	this.content!=''?this.$message('接口开发中'):this.$message('请输入内容')
+      },
+      searchTotalStation() {
+      	this.content = this.content.trim()
+      	this.content!=''?this.$message('接口开发中'):this.$message('请输入内容')
+      }
     }
   }
 </script>
 	
-<style scoped>
+<style lang="scss" scoped>
 
 .head-wrap{
 	color: #338ce6;
 	text-align: center;
+	margin-top: 20px;
+	img{
+		vertical-align: middle;
+		margin-right: 5px;
+	}
+	.title{
+		margin-right: 75px;
+	}
 }
 .el-button--primary{
 	background: #6b9cec;
