@@ -32,7 +32,6 @@ export default {
 				pageNumber:1,
 				pageSize:10
 			}).then(res =>{
-                
                 console.log(res)
             })
             .catch(res=>{
