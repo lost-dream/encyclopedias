@@ -33,14 +33,14 @@ export default {
 				pageNumber:1,
 				pageSize:10
 			}).then(res =>{
-                // 注册成功
-                alert('注册成功!')
-                this.$router.push('/login')
-                console.log(res)
-            })
-            .catch(res=>{
-            	console.log(res)
-            })
+				// 注册成功
+				alert('注册成功!')
+				this.$router.push('/login')
+				console.log(res)
+			})
+			.catch(res=>{
+				console.log(res)
+			})
 		},
 		
 	}
