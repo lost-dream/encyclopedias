@@ -10,6 +10,9 @@ import {categoryAttributeTemplate} from '@/api/classifyManager/index.js'
 export default {
 	name: 'classifyManage',
 	data() {
+		return {
+			
+		}
 		
 	},
 	watch: {
