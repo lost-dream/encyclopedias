@@ -7,11 +7,17 @@
       unique-opened
       @open="handleOpen"
       @close="handleClose"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
-
-      <el-submenu v-for="item in menu" :index="item.id" :key="item.id">
+      background-color="#fff"
+      text-color="black"
+      active-text-color="#F56C6C">
+			<!--一级路由-->
+			<el-menu-item v-if="item.componentName" v-for="item in menu" :index="item.componentName" :key="item.componentName">
+        <template slot="title">
+          <span v-text="item.name"></span>
+        </template>
+      </el-menu-item>
+			<!--二级路由-->
+			<el-submenu v-if="item.id" v-for="item in menu" :index="item.id" :key="item.id">
         <template slot="title">
           <span v-text="item.name"></span>
         </template>
@@ -20,7 +26,8 @@
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-
+			
+			
     </el-menu>
   </el-col>
 </el-row>
