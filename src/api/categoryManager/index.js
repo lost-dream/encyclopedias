@@ -8,6 +8,14 @@ function getTreeData(data) {
   })
 }
 
+function getCategoryList(data) {
+  return request({
+    url: '/wiki-backend/api/category/list',
+    method: 'post',
+    data
+  })
+}
+
 function updateCategory(data) {
   return request({
     url: '/wiki-backend/api/category/update',
@@ -32,9 +40,19 @@ function deleteCategory(data) {
   })
 }
 
+function checkCategory(data) {
+  return request({
+    url: '/wiki-backend/api/category/info',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   getTreeData,
+  getCategoryList,
   updateCategory,
   createCategory,
-  deleteCategory
+  deleteCategory,
+  checkCategory
 }
