@@ -67,25 +67,25 @@
     <el-dialog 
       :title="diagTitle.text" 
       :visible.sync="dialogFormVisible">
-      <el-form :model="form" :label-position="labelPos">
-        <el-form-item label="上级目录" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules" :label-position="labelPos">
+        <el-form-item label="上级目录" :label-width="formLabelWidth" prop="parentId">
           <el-cascader
             :value="form.parentId"
             :options="options"
             :props="cascaderProps"
             @change="handleChange"></el-cascader>
         </el-form-item>
-        <el-form-item label="分类名称" :label-width="formLabelWidth">
+        <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="分类编码" :label-width="formLabelWidth">
+        <el-form-item label="分类编码" :label-width="formLabelWidth" prop="code">
           <el-input v-model="form.code" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" :label-width="formLabelWidth">
           <el-input v-model="form.descM" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="排序" :label-width="formLabelWidth">
-          <el-input v-model="form.sort" autocomplete="off"></el-input>
+        <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
+          <el-input v-model.number="form.sort" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -122,7 +122,7 @@ export default{
       // },
       dialogFormVisible: false, // diag可见性
       formLabelWidth: '80px',
-      labelPos: 'left',
+      labelPos: 'right',
       diagTitle: {edit: '编辑分类', add: '添加分类', text: ''},
       form: {
         id: undefined,
@@ -135,26 +135,20 @@ export default{
       },
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入分类名称', trigger: 'blur' },
+          { min: 1, max: 18, message: '长度需在 1 到 18 个字符', trigger: 'blur' }
         ],
-        region: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
+        parentId: [
+          { required: true, message: '请指定父级分类', trigger: 'blur' },
         ],
-        date1: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        grade: [
+          { type: 'number', required: true, message: '排序值必须为数字', trigger: 'blur' }
         ],
-        date2: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        code: [
+          { type: 'number', message: '分类编码必须为数字', trigger: 'blur' }
         ],
-        type: [
-          { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-        ],
-        resource: [
-          { required: true, message: '请选择活动资源', trigger: 'change' }
-        ],
-        desc: [
-          { required: true, message: '请填写活动形式', trigger: 'blur' }
+        sort: [
+          { type: 'number', message: '排序值必须为数字', trigger: 'blur' }
         ]
       },
       cascaderProps: {
@@ -328,7 +322,6 @@ export default{
     // 级联选择父级category
     handleChange(e){
       console.log(e)
-      // this.form.parentId = e[e.length - 1]
     },
     // 处理category事件
     clickSlot(type, _data){
@@ -339,12 +332,15 @@ export default{
         case 'edit': {
           _.merge(this.form, _data)
           this.form =  _.pick(this.form, ['id', 'parentId', 'code', 'name', 'grade', 'sort', 'descM'])
+          // 指定当前节点及自己下面的节点不可选为自己的父级
+          this.disableNode(this.options, _data.id)
 
           this.dialogFormVisible = true;
 
           break;
         }
         case 'add': {
+          this.form = {}
           _.merge(this.form, {
             parentId: _data.id,
             grade: _data.grade + 1
@@ -394,6 +390,18 @@ export default{
       })
       .catch(e => {
         this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
+      })
+    },
+    // 禁用某节点
+    disableNode(arr, id){
+      arr.forEach(x => {
+        x.disabled = x.id == id
+        x.children && x.children.forEach(y => {
+          y.disabled = x.id == id || y.id == id
+          y.children && y.children.forEach(z => {
+            z.disabled = x.id == id || y.id == id || z.id == id
+          })
+        })
       })
     }
 	}
