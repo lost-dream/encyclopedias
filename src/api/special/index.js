@@ -19,7 +19,7 @@ export function deleteSpecial(data) {
 export function specialInfo(data) {
   return request({
     url: '/wiki-backend/api/special/info',
-    method: 'get',
+    method: 'post',
     data
   })
 }

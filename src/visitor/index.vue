@@ -5,6 +5,10 @@
       <el-container>
       	
         <el-main>
+        	<!--面包屑导航-->
+	      	<el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
+	            <el-breadcrumb-item v-for="item in levelList" :to="item.path">{{item.meta.title}}</el-breadcrumb-item>
+	       </el-breadcrumb>
         <!-- Body -->
          <router-view></router-view>
       </el-main>
@@ -18,7 +22,32 @@ export default {
   name: 'visitor',
   components: {
     
-  }
+  },
+  data() {
+	    return {
+	        levelList: []
+	    }
+	},
+	watch: {
+	    $route() {
+	        this.getBreadcrumb()
+	    }
+	},
+	created(){
+	    this.getBreadcrumb()
+	},
+	methods:{
+	    getBreadcrumb() {//停留在首页时点击首页会报错
+	        let matched = this.$route.matched.filter(item => item.name)
+	        matched.splice(0,1)
+	        const first = matched[0];
+	        if (first && first.name.trim() !== 'index') {
+	            matched = [{ path: '/index', meta: { title: '首页' }}].concat(matched)
+	            
+	        }
+	        this.levelList = matched
+	    }
+	}
 }
 
 </script>

@@ -28,6 +28,7 @@ export default {
 <style>
 .header {
   line-height: 60px;
+  height: auto !important;
 }
 html,body,#app{
 	height: 100vh;
