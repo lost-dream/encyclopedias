@@ -41,7 +41,7 @@ export function resetRouter() {
   router.matcher = newRouter.matcher // reset router
 }
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || '军事百科'
+  document.title = to.meta.title || '信息百科'
   next()
 })
 export default router
