@@ -11,7 +11,8 @@
         :props="defaultProps"
         :expand-on-click-node="false"
         highlight-current
-        :node-key="NODE_KEY">
+        :node-key="NODE_KEY"
+        :default-expanded-keys="expanded">
 				<div class="comp-tr-node" slot-scope="{ node, data }">
 					<!-- 编辑状态 -->
 					<template v-if="node.isEdit">
@@ -112,7 +113,8 @@ export default{
 			defaultProps: {// 默认设置
 				children: 'children',
 				label: 'name'
-			},
+      },
+      expanded: [], // 默认展开
 			// initParam: {// 新增参数
 			// 	name: '新增节点',
 			// 	parentId: 0,
@@ -175,7 +177,7 @@ export default{
 			console.log(_node, _data)
 			// 判断是否存在子category
 			if(_data.children && _data.children.length !== 0){
-				this.$message.error("此分类有子级，不可删除！")
+				this.$message.error("此分类有子级，不可删除！", 5000)
 				return false;
 			}else{
 				// // 删除操作
@@ -196,6 +198,7 @@ export default{
 						type: "warning"
 					}).then(() => {
             // DeletOprate()
+            vm.expanded = [].concat(_data.parentId)
             vm.doDeleteAction(_data.id)
 					}).catch(() => {})
 				}
@@ -307,9 +310,10 @@ export default{
               }
             });
 
-            this.options = [{children: data, id: 'ROOT', name: '根目录'}]
             this.setTree = res.data.children
           }
+
+          this.options = [{children: data || [], id: 'ROOT', name: '根目录'}]
         
           vm.isLoading = false
         }else{
@@ -356,13 +360,15 @@ export default{
     },
     // 发送保存请求操作
     doSaveAction(){
-      let apiFunc = this.diagTitle == '编辑分类' ? api.editCategory : api.createCategory, vm = this;
-      vm.form.parentId.length && (vm.form.parentId = vm.form.parentId(vm.form.parentId.length - 1)) // 默认是数组，提交时取最后一个
+      let apiFunc = this.diagTitle.text == '编辑分类' ? api.updateCategory : api.createCategory, vm = this, expanded = ''
+      typeof(vm.form.parentId) == 'object' && (vm.form.parentId = vm.form.parentId[vm.form.parentId.length - 1]) // 默认是数组，提交时取最后一个
+      expanded = [].concat(vm.form.parentId)
       apiFunc(_.merge({}, vm.form))
       .then(res => {
         if(res.status == 'success'){
           this.dialogFormVisible = false
           this.form = {}
+          this.expanded = expanded
           this.getTreeData()
           this.$message.success('保存成功！')
         }else{
