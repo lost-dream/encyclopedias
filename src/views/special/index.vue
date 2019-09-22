@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<p>专题</p>
 		<p>专题详情</p>
 		<el-row class="specialInfo">
 			<el-col :span="18">
@@ -28,7 +27,6 @@ export default {
 	    return {
 	    	specialId:'',
 	    	info:{},
-	    	total:'',
 	    	entryList:[],
 	    	pagination: {
 		      page: 1,

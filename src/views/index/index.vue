@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<p>首页</p>
 		<div class="title">
 			<span>最新词条</span>
 		</div>
@@ -50,7 +49,7 @@
 							<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
 								{{item1.name}}
 								<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
-									<li @click="routeToEntryList(item2.id,index2,index1,index)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
+									<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
 								</ul>
 							</li>
 						</ul>
@@ -92,12 +91,11 @@ export default {
 		
 	},
 	methods: {
-		routeToEntryList(id2,index2,index1,index) {
+		routeToEntryList(id2,index2,thirdAry) {
 			var choosedCategoryInfo = {
 				'id2':id2,
 				'index2':index2,
-				'index1':index1,
-				'index':index
+				'thirdAry':thirdAry
 			}
 			sessionStorage.setItem('choosedCategoryInfo',JSON.stringify(choosedCategoryInfo))
 			this.$router.push('entryListByCategory')

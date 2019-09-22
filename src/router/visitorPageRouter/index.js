@@ -1,5 +1,6 @@
 import Visitor from '@/visitor'
 const visitorRouter = [
+	{path: '/', redirect: 'index'},//默认进入首页
   {
 	path: '/visitor',
 	component: Visitor,
@@ -16,6 +17,7 @@ const visitorRouter = [
 				title: '专题',
 			},
 		},
+		
 		{
 			path: '/index',
 			component: () =>
@@ -43,8 +45,15 @@ const visitorRouter = [
 				title: '专题',
 			},
 		},
-		
-
+		{
+			path: '/entryListByCategory',
+			component: () =>
+				import('@/views/entryListByCategory/index'),
+			name: 'entryListByCategory',
+			meta: {
+				title: '精选分类',
+			},
+		},
 	]
 }
 
