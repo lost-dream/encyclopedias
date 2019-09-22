@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import {categoryTree,info,save,attrDelete} from '@/api/classifyManager/index.js'
+import {categoryTree,save,attrDelete,list} from '@/api/classifyManager/index.js'
 import {attributeTypeAry,editTypeAry,editSourceAry,} from '@/enumeration/classify.js'
 export default {
 	name: 'classifyManage',
@@ -138,7 +138,7 @@ export default {
 		//撤销修改
 		cancelModify() {
 			this.dialogVisible = false
-			info({'id':this.checkedId}).then(res =>{
+			list({'id':this.checkedId}).then(res =>{
                 console.log(res)
                 this.classifyData = [res.data]
             })
@@ -160,6 +160,7 @@ export default {
 				}
 				ary.push(obj)
 			})
+			console.log(ary)
 			save({
 				categoryId:this.checkedId,
 				categoryAttributeTemplates:ary
@@ -170,10 +171,14 @@ export default {
             	console.log(res)
             })
 		},
-		info(id) {
-			info({'id':this.checkedId}).then(res =>{
+		list(id) {
+			list({
+				categoryId:this.checkedId,
+				pageNumber: 1,
+				pageSize: 10,
+			}).then(res =>{
                 console.log(res)
-                this.classifyData = [res.data]
+                this.classifyData = res.data.records
             })
             .catch(res=>{
             	console.log(res)
@@ -199,7 +204,7 @@ export default {
 		            this.$refs.treeForm.setCheckedKeys([data.id]);
 		        }
 		    }
-		    this.info()
+		    this.list()
 		},
 		
 		
