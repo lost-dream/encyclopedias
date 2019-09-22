@@ -3,7 +3,7 @@
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <h3>[ci tiao ming cheng]</h3>
-                <h1>词条名称</h1>
+                <h1>{{entryName}}</h1>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20">
@@ -65,19 +65,19 @@
                                 <a @click="deleteQuote(index)" class="quote-btn">删除</a>
                             </span>
                             </p>
-                            <p>{{item.explain}}</p>
-                            <a  target="_blank" class="quote-btn" @click="goLink(item.linkURL)">{{item.linkURL}}</a>
+                            <p>{{item.inntroduce}}</p>
+                            <a  target="_blank" class="quote-btn" @click="goLink(item.url)">{{item.url}}</a>
                         </el-card >
                     </template>
                     <el-form label-width="80px">
                         <el-form-item label="说明">
-                            <el-input v-model="quote.explain"></el-input>
+                            <el-input v-model="quote.inntroduce"></el-input>
                         </el-form-item>
                         <el-form-item label="原始标题">
                             <el-input v-model="quote.title"></el-input>
                         </el-form-item>
                         <el-form-item label="网址">
-                            <el-input v-model="quote.linkURL"></el-input>
+                            <el-input v-model="quote.url"></el-input>
                         </el-form-item>
                     </el-form>
                     <div style="text-align: center;display: flex;" class="mg-top-20">
@@ -108,8 +108,8 @@
             </div>
 
             <div style="text-align: center;display: flex;" class="mg-top-20">
-                <el-button type="danger" @click="commit" >保存草稿</el-button>
-                <el-button type="primary" @click="commit" >提交词条</el-button>
+                <el-button type="danger" @click="commit('save')" >保存草稿</el-button>
+                <el-button type="primary" @click="commit('submit')" >提交词条</el-button>
             </div>
         </div>
         <div>
@@ -118,7 +118,15 @@
                     <el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>
                     <el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>
                 </el-tab-pane>
-                <el-tab-pane label="修改目录" name="second"></el-tab-pane>
+                <el-tab-pane label="修改目录" name="second">
+                    <div v-for="item in menuList">
+                        <p class="p1">{{item.title}}</p>
+                        <div v-for="k in item.children">
+                            <p class="p2">{{k.title}}</p>
+                            <p class="p3" v-for="v in k.children">{{v.title}}</p>
+                        </div>
+                    </div>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -128,11 +136,13 @@
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
+    //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
         components: {ElForm},
         name: 'editor',
         data() {
             return {
+                entryName: '词条名称',
                 isInit: false,
                 formLabelWidth: '120px',
                 dialogVisible: true,
@@ -232,16 +242,24 @@
                 quoteList: [],
                 quote: {
                     title: '',
-                    linkURL:'',
-                    explain: ''
+                    url:'',
+                    inntroduce: ''
                 },
                 editIndex: -1,
-                activeName: 'first'
+                activeName: 'first',
+                menuList: [],
+                submitList: []
             }
         },
         mounted() {
             this.setModel()
             this.initCKEditor()
+            let vm = this
+            // 获取目录列表
+            vm.$axios.post('/wiki-backend/api/categoryContentTemplate/list',{pageNumber: 1,pageSize: 10})
+                .then(res=>{
+                    console.log(res)
+                })
         },
         methods: {
             setModel () {
@@ -261,6 +279,7 @@
             },
             initCKEditor() {
                 var vm = this
+//                const ft = new FocusTracker()
                 if (!this.isInit) {
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
@@ -272,7 +291,14 @@
                         const toolbarContainer = document.querySelector('#toolbar');
                         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
                         this.editor = editor //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
-                        vm.commit()
+                        vm.updateEditorContent()
+                        editor.editing.view.document.on("change:isFocused", (evt, name, value) => {
+                            if (value) {
+                                return false
+                            } else {
+                                vm.updateEditorContent()
+                            }
+                        })
                     }).catch(error => {
                         console.error(error);
                     });
@@ -281,7 +307,7 @@
                     return false
                 }
             },
-            commit(){
+            updateEditorContent(){
                 let vm = this
                 let reg1 = new RegExp(/<h2>(.*?)<\/h2>/g)
                 let reg2 = new RegExp(/<h3>(.*?)<\/h3>/g)
@@ -289,6 +315,11 @@
                 let r_1 = vm.editor.getData().split(reg1)
                 let r = r_1.filter(function (s) {
                     return s && s.trim()
+                })
+                r.map((item,index)=>{
+                    if(item == '&nbsp;') {
+                        r.splice(index,1)
+                    }
                 })
                 let arr_main = []
                 let arr_sub = []
@@ -298,7 +329,7 @@
                     let obj = {}
                     if(index%2==0){
                         obj.title = item
-                        obj.plate1 = index/2 + 1
+//                        obj.plate1 = index/2 + 1
                         obj.children = []
                         arr_main.push(obj)
                     } else {
@@ -317,8 +348,8 @@
                                 if(v%2==1){
                                     let obj = {}
                                     obj.title = k
-                                    obj.plate1 = index+1
-                                    obj.plate2 = (v+1)/2
+//                                    obj.plate1 = index+1
+//                                    obj.plate2 = (v+1)/2
                                     obj.content = item[v+1]
                                     obj.children = []
                                     arr_main[index].children.push(obj)
@@ -333,8 +364,8 @@
                             if(v%2==0){
                                 let obj = {}
                                 obj.title = k
-                                obj.plate1 = index+1
-                                obj.plate2 = (v+1)/2
+//                                obj.plate1 = index+1
+//                                obj.plate2 = (v+1)/2
                                 obj.content = item[v+1]
                                 obj.children = []
                                 arr_main[index].children.push(obj)
@@ -356,24 +387,24 @@
                                     let obj = {}
                                     obj.title = v
                                     obj.content = tmp[n+1]
-                                    obj.plate1 = index+1
-                                    obj.plate2 = l+1
-                                    obj.plate3 = (n+1)/2
+//                                    obj.plate1 = index+1
+//                                    obj.plate2 = l+1
+//                                    obj.plate3 = (n+1)/2
                                     k.children.push(obj)
                                 }
                             })
                         } else {
-                            // 如果一级目录和二级目录之间有内容，则将一级目录content设置为空
-                            item.content = ''
+                            // 如果二级目录和二级目录之间没有内容，则将一级目录content设置为空
+                            k.content = ''
                             // 生成三级目录对象
                             tmp.map((v,n)=>{
                                 if(n%2==0){
                                     let obj = {}
                                     obj.title = v
                                     obj.content = tmp[n+1]
-                                    obj.plate1 = index+1
-                                    obj.plate2 = l+1
-                                    obj.plate3 = (n/2)+1
+//                                    obj.plate1 = index+1
+//                                    obj.plate2 = l+1
+//                                    obj.plate3 = (n/2)+1
                                     item.children[l].push(obj)
                                 }
                             })
@@ -382,6 +413,28 @@
                 })
                 console.log('提交格式为')
                 console.log(arr_main)
+                vm.submitList = arr_main
+                let arr = []
+                arr_main.map(item => {
+                    let lvl1 = {}
+                    lvl1.title = item.title
+                    lvl1.children = []
+                    item.children.map(k => {
+                        let lvl2 = {}
+                        lvl2.title = k.title
+                        lvl2.children = []
+                        lvl1.children.push(lvl2)
+                        k.children.map(v => {
+                            let lvl3 = {
+                                title: v.title
+                            }
+                            lvl2.children.push(lvl3)
+                        })
+                    })
+                    arr.push(lvl1)
+                })
+                vm.menuList = arr
+                console.log(arr)
             },
             addSymonyn () {
                 let vm = this;
@@ -411,18 +464,18 @@
                 }
             },
             resetQuote () {
-                this.quote = {title:'',linkURL: '',explain:''}
+                this.quote = {title:'',url: '',inntroduce:''}
             },
             addQuoteToList () {
                 console.log(this.editIndex)
                 let vm = this
-                if(vm.quote.name == ''||vm.quote.explain == ''||vm.quote.linkURL == '') {
+                if(vm.quote.name == ''||vm.quote.inntroduce == ''||vm.quote.url == '') {
                     vm.$message.error('请填写所有数据！');
                     return false
                 }
                 if(vm.editIndex>=0){
                     vm.$set(vm.quoteList[vm.editIndex], vm.quote)
-                    vm.quote = {title:'',linkURL: '',explain:''}
+                    vm.quote = {title:'',url: '',inntroduce:''}
                     vm.editIndex = -1
                 } else{
                     if(vm.quoteList.includes(vm.quote)) {
@@ -430,7 +483,7 @@
                         return false
                     }
                     vm.quoteList.push(vm.quote)
-                    vm.quote = {title:'',linkURL: '',explain:''}
+                    vm.quote = {title:'',url: '',inntroduce:''}
                 }
             },
             editQuote (index) {
@@ -468,8 +521,26 @@
                         message: '生成模板成功!'
                     });
                     vm.editor.setData(content)
+                    vm.updateEditorContent()
                 }).catch(() => {
                 });
+            },
+            commit (method) {
+                let vm = this
+                let data = {
+                    operate: method,
+                    entryId: '',  // 返回值
+                    versionId:'',
+                    entryName: vm.entryName,
+                    summary: vm.summary,
+                    categorys: [], // 欧阳 - [categoryId，categoryId]
+                    attributes: [], // 进哥 - [{key: keyName,value: value}]
+                    content:vm.submitList,
+                    label: vm.tagList,
+                    referrences: vm.quoteList,
+                    synonym: vm.synonymList
+                }
+                console.log(data)
             }
         }
     }
@@ -524,5 +595,21 @@
     }
     .el-tabs--border-card{
         position: fixed !important;
+        width: 200px;
+        margin-top: 100px;
+        margin-left: 20px;
+    }
+    .p1{
+        font-size: 16px;
+        font-weight: bolder;
+    }
+    .p2{
+        font-size: 14px;
+        padding-left:10px;
+    }
+    .p3{
+        font-size: 12px;
+        padding-left:20px;
+        font-weight: lighter;
     }
 </style>
