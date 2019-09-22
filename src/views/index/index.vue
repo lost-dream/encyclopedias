@@ -41,12 +41,31 @@
 		<div class="title">
 			<span>精选分类</span>
 		</div>
+		<el-row>
+			<el-col :span="24/categoryTreeList.length" v-for="(item,index) in categoryTreeList" :key="index">
+				<el-card>
+					<div :style="'background:#'+categoryBgColor[index]" class="categoryTreeList">
+						<p :style="'background:#'+categoryTitleColor[index]">{{item.name}}</p>
+						<ul>
+							<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
+								{{item1.name}}
+								<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
+									<li @click="routeToEntryList(item2.id,index2,index1,index)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
+								</ul>
+							</li>
+						</ul>
+						
+					</div>
+				</el-card>
+			</el-col>
+		</el-row>
 	</div>
 </template>
 
 <script>
 import {entryStatistical,} from '@/api/onlyShowData/index.js'
 import {specialList,} from '@/api/special/index.js'
+import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
 	
 	name: 'index',
@@ -54,6 +73,9 @@ export default {
 	    return {
 	    	entryStatisticalData:{},
 	    	specialListData:[],
+	    	categoryTreeList:[],
+	    	categoryTitleColor:['e9b937','6d56fb','079ea9','ec6b6b','199df2'],
+	    	categoryBgColor:['f3ebd1','d9d4f5','c1dfe2','f7dee0','c6e3f5'],
 	    }
 	},
 	watch: {
@@ -62,6 +84,7 @@ export default {
 	created() {
 		this.entryStatistical()
 		this.specialList()
+		this.categoryTree()
 	},
 	mounted() {
 	},
@@ -69,10 +92,45 @@ export default {
 		
 	},
 	methods: {
+		routeToEntryList(id2,index2,index1,index) {
+			var choosedCategoryInfo = {
+				'id2':id2,
+				'index2':index2,
+				'index1':index1,
+				'index':index
+			}
+			sessionStorage.setItem('choosedCategoryInfo',JSON.stringify(choosedCategoryInfo))
+			this.$router.push('entryListByCategory')
+		},
+		showThirdCategory(index1,index) {
+			this.categoryTreeList[index].children.map((item)=>{
+				item.showThirdCategory = false
+			})
+			this.categoryTreeList[index].children[index1].showThirdCategory = true
+		},
+		categoryTree() {
+			categoryTree({}).then(res =>{
+				res.data.children.map((item)=>{
+					item.children.map((item1,index)=>{
+						if(index === 0){
+							item1.showThirdCategory = true
+						}
+						else{
+							item1.showThirdCategory = false
+						}
+					})
+				})
+				this.categoryTreeList = res.data.children
+            })
+            .catch(res=>{
+            	console.log(res)
+            })
+		},
 		routeToSpecial(id) {
 			sessionStorage.setItem('specialId',id)
 			this.$router.push('special')
 		},
+		
 		specialList() {
 			specialList({
 				"pageNumber": 1,
@@ -105,6 +163,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.categoryTreeList{
+	padding-bottom: 10px;
+	font-size: 14px;
+	color: #99acae;
+	p{
+		font-size: 16px;
+		font-size: 16px;
+		font-weight: bold;
+		line-height: 40px;
+		color: white;
+		text-align: center;
+	}
+	ul{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		width: 50%;
+		display: inline-block;
+		li{
+			margin: 0;
+			padding: 0;
+			line-height: 30px;
+			text-align: center;
+		}
+	}
+	.secondCategory{
+		position: relative;
+		border-right: 1px solid white;
+		ul{
+			position: absolute;
+			right: -100%;
+			top: 0;
+			width: 100%;
+		}
+	}
+	
+}
 .specialList{
 	width: 360px;
 	height: 530px;
