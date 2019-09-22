@@ -97,11 +97,11 @@
 </template>
 
 <script>
-import api from '@/api/categoryManager/index.js'
+import api from '@/api/contentTemplate/index.js'
 import _ from 'lodash'
 
 export default{
-	name: 'categoryManager',
+	name: 'contentTemplate',
 	data(){
 		return {
 			isLoading: false,// 是否加载
@@ -115,11 +115,6 @@ export default{
 				label: 'name'
       },
       expanded: [], // 默认展开
-			// initParam: {// 新增参数
-			// 	name: '新增节点',
-			// 	parentId: 0,
-			// 	children: []
-      // },
       dialogFormVisible: false, // diag可见性
       formLabelWidth: '80px',
       labelPos: 'right',
@@ -159,7 +154,7 @@ export default{
 	created(){
 		// 初始值
     // this.startId = this.NODE_ID_START 
-    this.getTreeData()
+    // this.getTreeData()
 	},
 	methods: {
     // 删除category
