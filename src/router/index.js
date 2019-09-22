@@ -4,7 +4,8 @@ import classifyManagerRouter from './classifyManagerRouter'
 import categoryManagerRouter from './categoryManagerRouter'
 import dictionaryRouter from './dictionaryRouter'
 import visitorRouter from './visitorPageRouter'
-
+import commonUserRouter from './commonUserRouter'
+import administratorRouter from './administratorRouter'
 
 Vue.use(Router)
 /**
@@ -16,7 +17,9 @@ export const constantRoutes = [
   ...classifyManagerRouter,
   ...categoryManagerRouter,
   ...dictionaryRouter,
-  ...visitorRouter
+  ...visitorRouter,
+  ...commonUserRouter,
+  ...administratorRouter
 ]
 
 /**
