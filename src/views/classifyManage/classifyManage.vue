@@ -16,8 +16,24 @@
 		    check-on-click-node
 		    @check-change="handleNodeClick">
 		</el-tree>
-		<!--展示选中的分类对应的属性模板-->
-		<el-card shadow="hover">
+		<!--展示选中的分类对应的属性模板（只读）-->
+		<el-card v-show="checkedParentId" shadow="hover">
+			<div slot="header" class="clearfix">继承属性</div>
+			<el-table ref="table" :data="parentClassifyData" class="departTable" border stripe>
+		        <el-table-column prop="attributeName" label="属性名称" />
+		        <el-table-column prop="attributeType" label="属性值类型" />
+		        <el-table-column width="250px" label="约束值">
+		          <template slot-scope="scope">
+		          	{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}
+		          </template>
+		        </el-table-column>
+		        <el-table-column prop="editType" label="编辑模式" />
+		        <el-table-column prop="editSource" label="编辑内容来源" />
+		    </el-table>
+	    </el-card>
+		<!--展示选中的分类对应的属性模板（编辑）-->
+		<el-card v-show="checkedId" shadow="hover">
+			<div slot="header" class="clearfix">自身属性</div>
 			<el-row style="text-align: right;">
 				<el-button @click="addClassify" type="success">新增属性</el-button>
 			</el-row>
@@ -68,7 +84,7 @@
 				</el-table-column>
 		     </el-table>
 		     <el-row style="text-align: center;margin-top: 20px;">
-		     	<el-button @click="dialogVisible = true" type="warning">取消修改</el-button>
+		     	<!--<el-button @click="dialogVisible = true" type="warning">取消修改</el-button>-->
 			  	<el-button @click="save" type="primary">保存</el-button>
 			</el-row>
 	    </el-card>
@@ -88,19 +104,21 @@
 </template>
 
 <script>
-import {categoryTree,save,attrDelete,list} from '@/api/classifyManager/index.js'
+import {categoryTree,save,list} from '@/api/classifyManager/index.js'
 import {attributeTypeAry,editTypeAry,editSourceAry,} from '@/enumeration/classify.js'
 export default {
 	name: 'classifyManage',
 	data() {
 	    return {
 	        checkedId: '',
+	        checkedParentId:'',
 	        treeData: [],
 	        defaultProps: {
 	            children: 'children',
 	            label: 'name'
 	        },
 	        classifyData:[],
+	        parentClassifyData:[],
 	        attributeTypeAry:attributeTypeAry,
 	        editTypeAry:editTypeAry,
 	        editSourceAry:editSourceAry,
@@ -117,6 +135,35 @@ export default {
 	    }
 	},
 	watch: {
+		checkedParentId() {
+			list({
+				categoryId:this.checkedParentId,
+				pageNumber: 1,
+				pageSize: 100,
+			}).then(res =>{
+				res.data.records.map((item)=>{
+					this.attributeTypeAry.map((item1)=>{
+						if(item1.id === item.attributeType){
+							item.attributeType = item1.name
+						}
+					})
+					this.editTypeAry.map((item1)=>{
+						if(item1.id === item.editType){
+							item.editType = item1.name
+						}
+					})
+					this.editSourceAry.map((item1)=>{
+						if(item1.id === item.editSource){
+							item.editSource = item1.name
+						}
+					})
+				})
+                this.parentClassifyData = res.data.records
+            })
+            .catch(res=>{
+            	console.log(res)
+            })
+		}
 		
 	},
 	created() {
@@ -128,7 +175,11 @@ export default {
 		
 	},
 	methods: {
-		addClassify() {
+		addClassify() {//属性条数最多50条
+			if(this.classifyData.length == 50){
+				this.$message('属性条数最多50条')
+				return
+			}
 			var obj = JSON.parse(JSON.stringify(this.defaultClassifyItem))
 			this.classifyData.push(obj)
 		},
@@ -147,10 +198,14 @@ export default {
             })
 		},
 		save() {
-			var obj = JSON.parse(JSON.stringify(this.defaultClassifyItem))
 			var ary = []
+			var flag = true
 			this.classifyData.map((item)=>{
+				var obj = JSON.parse(JSON.stringify(this.defaultClassifyItem))
 				for(var i in obj){
+					if(item[i].toString().trim() === ''){
+						flag = false
+					}
 					if(i === 'attributeRangeBegin' || i === 'attributeRangeEnd'){
 						obj[i] = item[i].toString()
 					}
@@ -160,7 +215,10 @@ export default {
 				}
 				ary.push(obj)
 			})
-			console.log(ary)
+			if(!flag){
+				this.$message('请先完善属性');
+				return
+			}
 			save({
 				categoryId:this.checkedId,
 				categoryAttributeTemplates:ary
@@ -171,11 +229,11 @@ export default {
             	console.log(res)
             })
 		},
-		list(id) {
+		list() {
 			list({
 				categoryId:this.checkedId,
 				pageNumber: 1,
-				pageSize: 10,
+				pageSize: 100,
 			}).then(res =>{
                 console.log(res)
                 this.classifyData = res.data.records
@@ -184,9 +242,7 @@ export default {
             	console.log(res)
             })
 		},
-		attrDelete() {
-			
-		},
+		
 		categoryTree() {
 			categoryTree({}).then(res =>{
                 this.treeData = [res.data]
@@ -204,6 +260,8 @@ export default {
 		            this.$refs.treeForm.setCheckedKeys([data.id]);
 		        }
 		    }
+		    //获取选中分类的父级分类id，查询回父级分类的属性模板展示出来
+		    this.checkedParentId = data.parentId
 		    this.list()
 		},
 		
