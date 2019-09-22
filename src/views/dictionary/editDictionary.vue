@@ -1,33 +1,125 @@
 <template>
-    <div style="display: flex;max-width: 1280px;margin: 0 auto;flex-direction: column" >
-        <div>
-            <h3>[ci tiao ming cheng]</h3>
-            <h1>词条名称</h1>
-        </div>
-        <div>
-            <h4 class="block">词条分类</h4>
-        </div>
-        <div style="display: flex" v-show="false">
-            <div id="demo" style="width: 100%;padding: 20px">
-                <template v-for="item in wiki">
-                    <div v-if="item.isActive">
-                        <h2>{{item.title}}</h2>
-                        <div v-html="item.content"></div>
-                        <template v-if="item.children.length > 0" v-for="key in item.children">
-                            <div v-if="key.isActive" style="margin-left: 20px">
-                                <h3>{{key.subtitle}}</h3>
-                                <div v-html="key.content"></div>
-                            </div>
-                        </template>
+    <div style="display: flex;max-width: 1280px;margin: 0 auto" >
+        <div style="width: 80%;display: flex;flex-direction: column">
+            <div>
+                <h3>[ci tiao ming cheng]</h3>
+                <h1>词条名称</h1>
+            </div>
+            <!-- 词条分类 -->
+            <div class="mg-top-20">
+                <h4 class="block">词条分类</h4>
+                <div class="block-container"></div>
+            </div>
+            <!-- 同义词 -->
+            <div class="mg-top-20">
+                <h4 class="block">同义词</h4>
+                <div class="block-container">
+                    <el-input placeholder="回车添加同义词" v-model="synonym" class="input-with-select" @keyup.native.13="addSymonyn">
+                        <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
+                    </el-input>
+                    <div class="mg-top-20" v-show="synonymList.length">
+                        <el-tag
+                                v-for="tag in synonymList"
+                                :key="tag"
+                                closable
+                                @close="handleClose(tag, 1)"
+                                type="info">
+                            {{tag}}
+                        </el-tag>
                     </div>
-                </template>
+                </div>
+            </div>
+            <!-- 摘要 -->
+            <div class="mg-top-20">
+                <h4 class="block">摘要</h4>
+                <div>
+                    <el-input
+                            type="textarea"
+                            :rows="4"
+                            placeholder="请输入内容"
+                            v-model="summary">
+                    </el-input>
+                </div>
+            </div>
+            <!-- 属性 -->
+            <div class="mg-top-20">
+                <h4 class="block">属性</h4>
+                <div class="block-container"></div>
+            </div>
+            <!-- 正文 -->
+            <div class="mg-top-20">
+                <h4 class="block">正文</h4>
+                <div id="toolbar"></div>
+                <div id="editor"></div>
+            </div>
+
+            <!-- 引用 -->
+            <div class="mg-top-20">
+                <h4 class="block">引用</h4>
+                <div class="block-container">
+                    <template v-for="(item, index) in quoteList">
+                        <el-card class="box-card" style="margin-bottom: 10px">
+                            <p>{{item.title}}
+                                <span style="float: right;">
+                                <a @click="editQuote(index)" class="quote-btn">编辑</a>
+                                <a @click="deleteQuote(index)" class="quote-btn">删除</a>
+                            </span>
+                            </p>
+                            <p>{{item.explain}}</p>
+                            <a  target="_blank" class="quote-btn" @click="goLink(item.linkURL)">{{item.linkURL}}</a>
+                        </el-card >
+                    </template>
+                    <el-form label-width="80px">
+                        <el-form-item label="说明">
+                            <el-input v-model="quote.explain"></el-input>
+                        </el-form-item>
+                        <el-form-item label="原始标题">
+                            <el-input v-model="quote.title"></el-input>
+                        </el-form-item>
+                        <el-form-item label="网址">
+                            <el-input v-model="quote.linkURL"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div style="text-align: center;display: flex;" class="mg-top-20">
+                        <el-button type="danger" @click="resetQuote" >取消</el-button>
+                        <el-button type="primary" @click="addQuoteToList" v-show="editIndex<0">添加</el-button>
+                        <el-button type="primary" @click="addQuoteToList" v-show="editIndex>=0">保存</el-button>
+                    </div>
+                </div>
+            </div>
+            <!-- 标签 -->
+            <div class="mg-top-20">
+                <h4 class="block">标签</h4>
+                <div class="block-container">
+                    <el-input placeholder="回车添加标签" v-model="tag" class="input-with-select" @keyup.native.13="addTag">
+                        <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
+                    </el-input>
+                    <div class="mg-top-20" v-show="tagList.length">
+                        <el-tag
+                                v-for="tag in tagList"
+                                :key="tag"
+                                closable
+                                @close="handleClose(tag, 0)"
+                                type="info">
+                            {{tag}}
+                        </el-tag>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;display: flex;" class="mg-top-20">
+                <el-button type="danger" @click="commit" >保存草稿</el-button>
+                <el-button type="primary" @click="commit" >提交词条</el-button>
             </div>
         </div>
-
         <div>
-            <div id="toolbar"></div>
-            <div id="editor"></div>
-            <el-button type="primary" @click="commit" style="width: 100%">提 交</el-button>
+            <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="目录模板" name="first">
+                    <el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>
+                    <el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>
+                </el-tab-pane>
+                <el-tab-pane label="修改目录" name="second"></el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 
@@ -35,7 +127,9 @@
 <script>
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
+    import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
     export default {
+        components: {ElForm},
         name: 'editor',
         data() {
             return {
@@ -130,6 +224,19 @@
                 ],
                 wiki: '',
                 editor: null,
+                synonym:'',
+                synonymList:[],
+                tag: '',
+                tagList: [],
+                summary:'',
+                quoteList: [],
+                quote: {
+                    title: '',
+                    linkURL:'',
+                    explain: ''
+                },
+                editIndex: -1,
+                activeName: 'first'
             }
         },
         mounted() {
@@ -153,6 +260,7 @@
                 document.getElementById('editor').innerHTML = wiki
             },
             initCKEditor() {
+                var vm = this
                 if (!this.isInit) {
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
@@ -164,6 +272,7 @@
                         const toolbarContainer = document.querySelector('#toolbar');
                         toolbarContainer.appendChild(editor.ui.view.toolbar.element);
                         this.editor = editor //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
+                        vm.commit()
                     }).catch(error => {
                         console.error(error);
                     });
@@ -274,10 +383,98 @@
                 console.log('提交格式为')
                 console.log(arr_main)
             },
+            addSymonyn () {
+                let vm = this;
+                if(vm.synonymList.includes(vm.synonym)){
+                    this.$message.error('该同义词已存在');
+                } else {
+                    vm.synonymList.push(vm.synonym)
+                    vm.synonym = '';
+                }
+            },
+            handleClose(tag, index) {
+                if(index == 1){
+                    this.synonymList.splice(this.synonymList.indexOf(tag), 1);
+                    console.log(this.synonymList)
+                } else {
+                    this.tagList.splice(this.tagList.indexOf(tag), 1);
+                    console.log(this.tagList)
+                }
+            },
+            addTag () {
+                let vm = this;
+                if(vm.tagList.includes(vm.tag)){
+                    this.$message.error('该标签已存在');
+                } else {
+                    vm.tagList.push(vm.tag)
+                    vm.tag = '';
+                }
+            },
+            resetQuote () {
+                this.quote = {title:'',linkURL: '',explain:''}
+            },
+            addQuoteToList () {
+                console.log(this.editIndex)
+                let vm = this
+                if(vm.quote.name == ''||vm.quote.explain == ''||vm.quote.linkURL == '') {
+                    vm.$message.error('请填写所有数据！');
+                    return false
+                }
+                if(vm.editIndex>=0){
+                    vm.$set(vm.quoteList[vm.editIndex], vm.quote)
+                    vm.quote = {title:'',linkURL: '',explain:''}
+                    vm.editIndex = -1
+                } else{
+                    if(vm.quoteList.includes(vm.quote)) {
+                        vm.$message.error('引用数据重复！');
+                        return false
+                    }
+                    vm.quoteList.push(vm.quote)
+                    vm.quote = {title:'',linkURL: '',explain:''}
+                }
+            },
+            editQuote (index) {
+                this.editIndex = index
+                this.quote = this.quoteList[index]
+            },
+            deleteQuote(index){
+                this.quoteList.splice(index,1)
+            },
+            goLink (link) {
+                if(link.slice(0,4)=='http'){
+                    window.open(link)
+                } else {
+                    window.open('http://' + link)
+                }
+            },
+            handleClick(tab, event) {
+                console.log(tab, event);
+            },
+            setTemplate (index) {
+                let content
+                if(index == 1){
+                    content = '<h2>歼-20</h2><h3>基础信息</h3><h4>作战半径</h4><h4>空-空格斗</h4><h4>最大航速</h4><h4>载弹</h4><h2>发展历史</h2><h3>测试阶段</h3><h4>首飞</h4><h3>第一次作战</h3><h4>第一次作战</h4>'
+                } else {
+                    content = '<h2>目录1</h2><h3>目录1-1</h3><h4>目录1-1-1</h4><h4>目录1-1-2</h4><h3>目录1-2</h3><h4>目录1-2-1</h4><h2>目录2</h2><h3>目录2-1</h3><h4>目录2-1-1</h4>'
+                }
+                let vm = this
+                this.$confirm('生成模板将删除正文所有内容, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '生成模板成功!'
+                    });
+                    vm.editor.setData(content)
+                }).catch(() => {
+                });
+            }
         }
     }
 </script>
-<style>
+<style scoped>
     .ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable), .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners{
         border: 1px solid #ccc
     }
@@ -302,5 +499,30 @@
     }
     .block{
         width: 100px;
+        text-align: center;
+        color: white;
+        padding: 10px;
+        background: #03A9F4;
+    }
+    .block-container{
+        background: #eee;
+        padding: 20px;
+    }
+    .pd-20{
+        padding: 20px;
+    }
+    .quote-btn{
+        color:  #03A9F4;
+        padding-right: 10px;
+        cursor: pointer;
+    }
+    .box-card p{
+        margin: 5px 0;
+    }
+    .el-form-item{
+        margin-bottom: 10px;
+    }
+    .el-tabs--border-card{
+        position: fixed !important;
     }
 </style>
