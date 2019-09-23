@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <el-container>
-      <el-aside width="200px">
-      <!-- 侧边栏 -->
-        <navmenu></navmenu>
-    </el-aside>
-      <el-main>
-      <!-- Body -->
-        <router-view></router-view>
-    </el-main>
-    </el-container>
-  </div>
+	<el-main class="top-wrap">
+		<el-container>
+			<el-aside width="200px">
+			<!-- 侧边栏 -->
+					<navmenu></navmenu>
+			</el-aside>
+			<el-main>
+			<!-- Body -->
+				<router-view></router-view>
+			</el-main>
+		</el-container>
+	</el-main>
 </template>
 <script>
 import NavMenu from '@/components/NavMenu'
@@ -26,8 +26,8 @@ export default {
 <style lang="scss" scoped>
 .el-main{
 	overflow-y: auto;
-	width: 100vh;
-	/*height: 70vh;*/
+	width: 100vw;
+	min-height: 70vh;
 	
 	&::-webkit-scrollbar {
 	  width: 5px;
@@ -47,6 +47,15 @@ export default {
 	  border-radius: 10px;
 	  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
 	  background-color: #ddd;
+	}
+}
+.top-wrap {
+	padding: 0;
+	max-width: 1140px;
+	margin: 0 auto;
+
+	.el-main {
+		border-left: 1px solid #e6e6e6;
 	}
 }
 </style>

@@ -1,4 +1,5 @@
 import Layout from '@/layout'
+
 const contentTemplateRouter = [
   {
     path: '/layout',
@@ -13,10 +14,11 @@ const contentTemplateRouter = [
         component: () => import('@/views/contentTemplate/contentTemplate'),
         name: 'contentTemplate',
         meta: {
-          title: '分类模板',
+          title: '目录模板',
         }
       },
     ]
   }
 ]
+
 export default contentTemplateRouter

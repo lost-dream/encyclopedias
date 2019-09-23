@@ -37,6 +37,9 @@
   .over-hide{
     overflow: hidden;
   }
+  .el-menu {
+    border: none;
+  }
 </style>
 
 <script>

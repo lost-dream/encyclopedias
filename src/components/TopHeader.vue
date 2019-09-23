@@ -43,7 +43,7 @@
 .head-wrap{
 	color: #338ce6;
 	text-align: center;
-	margin-top: 20px;
+	margin: 15px 0;
 	img{
 		vertical-align: middle;
 		margin-right: 5px;

@@ -1,10 +1,10 @@
 <template>
   <div class="pos-rltv padding-20">
+    <div>
+      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+    </div>
+
     <div v-loading="isLoading" class="comp-tree">
-      <el-button class="comp-tr-top" 
-        type="primary" 
-        size="small" 
-        @click="handleAddTop">新增分类</el-button>
       <!-- tree -->
 		  <el-tree ref="SlotTree"
         :data="setTree"
@@ -154,7 +154,7 @@ export default{
 	created(){
 		// 初始值
     // this.startId = this.NODE_ID_START 
-    // this.getTreeData()
+    this.getTreeData()
 	},
 	methods: {
     // 删除category

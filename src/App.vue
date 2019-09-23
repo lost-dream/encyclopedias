@@ -4,12 +4,8 @@
       <el-header class="header">
         <vheader />
       </el-header>
-      <el-container>
-        <el-main>
-        <!-- Body -->
-         <router-view></router-view>
-      </el-main>
-      </el-container>
+      <!-- Body -->
+      <router-view></router-view>
     </el-container>
   </div>
 </template>
@@ -29,11 +25,10 @@ export default {
 .header {
   line-height: 60px;
   height: auto !important;
+  margin-bottom: 15px;
+  box-shadow: 0 0 5px 0 #8e8e8e;
 }
 html,body,#app{
 	height: 100vh;
-}
-.el-container{
-	height: calc(100vh - 60px);
 }
 </style>

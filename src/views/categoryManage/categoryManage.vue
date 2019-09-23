@@ -1,5 +1,6 @@
 <template>
   <div class="pos-rltv padding-20">
+    <h2>分类管理</h2>
     <div v-loading="isLoading" class="comp-tree">
       <el-button class="comp-tr-top" 
         type="primary" 
@@ -162,6 +163,9 @@ export default{
     this.getTreeData()
 	},
 	methods: {
+    goBack(){
+      console.log('back!')
+    },
     // 删除category
 		handleDelete(_node, _data){
       let vm = this;
@@ -443,13 +447,18 @@ export default{
   }
 
 	/* common end */
+
+  h2 {
+    font-weight: 400;
+    color: #1f2f3d;
+    margin: 0 0 40px;
+  }
   
 	.comp-tree{
-    position: absolute;
 		width: 100%;
 		max-width: 300px;
 		max-height: 80vh;
-    overflow: hidden show;
+    overflow: visible;
   
 		// 顶部按钮
 		.comp-tr-top{
