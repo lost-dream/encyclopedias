@@ -343,6 +343,7 @@ export default{
           break;
         }
         case 'add': {
+          this.$refs['ruleForm'] && this.$refs['ruleForm'].resetFields();
           this.form = {}
           _.merge(this.form, {
             parentId: _data.id,
@@ -447,12 +448,6 @@ export default{
   }
 
 	/* common end */
-
-  h2 {
-    font-weight: 400;
-    color: #1f2f3d;
-    margin: 0 0 40px;
-  }
   
 	.comp-tree{
 		width: 100%;

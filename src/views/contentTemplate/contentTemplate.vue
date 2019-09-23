@@ -1,9 +1,11 @@
 <template>
   <div class="pos-rltv padding-20">
+    <h2>分类目录模板</h2>
     <div>
-      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+      <el-tree :data="setTree" :props="defaultProps"></el-tree>
     </div>
 
+    <hr>
     <div v-loading="isLoading" class="comp-tree">
       <!-- tree -->
 		  <el-tree ref="SlotTree"
@@ -112,7 +114,7 @@ export default{
 			// startId: null,
 			defaultProps: {// 默认设置
 				children: 'children',
-				label: 'name'
+				label: 'contentName'
       },
       expanded: [], // 默认展开
       dialogFormVisible: false, // diag可见性
@@ -144,7 +146,7 @@ export default{
         ]
       },
       cascaderProps: {
-        label: 'name',
+        label: 'contentName',
         value: 'id',
         checkStrictly: true
       },
@@ -270,7 +272,8 @@ export default{
       vm.isLoading = true
       api.getTreeData()
       .then(res => {
-        // console.log('success:', res);
+        console.log('success:', res);
+        // return;
         if(res.status == 'success'){
           let data = res.data && (_.cloneDeep(res.data.children) || [])
 
@@ -301,7 +304,7 @@ export default{
             this.setTree = res.data.children
           }
 
-          this.options = [{children: data || [], id: 'ROOT', name: '根目录', disabled: false}]
+          this.options = [{children: data || [], id: 'ROOT', contentName: '根目录', disabled: false}]
         
           vm.isLoading = false
         }else{

@@ -31,4 +31,9 @@ export default {
 html,body,#app{
 	height: 100vh;
 }
+h2 {
+  font-weight: 400;
+  color: #1f2f3d;
+  margin: 0 0 40px;
+}
 </style>
