@@ -11,7 +11,7 @@
 
 <script>
 
-import {categoryTree} from '@/api/classifyManager/index.js'
+import {specialEntryList} from '@/api/special/index.js'
 export default {
 	
 	name: 'entryListByCategory',
@@ -61,7 +61,15 @@ export default {
 			})
 			item.choosed = true
 			console.log(item.id)
-			this.pagination.count = 100
+			specialEntryList({
+				"pageNumber": this.pagination.page,
+				"pageSize": this.pagination.limit,
+				"specialId": item.id
+			}).then((res)=>{
+				
+				this.pagination.count = 100
+			})
+			
 		},
 		//根据本地存储的首页传参高亮显示首页选中的分类
 		getChoosedCategoryInfo() {

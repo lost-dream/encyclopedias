@@ -1,21 +1,20 @@
 <template>
 	<div>
 		<p>属性模板管理</p>
+		<div class="classifyList">
+			<span @click="chooseItem(item)" v-for="item in treeData">
+				<span>{{item.name}}</span>
+				<el-cascader
+				    :options="item.children"
+				    :props="props"
+				    @change="changeCascader"
+				    :placeholder="item.name"
+				    :show-all-levels="false"
+			    	clearable>
+				</el-cascader>
+			</span>
+		</div>
 		
-		
-		<!--分类树-->
-		<p>分类树</p>
-		<el-tree
-		    :data="treeData"
-		    :props="defaultProps"
-		    node-key="id"
-		    ref="treeForm"
-		    show-checkbox
-		    check-strictly
-		    default-expand-all
-		    check-on-click-node
-		    @check-change="handleNodeClick">
-		</el-tree>
 		<!--展示选中的分类对应的属性模板（只读）-->
 		<el-card v-show="checkedParentId" shadow="hover">
 			<div slot="header" class="clearfix">继承属性</div>
@@ -112,10 +111,17 @@ export default {
 	    return {
 	        checkedId: '',
 	        checkedParentId:'',
+	        checkedParentItem:{},
 	        treeData: [],
 	        defaultProps: {
 	            children: 'children',
 	            label: 'name'
+	        },
+	        props:{
+	        	checkStrictly: true,
+	        	value:'id',
+	        	label:'name',
+	        	children:'children',
 	        },
 	        classifyData:[],
 	        parentClassifyData:[],
@@ -175,6 +181,26 @@ export default {
 		
 	},
 	methods: {
+		chooseItem(item) {
+			console.log(item)
+			this.checkedParentItem = item
+			this.checkedId = item.id
+			this.list()
+		},
+		//选中分类事件
+		changeCascader(item) {
+			console.log(item)
+			this.checkedId = item[item.length - 1];
+			 //获取选中分类的父级分类id，查询回父级分类的属性模板展示出来
+			 if(item.length>1){
+			 	this.checkedParentId = item[item.length - 2]
+			 }
+			 else{
+			 	this.checkedParentId = this.checkedParentItem.id
+			 }
+		    this.list()
+		    
+		},
 		addClassify() {//属性条数最多50条
 			if(this.classifyData.length == 50){
 				this.$message('属性条数最多50条')
@@ -245,7 +271,28 @@ export default {
 		
 		categoryTree() {
 			categoryTree({}).then(res =>{
-                this.treeData = [res.data]
+				//从第一级开始取
+				res.data.children.forEach((item)=>{
+					if(!item.children.length){
+						delete item.children
+					}
+					else{
+						item.children.forEach((item1)=>{
+							if(!item1.children.length){
+								delete item1.children
+							}
+							else{
+								item1.children.forEach((item2)=>{
+									if(!item2.children.length){
+										delete item2.children
+									}
+								})
+							}
+						})	
+					}
+				})
+				console.log(res.data.children)
+                this.treeData = res.data.children
             })
             .catch(res=>{
             	console.log(res)
@@ -270,8 +317,48 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-	.departTable {
+<style lang="scss">
+.classifyList{
+	background: #459df5;
+	color: white;
+	font-size: 16px;
+	line-height: 40px;
+	>span{
+		display: inline-block;
+		position: relative;
+		span{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			display: block;
+			text-align: center;
+		}
+		.el-cascader{
+			opacity: 0;
+		}
+		.el-cascader .el-input .el-input__inner{
+			opacity: 0;
+			text-align: center;
+			background: #459df5 !important;
+			color: white !important;
+			border: none;
+			padding: 0;
+			&::placeholder{
+				color: white;
+			}
+		}
+		.el-icon-arrow-down:before{
+			content: '' !important;
+		}
+		.el-cascader-menu__list{
+			background: #97c8f9 !important;
+			color: white !important;
+		}
+	}
+}
+
+.departTable {
   &/deep/ .cell {
     text-align: center;
   }
