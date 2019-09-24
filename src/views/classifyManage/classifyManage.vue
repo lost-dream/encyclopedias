@@ -1,21 +1,19 @@
 <template>
 	<div>
 		<p>属性模板管理</p>
+		<div>
+			<span v-for="item in treeData">
+				<el-cascader
+				    :options="item.children"
+				    :props="props"
+				    @change="change"
+				    :placeholder="item.name"
+				    :show-all-levels="false"
+			    	clearable>
+				</el-cascader>
+			</span>
+		</div>
 		
-		
-		<!--分类树-->
-		<p>分类树</p>
-		<el-tree
-		    :data="treeData"
-		    :props="defaultProps"
-		    node-key="id"
-		    ref="treeForm"
-		    show-checkbox
-		    check-strictly
-		    default-expand-all
-		    check-on-click-node
-		    @check-change="handleNodeClick">
-		</el-tree>
 		<!--展示选中的分类对应的属性模板（只读）-->
 		<el-card v-show="checkedParentId" shadow="hover">
 			<div slot="header" class="clearfix">继承属性</div>
@@ -116,6 +114,12 @@ export default {
 	        defaultProps: {
 	            children: 'children',
 	            label: 'name'
+	        },
+	        props:{
+	        	checkStrictly: true,
+	        	value:'name',
+	        	label:'name',
+	        	children:'children',
 	        },
 	        classifyData:[],
 	        parentClassifyData:[],
@@ -245,7 +249,21 @@ export default {
 		
 		categoryTree() {
 			categoryTree({}).then(res =>{
-                this.treeData = [res.data]
+				//从第一级开始取
+				res.data.children.forEach((item)=>{
+					if(!item.children.length){
+						delete item.children
+					}
+					else{
+						item.children.forEach((item1)=>{
+							if(!item1.children.length){
+								delete item1.children
+							}
+						})	
+					}
+				})
+				console.log(res.data.children)
+                this.treeData = res.data.children
             })
             .catch(res=>{
             	console.log(res)

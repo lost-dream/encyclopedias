@@ -31,3 +31,13 @@ export function specialSave(data) {
     data
   })
 }
+//按照专题ID获取专题词条列表
+export function specialEntryList(data) {
+  return request({
+    url: '/wiki-backend/api/entry/specialList',
+    method: 'post',
+    data
+  })
+}
+
+
