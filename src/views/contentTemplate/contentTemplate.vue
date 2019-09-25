@@ -84,7 +84,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -112,10 +111,7 @@ export default{
         children: 'children',
 				label: 'name'
       },
-      expanded: [], // 默认展开
       dialogFormVisible: false, // diag可见性
-      formLabelWidth: '80px',
-      labelPos: 'right',
       initParam: {// 新增参数
 				contentName: '新增目录',
 				children: []
@@ -124,6 +120,7 @@ export default{
       showSave: false,
       saveLoading: false,
       currentCategory: {},
+
 		}
 	},
 	created(){
@@ -132,9 +129,6 @@ export default{
     this.getCategoryTreeData()
 	},
 	methods: {
-    handleSelect(e){
-      console.log(e);
-    },
     handleDelete(_node, _data){// 删除节点
 			// console.log(_node, _data)
 			// 判断是否存在子节点
@@ -224,6 +218,7 @@ export default{
         if(res.status == 'success'){
           let data = res.data && (_.cloneDeep(res.data.children) || [])
           vm.categoryTree = data;
+          vm.fromData = data;
           vm.isLoading = false;
         }else{
           this.$message.error("获取分类信息失败，请稍后重试！")
@@ -304,8 +299,11 @@ export default{
       .catch(e => {
         this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
       })
-    }
-	}
+    },
+  }
+    
+
+    
 }
 </script>
 

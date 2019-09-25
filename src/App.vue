@@ -37,4 +37,7 @@ h2 {
   color: #1f2f3d;
   margin: 0 0 40px;
 }
+.u-clear {
+  color: #409EFF !important;
+}
 </style>

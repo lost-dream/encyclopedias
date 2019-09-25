@@ -9,6 +9,13 @@
             <div class="mg-top-20">
                 <h4 class="block">词条分类</h4>
                 <div class="block-container">
+                    <el-tag
+                        v-for="item in savedCategory"
+                        :key="item.id"
+                        type="primary">
+                        {{ item.name }}
+                    </el-tag>
+                    <el-button class="button-new-category" size="small" @click="dialogVisible = true"> + 添加分类</el-button>
                 </div>
             </div>
             <!-- 同义词 -->
@@ -132,25 +139,53 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-    </div>
 
+        <el-dialog
+        title="选择分类"
+        :visible.sync="dialogVisible"
+        :before-close="handleClose">
+            <tree-transfer 
+                ref="treeTransfer"
+                width="85%"
+                height="540px"
+                :title="title" 
+                :from_data='categoryTree' 
+                :to_data='toData' 
+                :defaultProps="{label:'name'}" 
+                pid="parentId" 
+                @addBtn='add' 
+                @removeBtn='remove' 
+                @left-check-change="checkLength"
+                :mode='mode' 
+                :addressOptions="{num: 1, connector: ''}" 
+                filter
+                style="margin: 0 auto;min-width: 740px"></tree-transfer>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveCategory">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
 </template>
 <script>
+    import treeTransfer from 'el-tree-transfer'
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
     import tabMenu from '../../components/treeMenu'
     import {categoryTree} from '@/api/classifyManager/index.js'
+    import categoryApi from '@/api/categoryManager/index.js'
+    import _ from 'lodash'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
-        components: {ElForm,tabMenu},
+        components: {ElForm,tabMenu,treeTransfer},
         name: 'editor',
         data() {
             return {
                 entryName: '词条名称',
                 isInit: false,
                 formLabelWidth: '120px',
-                dialogVisible: true,
+                dialogVisible: false,
                 model: [],
                 wiki: '',
                 editor: null,
@@ -169,8 +204,18 @@
                 editIndex: -1,
                 activeName: 'first',
                 menuList: [],
-                submitList: []
+                submitList: [],
+                // 分类部分
+                title: ["全部分类", "已选择"],
+                mode: "addressList", // transfer addressList
+                categoryTree: [],
+                toData:[],
+                savedCategory: [],
+                leafNumber: 0
             }
+        },
+        created(){
+            this.getCategoryTree();
         },
         mounted() {
             this.setModel()
@@ -210,7 +255,7 @@
             },
             initCKEditor() {
                 var vm = this
-//                const ft = new FocusTracker()
+                // const ft = new FocusTracker()
                 if (!this.isInit) {
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
@@ -260,7 +305,7 @@
                     let obj = {}
                     if(index%2==0){
                         obj.title = item
-//                        obj.plate1 = index/2 + 1
+                        // obj.plate1 = index/2 + 1
                         obj.children = []
                         arr_main.push(obj)
                     } else {
@@ -279,8 +324,8 @@
                                 if(v%2==1){
                                     let obj = {}
                                     obj.title = k
-//                                    obj.plate1 = index+1
-//                                    obj.plate2 = (v+1)/2
+                                    // obj.plate1 = index+1
+                                    // obj.plate2 = (v+1)/2
                                     obj.content = item[v+1]
                                     obj.children = []
                                     arr_main[index].children.push(obj)
@@ -295,8 +340,8 @@
                             if(v%2==0){
                                 let obj = {}
                                 obj.title = k
-//                                obj.plate1 = index+1
-//                                obj.plate2 = (v+1)/2
+                            //    obj.plate1 = index+1
+                            //    obj.plate2 = (v+1)/2
                                 obj.content = item[v+1]
                                 obj.children = []
                                 arr_main[index].children.push(obj)
@@ -318,9 +363,9 @@
                                     let obj = {}
                                     obj.title = v
                                     obj.content = tmp[n+1]
-//                                    obj.plate1 = index+1
-//                                    obj.plate2 = l+1
-//                                    obj.plate3 = (n+1)/2
+                                //    obj.plate1 = index+1
+                                //    obj.plate2 = l+1
+                                //    obj.plate3 = (n+1)/2
                                     k.children.push(obj)
                                 }
                             })
@@ -333,9 +378,9 @@
                                     let obj = {}
                                     obj.title = v
                                     obj.content = tmp[n+1]
-//                                    obj.plate1 = index+1
-//                                    obj.plate2 = l+1
-//                                    obj.plate3 = (n/2)+1
+                                //    obj.plate1 = index+1
+                                //    obj.plate2 = l+1
+                                //    obj.plate3 = (n/2)+1
                                     item.children[l].push(obj)
                                 }
                             })
@@ -472,6 +517,64 @@
                     synonym: vm.synonymList
                 }
                 console.log(data)
+            },
+            //
+            getCategoryTree(){
+                let vm = this
+                categoryApi.getTreeData()
+                .then(res => {
+                    console.log('success:', res);
+                    // return;
+                    if(res.status == 'success'){
+                        let data = res.data && (_.cloneDeep(res.data.children) || [])
+                        vm.categoryTree = data;
+                    }else{
+                        this.$message.error("获取分类信息失败，请稍后重试！")
+                    }
+                })
+                .catch(res => {
+                    // console.log('error: ', res)
+                    this.$message.error("请求出错，错误原因： " + res.msg ? res.msg : JSON.stringify(res));
+                })
+            },
+            // 监听穿梭框组件添加
+            add(transfered){
+                // console.log("transfered:", transfered);
+                this.savedCategory = transfered
+            },
+            // 监听穿梭框组件移除
+            remove(transfered){
+                // console.log("transfered:", transfered);
+                this.savedCategory = transfered
+            },
+            // 限制最多选5个
+            checkLength(nodeObj, treeObj, checkAll){
+                // console.log(nodeObj, treeObj, checkAll)
+                let vm = this,
+                    treeComp = this.$refs.treeTransfer.$children[2],
+                    arr = treeComp.getCheckedNodes().filter(x => !x.children.length);
+
+                console.log(arr);
+
+                if((arr && ((arr.length + vm.savedCategory.length) > 5))){
+                    this.$message.error("最多只能选择5个最末级分类");
+                    treeComp.setCheckedKeys([]);
+                    this.$refs.treeTransfer.from_check_all = false
+                    this.$refs.treeTransfer.from_disabled =true
+                    this.$refs.treeTransfer.from_check_keys = []
+                }
+            },
+            // 关闭弹窗二次确认
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
+            },
+            // 保存词条分类
+            saveCategory(){
+                // 处理一下savedCategory数组, 提出来id，重新弄个数组就ok
             }
         }
     }
@@ -542,5 +645,15 @@
         font-size: 12px;
         padding-left:20px;
         font-weight: lighter;
+    }
+    .el-dialog__wrapper /deep/ .el-dialog {
+        min-width: 780px;
+    }
+    .el-tag,.button-new-category {
+        min-width: 80px;
+        text-align: center;
+    } 
+    .el-tag + .el-tag, .button-new-category {
+        margin-left: 10px;
     }
 </style>
