@@ -16,33 +16,39 @@
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row">
                 <div class="block-container" style="width: 20%;"><p>目录</p></div>
-                <div v-for="item in wikiContent.entryContentVos">
-                    <p>{{item.contentTitle}}</p>
+                <div v-for="(item,index) in wikiContent.entryContentVos">
+                    <a @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
                     <div v-for="k in item.children">
-                        <p>{{k.contentTitle}}</p>
-                        <p v-for="v in k.children">{{v.contentTitle}}</p>
+                        <a @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
+                        <a v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
                     </div>
                 </div>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20">
             </div>
-            <!-- 词条分类 -->
+            <!-- 词条详情 -->
             <div class="mg-top-20">
                 <div class="block-container">
                 </div>
             </div>
             <div style="display: flex"  class="mg-top-20">
                 <div id="demo" style="width: 100%;padding: 20px">
-                    <template v-for="item in wikiContent.entryContentVos">
+                    <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 class="block">{{item.contentTitle}}</h2>
+                            <h2 class="block" :id="item.id">{{index+1}}{{item.contentTitle}}</h2>
                             <div>{{item.contentBody}}</div>
                             <template v-if="item.children.length > 0" v-for="key in item.children">
                                 <div style="margin-left: 20px">
-                                    <h3>{{key.contentTitle}}</h3>
+                                    <h3 :id="key.id">{{key.contentTitle}}</h3>
                                     <div>{{key.contentBody}}</div>
                                 </div>
+                                <template v-if="key.children.length > 0" v-for="v in key.children">
+                                    <div style="margin-left: 20px">
+                                        <h4 :id="v.id">{{v.contentTitle}}</h4>
+                                        <div>{{v.contentBody}}</div>
+                                    </div>
+                                </template>
                             </template>
                         </div>
                     </template>
@@ -77,10 +83,10 @@
                 <!--</el-tab-pane>-->
                 <el-tab-pane label="目录" name="second">
                     <div v-for="item in wikiContent.entryContentVos">
-                        <p class="p1">{{item.contentTitle}}</p>
+                        <a class="p1" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
                         <div v-for="k in item.children">
-                            <p class="p2">{{k.contentTitle}}</p>
-                            <p class="p3" v-for="v in k.children">{{v.contentTitle}}</p>
+                            <a class="p2" @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
+                            <a class="p3" v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
                         </div>
                     </div>
                 </el-tab-pane>
@@ -94,7 +100,7 @@
         name: 'editor',
         data() {
             return {
-                wikiContent: '',
+                wikiContent: {entrySummary: {summary: ''}},
                 activeName: 'second'
             }
         },
@@ -114,6 +120,10 @@
                     window.open('http://' + link)
                 }
             },
+            slideToAnchor (target) {
+                console.log(target)
+                document.getElementById(target).scrollIntoView({behavior: 'smooth'})
+            }
         }
     }
 </script>
