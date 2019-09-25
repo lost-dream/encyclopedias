@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex;max-width: 1280px;margin: 0 auto;" >
+    <div style="display: flex;min-width: 1080px;margin: 0 auto;" >
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
