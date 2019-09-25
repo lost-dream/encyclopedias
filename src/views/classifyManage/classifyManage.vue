@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<!--分类树-->
 		<el-row>
 			<treemenu @parentMethod="chooseItem" :list="treeData"></treemenu>
 		</el-row>

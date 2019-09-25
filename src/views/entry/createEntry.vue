@@ -9,6 +9,7 @@
             <div class="mg-top-20">
                 <h4 class="block">词条分类</h4>
                 <div class="block-container">
+                	
                 </div>
             </div>
             <!-- 同义词 -->
@@ -46,7 +47,10 @@
             <div class="mg-top-20">
                 <h4 class="block">属性</h4>
                 <div class="block-container">
-                    <tab-menu :list="treeData"></tab-menu>
+                    <!--分类树-->
+					<el-row>
+						<treemenu @parentMethod="chooseItem" :list="treeData"></treemenu>
+					</el-row>
                 </div>
             </div>
             <!-- 正文 -->
@@ -141,9 +145,10 @@
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
     import tabMenu from '../../components/treeMenu'
     import {categoryTree} from '@/api/classifyManager/index.js'
+    import treemenu from '@/components/treeMenu'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
-        components: {ElForm,tabMenu},
+        components: {ElForm,tabMenu,treemenu},
         name: 'editor',
         data() {
             return {
@@ -175,39 +180,42 @@
         mounted() {
             this.setModel()
             this.initCKEditor()
-            let vm = this
-            categoryTree({}).then(res =>{
-                //从第一级开始取
-                res.data.children.forEach((item)=>{
-                    if(!item.children.length){
-                        delete item.children
-                    }
-                    else{
-                        item.children.forEach((item1)=>{
-                            if(!item1.children.length){
-                                delete item1.children
-                            }
-                            else{
-                                item1.children.forEach((item2)=>{
-                                    if(!item2.children.length){
-                                        delete item2.children
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-                console.log(res.data.children)
-                this.treeData = res.data.children
-            })
-                .catch(res=>{
-                    console.log(res)
-                })
+            this.categoryTree()
         },
         methods: {
             setModel () {
                 document.getElementById('editor').innerHTML = ''
             },
+            //分类树
+            categoryTree() {
+			categoryTree({}).then(res =>{
+				//从第一级开始取
+				res.data.children.forEach((item)=>{
+					if(!item.children.length){
+						delete item.children
+					}
+					else{
+						item.children.forEach((item1)=>{
+							if(!item1.children.length){
+								delete item1.children
+							}
+							else{
+								item1.children.forEach((item2)=>{
+									if(!item2.children.length){
+										delete item2.children
+									}
+								})
+							}
+						})	
+					}
+				})
+				console.log(res.data.children)
+                this.treeData = res.data.children
+            })
+            .catch(res=>{
+            	console.log(res)
+            })
+		},
             initCKEditor() {
                 var vm = this
 //                const ft = new FocusTracker()
