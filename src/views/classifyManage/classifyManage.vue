@@ -37,7 +37,7 @@
 		        
 		        <el-table-column width="150px" label="属性值类型">
 		          <template slot-scope="scope">
-		          	<el-select placeholder="请选择类型" v-model="scope.row.attributeType">
+		          	<el-select @change="attributeTypeChange($event)" placeholder="请选择类型" v-model="scope.row.attributeType">
 			          <el-option v-for="(item, index) in attributeTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
 			        </el-select>
 		          </template>
@@ -177,6 +177,10 @@ export default {
 		
 	},
 	methods: {
+		//根据属性值类型变化改变约束值和编辑模式
+		attributeTypeChange(item) {
+			console.log(item)
+		},
 		chooseItem(item,parentItem) {
 			parentItem?this.checkedParentId = parentItem.id:this.checkedParentId = ''
 			this.checkedId = item.id

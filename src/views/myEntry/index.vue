@@ -85,7 +85,7 @@ export default {
 			this.statusList.map((item)=>{
 				item.choosed = false
 			})
-			this.status = item.id
+			item.status = item.id
 			item.choosed = true
 		},
 	}
