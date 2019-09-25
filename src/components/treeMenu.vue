@@ -5,10 +5,10 @@
 				<a @click.stop="clickFirstCategory(item)">{{item.name}}</a>
 				<ul class="dropdown-menu" v-show="item.show">
 					<li class="dropdown-submenu" @mouseout="hideThirdCategory(item1)" @mouseover="showThirdCategory(item1)" v-for="(item1,index1) in item.children">
-						<a @click.stop="clickSecondCategory(item1)">{{item1.name}}</a>
-						<ul class="dropdown-menu" v-show="item1.show" v-if="item1.children.length">
+						<a @click.stop="clickSecondCategory(item1,item)">{{item1.name}}</a>
+						<ul class="dropdown-menu" v-show="item1.show">
 							<li class="dropdown-submenu" v-for="(item2,index2) in item1.children">
-								<a @click.stop="clickThirdCategory(item2)">{{item2.name}}</a>
+								<a @click.stop="clickThirdCategory(item2,item1)">{{item2.name}}</a>
 							</li>
 						</ul>
 					</li>
@@ -35,7 +35,9 @@ export default {
   watch: {
   	
   },
-  created() {},
+  created() {
+  	
+  },
   mounted() {},
   beforeRouteLeave(to,from,next) {},
   
@@ -43,13 +45,13 @@ export default {
   	clickFirstCategory(item) {
   		this.$emit('parentMethod',item);
   	},
-  	clickSecondCategory(item) {
-  		this.hideSecondCategory(item)
-  		this.$emit('parentMethod',item);
+  	clickSecondCategory(item,parentItem) {
+  		this.hideSecondCategory(parentItem)
+  		this.$emit('parentMethod',item,parentItem);
   	},
-  	clickThirdCategory(item) {
-  		this.hideThirdCategory(item)
-  		this.$emit('parentMethod',item);
+  	clickThirdCategory(item,parentItem) {
+  		this.hideThirdCategory(parentItem)
+  		this.$emit('parentMethod',item,parentItem);
   	},
   	showSecondCategory(item) {
   		this.$set(item,'show',true)

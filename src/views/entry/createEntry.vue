@@ -139,7 +139,7 @@
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
-    import tabMenu from '../../components/children'
+    import tabMenu from '../../components/treeMenu'
     import {categoryTree} from '@/api/classifyManager/index.js'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
