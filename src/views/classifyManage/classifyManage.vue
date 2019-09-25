@@ -1,19 +1,9 @@
 <template>
 	<div>
-		<p>属性模板管理</p>
-		<div class="classifyList">
-			<span @click="chooseItem(item)" v-for="item in treeData">
-				<span>{{item.name}}</span>
-				<el-cascader
-				    :options="item.children"
-				    :props="props"
-				    @change="changeCascader"
-				    :placeholder="item.name"
-				    :show-all-levels="false"
-			    	clearable>
-				</el-cascader>
-			</span>
-		</div>
+		<el-row>
+			<treemenu @parentMethod="chooseItem" :list="treeData"></treemenu>
+		</el-row>
+		
 		
 		<!--展示选中的分类对应的属性模板（只读）-->
 		<el-card v-show="checkedParentId" shadow="hover">
@@ -105,8 +95,12 @@
 <script>
 import {categoryTree,save,list} from '@/api/classifyManager/index.js'
 import {attributeTypeAry,editTypeAry,editSourceAry,} from '@/enumeration/classify.js'
+import treemenu from '@/components/treeMenu'
 export default {
 	name: 'classifyManage',
+	components:{
+		treemenu
+	},
 	data() {
 	    return {
 	        checkedId: '',
@@ -118,6 +112,7 @@ export default {
 	            label: 'name'
 	        },
 	        props:{
+	        	expandTrigger:'hover',
 	        	checkStrictly: true,
 	        	value:'id',
 	        	label:'name',
@@ -181,15 +176,13 @@ export default {
 		
 	},
 	methods: {
-		chooseItem(item) {
-			console.log(item)
-			this.checkedParentItem = item
+		chooseItem(item,parentItem) {
+			parentItem?this.checkedParentId = parentItem.id:this.checkedParentId = ''
 			this.checkedId = item.id
 			this.list()
 		},
 		//选中分类事件
 		changeCascader(item) {
-			console.log(item)
 			this.checkedId = item[item.length - 1];
 			 //获取选中分类的父级分类id，查询回父级分类的属性模板展示出来
 			 if(item.length>1){
@@ -261,7 +254,6 @@ export default {
 				pageNumber: 1,
 				pageSize: 100,
 			}).then(res =>{
-                console.log(res)
                 this.classifyData = res.data.records
             })
             .catch(res=>{
