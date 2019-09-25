@@ -3,7 +3,8 @@
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <h3>[ci tiao ming cheng]</h3>
-                <h1>{{entryName}}</h1>
+
+                <el-input  v-model="entryName"></el-input>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20">
@@ -21,11 +22,11 @@
                     <div class="mg-top-20" v-show="synonymList.length">
                         <el-tag
                                 v-for="tag in synonymList"
-                                :key="tag"
+                                :key="tag.name"
                                 closable
                                 @close="handleClose(tag, 1)"
                                 type="info">
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                     </div>
                 </div>
@@ -68,13 +69,13 @@
                                 <a @click="deleteQuote(index)" class="quote-btn">删除</a>
                             </span>
                             </p>
-                            <p>{{item.inntroduce}}</p>
+                            <p>{{item.introduce}}</p>
                             <a  target="_blank" class="quote-btn" @click="goLink(item.url)">{{item.url}}</a>
                         </el-card >
                     </template>
                     <el-form label-width="80px">
                         <el-form-item label="说明">
-                            <el-input v-model="quote.inntroduce"></el-input>
+                            <el-input v-model="quote.introduce"></el-input>
                         </el-form-item>
                         <el-form-item label="原始标题">
                             <el-input v-model="quote.title"></el-input>
@@ -100,11 +101,11 @@
                     <div class="mg-top-20" v-show="tagList.length">
                         <el-tag
                                 v-for="tag in tagList"
-                                :key="tag"
+                                :key="tag.name"
                                 closable
                                 @close="handleClose(tag, 0)"
                                 type="info">
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                     </div>
                 </div>
@@ -146,7 +147,7 @@
         name: 'editor',
         data() {
             return {
-                entryName: '词条名称',
+                entryName: '',
                 isInit: false,
                 formLabelWidth: '120px',
                 dialogVisible: true,
@@ -162,7 +163,7 @@
                 quote: {
                     title: '',
                     url:'',
-                    inntroduce: ''
+                    introduce: ''
                 },
                 editIndex: -1,
                 activeName: 'first',
@@ -173,13 +174,20 @@
         mounted() {
             let vm = this
             // 获取目录列表
-            this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:'1174974096481820673',versionId:'1174974096481820674'})
+            vm.entryId = '1174974096481820673'
+            vm.versionId = '1174974096481820674'
+            this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:vm.versionId})
                 .then(res => {
                     console.log(res.data)
                     let data = res.data
                     vm.entryName = data.entryName
                     data.entrySynonyms.map(item => {
-                        vm.synonymList.push(item.name)
+                        let obj = {
+                            name:item.name,
+                            sourceType:item.sourceType,
+                            sourceValue:item.sourceValue,
+                        }
+                        vm.synonymList.push(obj)
                     })
                     vm.summary = data.entrySummary.summary
                     data.entryContentVos.map(item =>{
@@ -208,17 +216,25 @@
                     data.entryReferrences.map(item => {
                         let obj = {}
                         obj.title = item.referrenceTitle
-                        obj.inntroduce = item.referrenceDesc
+                        obj.introduce = item.referrenceDesc
                         obj.url = item.referrenceUrl
                         vm.quoteList.push(obj)
                     })
                     data.entryLabels.map(item => {
-                        vm.tagList.push(item.labelName)
+                        let obj = {
+                            name:item.labelName,
+                            sourceType:item.sourceType,
+                            sourceValue:item.sourceValue,
+                        }
+                        vm.tagList.push(obj)
                     })
                     console.log(vm.tagList)
                     vm.setModel()
                     vm.initCKEditor()
                 })
+
+            vm.setModel()
+            vm.initCKEditor()
         },
         methods: {
             setModel () {
@@ -385,15 +401,22 @@
                 arr_main.map(item => {
                     let lvl1 = {}
                     lvl1.title = item.title
+                    lvl1.sourceType = null
+                    lvl1.sourceValue = null
                     lvl1.children = []
                     item.children.map(k => {
                         let lvl2 = {}
                         lvl2.title = k.title
+                        lvl1.sourceType = null
+                        lvl1.sourceValue = null
                         lvl2.children = []
                         lvl1.children.push(lvl2)
                         k.children.map(v => {
                             let lvl3 = {
-                                title: v.title
+                                title: v.title,
+                                content: v.content,
+                                sourceType: null,
+                                sourceValue: null
                             }
                             lvl2.children.push(lvl3)
                         })
@@ -408,7 +431,12 @@
                 if(vm.synonymList.includes(vm.synonym)){
                     this.$message.error('该同义词已存在');
                 } else {
-                    vm.synonymList.push(vm.synonym)
+                    let obj = {
+                        name: vm.synonym,
+                        sourceType: null,
+                        sourceValue: null
+                    }
+                    vm.synonymList.push(obj)
                     vm.synonym = '';
                 }
             },
@@ -426,31 +454,34 @@
                 if(vm.tagList.includes(vm.tag)){
                     this.$message.error('该标签已存在');
                 } else {
-                    vm.tagList.push(vm.tag)
+                    let obj = {name: vm.tag,sourceType:5,sourceValue:'test'}
+                    vm.tagList.push(obj)
                     vm.tag = '';
                 }
             },
             resetQuote () {
-                this.quote = {title:'',url: '',inntroduce:''}
+                this.quote = {title:'',url: '',introduce:''}
             },
             addQuoteToList () {
                 console.log(this.editIndex)
                 let vm = this
-                if(vm.quote.name == ''||vm.quote.inntroduce == ''||vm.quote.url == '') {
+                if(vm.quote.name == ''||vm.quote.introduce == ''||vm.quote.url == '') {
                     vm.$message.error('请填写所有数据！');
                     return false
                 }
                 if(vm.editIndex>=0){
                     vm.$set(vm.quoteList[vm.editIndex], vm.quote)
-                    vm.quote = {title:'',url: '',inntroduce:''}
+                    vm.quote = {title:'',url: '',introduce:''}
                     vm.editIndex = -1
                 } else{
                     if(vm.quoteList.includes(vm.quote)) {
                         vm.$message.error('引用数据重复！');
                         return false
                     }
+                    vm.quoteList.sourceType = null
+                    vm.quoteList.sourceValue = null
                     vm.quoteList.push(vm.quote)
-                    vm.quote = {title:'',url: '',inntroduce:''}
+                    vm.quote = {title:'',url: '',introduce:''}
                 }
             },
             editQuote (index) {
@@ -496,10 +527,11 @@
                 let vm = this
                 let data = {
                     operate: method,
-                    entryId: '',  // 返回值
+                    editReson: '',
+                    entryId: method=='save'?vm.entryId:'',  // 返回值
                     versionId:'',
                     entryName: vm.entryName,
-                    summary: vm.summary,
+                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:1,sourceValue: 'baidu.com'}],
                     categorys: [], // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -507,6 +539,9 @@
                     referrences: vm.quoteList,
                     synonym: vm.synonymList
                 }
+                console.log(data)
+                vm.$axios.post('/wiki-backend/api/entry/save', data)
+                    .then(res =>{console.log(res)})
                 console.log(data)
             }
         }

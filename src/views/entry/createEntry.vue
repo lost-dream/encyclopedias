@@ -3,7 +3,7 @@
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <h3>[ci tiao ming cheng]</h3>
-                <h1>{{entryName}}</h1>
+                <el-input  v-model="entryName"></el-input>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20">
@@ -22,11 +22,11 @@
                     <div class="mg-top-20" v-show="synonymList.length">
                         <el-tag
                                 v-for="tag in synonymList"
-                                :key="tag"
+                                :key="tag.name"
                                 closable
                                 @close="handleClose(tag, 1)"
                                 type="info">
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                     </div>
                 </div>
@@ -104,11 +104,11 @@
                     <div class="mg-top-20" v-show="tagList.length">
                         <el-tag
                                 v-for="tag in tagList"
-                                :key="tag"
+                                :key="tag.name"
                                 closable
                                 @close="handleClose(tag, 0)"
                                 type="info">
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
         name: 'editor',
         data() {
             return {
-                entryName: '词条名称',
+                entryName: '',
                 isInit: false,
                 formLabelWidth: '120px',
                 dialogVisible: true,
@@ -357,15 +357,22 @@
                 arr_main.map(item => {
                     let lvl1 = {}
                     lvl1.title = item.title
+                    lvl1.sourceType = null
+                    lvl1.sourceValue = null
                     lvl1.children = []
                     item.children.map(k => {
                         let lvl2 = {}
                         lvl2.title = k.title
+                        lvl1.sourceType = null
+                        lvl1.sourceValue = null
                         lvl2.children = []
                         lvl1.children.push(lvl2)
                         k.children.map(v => {
                             let lvl3 = {
-                                title: v.title
+                                title: v.title,
+                                content: v.content,
+                                sourceType: null,
+                                sourceValue: null
                             }
                             lvl2.children.push(lvl3)
                         })
@@ -380,7 +387,12 @@
                 if(vm.synonymList.includes(vm.synonym)){
                     this.$message.error('该同义词已存在');
                 } else {
-                    vm.synonymList.push(vm.synonym)
+                    let obj = {
+                        name: vm.synonym,
+                        sourceType: null,
+                        sourceValue: null
+                    }
+                    vm.synonymList.push(obj)
                     vm.synonym = '';
                 }
             },
@@ -398,7 +410,8 @@
                 if(vm.tagList.includes(vm.tag)){
                     this.$message.error('该标签已存在');
                 } else {
-                    vm.tagList.push(vm.tag)
+                    let obj = {name: vm.tag,sourceType:5,sourceValue:'test'}
+                    vm.tagList.push(obj)
                     vm.tag = '';
                 }
             },
@@ -421,6 +434,8 @@
                         vm.$message.error('引用数据重复！');
                         return false
                     }
+                    vm.quoteList.sourceType = null
+                    vm.quoteList.sourceValue = null
                     vm.quoteList.push(vm.quote)
                     vm.quote = {title:'',url: '',inntroduce:''}
                 }
@@ -468,10 +483,11 @@
                 let vm = this
                 let data = {
                     operate: method,
+                    editReson: '',
                     entryId: '',  // 返回值
                     versionId:'',
                     entryName: vm.entryName,
-                    summary: vm.summary,
+                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:1,sourceValue: 'baidu.com'}],
                     categorys: [], // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -479,6 +495,9 @@
                     referrences: vm.quoteList,
                     synonym: vm.synonymList
                 }
+                console.log(data)
+                vm.$axios.post('/wiki-backend/api/entry/save', data)
+                    .then(res =>{console.log(res)})
                 console.log(data)
             }
         }
