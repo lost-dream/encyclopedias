@@ -3,7 +3,7 @@
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <h3>[ci tiao ming cheng]</h3>
-                <h1>{{entryName}}</h1>
+                <el-input  v-model="entryName"></el-input>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20">
@@ -28,11 +28,11 @@
                     <div class="mg-top-20" v-show="synonymList.length">
                         <el-tag
                                 v-for="tag in synonymList"
-                                :key="tag"
+                                :key="tag.name"
                                 closable
                                 @close="handleClose(tag, 1)"
                                 type="info">
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                     </div>
                 </div>
@@ -53,7 +53,10 @@
             <div class="mg-top-20">
                 <h4 class="block">属性</h4>
                 <div class="block-container">
-                    <tab-menu :list="treeData"></tab-menu>
+                    <!--分类树-->
+					<el-row>
+						<treemenu @parentMethod="chooseItem" :list="treeData"></treemenu>
+					</el-row>
                 </div>
             </div>
             <!-- 正文 -->
@@ -107,11 +110,11 @@
                     <div class="mg-top-20" v-show="tagList.length">
                         <el-tag
                                 v-for="tag in tagList"
-                                :key="tag"
+                                :key="tag.name"
                                 closable
                                 @close="handleClose(tag, 0)"
                                 type="info">
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                     </div>
                 </div>
@@ -149,7 +152,7 @@
                 width="85%"
                 height="540px"
                 :title="title" 
-                :from_data='categoryTree' 
+                :from_data='categoryTreeData' 
                 :to_data='toData' 
                 :defaultProps="{label:'name'}" 
                 pid="parentId" 
@@ -175,14 +178,15 @@
     import tabMenu from '../../components/treeMenu'
     import {categoryTree} from '@/api/classifyManager/index.js'
     import categoryApi from '@/api/categoryManager/index.js'
+    import treemenu from '@/components/treeMenu'
     import _ from 'lodash'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
-        components: {ElForm,tabMenu,treeTransfer},
+        components: {ElForm,tabMenu,treemenu,treeTransfer},
         name: 'editor',
         data() {
             return {
-                entryName: '词条名称',
+                entryName: '',
                 isInit: false,
                 formLabelWidth: '120px',
                 dialogVisible: false,
@@ -208,7 +212,7 @@
                 // 分类部分
                 title: ["全部分类", "已选择"],
                 mode: "addressList", // transfer addressList
-                categoryTree: [],
+                categoryTreeData: [],
                 toData:[],
                 savedCategory: [],
                 leafNumber: 0
@@ -220,38 +224,41 @@
         mounted() {
             this.setModel()
             this.initCKEditor()
-            let vm = this
-            categoryTree({}).then(res =>{
-                //从第一级开始取
-                res.data.children.forEach((item)=>{
-                    if(!item.children.length){
-                        delete item.children
-                    }
-                    else{
-                        item.children.forEach((item1)=>{
-                            if(!item1.children.length){
-                                delete item1.children
-                            }
-                            else{
-                                item1.children.forEach((item2)=>{
-                                    if(!item2.children.length){
-                                        delete item2.children
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-                console.log(res.data.children)
-                this.treeData = res.data.children
-            })
-                .catch(res=>{
-                    console.log(res)
-                })
+            this.categoryTree()
         },
         methods: {
             setModel () {
                 document.getElementById('editor').innerHTML = ''
+            },
+            //分类树
+            categoryTree() {
+                categoryTree({}).then(res =>{
+                    //从第一级开始取
+                    res.data.children.forEach((item)=>{
+                        if(!item.children.length){
+                            delete item.children
+                        }
+                        else{
+                            item.children.forEach((item1)=>{
+                                if(!item1.children.length){
+                                    delete item1.children
+                                }
+                                else{
+                                    item1.children.forEach((item2)=>{
+                                        if(!item2.children.length){
+                                            delete item2.children
+                                        }
+                                    })
+                                }
+                            })	
+                        }
+                    })
+                    console.log(res.data.children)
+                    this.treeData = res.data.children
+                })
+                .catch(res=>{
+                    console.log(res)
+                })
             },
             initCKEditor() {
                 var vm = this
@@ -394,15 +401,22 @@
                 arr_main.map(item => {
                     let lvl1 = {}
                     lvl1.title = item.title
+                    lvl1.sourceType = null
+                    lvl1.sourceValue = null
                     lvl1.children = []
                     item.children.map(k => {
                         let lvl2 = {}
                         lvl2.title = k.title
+                        lvl1.sourceType = null
+                        lvl1.sourceValue = null
                         lvl2.children = []
                         lvl1.children.push(lvl2)
                         k.children.map(v => {
                             let lvl3 = {
-                                title: v.title
+                                title: v.title,
+                                content: v.content,
+                                sourceType: null,
+                                sourceValue: null
                             }
                             lvl2.children.push(lvl3)
                         })
@@ -417,7 +431,12 @@
                 if(vm.synonymList.includes(vm.synonym)){
                     this.$message.error('该同义词已存在');
                 } else {
-                    vm.synonymList.push(vm.synonym)
+                    let obj = {
+                        name: vm.synonym,
+                        sourceType: null,
+                        sourceValue: null
+                    }
+                    vm.synonymList.push(obj)
                     vm.synonym = '';
                 }
             },
@@ -435,7 +454,8 @@
                 if(vm.tagList.includes(vm.tag)){
                     this.$message.error('该标签已存在');
                 } else {
-                    vm.tagList.push(vm.tag)
+                    let obj = {name: vm.tag,sourceType:5,sourceValue:'test'}
+                    vm.tagList.push(obj)
                     vm.tag = '';
                 }
             },
@@ -458,6 +478,8 @@
                         vm.$message.error('引用数据重复！');
                         return false
                     }
+                    vm.quoteList.sourceType = null
+                    vm.quoteList.sourceValue = null
                     vm.quoteList.push(vm.quote)
                     vm.quote = {title:'',url: '',inntroduce:''}
                 }
@@ -505,10 +527,11 @@
                 let vm = this
                 let data = {
                     operate: method,
+                    editReson: '',
                     entryId: '',  // 返回值
                     versionId:'',
                     entryName: vm.entryName,
-                    summary: vm.summary,
+                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:1,sourceValue: 'baidu.com'}],
                     categorys: [], // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -517,8 +540,12 @@
                     synonym: vm.synonymList
                 }
                 console.log(data)
+                vm.$axios.post('/wiki-backend/api/entry/save', data)
+                    .then(res =>{console.log(res)})
+                console.log(data)
+
             },
-            //
+            // 获取分类树
             getCategoryTree(){
                 let vm = this
                 categoryApi.getTreeData()
@@ -527,7 +554,7 @@
                     // return;
                     if(res.status == 'success'){
                         let data = res.data && (_.cloneDeep(res.data.children) || [])
-                        vm.categoryTree = data;
+                        vm.categoryTreeData = data;
                     }else{
                         this.$message.error("获取分类信息失败，请稍后重试！")
                     }
@@ -575,6 +602,7 @@
             // 保存词条分类
             saveCategory(){
                 // 处理一下savedCategory数组, 提出来id，重新弄个数组就ok
+                this.dialogVisible = false;
             }
         }
     }

@@ -7,10 +7,10 @@ export function entryStatistical(data) {
     data
   })
 }
-//获取模板数据列表
-export function list(data) {
+//获取用户词条列表
+export function userEntryList(data) {
   return request({
-    url: '/wiki-backend/api/categoryAttributeTemplate/list',
+    url: '/wiki-backend/api/entry/userList',
     method: 'post',
     data
   })
