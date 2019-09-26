@@ -21,7 +21,21 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
+	
+/*--------------------全局样式-------------------------------------------*/
+	/*分页居中*/
+.el-pagination{
+	margin-top: 40px;
+	text-align: center;
+}
+/*表格文字居中*/
+.departTable {
+  &/deep/ .cell {
+    text-align: center;
+  }
+}
+/*--------------------全局样式-------------------------------------------*/
 .header {
   line-height: 60px;
   height: auto !important;

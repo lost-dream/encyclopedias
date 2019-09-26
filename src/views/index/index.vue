@@ -3,24 +3,46 @@
 		<div class="title">
 			<span>最新词条</span>
 		</div>
-		<div id="entryStatisticalData">
-			<p>
-				<img src="../../assets/index/01.png"/>
-				<span class="data">{{entryStatisticalData.totalEntry}}</span>
-				<span>个词条</span>
-			</p>
-			<p>
-				<img src="../../assets/index/02.png"/>
-				<span class="data">{{entryStatisticalData.totalEntryEitor}}</span>
-				<span>次编辑</span>
-			</p>
-			<p>
-				<img src="../../assets/index/03.png"/>
-				<span class="data">{{entryStatisticalData.totalEditor}}</span>
-				<span>人编写</span>
-			</p>
-			
-		</div>
+		<el-row>
+			<el-col :span="16">
+				<el-carousel :interval="2000000" type="card" height="530px">
+					<el-carousel-item v-for="item in entryListData" :key="item.id">
+						<div @click="seeEntry(item.id)" class="entryList">
+							<!--<img :src="item.specialCoverUrl" alt="" />-->
+							<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
+							<div>
+								<p class="entry-title">{{item.ENTRY_NAME}}</p>
+								<div v-if="item.SUMMARY.length">{{item.SUMMARY[0].summary}}</div>
+							</div>
+						</div>
+					</el-carousel-item>
+				</el-carousel>
+			</el-col>
+			<el-col :span="8">
+				<div id="entryStatisticalData">
+					<p>
+						<img src="../../assets/index/01.png"/>
+						<span class="data">{{entryStatisticalData.totalEntry}}</span>
+						<span>个词条</span>
+					</p>
+					<p>
+						<img src="../../assets/index/02.png"/>
+						<span class="data">{{entryStatisticalData.totalEntryEitor}}</span>
+						<span>次编辑</span>
+					</p>
+					<p>
+						<img src="../../assets/index/03.png"/>
+						<span class="data">{{entryStatisticalData.totalEditor}}</span>
+						<span>人编写</span>
+					</p>
+					
+				</div>
+			</el-col>
+		</el-row>
+		
+		
+		
+		
 		<div class="title">
 			<span>特色专题</span>
 		</div>
@@ -62,7 +84,7 @@
 </template>
 
 <script>
-import {entryStatistical,} from '@/api/onlyShowData/index.js'
+import {entryStatistical,entryList} from '@/api/onlyShowData/index.js'
 import {specialList,} from '@/api/special/index.js'
 import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
@@ -73,6 +95,7 @@ export default {
 	    	entryStatisticalData:{},
 	    	specialListData:[],
 	    	categoryTreeList:[],
+	    	entryListData:[],
 	    	categoryTitleColor:['e9b937','6d56fb','079ea9','ec6b6b','199df2'],
 	    	categoryBgColor:['f3ebd1','d9d4f5','c1dfe2','f7dee0','c6e3f5'],
 	    }
@@ -84,6 +107,7 @@ export default {
 		this.entryStatistical()
 		this.specialList()
 		this.categoryTree()
+		this.entryList()
 	},
 	mounted() {
 	},
@@ -91,6 +115,17 @@ export default {
 		
 	},
 	methods: {
+		entryList() {
+			entryList({
+				"pageNumber": "1",
+				"pageSize": "4",
+				"categoryId": "",
+				"keyword": ""
+			}).then((res)=>{
+				this.entryListData = res.data.records
+			})
+		},
+		
 		routeToEntryList(id2,index2,thirdAry) {
 			var choosedCategoryInfo = {
 				'id2':id2,
@@ -141,17 +176,21 @@ export default {
 		entryStatistical() {
 			entryStatistical({}).then((res)=>{
 				this.entryStatisticalData = res.data
-				var list = document.querySelectorAll('.data')
-				var ary = []
-				for(let i = 0;i<list.length;i++){
-					ary.push(list[i].offsetWidth)
-				}
-				ary.sort(function (a, b) {
-				  return a-b;
+				this.$nextTick(()=>{
+					var list = document.querySelectorAll('.data')
+					var ary = []
+					for(let i = 0;i<list.length;i++){
+						ary.push(list[i].offsetWidth)
+					}
+					ary.sort(function (a, b) {
+					  return a-b;
+					})
+					
+					for(let i = 0;i<list.length;i++){
+						list[i].style.width = ary[ary.length-1]+'px'
+					}
 				})
-				for(let i = 0;i<list.length;i++){
-					list[i].style.width = ary[ary.length-1]+'px'
-				}
+				
 			})
 		},
 		
@@ -197,6 +236,25 @@ export default {
 		}
 	}
 	
+}
+.entryList{
+	position: relative;
+	>div{
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		background: (0,0,0,0.3);
+		color: white;
+		width: calc(100% - 30px);
+		padding: 0 15px;
+		line-height: 25px;
+		font-size: 16px;
+		.entry-title{
+			line-height: 30px;
+			font-size: 14px;
+			font-weight: bold;
+		}
+	}
 }
 .specialList{
 	width: 360px;

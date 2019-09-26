@@ -15,10 +15,10 @@ export function userEntryList(data) {
     data
   })
 }
-//新增/更新分类属性模板
-export function save(data) {
+//词条列表（搜索、词条分类）
+export function entryList(data) {
   return request({
-    url: '/wiki-backend/api/categoryAttributeTemplate/save',
+    url: '/wiki-backend/api/entry/list',
     method: 'post',
     data
   })

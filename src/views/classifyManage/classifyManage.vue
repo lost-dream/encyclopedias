@@ -355,9 +355,4 @@ export default {
 	}
 }
 
-.departTable {
-  &/deep/ .cell {
-    text-align: center;
-  }
-}
 </style>

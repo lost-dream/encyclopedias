@@ -2,33 +2,36 @@
 	<div>
 		<p>根据分类查询词条列表</p>
 		<ul class="categoryList">
-			<li :class="item.choosed?'highlight':''" @click="list(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
+			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
 		</ul>
-		<div class="noDataRemindContent" v-if="!entryList.length">当前分类暂无词条</div>
+		<div class="noDataRemindContent" v-if="!entryListData.length">当前分类暂无词条</div>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
 	</div>
 </template>
 
 <script>
-
-import {specialEntryList} from '@/api/special/index.js'
+import {entryList} from '@/api/onlyShowData/index.js'
 export default {
 	
 	name: 'entryListByCategory',
 	data() {
 	    return {
-	    	entryList:[],
+	    	entryListData:[],
 	    	categoryList:[],
 	    	pagination: {
 		      page: 1,
 		      limit: 10,
 		      count: 0
 		    },
+		    categoryId:'',
 		    
 	    }
 	},
 	watch: {
-		
+		categoryId() {
+			this.pagination.page = 1
+			this.list()
+		}
 	},
 	created() {
 		this.getChoosedCategoryInfo()
@@ -39,6 +42,13 @@ export default {
 		
 	},
 	methods: {
+		choose(item) {
+			this.categoryList.map((item)=>{
+				item.choosed = false
+			})
+			item.choosed = true
+			this.categoryId = item.id
+		},
 		routeToEntry(id) {
 			this.$router.push({
 				name: 'entryDetail',
@@ -56,15 +66,11 @@ export default {
 		},
 		//根据分类id获取词条列表
 		list(item) {
-			this.categoryList.forEach((item)=>{
-				item.choosed = false
-			})
-			item.choosed = true
-			console.log(item.id)
-			specialEntryList({
+			entryList({
 				"pageNumber": this.pagination.page,
 				"pageSize": this.pagination.limit,
-				"specialId": item.id
+				"categoryId": this.categoryId,
+				"keyword": ""
 			}).then((res)=>{
 				
 				this.pagination.count = 100
@@ -75,8 +81,12 @@ export default {
 		getChoosedCategoryInfo() {
 			try{
 				var obj = JSON.parse(sessionStorage.getItem('choosedCategoryInfo'))
+				obj.thirdAry.map((item)=>{
+					item.choosed = false
+				})
 				this.categoryList = obj.thirdAry
-				this.list(this.categoryList[obj.index2])
+				this.categoryId = this.categoryList[obj.index2].id
+				this.categoryList[obj.index2].choosed = true
 			}catch(e){
 				//TODO handle the exception
 			}

@@ -4,20 +4,33 @@
 			<li :class="item.choosed?'choosed':''" @click="chooseStatus(item)" v-for="(item,index) in statusList">{{item.name}}</li>
 		</ul>
 		<el-table
+			class="departTable"
 		    :data="MyEntryList"
 		    border
 		    style="width: 100%">
-		    <el-table-column prop="date" label="词条名称" width="180"></el-table-column>
-			<el-table-column prop="name" label="保存时间" width="180"></el-table-column>
-			<el-table-column prop="address" label="提交时间"></el-table-column>
-			<el-table-column prop="date" label="审核时间" width="180"></el-table-column>
-			<el-table-column prop="name" label="审核人员" width="180"></el-table-column>
-			<el-table-column prop="address" label="审核意见"></el-table-column>
-			<el-table-column fixed="right" label="操作" width="100">
+		    <el-table-column prop="ENTRY_NAME" label="词条名称" width="180"></el-table-column>
+			<el-table-column label="保存时间" width="180">
 				<template slot-scope="scope">
-					<el-button @click="handleClick(scope.row)" type="text" size="small">继续修改</el-button>
-        			<el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
-        			<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+					{{parseTime(scope.row.CREATE_TIME)}}
+				</template>
+			</el-table-column>
+			<el-table-column label="提交时间" width="180">
+				<template slot-scope="scope">
+					{{parseTime(scope.row.CREATE_TIME)}}
+				</template>
+			</el-table-column>
+			<el-table-column label="审核时间" width="180">
+				<template slot-scope="scope">
+					{{parseTime(scope.row.AUDIT_TIME)}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="AUDITOR" label="审核人员" width="180"></el-table-column>
+			<el-table-column prop="AUDIT_CONTENT" label="审核意见"></el-table-column>
+			<el-table-column fixed="right" label="操作" width="150">
+				<template slot-scope="scope">
+					<el-button @click="modifyEntry(scope.row)" type="text" size="small">继续修改</el-button>
+        			<el-button @click="deleteEntry(scope.row)" type="text" size="small">删除</el-button>
+        			<el-button @click="seeEntry(scope.row)" type="text" size="small">查看</el-button>
 				</template>
 			</el-table-column>
 		  </el-table>
@@ -27,13 +40,14 @@
 
 <script>
 import {userEntryList} from '@/api/onlyShowData/index.js'
+import {parseTime} from '@/utils/commonMethod.js'
 export default {
 	
 	name: 'myEntry',
 	data() {
 	    return {
 	    	statusList:[
-	    		{id:'1',name:'草稿'},
+	    		{id:'1',name:'草稿',choosed:true},
 	    		{id:'2',name:'待审核'},
 	    		{id:'3',name:'已通过'},
 	    		{id:'4',name:'未通过'},
@@ -48,7 +62,10 @@ export default {
 	    }
 	},
 	watch: {
-		
+		status() {
+			this.pagination.page = 1
+			this.userEntryList()
+		}
 	},
 	created() {
 		this.userEntryList()
@@ -59,6 +76,42 @@ export default {
 		
 	},
 	methods: {
+		modifyEntry(item) {
+			this.$router.push({
+				name:'editEntry',
+				params:{
+					id:item.ID
+				}
+			})
+		},
+		deleteEntry(item) {
+			this.$confirm('确认删除当前词条？', '提示', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          type: 'warning',
+	          center: true
+	        }).then(() => {
+	        	this.$message('删除成功');
+	        	this.pagination.page = 1
+				this.userEntryList()
+	        }).catch(() => {
+	          
+	        });
+			
+		},
+		seeEntry(item) {
+			console.log(item)
+			this.$router.push({
+				name:'viewEntry',
+				params:{
+					id:item.ID
+				}
+			})
+		},
+		
+		parseTime(str) {
+			return parseTime(str)
+		},
 		handleSizeChange(val) {
 			this.pagination.page = 1
 			this.pagination.limit = val
@@ -85,8 +138,9 @@ export default {
 			this.statusList.map((item)=>{
 				item.choosed = false
 			})
-			item.status = item.id
+			this.status = item.id
 			item.choosed = true
+			
 		},
 	}
 
