@@ -100,14 +100,25 @@
                 </div>
             </div>
         </div>
-        <div>
-            <el-tabs type="border-card" v-model="activeName">
-                <!--<el-tab-pane label="目录模板" name="first">-->
-                    <!--<el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>-->
-                    <!--<el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>-->
-                <!--</el-tab-pane>-->
-                <el-tab-pane label="目录" name="second">
-                <a @click="slideToAnchor('summary')" class="catalogue">摘要</a>
+        <div >
+            <div class="box-card">
+
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <span>词条统计</span>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                    </div>
+                    <p>创建者：{{wikiInfo.creator}}</p>
+                    <p>编辑次数：{{wikiInfo.versionApprovingCount}}&nbsp;<a style="color:#03A9F4;cursor:pointer;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
+                    <p v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
+                </el-card>
+                <el-card style="margin-top: 20px">
+                    <div slot="header" class="clearfix">
+                        <span>快速导航</span>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                    </div>
+
+                    <a @click="slideToAnchor('summary')" class="catalogue">摘要</a>
                     <a @click="slideToAnchor('catalogue')" class="catalogue">目录</a>
                     <a @click="slideToAnchor('classify')" class="catalogue">词条分类</a>
                     <div v-for="item in wikiContent.entryContentVos">
@@ -119,8 +130,16 @@
                     </div>
                     <a @click="slideToAnchor('reference')" class="catalogue">引用</a>
                     <a @click="slideToAnchor('tag')" class="catalogue">标签</a>
-                </el-tab-pane>
-            </el-tabs>
+                </el-card>
+            </div>
+            <!--<el-tabs v-model="activeName">-->
+                <!--&lt;!&ndash;<el-tab-pane label="目录模板" name="first">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;</el-tab-pane>&ndash;&gt;-->
+                <!--<el-tab-pane label="目录" name="second">-->
+                <!--</el-tab-pane>-->
+            <!--</el-tabs>-->
         </div>
     </div>
 
@@ -132,7 +151,8 @@
             return {
                 wikiContent: {entrySummary: {summary: ''}},
                 activeName: 'second',
-                contentList: []
+                contentList: [],
+                wikiInfo: {}
             }
         },
         mounted() {
@@ -175,18 +195,11 @@
                     })
                     console.log(vm.contentList)
                 })
-//            } else {
-//                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-//                    .then(res => {
-//                        // console.log(res.data)
-//                        // vm.wikiContent = res.data
-//                        this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:res.data.versionId})
-//                            .then(result => {
-//                                console.log(result.data)
-//                                vm.wikiContent = result.data
-//                            })
-//                    })
-//            }
+            this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+                .then(res => {
+                     console.log(res.data)
+                     vm.wikiInfo = res.data
+                })
         },
         methods: {
             goLink (link) {
@@ -199,6 +212,14 @@
             slideToAnchor (target) {
                 console.log(target)
                 document.getElementById(target).scrollIntoView({behavior: 'smooth'})
+            },
+            toHistoryList (target) {
+                this.$router.push({
+                    name:'entryVersionList',
+                    query:{
+                        entryId: target
+                    }
+                })
             }
         }
     }
@@ -251,10 +272,10 @@
     .el-form-item{
         margin-bottom: 10px;
     }
-    .el-tabs--border-card{
+    .box-card{
         position: fixed !important;
         width: 200px;
-        margin-top: 100px;
+        margin-top: 50px;
         margin-left: 20px;
     }
     .p1{
