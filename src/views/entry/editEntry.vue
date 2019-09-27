@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex;min-width: 1080px;margin: 0 auto" >
+    <div style="display: flex;width: 1280px;margin: 0 auto" >
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <h3>[ci tiao ming cheng]</h3>
@@ -174,67 +174,69 @@
         mounted() {
             let vm = this
             // 获取目录列表
-            vm.entryId = '1174974096481820673'
-            vm.versionId = '1174974096481820674'
-            this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:vm.versionId})
-                .then(res => {
-                    console.log(res.data)
-                    let data = res.data
-                    vm.entryName = data.entryName
-                    data.entrySynonyms.map(item => {
-                        let obj = {
-                            name:item.name,
-                            sourceType:item.sourceType,
-                            sourceValue:item.sourceValue,
-                        }
-                        vm.synonymList.push(obj)
-                    })
-                    vm.summary = data.entrySummary.summary
-                    data.entryContentVos.map(item =>{
-                        let obj1 = {
-                            'title': item.contentTitle,
-                            'content': item.contentBody,
-                            'children': []
-                        }
-                        item.children.map(k => {
-                            let obj2 = {
-                                'title': k.contentTitle,
-                                'content': k.contentBody,
+            vm.entryId = vm.$route.query.entryId
+            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
+            vm.viewType = vm.$route.query.viewType
+            if(vm.viewType == 'preview'){
+                this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:vm.versionId})
+                    .then(res => {
+                        console.log(res.data)
+                        let data = res.data
+                        vm.entryName = data.entryName
+                        data.entrySynonyms.map(item => {
+                            let obj = {
+                                name:item.name,
+                                sourceType:item.sourceType,
+                                sourceValue:item.sourceValue,
+                            }
+                            vm.synonymList.push(obj)
+                        })
+                        vm.summary = data.entrySummarys.summary
+                        data.entryContentVos.map(item =>{
+                            let obj1 = {
+                                'title': item.contentTitle,
+                                'content': item.contentBody,
                                 'children': []
                             }
-                            obj1.children.push(obj2)
-                            k.children.map(v => {
-                                let obj3 = {
-                                    'title': v.contentTitle,
-                                    'content': v.contentBody,
+                            item.children.map(k => {
+                                let obj2 = {
+                                    'title': k.contentTitle,
+                                    'content': k.contentBody,
+                                    'children': []
                                 }
-                                obj2.children.push(obj3)
+                                obj1.children.push(obj2)
+                                k.children.map(v => {
+                                    let obj3 = {
+                                        'title': v.contentTitle,
+                                        'content': v.contentBody,
+                                    }
+                                    obj2.children.push(obj3)
+                                })
                             })
+                            vm.model.push(obj1)
                         })
-                        vm.model.push(obj1)
+                        data.entryReferrences.map(item => {
+                            let obj = {}
+                            obj.title = item.referrenceTitle
+                            obj.introduce = item.referrenceDesc
+                            obj.url = item.referrenceUrl
+                            vm.quoteList.push(obj)
+                        })
+                        data.entryLabels.map(item => {
+                            let obj = {
+                                name:item.labelName,
+                                sourceType:item.sourceType,
+                                sourceValue:item.sourceValue,
+                            }
+                            vm.tagList.push(obj)
+                        })
+                        vm.initCKEditor()
+                        vm.setModel()
                     })
-                    data.entryReferrences.map(item => {
-                        let obj = {}
-                        obj.title = item.referrenceTitle
-                        obj.introduce = item.referrenceDesc
-                        obj.url = item.referrenceUrl
-                        vm.quoteList.push(obj)
-                    })
-                    data.entryLabels.map(item => {
-                        let obj = {
-                            name:item.labelName,
-                            sourceType:item.sourceType,
-                            sourceValue:item.sourceValue,
-                        }
-                        vm.tagList.push(obj)
-                    })
-                    console.log(vm.tagList)
-                    vm.setModel()
-                    vm.initCKEditor()
-                })
+            }
 
-            vm.setModel()
-            vm.initCKEditor()
+            // vm.initCKEditor()
+            // vm.setModel()
         },
         methods: {
             setModel () {
@@ -401,13 +403,13 @@
                 arr_main.map(item => {
                     let lvl1 = {}
                     lvl1.title = item.title
-                    lvl1.sourceType = null
+                    lvl1.sourceType = 7
                     lvl1.sourceValue = null
                     lvl1.children = []
                     item.children.map(k => {
                         let lvl2 = {}
                         lvl2.title = k.title
-                        lvl1.sourceType = null
+                        lvl1.sourceType = 7
                         lvl1.sourceValue = null
                         lvl2.children = []
                         lvl1.children.push(lvl2)
@@ -415,7 +417,7 @@
                             let lvl3 = {
                                 title: v.title,
                                 content: v.content,
-                                sourceType: null,
+                                sourceType: 7,
                                 sourceValue: null
                             }
                             lvl2.children.push(lvl3)
@@ -433,7 +435,7 @@
                 } else {
                     let obj = {
                         name: vm.synonym,
-                        sourceType: null,
+                        sourceType: 7,
                         sourceValue: null
                     }
                     vm.synonymList.push(obj)
@@ -443,10 +445,8 @@
             handleClose(tag, index) {
                 if(index == 1){
                     this.synonymList.splice(this.synonymList.indexOf(tag), 1);
-                    console.log(this.synonymList)
                 } else {
                     this.tagList.splice(this.tagList.indexOf(tag), 1);
-                    console.log(this.tagList)
                 }
             },
             addTag () {
@@ -454,7 +454,7 @@
                 if(vm.tagList.includes(vm.tag)){
                     this.$message.error('该标签已存在');
                 } else {
-                    let obj = {name: vm.tag,sourceType:5,sourceValue:'test'}
+                    let obj = {name: vm.tag,sourceType:7,sourceValue:null}
                     vm.tagList.push(obj)
                     vm.tag = '';
                 }
@@ -463,7 +463,6 @@
                 this.quote = {title:'',url: '',introduce:''}
             },
             addQuoteToList () {
-                console.log(this.editIndex)
                 let vm = this
                 if(vm.quote.name == ''||vm.quote.introduce == ''||vm.quote.url == '') {
                     vm.$message.error('请填写所有数据！');
@@ -478,7 +477,7 @@
                         vm.$message.error('引用数据重复！');
                         return false
                     }
-                    vm.quoteList.sourceType = null
+                    vm.quoteList.sourceType = 7
                     vm.quoteList.sourceValue = null
                     vm.quoteList.push(vm.quote)
                     vm.quote = {title:'',url: '',introduce:''}
@@ -528,10 +527,10 @@
                 let data = {
                     operate: method,
                     editReson: '',
-                    entryId: method=='save'?vm.entryId:'',  // 返回值
-                    versionId:'',
+                    entryId: vm.entryId,  // 返回值
+                    versionId:vm.versionId,
                     entryName: vm.entryName,
-                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:1,sourceValue: 'baidu.com'}],
+                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
                     categorys: [], // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -541,7 +540,11 @@
                 }
                 console.log(data)
                 vm.$axios.post('/wiki-backend/api/entry/save', data)
-                    .then(res =>{console.log(res)})
+                    .then(res =>{
+                        if(res.status == 'success'){
+                            vm.$router.push('/myEntry')
+                        }
+                    })
                 console.log(data)
             }
         }

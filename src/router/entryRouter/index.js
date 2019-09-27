@@ -17,7 +17,7 @@ const EntryRouter = [
     }, {
         path: '/editEntry',
         component: () => import('@/views/entry/editEntry'),
-        name: 'viewEntry',
+        name: 'editEntry',
         meta: {
             title: '词条编辑',
         },

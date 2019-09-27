@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex;max-width: 1280px;margin: 0 auto" >
+    <div style="display: flex;width: 1280px;margin: 0 auto" >
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
                 <h3>[ci tiao ming cheng]</h3>
@@ -146,7 +146,7 @@
         <el-dialog
         title="选择分类"
         :visible.sync="dialogVisible"
-        :before-close="handleClose">
+        :before-close="handleCloseModel">
             <tree-transfer 
                 ref="treeTransfer"
                 width="85%"
@@ -401,13 +401,13 @@
                 arr_main.map(item => {
                     let lvl1 = {}
                     lvl1.title = item.title
-                    lvl1.sourceType = null
+                    lvl1.sourceType = 7
                     lvl1.sourceValue = null
                     lvl1.children = []
                     item.children.map(k => {
                         let lvl2 = {}
                         lvl2.title = k.title
-                        lvl1.sourceType = null
+                        lvl1.sourceType = 7
                         lvl1.sourceValue = null
                         lvl2.children = []
                         lvl1.children.push(lvl2)
@@ -415,7 +415,7 @@
                             let lvl3 = {
                                 title: v.title,
                                 content: v.content,
-                                sourceType: null,
+                                sourceType: 7,
                                 sourceValue: null
                             }
                             lvl2.children.push(lvl3)
@@ -433,7 +433,7 @@
                 } else {
                     let obj = {
                         name: vm.synonym,
-                        sourceType: null,
+                        sourceType: 7,
                         sourceValue: null
                     }
                     vm.synonymList.push(obj)
@@ -454,7 +454,7 @@
                 if(vm.tagList.includes(vm.tag)){
                     this.$message.error('该标签已存在');
                 } else {
-                    let obj = {name: vm.tag,sourceType:5,sourceValue:'test'}
+                    let obj = {name: vm.tag,sourceType:7,sourceValue:null}
                     vm.tagList.push(obj)
                     vm.tag = '';
                 }
@@ -478,7 +478,7 @@
                         vm.$message.error('引用数据重复！');
                         return false
                     }
-                    vm.quoteList.sourceType = null
+                    vm.quoteList.sourceType = 7
                     vm.quoteList.sourceValue = null
                     vm.quoteList.push(vm.quote)
                     vm.quote = {title:'',url: '',inntroduce:''}
@@ -531,7 +531,7 @@
                     entryId: '',  // 返回值
                     versionId:'',
                     entryName: vm.entryName,
-                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:1,sourceValue: 'baidu.com'}],
+                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
                     categorys: [], // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -541,7 +541,11 @@
                 }
                 console.log(data)
                 vm.$axios.post('/wiki-backend/api/entry/save', data)
-                    .then(res =>{console.log(res)})
+                    .then(res =>{
+                        if(res.status == 'success'){
+                            vm.$router.push('/myEntry')
+                        }
+                    })
                 console.log(data)
 
             },
@@ -592,7 +596,7 @@
                 }
             },
             // 关闭弹窗二次确认
-            handleClose(done) {
+            handleCloseModel(done) {
                 this.$confirm('确认关闭？')
                 .then(_ => {
                     done();

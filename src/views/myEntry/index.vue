@@ -79,8 +79,10 @@ export default {
 		modifyEntry(item) {
 			this.$router.push({
 				name:'editEntry',
-				params:{
-					id:item.ID
+				query:{
+					entryId:item.ENTRY_ID,
+					versionId: item.ID,
+					viewType: 'preview'
 				}
 			})
 		},
@@ -103,8 +105,10 @@ export default {
 			console.log(item)
 			this.$router.push({
 				name:'viewEntry',
-				params:{
-					id:item.ID
+				query:{
+					entryId:item.ENTRY_ID,
+					versionId: item.ID,
+					viewType: 'preview'
 				}
 			})
 		},
