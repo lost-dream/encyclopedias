@@ -4,8 +4,6 @@
 		<el-row>
 			<treemenu @parentMethod="chooseItem" :list="treeData"></treemenu>
 		</el-row>
-		
-		
 		<!--展示选中的分类对应的属性模板（只读）-->
 		<el-card v-show="checkedParentId" shadow="hover">
 			<div slot="header" class="clearfix">继承属性</div>
@@ -37,32 +35,63 @@
 		        
 		        <el-table-column width="150px" label="属性值类型">
 		          <template slot-scope="scope">
-		          	<el-select @change="attributeTypeChange($event)" placeholder="请选择类型" v-model="scope.row.attributeType">
+		          	<el-select @change="attributeTypeChange($event,scope.row)" placeholder="请选择类型" v-model="scope.row.attributeType">
 			          <el-option v-for="(item, index) in attributeTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
 			        </el-select>
 		          </template>
 		        </el-table-column>
 		        <el-table-column width="250px" label="约束值">
-		          <template slot-scope="scope">
-		          	<el-col :span="11">
-						<el-input placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeBegin"></el-input>
-					</el-col>
-					<el-col style="line-height: 40px;" :span="1">-</el-col>
-					<el-col :span="11">
-						<el-input placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeEnd"></el-input>
-					</el-col>
-		          </template>
+		        	<template slot-scope="scope">
+		        		<!--数字范围-->
+		        		<el-row v-if="scope.row.attributeType===2">
+		        			<el-col :span="11">
+								<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeBegin"></el-input>
+							</el-col>
+							<el-col style="line-height: 40px;" :span="1">-</el-col>
+							<el-col :span="11">
+								<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeEnd"></el-input>
+							</el-col>
+		        		</el-row>
+		        		
+		        		<!--时间范围-->
+		        		<el-row v-if="scope.row.attributeType===7||scope.row.attributeType===6||scope.row.attributeType===5||scope.row.attributeType===4">
+		        			<el-col :span="11">
+								<el-date-picker
+							      v-model="scope.row.attributeRangeBegin"
+							      :type="datetimeObj[scope.row.attributeType]"
+							      placeholder="选择日期时间"
+							      align="right"
+							      value-format="timestamp"
+							      >
+							    </el-date-picker>
+				          	</el-col>
+							<el-col style="line-height: 40px;" :span="1">-</el-col>
+							<el-col :span="11">
+								<el-date-picker
+							      v-model="scope.row.attributeRangeEnd"
+							      :type="datetimeObj[scope.row.attributeType]"
+							      placeholder="选择日期时间"
+							      align="right"
+							      value-format="timestamp"
+							      >
+							    </el-date-picker>
+							</el-col>
+		        		</el-row>
+		        		
+		        		
+		        	</template>
+		        	
 		        </el-table-column>
 		        <el-table-column width="150px" label="编辑模式">
 		          <template slot-scope="scope">
-		            <el-select placeholder="请选择模式" v-model="scope.row.editType">
+		            <el-select disabled placeholder="请选择模式" v-model="scope.row.editType">
 			          <el-option v-for="(item, index) in editTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
 			        </el-select>
 		          </template>
 		        </el-table-column>
 		        <el-table-column width="200px" label="编辑内容来源">
 		          <template slot-scope="scope">
-		            <el-select placeholder="请选择来源" v-model="scope.row.editSource">
+		            <el-select disabled placeholder="请选择来源" v-model="scope.row.editSource">
 			          <el-option v-for="(item, index) in editSourceAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
 			        </el-select>
 		          </template>
@@ -90,6 +119,62 @@
 		    <el-button type="primary" @click="cancelModify">确 定</el-button>
 		  </span>
 		</el-dialog>
+		
+		<!--根据属性动态创建form表单-->
+		<ul>
+			<li v-for="item in classifyData">
+				<span>{{item.attributeName}}</span>
+				<div>
+					<!--文本-->
+					<span v-if="item.attributeType===1">
+						<el-input
+							type="text"
+						  placeholder="请输入属性内容"
+						  v-model="item.val"
+						  clearable>
+						</el-input>
+					</span>
+					<!--数字-->
+					<span v-if="item.attributeType===2">
+						<el-input
+							type="number"
+							:min="item.attributeRangeBegin"
+							:max="item.attributeRangeEnd"
+						  placeholder="请输入属性内容"
+						  v-model="item.val"
+						  clearable>
+						</el-input>
+					</span>
+					<!--枚举-->
+					<span v-if="item.attributeType===3">
+						<el-select v-model="item.val" placeholder="请选择">
+						    <el-option
+						      v-for="item1 in options"
+						      :key="item1.value"
+						      :label="item1.label"
+						      :value="item1.value">
+						    </el-option>
+						  </el-select>
+					</span>
+					<!--时间-->
+					<span v-if="item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7">
+						<el-date-picker
+					      v-model="item.val"
+					      :type="datetimeObj[item.attributeType]"
+					      placeholder="选择日期时间"
+					      align="right"
+					      value-format="timestamp"
+					      :data-begin="item.attributeRangeBegin"
+					      :data-end="item.attributeRangeEnd"
+					      :picker-options="pickerOptions"
+					      >
+					    </el-date-picker>
+					</span>
+					
+				</div>
+			</li>
+		</ul>
+		
 	</div>
 </template>
 
@@ -104,6 +189,20 @@ export default {
 	},
 	data() {
 	    return {
+	    	pickerOptions: {
+				disabledDate: this.disabledDate
+			},
+	    	options:[
+	    		{value:'1',label:'没得数据1'},
+	    		{value:'2',label:'没得数据2'},
+	    		{value:'3',label:'没得数据3'},
+	    	],
+	    	datetimeObj:{
+	    		7:'datetime',
+	    		6:'date',
+	    		5:'month',
+	    		4:'year'
+	    	},
 	        checkedId: '',
 	        checkedParentId:'',
 	        checkedParentItem:{},
@@ -137,6 +236,7 @@ export default {
 	    }
 	},
 	watch: {
+		
 		checkedParentId() {
 			list({
 				categoryId:this.checkedParentId,
@@ -177,9 +277,25 @@ export default {
 		
 	},
 	methods: {
+		disabledDate(time,now) {
+			console.log(now)
+           	return time.getTime() > Date.now() - 8.64e6;//如果没有后面的-8.64e6就是不可以选择今天的
+           
+        },
 		//根据属性值类型变化改变约束值和编辑模式
-		attributeTypeChange(item) {
-			console.log(item)
+		attributeTypeChange(ev,row) {
+			this.$set(row,'attributeType',ev)
+			this.$set(row,'attributeRangeBegin','')
+			this.$set(row,'attributeRangeEnd','')
+			this.$set(row,'editType',ev)
+			this.$set(row,'editSource','')
+			if(ev === 3){
+				this.$set(row,'editSource','1')
+			}
+			if(ev === 1||ev === 3){
+				this.$set(row,'attributeRangeBegin',0)
+			this.$set(row,'attributeRangeEnd',0)
+			}
 		},
 		chooseItem(item,parentItem) {
 			parentItem?this.checkedParentId = parentItem.id:this.checkedParentId = ''
@@ -226,10 +342,31 @@ export default {
 			var flag = true
 			this.classifyData.map((item)=>{
 				var obj = JSON.parse(JSON.stringify(this.defaultClassifyItem))
-				for(var i in obj){
-					if(item[i].toString().trim() === ''){
+				if(item['attributeType']===1){
+					if(item['attributeName'].trim()===''){
 						flag = false
 					}
+				}
+				else if(item['attributeType']===2){
+					if(item['attributeRangeBegin']===''||item['attributeRangeEnd']===''
+					|| (item['attributeRangeBegin']>=item['attributeRangeEnd'])
+					){
+						flag = false
+					}
+					
+				}
+				else if(item['attributeType']===3){
+					
+				}
+				else{//日期
+					if(item['attributeRangeBegin']===''||item['attributeRangeEnd']===''
+					|| (item['attributeRangeBegin']>=item['attributeRangeEnd'])
+					){
+						flag = false
+					}
+				}
+				
+				for(var i in obj){
 					if(i === 'attributeRangeBegin' || i === 'attributeRangeEnd'){
 						obj[i] = item[i].toString()
 					}
@@ -259,6 +396,9 @@ export default {
 				pageNumber: 1,
 				pageSize: 100,
 			}).then(res =>{
+				res.data.records.map((item)=>{
+					item.val = ''
+				})
                 this.classifyData = res.data.records
             })
             .catch(res=>{
