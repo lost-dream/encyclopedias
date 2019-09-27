@@ -10,21 +10,44 @@
             </div>
             <!-- summary -->
             <div class="mg-top-20" id="summary">
-                <div class="block-container" v-if="wikiContent.entrySummarys.summary">
-                    {{wikiContent.entrySummarys.summary}}
+                <div class="block-container" v-for="item,index in wikiContent.entrySummarys" :key="index">
+                    <div v-if="item.status == 1">
+                        <span v-if="item.summary">{{item.summary}}</span>
+                        <span v-else>当前词条暂无描述</span>
+                    </div>
                 </div>
-                <div v-else>暂无摘要内容。</div>
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container" style="width: 20%;"><p>目录</p></div>
-                <div v-for="(item,index) in wikiContent.entryContentVos">
-                    <a @click="slideToAnchor(item.id)" class="catalogue">{{item.contentTitle}}</a>
-                    <div v-for="k in item.children">
-                        <a @click="slideToAnchor(k.id)" class="catalogue">{{k.contentTitle}}</a>
-                        <a v-for="v in k.children" @click="slideToAnchor(v.id)" class="catalogue">{{v.contentTitle}}</a>
-                    </div>
-                </div>
+                <div class="block-container" style="width: calc(14% - 40px);font-weight: bolder"><p class="vertical-middle">目录</p></div>
+                <ul style="padding: 15px;width: calc(21.5% - 31px);border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList.slice(0,8)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
+                <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList.slice(8,16)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
+                <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList.slice(16,24)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
+                <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px)">
+                    <li v-for="(item,index) in contentList.slice(24,32)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20" id="classify">
@@ -77,27 +100,46 @@
                 </div>
             </div>
         </div>
-        <div>
-            <el-tabs type="border-card" v-model="activeName">
-                <!--<el-tab-pane label="目录模板" name="first">-->
-                    <!--<el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>-->
-                    <!--<el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>-->
-                <!--</el-tab-pane>-->
-                <el-tab-pane label="目录" name="second">
-                <a @click="slideToAnchor('summary')" class="catalogue">摘要</a>
+        <div >
+            <div class="box-card">
+
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <span>词条统计</span>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                    </div>
+                    <p>创建者：{{wikiInfo.creator}}</p>
+                    <p>编辑次数：{{wikiInfo.versionApprovingCount}}&nbsp;<a style="color:#03A9F4;cursor:pointer;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
+                    <p v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
+                </el-card>
+                <el-card style="margin-top: 20px">
+                    <div slot="header" class="clearfix">
+                        <span>快速导航</span>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                    </div>
+
+                    <a @click="slideToAnchor('summary')" class="catalogue">摘要</a>
                     <a @click="slideToAnchor('catalogue')" class="catalogue">目录</a>
                     <a @click="slideToAnchor('classify')" class="catalogue">词条分类</a>
                     <div v-for="item in wikiContent.entryContentVos">
                         <a class="p1 catalogue" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
                         <div v-for="k in item.children">
                             <a class="p2 catalogue" @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
-                            <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)"">{{v.contentTitle}}</a>
+                            <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
                         </div>
                     </div>
                     <a @click="slideToAnchor('reference')" class="catalogue">引用</a>
                     <a @click="slideToAnchor('tag')" class="catalogue">标签</a>
-                </el-tab-pane>
-            </el-tabs>
+                </el-card>
+            </div>
+            <!--<el-tabs v-model="activeName">-->
+                <!--&lt;!&ndash;<el-tab-pane label="目录模板" name="first">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;</el-tab-pane>&ndash;&gt;-->
+                <!--<el-tab-pane label="目录" name="second">-->
+                <!--</el-tab-pane>-->
+            <!--</el-tabs>-->
         </div>
     </div>
 
@@ -108,7 +150,9 @@
         data() {
             return {
                 wikiContent: {entrySummary: {summary: ''}},
-                activeName: 'second'
+                activeName: 'second',
+                contentList: [],
+                wikiInfo: {}
             }
         },
         mounted() {
@@ -116,24 +160,46 @@
             vm.entryId = vm.$route.query.entryId
             vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
             vm.viewType = vm.$route.query.viewType
-            if(vm.viewType == 'preview') {
-                vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId: vm.entryId,versionId: vm.versionId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiContent = res.data
+//            if(vm.viewType == 'preview') {
+            vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId: vm.entryId,versionId: vm.versionId})
+                .then(res => {
+                    console.log(res.data)
+                    vm.wikiContent = res.data
+                    vm.contentList = []
+                    res.data.entryContentVos.map((item,index) => {
+                        let obj1 = {
+                            level: 1,
+                            value: item.contentTitle,
+                            id: item.id,
+                            mark: index
+                        }
+                        vm.contentList.push(obj1)
+                        item.children.map(k => {
+                             let obj2 = {
+                                 level: 2,
+                                 value: k.contentTitle,
+                                 id: k.id,
+                                 mark: index
+                             }
+                             vm.contentList.push(obj2)
+                             k.children.map(v=>{
+                                 let obj3 = {
+                                     level: 3,
+                                     value: v.contentTitle,
+                                     id: v.id,
+                                     mark: index
+                                 }
+                                 vm.contentList.push(obj3)
+                             })
+                        })
                     })
-            } else {
-                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        // console.log(res.data)
-                        // vm.wikiContent = res.data
-                        this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:res.data.versionId})
-                            .then(result => {
-                                console.log(result.data)
-                                vm.wikiContent = result.data
-                            })
-                    })
-            }
+                    console.log(vm.contentList)
+                })
+            this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+                .then(res => {
+                     console.log(res.data)
+                     vm.wikiInfo = res.data
+                })
         },
         methods: {
             goLink (link) {
@@ -146,6 +212,14 @@
             slideToAnchor (target) {
                 console.log(target)
                 document.getElementById(target).scrollIntoView({behavior: 'smooth'})
+            },
+            toHistoryList (target) {
+                this.$router.push({
+                    name:'entryVersionList',
+                    query:{
+                        entryId: target
+                    }
+                })
             }
         }
     }
@@ -198,10 +272,10 @@
     .el-form-item{
         margin-bottom: 10px;
     }
-    .el-tabs--border-card{
+    .box-card{
         position: fixed !important;
         width: 200px;
-        margin-top: 100px;
+        margin-top: 50px;
         margin-left: 20px;
     }
     .p1{
@@ -217,7 +291,20 @@
         padding-left:20px;
         font-weight: lighter;
     }
+    .pd-top-5{
+        padding-top: 5px;
+    }
     a.catalogue{
         display: block;
+        cursor: pointer;
+    }
+    .text-center{
+        text-align: center;
+    }
+    .vertical-middle{
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
     }
 </style>
