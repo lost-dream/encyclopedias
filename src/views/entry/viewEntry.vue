@@ -10,21 +10,44 @@
             </div>
             <!-- summary -->
             <div class="mg-top-20" id="summary">
-                <div class="block-container" v-if="wikiContent.entrySummarys.summary">
-                    {{wikiContent.entrySummarys.summary}}
+                <div class="block-container" v-for="item,index in wikiContent.entrySummarys" :key="index">
+                    <div v-if="item.status == 1">
+                        <span v-if="item.summary">{{item.summary}}</span>
+                        <span v-else>当前词条暂无描述</span>
+                    </div>
                 </div>
-                <div v-else>暂无摘要内容。</div>
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container" style="width: 20%;"><p>目录</p></div>
-                <div v-for="(item,index) in wikiContent.entryContentVos">
-                    <a @click="slideToAnchor(item.id)" class="catalogue">{{item.contentTitle}}</a>
-                    <div v-for="k in item.children">
-                        <a @click="slideToAnchor(k.id)" class="catalogue">{{k.contentTitle}}</a>
-                        <a v-for="v in k.children" @click="slideToAnchor(v.id)" class="catalogue">{{v.contentTitle}}</a>
-                    </div>
-                </div>
+                <div class="block-container" style="width: calc(14% - 40px);font-weight: bolder"><p class="vertical-middle">目录</p></div>
+                <ul style="padding: 15px;width: calc(21.5% - 31px);border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList.slice(0,8)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
+                <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList.slice(8,16)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
+                <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList.slice(16,24)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
+                <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px)">
+                    <li v-for="(item,index) in contentList.slice(24,32)">
+                        <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
+                    </li>
+                </ul>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20" id="classify">
@@ -91,7 +114,7 @@
                         <a class="p1 catalogue" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
                         <div v-for="k in item.children">
                             <a class="p2 catalogue" @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
-                            <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)"">{{v.contentTitle}}</a>
+                            <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
                         </div>
                     </div>
                     <a @click="slideToAnchor('reference')" class="catalogue">引用</a>
@@ -108,7 +131,8 @@
         data() {
             return {
                 wikiContent: {entrySummary: {summary: ''}},
-                activeName: 'second'
+                activeName: 'second',
+                contentList: []
             }
         },
         mounted() {
@@ -116,24 +140,53 @@
             vm.entryId = vm.$route.query.entryId
             vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
             vm.viewType = vm.$route.query.viewType
-            if(vm.viewType == 'preview') {
-                vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId: vm.entryId,versionId: vm.versionId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiContent = res.data
+//            if(vm.viewType == 'preview') {
+            vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId: vm.entryId,versionId: vm.versionId})
+                .then(res => {
+                    console.log(res.data)
+                    vm.wikiContent = res.data
+                    vm.contentList = []
+                    res.data.entryContentVos.map((item,index) => {
+                        let obj1 = {
+                            level: 1,
+                            value: item.contentTitle,
+                            id: item.id,
+                            mark: index
+                        }
+                        vm.contentList.push(obj1)
+                        item.children.map(k => {
+                             let obj2 = {
+                                 level: 2,
+                                 value: k.contentTitle,
+                                 id: k.id,
+                                 mark: index
+                             }
+                             vm.contentList.push(obj2)
+                             k.children.map(v=>{
+                                 let obj3 = {
+                                     level: 3,
+                                     value: v.contentTitle,
+                                     id: v.id,
+                                     mark: index
+                                 }
+                                 vm.contentList.push(obj3)
+                             })
+                        })
                     })
-            } else {
-                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        // console.log(res.data)
-                        // vm.wikiContent = res.data
-                        this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:res.data.versionId})
-                            .then(result => {
-                                console.log(result.data)
-                                vm.wikiContent = result.data
-                            })
-                    })
-            }
+                    console.log(vm.contentList)
+                })
+//            } else {
+//                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+//                    .then(res => {
+//                        // console.log(res.data)
+//                        // vm.wikiContent = res.data
+//                        this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:res.data.versionId})
+//                            .then(result => {
+//                                console.log(result.data)
+//                                vm.wikiContent = result.data
+//                            })
+//                    })
+//            }
         },
         methods: {
             goLink (link) {
@@ -217,7 +270,20 @@
         padding-left:20px;
         font-weight: lighter;
     }
+    .pd-top-5{
+        padding-top: 5px;
+    }
     a.catalogue{
         display: block;
+        cursor: pointer;
+    }
+    .text-center{
+        text-align: center;
+    }
+    .vertical-middle{
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
     }
 </style>

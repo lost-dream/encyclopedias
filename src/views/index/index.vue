@@ -7,7 +7,7 @@
 			<el-col :span="16">
 				<el-carousel :interval="2000000" type="card" height="530px">
 					<el-carousel-item v-for="item in entryListData" :key="item.id">
-						<div @click="seeEntry(item.id)" class="entryList">
+						<div @click="seeEntry(item)" class="entryList">
 							<!--<img :src="item.specialCoverUrl" alt="" />-->
 							<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
 							<div>
@@ -193,7 +193,18 @@ export default {
 				
 			})
 		},
-		
+
+        seeEntry (hash) {
+            console.log(hash)
+            this.$router.push({
+                name:'viewEntry',
+                query:{
+                    entryId:hash.ENTRY_ID,
+//                    versionId: hash.ID,
+                    viewType: 'view'
+                }
+            })
+		}
 	}
 
 }
