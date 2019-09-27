@@ -1,23 +1,51 @@
 <template>
 	<div>
-		<p>历史版本</p>
+		<el-table
+			class="departTable"
+		    :data="MyEntryList"
+		    border
+		    style="width: 100%">
+			<el-table-column label="版本时间" width="180">
+				<template slot-scope="scope">
+					{{parseTime(scope.row.createTime)}}
+				</template>
+			</el-table-column>
+			<el-table-column label="版本详情" width="180">
+				<template slot-scope="scope">
+        			<el-button @click="seeEntry(scope.row)" type="text" size="small">查看</el-button>
+				</template>
+			</el-table-column>
+			<el-table-column prop="creator" label="贡献者" width="180"></el-table-column>
+			<el-table-column prop="editReason" label="编辑原因" width="180"></el-table-column>
+			
+		  </el-table>
+		  <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
 	</div>
 </template>
 
 <script>
+import {entryVersionList} from '@/api/entry/index.js'
+import {parseTime} from '@/utils/commonMethod.js'
 export default {
 	
-	name: 'versionHistoryDetail',
+	name: 'entryVersionList',
 	data() {
 	    return {
-	    	
+	    	entryId:'',
+	    	MyEntryList:[],
+	    	pagination: {
+		      page: 1,
+		      limit: 10,
+		      count: 0
+		    },
 	    }
 	},
 	watch: {
 		
 	},
 	created() {
-		
+		this.entryId = this.$route.query.entryId
+		this.entryVersionList()
 	},
 	mounted() {
 	},
@@ -25,6 +53,68 @@ export default {
 		
 	},
 	methods: {
+		modifyEntry(item) {
+			this.$router.push({
+				name:'editEntry',
+				query:{
+					entryId:item.ENTRY_ID,
+					versionId: item.ID,
+					viewType: 'preview'
+				}
+			})
+		},
+		deleteEntry(item) {
+			this.$confirm('确认删除当前词条？', '提示', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          type: 'warning',
+	          center: true
+	        }).then(() => {
+	        	this.$message('删除成功');
+	        	this.pagination.page = 1
+				this.entryVersionList()
+	        }).catch(() => {
+	          
+	        });
+			
+		},
+		seeEntry(item) {
+			console.log(item)
+			this.$router.push({
+				name:'viewEntry',
+				query:{
+					entryId:this.entryId,
+					versionId: item.id,
+					viewType: 'preview'
+				}
+			})
+		},
+		
+		parseTime(str) {
+			return parseTime(str)
+		},
+		handleSizeChange(val) {
+			this.pagination.page = 1
+			this.pagination.limit = val
+			this.entryVersionList()
+		},
+		handleCurrentChange(val) {
+			this.pagination.page = val
+			this.entryVersionList()
+		},
+		entryVersionList() {
+			entryVersionList({
+				pageNumber: this.pagination.page,
+				pageSize: this.pagination.limit,
+				entryId: this.entryId
+			}).then(res =>{
+				this.MyEntryList = res.data.records
+				this.pagination.count = res.data.total
+			})
+            .catch(res=>{
+            	console.log(res)
+            })
+		},
 		
 	}
 
@@ -32,5 +122,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	
+.statusList{
+	li{
+		display: inline-block;
+		background: #e6e6e6;
+		color: #adadad;
+		font-weight: bold;
+		font-size: 18px;
+		width: 90px;
+		text-align: center;
+		border-right: 1px solid #d0d0d0;
+		line-height: 40px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+	}
+	.choosed{
+		background: #337ab7;
+		color: white;
+	}
+}	
 </style>

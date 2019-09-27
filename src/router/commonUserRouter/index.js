@@ -18,19 +18,19 @@ const commonUserRouter = [
 			},
 		},
 		{
-			path: '/versionHistory',
+			path: '/entryVersionList',
 			component: () =>
 				import('@/views/versionHistory/index'),
-			name: 'versionHistory',
+			name: 'entryVersionList',
 			meta: {
 				title: '历史版本',
 			},
 		},
 		{
-			path: '/versionHistoryDetail',
+			path: '/entryVersionDetail',
 			component: () =>
 				import('@/views/versionHistory/detail'),
-			name: 'versionHistoryDetail',
+			name: 'entryVersionDetail',
 			meta: {
 				title: '版本详情',
 			},
