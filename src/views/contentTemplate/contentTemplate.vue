@@ -31,7 +31,7 @@
           <div class="comp-tr-node" slot-scope="{ node, data }">
             <!-- 编辑状态 -->
             <template v-if="node.isEdit">
-              <el-input v-model="data.name" 
+              <el-input v-model="data.contentName" 
                 autofocus
                 size="mini"
                 :ref="'slotTreeInput'+data[NODE_KEY]"
@@ -257,33 +257,6 @@ export default{
         this.checkTemplateTreeData(data.id)
       }
     },
-    // 发送保存请求操作
-    doSaveAction(){
-      let apiFunc = this.diagTitle.text == '编辑分类' ? api.updateCategory : api.createCategory, vm = this, expanded = ''
-      this.$refs['ruleForm'].validate((valid) => {
-        if (valid) {
-          typeof(vm.form.parentId) == 'object' && (vm.form.parentId = vm.form.parentId[vm.form.parentId.length - 1]) // 默认是数组，提交时取最后一个
-          expanded = [].concat(vm.form.parentId)
-          apiFunc(_.merge({}, vm.form))
-          .then(res => {
-            if(res.status == 'success'){
-              this.dialogFormVisible = false
-              this.form = {}
-              this.expanded = expanded
-              this.getTreeData()
-              this.$message.success('保存成功！')
-            }else{
-              this.$message.error('保存失败，请稍后重试！')
-            }
-          })
-          .catch(e => {
-            this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
-          })
-        } else {
-          return false;
-        }
-      });
-    },
     // 保存函数
     saveContent(){
       let vm = this
@@ -294,6 +267,8 @@ export default{
         content: this.setTree
       })
       .then(res => {
+        this.$message.success("保存成功！");
+        this.saveLoading = false
         console.log(res);
       })
       .catch(e => {
@@ -307,14 +282,8 @@ export default{
 }
 </script>
 
-<style>
-.el-tree-node__content {
-  height: 28px !important;
-}
-</style>
 <style lang="scss" scoped>
 	/* common */
-
 	// 显示按钮
 	.show-btns{
 		opacity: 1;
@@ -355,7 +324,7 @@ export default{
 		.comp-tr-node{
 			// label
 			.comp-tr-node--name{
-				display: inline-block;
+				display: inline;
 				line-height: 40px;
 				min-height: 40px;
 				// 新增
@@ -432,6 +401,10 @@ export default{
       min-width: 130px;
     }
   }
+}
+
+.el-tree /deep/ .el-tree-node__content {
+  height: 28px !important;
 }
 
 </style>

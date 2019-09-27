@@ -52,10 +52,6 @@ h2 {
   margin: 0 0 40px;
 }
 
-.u-clear {
-  color: #409EFF !important;
-}
-
 ul,li{
 	list-style: none;
 	margin: 0;
