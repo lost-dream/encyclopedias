@@ -7,7 +7,7 @@
         <el-main>
         	<!--面包屑导航-->
 	      	<el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
-	            <el-breadcrumb-item v-for="item in levelList" :to="item.path">{{item.meta.title}}</el-breadcrumb-item>
+	            <el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
 	       </el-breadcrumb>
         <!-- Body -->
          <router-view></router-view>

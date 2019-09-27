@@ -135,7 +135,9 @@
                         @node-click="loadContent">
                     </el-tree>
                     <div class="template-right">
-                        <h4>{{selectedCategory}}</h4>
+                        <h4 class="category-title">{{selectedCategory}}
+                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
+                        </h4>
                         <ul v-if="contentData.length" class="content-menu">
                             <li v-for="item in contentData" v-bind:key="item.id">
                                 <template v-if="item.children.length">
@@ -143,6 +145,11 @@
                                     <ul>
                                         <li v-for="el in item['children']" v-bind:key="el.id">
                                             {{el.contentName}}
+                                            <ul class="thrid-class">
+                                                <li v-for="e in el['children']" v-bind:key="e.id">
+                                                    {{e.contentName}}
+                                                </li>
+                                            </ul>
                                         </li>
                                     </ul>
                                 </template> 
@@ -246,6 +253,7 @@
                 // 目录
                 contentData: [],
                 selectedCategory: '',
+                showFormat: false,
             }
         },
         created(){
@@ -531,14 +539,19 @@
             handleClick(tab, event) {
                 console.log(tab, event);
             },
-            setTemplate (index) {
-                let content
-                if(index == 1){
-                    content = '<h2>歼-20</h2><h3>基础信息</h3><h4>作战半径</h4><h4>空-空格斗</h4><h4>最大航速</h4><h4>载弹</h4><h2>发展历史</h2><h3>测试阶段</h3><h4>首飞</h4><h3>第一次作战</h3><h4>第一次作战</h4>'
-                } else {
-                    content = '<h2>目录1</h2><h3>目录1-1</h3><h4>目录1-1-1</h4><h4>目录1-1-2</h4><h3>目录1-2</h3><h4>目录1-2-1</h4><h2>目录2</h2><h3>目录2-1</h3><h4>目录2-1-1</h4>'
-                }
-                let vm = this
+            setTemplate () {
+                let vm = this, content = ''
+                // 处理目录html
+                this.contentData.forEach(x => {
+                    content += `<h2>${x.contentName}</h2>`
+                    x.children.length && x.children.forEach(y => {
+                        content += `<h3>${y.contentName}</h3>`
+                        y.children.length && y.children.forEach(z => {
+                            content += `<h4>${z.contentName}</h4>`
+                        })
+                    })
+                })
+                
                 this.$confirm('生成模板将删除正文所有内容, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -637,18 +650,21 @@
             },
             // 获取目录数据
             loadContent(data, node, component){
+                this.showFormat = false
                 this.selectedCategory = data.name
                 if(!data.children.length){
                     templateApi.checkTemplateTreeData({
                         id: data.id
                     })
                     .then(res => {
-                        // 
                         this.contentData = res.data
+                        this.showFormat = Boolean(res.data.length)
                     })
                     .catch(e => {
-
+                        this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
                     })
+                }else{
+                    this.contentData = []
                 }
             }
         }
@@ -735,6 +751,11 @@
         color: #409EFF !important;
     }
 
+    .el-tabs /deep/ .el-tabs__item {
+        width: 180px;
+        text-align: center;
+    }
+
     .template-left {
         position: absolute;
         padding-right: 10px;
@@ -747,6 +768,7 @@
         margin-left: 151px;
         color: #606266;
         font-size: 14px;
+        width: 160px;
     }
     #pane-first {
         position: relative;
@@ -761,12 +783,35 @@
     .content-menu li ul {
         padding-left: 30px;
     }
+
+    .content-menu .thrid-class li {
+        list-style: circle;
+    }
     .template-right .empty-list {
         display: flex;
         min-width: 150px;
-        height: 280px;
+        height: 240px;
         justify-content: center;
         align-items: center;
         color: #999;
+        margin: 0
+    }
+
+    .category-title {
+        margin-top: 5px;
+        position: relative;
+    }
+
+    .category-title .formatting {
+        height: 18px;
+        width: 18px;
+        position: absolute;
+        top: -4px;
+        right: 0;
+        border: 1px solid #fff;
+        padding: 2px;
+    }
+    .category-title .formatting:hover{
+        border-color:#ccc;
     }
 </style>

@@ -100,7 +100,7 @@ export default{
       setTree: [], // 目录树
       categoryTree: [], // 
 			NODE_KEY: 'categoryId',// id对应字段
-			MAX_LEVEL: 4,// 设定最大层级
+			MAX_LEVEL: 3,// 设定最大层级    todo: 确认最大级别
 			NODE_ID_START: 0,// 新增节点id，逐次递减
 			// startId: null,
 			defaultProps: {// 默认设置
