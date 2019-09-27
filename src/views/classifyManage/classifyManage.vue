@@ -121,9 +121,9 @@
 		</el-dialog>
 		
 		<!--根据属性动态创建form表单-->
-		<ul>
-			<li v-for="item in classifyData">
-				<span>{{item.attributeName}}</span>
+		<ul class="classifyForm">
+			<li v-for="(item,index) in classifyData">
+				<span class="name">{{item.attributeName}}</span>
 				<div>
 					<!--文本-->
 					<span v-if="item.attributeType===1">
@@ -166,7 +166,7 @@
 					      value-format="timestamp"
 					      :data-begin="item.attributeRangeBegin"
 					      :data-end="item.attributeRangeEnd"
-					      :picker-options="pickerOptions"
+					      :picker-options="pickerOptionsList[index]"
 					      >
 					    </el-date-picker>
 					</span>
@@ -189,9 +189,7 @@ export default {
 	},
 	data() {
 	    return {
-	    	pickerOptions: {
-				disabledDate: this.disabledDate
-			},
+	    	pickerOptionsList:[],
 	    	options:[
 	    		{value:'1',label:'没得数据1'},
 	    		{value:'2',label:'没得数据2'},
@@ -277,11 +275,6 @@ export default {
 		
 	},
 	methods: {
-		disabledDate(time,now) {
-			console.log(now)
-           	return time.getTime() > Date.now() - 8.64e6;//如果没有后面的-8.64e6就是不可以选择今天的
-           
-        },
 		//根据属性值类型变化改变约束值和编辑模式
 		attributeTypeChange(ev,row) {
 			this.$set(row,'attributeType',ev)
@@ -342,6 +335,7 @@ export default {
 			var flag = true
 			this.classifyData.map((item)=>{
 				var obj = JSON.parse(JSON.stringify(this.defaultClassifyItem))
+				
 				if(item['attributeType']===1){
 					if(item['attributeName'].trim()===''){
 						flag = false
@@ -376,6 +370,7 @@ export default {
 				}
 				ary.push(obj)
 			})
+			console.log(ary,'ary')
 			if(!flag){
 				this.$message('请先完善属性');
 				return
@@ -396,9 +391,29 @@ export default {
 				pageNumber: 1,
 				pageSize: 100,
 			}).then(res =>{
-				res.data.records.map((item)=>{
+				this.pickerOptionsList = []
+				res.data.records.map((item,index)=>{
 					item.val = ''
+					
 				})
+				this.pickerOptionsList.push(
+					{
+						disabledDate(time){
+							return time.getTime() <= "1514736000000"
+						}
+					}
+				)
+				
+				this.pickerOptionsList.push(
+					{
+						disabledDate(time){
+							return (time.getTime() <= "1325347200000" || time.getTime() >= "1388505600000")
+							
+						}
+					}
+				)
+				
+				
                 this.classifyData = res.data.records
             })
             .catch(res=>{
@@ -455,6 +470,37 @@ export default {
 </script>
 
 <style lang="scss">
+.classifyForm{
+	font-size: 0;
+	li{
+		display: inline-block;
+		width: 50%;
+		font-size: 14px;
+		color: black;
+		line-height: 30px;
+		margin-top: 20px;
+		.name{
+			margin-right: 15px;
+			display: inline-block;
+			width: 200px;
+			text-align: right;
+			vertical-align: middle;
+			max-height: 60px;
+			overflow: hidden;
+		}
+		div{
+			display: inline-block;
+			
+		}
+	}
+}
+
+
+
+
+
+
+
 .classifyList{
 	background: #459df5;
 	color: white;
