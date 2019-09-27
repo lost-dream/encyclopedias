@@ -130,7 +130,7 @@ export default{
 	},
 	methods: {
     handleDelete(_node, _data){// 删除节点
-			// console.log(_node, _data)
+			console.log(_node, _data)
 			// 判断是否存在子节点
 			if(_data.children && _data.children.length !== 0){
 				this.$message.error("此节点有子级，不可删除！")
@@ -140,8 +140,9 @@ export default{
 				let DeletOprate = () => {
 					this.$nextTick(() => {
 						if(this.$refs.SlotTree){
-							this.$refs.SlotTree.remove(_data)
-							this.$message.success("删除成功！")
+              this.$refs.SlotTree.remove(_node)
+              this.showSave = true;
+							// this.$message.success("删除成功！")
 						}
 					})
 				}

@@ -51,7 +51,7 @@ export default {
 }
 .top-wrap {
 	padding: 0;
-	min-width: 1140px;
+	width: 1280px;
 	margin: 0 auto;
 
 	.el-main {
