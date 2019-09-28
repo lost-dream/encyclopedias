@@ -46,8 +46,48 @@
             <!-- 属性 -->
             <div class="mg-top-20">
                 <h4 class="block">属性</h4>
-                <div class="block-container">
-
+                <div class="block-container" style="background: white;">
+                	<!--分类树-->
+					<el-row style="background: #459DF6;">
+						<treemenu @parentMethod="chooseClassifyItem" :list="categoryTreeData"></treemenu>
+					</el-row>
+                    <!--根据属性动态创建form表单-->
+					<ul class="classifyForm">
+						<li v-for="(item,index) in classifyData">
+							<span class="name">{{item.attributeName}}</span>
+							<div>
+								<!--文本-->
+								<span v-if="item.attributeType===1">
+									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+								</span>
+								<!--数字-->
+								<span v-if="item.attributeType===2">
+									<el-input type="number" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+								</span>
+								<!--枚举-->
+								<span v-if="item.attributeType===3">
+									<el-select v-model="item.val" placeholder="请选择">
+									    <el-option v-for="item1 in options" :key="item1.value" :label="item1.label" :value="item1.value"></el-option>
+									  </el-select>
+								</span>
+								<!--时间-->
+								<span v-if="item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7">
+									<el-date-picker
+								      v-model="item.val"
+								      :type="datetimeObj[item.attributeType]"
+								      placeholder="选择日期时间"
+								      align="right"
+								      value-format="timestamp"
+								      :data-begin="item.attributeRangeBegin"
+								      :data-end="item.attributeRangeEnd"
+								      :picker-options="pickerOptionsList[index]"
+								      >
+								    </el-date-picker>
+								</span>
+								
+							</div>
+						</li>
+					</ul>
                 </div>
             </div>
             <!-- 正文 -->
@@ -140,13 +180,31 @@
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
-    // import treeMenu from '../../components/children'
+    import {categoryTree,getAllAttributesByCategoryId} from '@/api/classifyManager/index.js'
+   	import treemenu from '@/components/treeMenu'
+   	import categoryApi from '@/api/categoryManager/index.js'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
-        components: {ElForm,},
+        components: {ElForm,treemenu,},
         name: 'editor',
         data() {
             return {
+            	//------------属性模板----------------
+            	pickerOptionsList:[],
+		    	options:[
+		    		{value:'1',label:'没得数据1'},
+		    		{value:'2',label:'没得数据2'},
+		    		{value:'3',label:'没得数据3'},
+		    	],
+		    	datetimeObj:{
+		    		7:'datetime',
+		    		6:'date',
+		    		5:'month',
+		    		4:'year'
+		    	},
+		    	classifyData:[],
+		    	categoryTreeData:[],
+		    	//------------属性模板----------------
                 entryName: '',
                 isInit: false,
                 formLabelWidth: '120px',
@@ -170,6 +228,9 @@
                 menuList: [],
                 submitList: []
             }
+        },
+        created(){
+            this.categoryTree()
         },
         mounted() {
             let vm = this
@@ -232,6 +293,28 @@
                         })
                         vm.initCKEditor()
                         vm.setModel()
+                        
+                        
+                        
+                        
+                        data.entryAttributes.map((item,index)=>{
+							item.val = item.attributeValue
+							item.attributeType = item.dataType
+							item.attributeName = item.attributeKey
+//							item.attributeName = item.attributeValue
+							if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+								this.pickerOptionsList.push({
+									disabledDate(time){
+										return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+									}
+								})
+							}
+							else{
+								this.pickerOptionsList.push('')
+							}	
+						})
+                        vm.classifyData = data.entryAttributes
+                        console.log(vm.classifyData,'vm.classifyData')
                     })
             }
 
@@ -239,6 +322,44 @@
             // vm.setModel()
         },
         methods: {
+        	categoryTree() {
+				categoryTree({}).then(res =>{
+	                this.categoryTreeData = res.data.children
+	            })
+	            .catch(res=>{
+	            	console.log(res)
+	            })
+			},
+        	
+        	
+        	chooseClassifyItem(item,parentItem) {
+				this.getAllAttributesByCategoryId(item.id)
+			},
+        	getAllAttributesByCategoryId(id) {
+        		this.classifyData = []
+        		this.pickerOptionsList = []
+        		getAllAttributesByCategoryId({categoryId:id}).then((res)=>{
+        			res.data.map((item,index)=>{
+					item.val = ''
+					if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+						this.pickerOptionsList.push({
+							disabledDate(time){
+								return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+							}
+						})
+					}
+					else{
+						this.pickerOptionsList.push('')
+					}	
+				})
+        		
+                this.classifyData = res.data
+        		})
+        	},
+        	
+        	
+        	
+        	
             setModel () {
                 let vm = this
                 let wiki = ''
@@ -550,7 +671,7 @@
         }
     }
 </script>
-<style scoped>
+<style lang="scss" scoped>
     .ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable), .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners{
         border: 1px solid #ccc
     }
@@ -617,4 +738,29 @@
         padding-left:20px;
         font-weight: lighter;
     }
+    /*属性form样式*/
+    .classifyForm{
+		font-size: 0;
+		li{
+			display: inline-block;
+			width: 50%;
+			font-size: 14px;
+			color: black;
+			line-height: 30px;
+			margin-top: 20px;
+			.name{
+				margin-right: 15px;
+				display: inline-block;
+				width: 200px;
+				text-align: right;
+				vertical-align: middle;
+				max-height: 60px;
+				overflow: hidden;
+			}
+			div{
+				display: inline-block;
+				
+			}
+		}
+	}
 </style>
