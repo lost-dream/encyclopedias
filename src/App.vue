@@ -35,6 +35,11 @@ export default {
     text-align: center;
   }
 }
+/*列表暂无数据*/
+.noDataRemindContent{
+	text-align: center;
+	padding: 20px 0;
+}
 /*--------------------全局样式-------------------------------------------*/
 .header {
   line-height: 60px;
