@@ -311,6 +311,11 @@
                 showFormat: false,
             }
         },
+        watch: {
+            savedCategories: function(newValue, oldValue){
+                this.savedCategoriesArr = newValue.map(x => {return {'categoryId': x.id}})
+            }
+        },
         created(){
             this.categoryTree()
         },
@@ -399,6 +404,28 @@
 						})
                         vm.classifyData = data.entryAttributes
                         console.log(vm.classifyData,'vm.classifyData')
+
+                        // 处理已选分类
+                        let tempArr = [];
+                        data.categories.forEach(x => {
+                            vm.categoryTreeData.forEach(y => {
+                                if(y.children.length){
+                                    y.children.forEach(z => {
+                                        if(z.children.length){
+                                            z.children.forEach(s => {
+                                                s.id == x && (tempArr.push(s))
+                                            })
+                                        }else{
+                                            z.id == x && (tempArr.push(z))
+                                        }
+                                    })
+                                }else{
+                                    y.id == x && (tempArr.push(y))
+                                }
+                            })
+                        })
+                        vm.savedCategories = tempArr
+                        vm.toData = [].concat(tempArr)
                     })
             }
 
@@ -723,13 +750,17 @@
                 console.log(tab, event);
             },
             setTemplate (index) {
-                let content
-                if(index == 1){
-                    content = '<h2>歼-20</h2><h3>基础信息</h3><h4>作战半径</h4><h4>空-空格斗</h4><h4>最大航速</h4><h4>载弹</h4><h2>发展历史</h2><h3>测试阶段</h3><h4>首飞</h4><h3>第一次作战</h3><h4>第一次作战</h4>'
-                } else {
-                    content = '<h2>目录1</h2><h3>目录1-1</h3><h4>目录1-1-1</h4><h4>目录1-1-2</h4><h3>目录1-2</h3><h4>目录1-2-1</h4><h2>目录2</h2><h3>目录2-1</h3><h4>目录2-1-1</h4>'
-                }
-                let vm = this
+                let vm = this, content = ''
+                this.contentData.forEach(x => {
+                    content += `<h2>${x.contentName}</h2>`+`<p></p>`
+                    x.children.length && x.children.forEach(y => {
+                        content += `<h3>${y.contentName}</h3>`+`<p></p>`
+                        y.children.length && y.children.forEach(z => {
+                            content += `<h4>${z.contentName}</h4>`+`<p></p>`
+                        })
+                    })
+                })
+                
                 this.$confirm('生成模板将删除正文所有内容, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -753,7 +784,7 @@
                     versionId:vm.versionId,
                     entryName: vm.entryName,
                     summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
-                    categorys: [], // 欧阳 - [categoryId，categoryId]
+                    categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
                     label: vm.tagList,
