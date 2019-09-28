@@ -599,11 +599,11 @@
                 let vm = this, content = ''
                 // 处理目录html
                 this.contentData.forEach(x => {
-                    content += `<h2>${x.contentName}</h2>`
+                    content += `<h2>${x.contentName}</h2>`+`<p></p>`
                     x.children.length && x.children.forEach(y => {
-                        content += `<h3>${y.contentName}</h3>`
+                        content += `<h3>${y.contentName}</h3>`+`<p></p>`
                         y.children.length && y.children.forEach(z => {
-                            content += `<h4>${z.contentName}</h4>`
+                            content += `<h4>${z.contentName}</h4>`+`<p></p>`
                         })
                     })
                 })
