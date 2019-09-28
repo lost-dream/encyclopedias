@@ -7,7 +7,14 @@ export function entryVersionList(data) {
     data
   })
 }
-
+//删除某词条下的某版本（如果版本审核通过则无法删除）
+export function deleteEntry(data) {
+  return request({
+    url: '/wiki-backend/api/entry/delete',
+    method: 'post',
+    data
+  })
+}
 
 
 
