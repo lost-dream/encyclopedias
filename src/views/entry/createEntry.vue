@@ -81,6 +81,7 @@
 									<el-date-picker
 								      v-model="item.val"
 								      :type="datetimeObj[item.attributeType]"
+								      :default-value="item.val"
 								      placeholder="选择日期时间"
 								      align="right"
 								      value-format="timestamp"
@@ -626,10 +627,15 @@
                 let vm = this
                 let attributesAry = []
                 this.classifyData.map((item)=>{
-                	if(item.val.trim()!==''){
+                	if(item.val&&item.val!==''){
                 		attributesAry.push({
                 			key: item.attributeName,
 							value: item.val,
+							attributeRangeBegin:item.attributeRangeBegin,
+							attributeRangeEnd:item.attributeRangeEnd,
+							attributeType:item.attributeType,
+							editSource:item.editSource,
+							editType:item.editType,
 							sourceType: '7',
 							sourceValue: null,
 							dataType:1
