@@ -15,6 +15,13 @@ export function deleteEntry(data) {
     data
   })
 }
-
+//根据词条ID获取词条信息
+export function entryInfo(data) {
+  return request({
+    url: '/wiki-backend/api/entry/info',
+    method: 'post',
+    data
+  })
+}
 
 

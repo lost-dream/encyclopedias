@@ -1,5 +1,11 @@
 <template>
 	<div>
+		<el-row class="versionHistory">
+			<el-col :span="6">{{info.entryName}}</el-col>
+			<el-col :span="6">编辑次数：{{info.versionApprovingCount}}次</el-col>
+			<el-col :span="6">创建者：{{info.creator}}</el-col>
+			<el-col :span="6">创建时间：{{parseTime(info.createTime)}}</el-col>
+		</el-row>
 		<el-table
 			class="departTable"
 		    :data="MyEntryList"
@@ -16,7 +22,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column prop="creator" label="贡献者" width="180"></el-table-column>
-			<el-table-column prop="editReason" label="编辑原因" width="180"></el-table-column>
+			<el-table-column prop="editReason" label="编辑原因"></el-table-column>
 			
 		  </el-table>
 		  <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
@@ -24,7 +30,7 @@
 </template>
 
 <script>
-import {entryVersionList} from '@/api/entry/index.js'
+import {entryVersionList,entryInfo} from '@/api/entry/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 export default {
 	
@@ -33,6 +39,7 @@ export default {
 	    return {
 	    	entryId:'',
 	    	MyEntryList:[],
+	    	info:{},
 	    	pagination: {
 		      page: 1,
 		      limit: 10,
@@ -46,6 +53,7 @@ export default {
 	created() {
 		this.entryId = this.$route.query.entryId
 		this.entryVersionList()
+		this.entryInfo()
 	},
 	mounted() {
 	},
@@ -102,6 +110,11 @@ export default {
 			this.pagination.page = val
 			this.entryVersionList()
 		},
+		entryInfo() {
+			entryInfo({id:this.entryId}).then((res)=>{
+				this.info = res.data
+			})
+		},
 		entryVersionList() {
 			entryVersionList({
 				pageNumber: this.pagination.page,
@@ -122,6 +135,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.versionHistory{
+	background: #f6fafb;
+	color: black;
+	line-height: 60px;
+	.el-col-6{
+		text-align: center;
+	}
+}
 .statusList{
 	li{
 		display: inline-block;

@@ -12,7 +12,8 @@
 		        <el-table-column prop="attributeType" label="属性值类型" />
 		        <el-table-column width="250px" label="约束值">
 		          <template slot-scope="scope">
-		          	{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}
+		          	<span v-if="scope.row.attributeType===4||scope.row.attributeType===5||scope.row.attributeType===6||scope.row.attributeType===7">{{parseTime(scope.row.attributeRangeBegin)}}~{{parseTime(scope.row.attributeRangeEnd)}}</span>
+		          	<span v-else>{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}</span>
 		          </template>
 		        </el-table-column>
 		        <el-table-column prop="editType" label="编辑模式" />
@@ -129,6 +130,7 @@
 import {categoryTree,save,list} from '@/api/classifyManager/index.js'
 import {attributeTypeAry,editTypeAry,editSourceAry,} from '@/enumeration/classify.js'
 import treemenu from '@/components/treeMenu'
+import {parseTime} from '@/utils/commonMethod.js'
 export default {
 	name: 'classifyManage',
 	components:{
@@ -217,6 +219,9 @@ export default {
 		
 	},
 	methods: {
+		parseTime(str) {
+			return parseTime(str)
+		},
 		//根据属性值类型变化改变约束值和编辑模式
 		attributeTypeChange(ev,row) {
 			this.$set(row,'attributeType',ev)
