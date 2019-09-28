@@ -307,4 +307,7 @@
         transform: translateY(-50%);
         margin: 0;
     }
+    ul li{
+        line-height: 20px;
+    }
 </style>

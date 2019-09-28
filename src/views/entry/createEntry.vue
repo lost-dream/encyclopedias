@@ -395,7 +395,7 @@
                 // 两级目录间有内容，切割长度为奇数；无内容为偶数
                 r.map((item,index) => {
                     let obj = {}
-                    if(index%2==0){
+                    if(!(item.includes('</')&&item.includes('>'))){
                         obj.title = item
                         // obj.plate1 = index/2 + 1
                         obj.children = []
