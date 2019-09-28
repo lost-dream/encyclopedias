@@ -334,7 +334,8 @@
                             }
                             vm.synonymList.push(obj)
                         })
-                        vm.summary = data.entrySummarys.summary
+                        vm.summary = JSON.parse(data.entrySummarys.summary).text
+                        vm.summaryImg = JSON.parse(data.entrySummarys.summary).img
                         data.entryContentVos.map(item =>{
                             let obj1 = {
                                 'title': item.contentTitle,

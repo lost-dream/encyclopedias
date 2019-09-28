@@ -169,7 +169,6 @@
                     console.log(res.data)
                     vm.wikiContent = res.data
                     vm.contentList = []
-                    vm.wikiContent.entrySummary = JSON.parse(res.data.entrySummary)
                     res.data.entryContentVos.map((item,index) => {
                         let obj1 = {
                             level: 1,
