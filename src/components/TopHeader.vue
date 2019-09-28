@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24"
+    <el-col :span="24">
     	
       <div class="head-wrap">
       	<img src="../assets/logo.png"/>

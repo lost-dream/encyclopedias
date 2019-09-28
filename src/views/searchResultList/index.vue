@@ -2,7 +2,7 @@
 	<div>
 		
 		<div class="entryListData">
-			<div v-for="item in entryListData">
+			<div v-for="item,index in entryListData" @click="routeToEntry(item.ENTRY_ID)" class="entry-cell" :class="index==entryListData.length-1?'':'bd-bottom'">
 				<!--<img src="../../assets/index/03.png" alt="" />
 				<div>
 					<p>{{item.ENTRY_NAME}}</p>
@@ -72,6 +72,16 @@ export default {
 				this.entryListData = res.data.records
 				this.pagination.count = res.data.total
 			})
+		},
+        routeToEntry (index) {
+		    this.$router.push({
+				name: 'viewEntry',
+				query: {
+                    entryId: index,
+					versionId: '',
+                    viewType:'view'
+				}
+			})
 		}
 	}
 
@@ -95,6 +105,15 @@ export default {
 				font-weight: normal;
 				font-size: 14px;
 			}
+		}
+		ul, li, p{
+			cursor: pointer;
+		}
+		.entry-cell{
+			padding: 10px 0;
+		}
+		.bd-bottom{
+			border-bottom: 1px dotted #ccc;
 		}
 	}
 </style>
