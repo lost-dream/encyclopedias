@@ -388,7 +388,6 @@
 							item.val = item.attributeValue
 							item.attributeType = item.attributeType
 							item.attributeName = item.attributeKey
-//							item.attributeName = item.attributeValue
 							if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
 								item.val = Number(item.val)
 								this.pickerOptionsList.push({
@@ -775,7 +774,24 @@
                 });
             },
             commit (method) {
-                let vm = this
+            	let vm = this
+                let attributesAry = []
+                this.classifyData.map((item)=>{
+                	if(item.val&&item.val!==''){
+                		attributesAry.push({
+                			key: item.attributeName,
+							value: item.val,
+							attributeRangeBegin:item.attributeRangeBegin,
+							attributeRangeEnd:item.attributeRangeEnd,
+							attributeType:item.attributeType,
+							editSource:item.editSource,
+							editType:item.editType,
+							sourceType: '7',
+							sourceValue: null,
+							dataType:1
+                		})
+                	}
+                })
                 let data = {
                     operate: method,
                     editReson: '',
@@ -784,7 +800,7 @@
                     entryName: vm.entryName,
                     summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
                     categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
-                    attributes: [], // 进哥 - [{key: keyName,value: value}]
+                    attributes: attributesAry, // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
                     label: vm.tagList,
                     referrences: vm.quoteList,

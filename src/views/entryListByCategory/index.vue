@@ -72,8 +72,8 @@ export default {
 				"categoryId": this.categoryId,
 				"keyword": ""
 			}).then((res)=>{
-				
-				this.pagination.count = 100
+				this.entryListData = res.data.records
+				this.pagination.count = total
 			})
 			
 		},
