@@ -515,14 +515,23 @@
                 // 两级目录间有内容，切割长度为奇数；无内容为偶数
                 r.map((item,index) => {
                     let obj = {}
-                    if(!(item.includes('</')&&item.includes('>'))){
-                        obj.title = item
+                    if(index == 0&&(item.includes('</')&&item.includes('>'))){
+                        obj.title = ''
                         // obj.plate1 = index/2 + 1
                         obj.children = []
                         arr_main.push(obj)
-                    } else {
-                        // 预先切割h2标题
-                        arr_sub.push(item.split(reg2))
+                        arr_sub.push(r[index].split(reg2))
+                    }
+                    if(index > 0){
+                        if(!(item.includes('</')&&item.includes('>'))){
+                            obj.title = item
+                            // obj.plate1 = index/2 + 1
+                            obj.children = []
+                            arr_main.push(obj)
+                        } else {
+                            // 预先切割h2标题
+                            arr_sub.push(item.split(reg2))
+                        }
                     }
                 })
                 // 构建二级目录结构
