@@ -385,6 +385,7 @@
 							item.attributeName = item.attributeKey
 //							item.attributeName = item.attributeValue
 							if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+								item.val = Number(item.val)
 								this.pickerOptionsList.push({
 									disabledDate(time){
 										return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
