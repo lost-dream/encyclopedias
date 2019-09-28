@@ -11,13 +11,19 @@
             <!-- summary -->
             <div class="mg-top-20" id="summary">
                 <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex">
-                    <div >
+                    <div v-if="item.dataType == 1">
                         <el-image :src="JSON.parse(item.summary).img" style="width: 250px"></el-image>
                     </div>
-                    <div v-if="item.status == 1" style="padding-left: 20px">
+                    <div v-if="item.dataType == 1" style="padding-left: 20px">
                         <span v-if="item.summary">{{JSON.parse(item.summary).text}}</span>
                         <span v-else>当前词条暂无描述</span>
                     </div>
+                </div>
+            </div>
+            <!-- 词条属性 -->
+            <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;margin: 20px">
+                <div v-for="item in wikiContent.entryAttributes" style="width: 50%">
+                    <p style="padding-left: 30px;padding-bottom: 10px;border-bottom: 1px dotted #ccc"><strong style="width: 100px;display: inline-block">{{item.attributeKey}}</strong><span>{{item.attributeValue}}</span></p>
                 </div>
             </div>
             <!-- 目录 -->
@@ -33,7 +39,7 @@
                 <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(8,16)">
                         <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #03A9F4;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
-                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{item.value}}</a>
+                        <a @click="slideToAnchor(item.id)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor(item.id)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
@@ -52,19 +58,12 @@
                     </li>
                 </ul>
             </div>
-            <!-- 词条分类 -->
-            <div class="mg-top-20" id="classify">
-            </div>
             <!-- 词条详情 -->
-            <div class="mg-top-20">
-                <div class="block-container">
-                </div>
-            </div>
             <div style="display: flex"  class="mg-top-20">
                 <div id="demo" style="width: 100%;padding: 20px">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 class="block" :id="item.id" v-if="item.contentTitle">{{index+1}}{{item.contentTitle}}</h2>
+                            <h2  :id="item.id" v-if="item.contentTitle"><span style="color: #03A9F4;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
                             <div v-html="item.contentBody">}</div>
                             <template v-if="item.children.length > 0" v-for="key in item.children">
                                 <div style="margin-left: 20px">
@@ -123,7 +122,7 @@
 
                     <a @click="slideToAnchor('summary')" class="catalogue">摘要</a>
                     <a @click="slideToAnchor('catalogue')" class="catalogue">目录</a>
-                    <a @click="slideToAnchor('classify')" class="catalogue">词条分类</a>
+                    <a @click="slideToAnchor('attribute')" class="catalogue">词条属性</a>
                     <div v-for="item in wikiContent.entryContentVos">
                         <a class="p1 catalogue" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
                         <div v-for="k in item.children">
@@ -254,7 +253,7 @@
         width: 100px;
         text-align: center;
         color: white;
-        padding: 10px;
+        padding: 5px 10px;
         background: #03A9F4;
     }
     .block-container{
