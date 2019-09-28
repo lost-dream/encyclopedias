@@ -311,6 +311,11 @@
                 showFormat: false,
             }
         },
+        watch: {
+            savedCategories: function(newValue, oldValue){
+                this.savedCategoriesArr = newValue.map(x => {return {'categoryId': x.id}})
+            }
+        },
         created(){
             this.categoryTree()
         },
@@ -397,6 +402,28 @@
 						})
                         vm.classifyData = data.entryAttributes
                         console.log(vm.classifyData,'vm.classifyData')
+
+                        // 处理已选分类
+                        let tempArr = [];
+                        data.categories.forEach(x => {
+                            vm.categoryTreeData.forEach(y => {
+                                if(y.children.length){
+                                    y.children.forEach(z => {
+                                        if(z.children.length){
+                                            z.children.forEach(s => {
+                                                s.id == x && (tempArr.push(s))
+                                            })
+                                        }else{
+                                            z.id == x && (tempArr.push(z))
+                                        }
+                                    })
+                                }else{
+                                    y.id == x && (tempArr.push(y))
+                                }
+                            })
+                        })
+                        vm.savedCategories = tempArr
+                        vm.toData = [].concat(tempArr)
                     })
             }
 
@@ -734,7 +761,7 @@
                     versionId:vm.versionId,
                     entryName: vm.entryName,
                     summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
-                    categorys: [], // 欧阳 - [categoryId，categoryId]
+                    categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
                     attributes: [], // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
                     label: vm.tagList,
