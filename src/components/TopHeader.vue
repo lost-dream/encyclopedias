@@ -1,7 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="24"
-    	
+    <el-col :span="24">
       <div class="head-wrap">
       	<img src="../assets/logo.png"/>
       	<span class="title">信息百科</span>

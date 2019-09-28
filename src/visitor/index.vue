@@ -1,20 +1,14 @@
 <template>
-  <div>
-  	<el-container>
-      
-      <el-container>
-      	
-        <el-main>
-        	<!--面包屑导航-->
-	      	<el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
-	            <el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
-	       </el-breadcrumb>
-        <!-- Body -->
-         <router-view></router-view>
-      </el-main>
-      </el-container>
-    </el-container>
-  </div>
+		<el-container class="page-wrapper">
+			<el-main>
+				<!--面包屑导航-->
+				<el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
+						<el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
+				</el-breadcrumb>
+			<!-- Body -->
+				<router-view></router-view>
+		</el-main>
+		</el-container>
 </template>
 <script>
 
@@ -53,9 +47,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.page-wrapper{
+	// width: 1280px;
+	// margin: 0 auto;
+	.el-main {
+		padding: 0;
+	}
+}
 .el-main{
+	padding-top: 0;
 	overflow-y: auto;
-	width: 100vh;
+	// width: 1280px;
+	// margin: 0 auto;
 	/*height: 70vh;*/
 	
 	&::-webkit-scrollbar {

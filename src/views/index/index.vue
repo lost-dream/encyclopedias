@@ -1,85 +1,87 @@
 <template>
-	<div>
-		<div class="title">
-			<span>最新词条</span>
-		</div>
-		<el-row>
-			<el-col :span="16">
-				<el-carousel :interval="2000000" type="card" height="530px">
-					<el-carousel-item v-for="item in entryListData" :key="item.id">
-						<div @click="seeEntry(item)" class="entryList">
-							<!--<img :src="item.specialCoverUrl" alt="" />-->
-							<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
-							<div>
-								<p class="entry-title">{{item.ENTRY_NAME}}</p>
-								<div v-if="item.SUMMARY.length">{{item.SUMMARY[0].summary}}</div>
+	<div class="main-page">
+		<div class="max-w1280">
+			<div class="title">
+				<span>最新词条</span>
+			</div>
+			<el-row>
+				<el-col :span="16">
+					<el-carousel :interval="2000000">
+						<el-carousel-item v-for="item in entryListData" :key="item.id">
+							<div @click="seeEntry(item)" class="entryList">
+								<!--<img :src="item.specialCoverUrl" alt="" />-->
+								<img src="/static/image/tank.png"/>
+								<div>
+									<p class="entry-title">{{item.ENTRY_NAME}}</p>
+									<div v-if="item.SUMMARY.length">{{item.SUMMARY[0].summary}}</div>
+								</div>
 							</div>
-						</div>
-					</el-carousel-item>
-				</el-carousel>
-			</el-col>
-			<el-col :span="8">
-				<div id="entryStatisticalData">
-					<p>
-						<img src="../../assets/index/01.png"/>
-						<span class="data">{{entryStatisticalData.totalEntry}}</span>
-						<span>个词条</span>
-					</p>
-					<p>
-						<img src="../../assets/index/02.png"/>
-						<span class="data">{{entryStatisticalData.totalEntryEitor}}</span>
-						<span>次编辑</span>
-					</p>
-					<p>
-						<img src="../../assets/index/03.png"/>
-						<span class="data">{{entryStatisticalData.totalEditor}}</span>
-						<span>人编写</span>
-					</p>
-					
-				</div>
-			</el-col>
-		</el-row>
-		
-		
-		
-		
-		<div class="title">
-			<span>特色专题</span>
-		</div>
-		<el-carousel :interval="2000000" type="card" height="530px">
-			<el-carousel-item v-for="item in specialListData" :key="item.id">
-				<div @click="routeToSpecial(item.id)" class="specialList">
-					<!--<img :src="item.specialCoverUrl" alt="" />-->
-					<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
-					<div>
-						<p>{{item.specialName}}</p>
-						<div>{{item.specialDesc}}</div>
-					</div>
-				</div>
-			</el-carousel-item>
-		</el-carousel>
-		
-		<div class="title">
-			<span>精选分类</span>
-		</div>
-		<el-row>
-			<el-col :span="24/categoryTreeList.length" v-for="(item,index) in categoryTreeList" :key="index">
-				<el-card>
-					<div :style="'background:#'+categoryBgColor[index]" class="categoryTreeList">
-						<p :style="'background:#'+categoryTitleColor[index]">{{item.name}}</p>
-						<ul>
-							<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
-								{{item1.name}}
-								<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
-									<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
-								</ul>
-							</li>
-						</ul>
+						</el-carousel-item>
+					</el-carousel>
+				</el-col>
+				<el-col :span="8">
+					<div id="entryStatisticalData">
+						<p>
+							<img src="../../assets/index/01.png"/>
+							<span class="data">{{entryStatisticalData.totalEntry}}</span>
+							<span>个词条</span>
+						</p>
+						<p>
+							<img src="../../assets/index/02.png"/>
+							<span class="data">{{entryStatisticalData.totalEntryEitor}}</span>
+							<span>次编辑</span>
+						</p>
+						<p>
+							<img src="../../assets/index/03.png"/>
+							<span class="data">{{entryStatisticalData.totalEditor}}</span>
+							<span>人编写</span>
+						</p>
 						
 					</div>
-				</el-card>
-			</el-col>
-		</el-row>
+				</el-col>
+			</el-row>
+			
+			
+			
+			
+			<div class="title">
+				<span>特色专题</span>
+			</div>
+			<el-carousel :interval="2000000" type="card" height="530px">
+				<el-carousel-item v-for="item in specialListData" :key="item.id">
+					<div @click="routeToSpecial(item.id)" class="specialList">
+						<!--<img :src="item.specialCoverUrl" alt="" />-->
+						<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
+						<div>
+							<p>{{item.specialName}}</p>
+							<div>{{item.specialDesc}}</div>
+						</div>
+					</div>
+				</el-carousel-item>
+			</el-carousel>
+			
+			<div class="title">
+				<span>精选分类</span>
+			</div>
+			<el-row>
+				<el-col :span="24/categoryTreeList.length" v-for="(item,index) in categoryTreeList" :key="index">
+					<el-card>
+						<div :style="'background:#'+categoryBgColor[index]" class="categoryTreeList">
+							<p :style="'background:#'+categoryTitleColor[index]">{{item.name}}</p>
+							<ul>
+								<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
+									{{item1.name}}
+									<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
+										<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
+									</ul>
+								</li>
+							</ul>
+							
+						</div>
+					</el-card>
+				</el-col>
+			</el-row>
+		</div>
 	</div>
 </template>
 
@@ -211,6 +213,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.main-page {
+	padding-top: 30px;
+	background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	.max-w1280 {
+		max-width: 1280px;
+		margin: 0 auto;
+	}
+}
 .categoryTreeList{
 	padding-bottom: 10px;
 	font-size: 14px;
@@ -246,15 +256,29 @@ export default {
 			width: 100%;
 		}
 	}
-	
 }
+
+.el-carousel {
+	&/deep/ .el-carousel__container{
+		height: 400px;
+	}
+}
+
 .entryList{
 	position: relative;
+	width: 800px;
+	height: 400px;
+
+	image {
+		width: 100%;
+		height: 100%;
+	}
+
 	>div{
 		position: absolute;
 		left: 0;
 		bottom: 0;
-		background: (0,0,0,0.3);
+		background: rgba(0,0,0,0.3);
 		color: white;
 		width: calc(100% - 30px);
 		padding: 0 15px;
@@ -300,10 +324,13 @@ export default {
 	background: white;
 }
 .title{
+	margin: 15px 0;
+	padding-left: 90px;
 	color: #338ce6;
 	font-weight: bold;
 	font-size: 20px;
 	line-height: 55px;
+	background: url('/static/image/title.png') no-repeat;
 }
 #entryStatisticalData{
 	color: #338ce6;
@@ -323,6 +350,11 @@ export default {
 			color: #666666;
 		}
 	}
+}
+
+.page-index {
+	width: 1280px; 
+	margin: 0 auto;
 }
 	
 </style>
