@@ -322,20 +322,20 @@
         		this.pickerOptionsList = []
         		getAllAttributesByCategoryId({categoryId:id}).then((res)=>{
         			res.data.map((item,index)=>{
-					item.val = ''
-					if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
-						this.pickerOptionsList.push({
-							disabledDate(time){
-								return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
-							}
-						})
-					}
-					else{
-						this.pickerOptionsList.push('')
-					}	
-				})
+						item.val = ''
+						if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+							this.pickerOptionsList.push({
+								disabledDate(time){
+									return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+								}
+							})
+						}
+						else{
+							this.pickerOptionsList.push('')
+						}	
+					})
         		
-                this.classifyData = res.data
+                	this.classifyData = res.data
         		})
         	},
         	
