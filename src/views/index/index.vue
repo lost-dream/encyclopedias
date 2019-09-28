@@ -1,6 +1,6 @@
 <template>
 	<div class="main-page">
-		<div class="max-w1280">
+		<div class="w1280">
 			<div class="title">
 				<span>最新词条</span>
 			</div>
@@ -216,8 +216,9 @@ export default {
 .main-page {
 	padding-top: 30px;
 	background: url('/static/image/index-bg.png') 0 0 no-repeat;
-	.max-w1280 {
-		max-width: 1280px;
+	background-size: 100% 550px;
+	.w1280 {
+		width: 1280px;
 		margin: 0 auto;
 	}
 }
@@ -351,6 +352,11 @@ export default {
 		}
 	}
 }
+
+.el-row+.title{
+	margin-top: 60px;
+}
+
 
 .page-index {
 	width: 1280px; 

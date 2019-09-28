@@ -44,7 +44,7 @@ export default {
 .header {
   line-height: 60px;
   height: auto !important;
-  margin-bottom: 15px;
+  // margin-bottom: 15px;
   box-shadow: 0 0 5px 0 #8e8e8e;
 }
 html,body,#app{
