@@ -299,7 +299,6 @@
                 // 分类部分
                 title: ["全部分类", "已选择"],
                 mode: "addressList", // transfer addressList
-                categoryTreeData: [],
                 toData:[],
                 savedCategories: [],
                 savedCategoriesArr: [],
@@ -944,7 +943,7 @@
         text-align: center;
         color: white;
         padding: 10px;
-        background: #03A9F4;
+        background: #338ce6;
     }
     .block-container{
         background: #eee;
@@ -954,7 +953,7 @@
         padding: 20px;
     }
     .quote-btn{
-        color:  #03A9F4;
+        color:  #338ce6;
         padding-right: 10px;
         cursor: pointer;
     }
@@ -1060,6 +1059,7 @@
     .category-title .formatting:hover{
         border-color:#ccc;
     }
+
     /*属性form样式*/
     .classifyForm{
 		font-size: 0;

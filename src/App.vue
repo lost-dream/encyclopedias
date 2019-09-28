@@ -5,7 +5,7 @@
         <vheader />
       </el-header>
       <!-- Body -->
-      <router-view></router-view>
+      <router-view style="max-width: 1280px;margin: auto"></router-view>
     </el-container>
   </div>
 </template>

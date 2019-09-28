@@ -782,7 +782,7 @@
         text-align: center;
         color: white;
         padding: 10px;
-        background: #03A9F4;
+        background: #338ce6;
     }
     .block-container{
         background: #eee;
@@ -792,7 +792,7 @@
         padding: 20px;
     }
     .quote-btn{
-        color:  #03A9F4;
+        color:  #338ce6;
         padding-right: 10px;
         cursor: pointer;
     }
