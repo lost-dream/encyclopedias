@@ -98,7 +98,7 @@
                 <h3 id="tag">标签</h3>
                 <div>
                     <template v-for="(item,index) in wikiContent.entryLabels">
-                        <el-tag>{{item.labelName}}</el-tag>
+                        <el-tag style="margin-right: 10px">{{item.labelName}}</el-tag>
                     </template>
                 </div>
             </div>
@@ -169,7 +169,6 @@
                     console.log(res.data)
                     vm.wikiContent = res.data
                     vm.contentList = []
-                    vm.wikiContent.entrySummary = JSON.parse(res.data.entrySummary)
                     res.data.entryContentVos.map((item,index) => {
                         let obj1 = {
                             level: 1,

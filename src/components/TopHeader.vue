@@ -19,16 +19,53 @@
   </el-row>
 </template>
 <script>
+	
 	export default {
     data () {
       return {
         content: ''
       }
     },
+    watch: {
+		  $route: {
+		    handler: function(val, oldVal){
+		      if(this.$route.path === '/searchResultList'){
+		      	this.content = sessionStorage.getItem('searchContent')
+		      }
+		    	else{
+		    		this.content = ''
+		    	}
+		    },
+		    // 深度观察监听
+		    deep: true
+		  }
+		},
+    created() {
+    	
+    },
     methods: {
       search() {
       	this.content = this.content.trim()
-      	this.content!=''?this.$message('接口开发中'):this.$message('请输入内容')
+      	if(this.content!=''){
+      		sessionStorage.setItem('searchContent',this.content)
+      		if(this.$route.path === '/searchResultList'){
+      			var url = window.location.href.split('?')[0]+'?content='+this.content
+      			history.pushState("", "", url)
+      			window.location.reload()
+      		}
+      		else{
+      			this.$router.push({
+		      		name:'searchResultList',
+		      		query:{
+		      			content:this.content
+		      		}
+		      	})
+      		}
+      		
+      	}
+      	else{
+      		this.$message('请输入内容')
+      	}
       },
       searchTotalStation() {
       	this.content = this.content.trim()

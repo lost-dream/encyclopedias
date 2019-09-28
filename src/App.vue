@@ -35,6 +35,11 @@ export default {
     text-align: center;
   }
 }
+/*列表暂无数据*/
+.noDataRemindContent{
+	text-align: center;
+	padding: 20px 0;
+}
 /*--------------------全局样式-------------------------------------------*/
 .header {
   line-height: 60px;
@@ -51,7 +56,7 @@ h2 {
   color: #1f2f3d;
 }
 
-ul,li{
+ul,li,p{
 	list-style: none;
 	margin: 0;
 	padding: 0;
