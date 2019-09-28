@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<p>专题详情</p>
 		<el-row class="specialInfo">
 			<el-col :span="18">
 				<!--<img :src="info.specialCoverUrl" alt="" />-->
@@ -11,7 +10,6 @@
 				<p>{{info.specialDesc}}</p>
 			</el-col>
 		</el-row>
-		<p>专题所属词条列表</p>
 		
 		<div class="noDataRemindContent" v-if="!entryList.length">当前专题暂无词条</div>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
@@ -91,6 +89,7 @@ export default {
 	font-size: 0;
 	position: relative;
 	overflow: hidden;
+	margin-top: 20px;
 	img{
 		width: 100%;
 	}

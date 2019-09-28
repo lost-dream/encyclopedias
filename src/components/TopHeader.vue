@@ -51,7 +51,7 @@
       		if(this.$route.path === '/searchResultList'){
       			var url = window.location.href.split('?')[0]+'?content='+this.content
       			history.pushState("", "", url)
-      			
+      			window.location.reload()
       		}
       		else{
       			this.$router.push({

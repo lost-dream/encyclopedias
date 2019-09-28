@@ -1,9 +1,20 @@
 <template>
 	<div>
 		
-		<div>
+		<div class="entryListData">
 			<div v-for="item in entryListData">
-				
+				<!--<img src="../../assets/index/03.png" alt="" />
+				<div>
+					<p>{{item.ENTRY_NAME}}</p>
+					<p class="desc">111122222</p>
+				</div>-->
+				<img v-if="item.SUMMARY.length" :src="JSON.parse(item.SUMMARY[0]).img" alt="" />
+				<img v-else src="../../assets/index/03.png" alt="" />
+				<div>
+					<p>{{item.ENTRY_NAME}}</p>
+					<p class="desc" v-if="item.SUMMARY.length">{{JSON.parse(item.SUMMARY[0]).text}}</p>
+					<p class="desc" v-else>暂无描述</p>
+				</div>
 			</div>
 		</div>
 		
@@ -30,9 +41,7 @@ export default {
 	    }
 	},
 	watch: {
-		$route(){
-	       console.log(this.$route.query.content)
-	    },
+		
 	},
 	created() {
 		this.keyword = this.$route.query.content
@@ -70,5 +79,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	
+	.entryListData{
+		>div{
+			line-height: 36px;
+			font-size: 16px;
+			font-weight: bold;
+			display: flex;
+			img{
+				width: 160px;
+				height: 120px;
+				margin-right: 20px;
+			}
+			.desc{
+				line-height: 20px;
+				font-weight: normal;
+				font-size: 14px;
+			}
+		}
+	}
 </style>

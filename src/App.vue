@@ -56,7 +56,7 @@ h2 {
   color: #1f2f3d;
 }
 
-ul,li{
+ul,li,p{
 	list-style: none;
 	margin: 0;
 	padding: 0;
