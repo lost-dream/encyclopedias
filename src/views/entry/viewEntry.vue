@@ -208,6 +208,11 @@
                         })
                         console.log(vm.contentList)
                     })
+                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+                    .then(res => {
+                        console.log(res.data)
+                        vm.wikiInfo = res.data
+                    })
             }else{
                 this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
                     .then(res => {
