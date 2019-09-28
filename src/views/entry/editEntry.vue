@@ -10,6 +10,13 @@
             <div class="mg-top-20">
                 <h4 class="block">词条分类</h4>
                 <div class="block-container">
+                    <el-tag
+                        v-for="item in savedCategories"
+                        :key="item.id"
+                        type="primary">
+                        {{ item.name }}
+                    </el-tag>
+                    <el-button class="button-new-category" size="small" @click="dialogVisible = true"> + 添加分类</el-button>
                 </div>
             </div>
             <!-- 同义词 -->
@@ -159,8 +166,40 @@
         <div>
             <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="目录模板" name="first">
-                    <el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>
-                    <el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>
+                    <el-tree 
+                        class="template-left"
+                        :data="categoryTreeData" 
+                        :props="{label: 'name'}"
+                        @node-click="loadContent">
+                    </el-tree>
+                    <div class="template-right">
+                        <h4 class="category-title">{{selectedCategory}}
+                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
+                        </h4>
+                        <ul v-if="contentData.length" class="content-menu">
+                            <li v-for="item in contentData" v-bind:key="item.id">
+                                <template v-if="item.children.length">
+                                    {{item.contentName}}
+                                    <ul>
+                                        <li v-for="el in item['children']" v-bind:key="el.id">
+                                            {{el.contentName}}
+                                            <ul class="thrid-class">
+                                                <li v-for="e in el['children']" v-bind:key="e.id">
+                                                    {{e.contentName}}
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </template> 
+                                <template v-else>
+                                    {{item.contentName}}
+                                </template>
+                            </li>
+                        </ul>
+                        <p v-else class="empty-list">当前暂无目录模板数据</p>
+                    </div>
+                    <!-- <el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>
+                    <el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button> -->
                 </el-tab-pane>
                 <el-tab-pane label="修改目录" name="second">
                     <div v-for="item in menuList">
@@ -173,19 +212,48 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
+
+        <!-- 弹窗 -->
+        <el-dialog
+        title="选择分类"
+        :visible.sync="dialogVisible"
+        :before-close="handleCloseModel">
+            <tree-transfer 
+                ref="treeTransfer"
+                width="85%"
+                height="540px"
+                :title="title" 
+                :from_data='categoryTreeData' 
+                :to_data='toData' 
+                :defaultProps="{label:'name'}" 
+                pid="parentId" 
+                @addBtn='add' 
+                @removeBtn='remove' 
+                @left-check-change="checkLength"
+                :mode='mode' 
+                :addressOptions="{num: 1, connector: ''}" 
+                filter
+                style="margin: 0 auto;min-width: 740px"></tree-transfer>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveCategory">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 
 </template>
 <script>
+    import treeTransfer from 'el-tree-transfer'
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
     import {categoryTree,getAllAttributesByCategoryId} from '@/api/classifyManager/index.js'
    	import treemenu from '@/components/treeMenu'
-   	import categoryApi from '@/api/categoryManager/index.js'
+    import categoryApi from '@/api/categoryManager/index.js'
+    import templateApi from '@/api/contentTemplate/index.js'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
-        components: {ElForm,treemenu,},
+        components: {ElForm,treemenu,treeTransfer},
         name: 'editor',
         data() {
             return {
@@ -208,7 +276,7 @@
                 entryName: '',
                 isInit: false,
                 formLabelWidth: '120px',
-                dialogVisible: true,
+                dialogVisible: false,
                 model: [],
                 wiki: '',
                 editor: null,
@@ -226,7 +294,21 @@
                 editIndex: -1,
                 activeName: 'first',
                 menuList: [],
-                submitList: []
+                submitList: [],
+
+                
+                // 分类部分
+                title: ["全部分类", "已选择"],
+                mode: "addressList", // transfer addressList
+                categoryTreeData: [],
+                toData:[],
+                savedCategories: [],
+                savedCategoriesArr: [],
+                leafNumber: 0,
+                // 目录
+                contentData: [],
+                selectedCategory: '',
+                showFormat: false,
             }
         },
         created(){
@@ -667,6 +749,82 @@
                         }
                     })
                 console.log(data)
+            },
+            // 获取分类树
+            getCategoryTree(){
+                let vm = this
+                categoryApi.getTreeData()
+                .then(res => {
+                    console.log('success:', res);
+                    // return;
+                    if(res.status == 'success'){
+                        let data = res.data && (_.cloneDeep(res.data.children) || [])
+                        vm.categoryTreeData = data;
+                    }else{
+                        this.$message.error("获取分类信息失败，请稍后重试！")
+                    }
+                })
+                .catch(res => {
+                    // console.log('error: ', res)
+                    this.$message.error("请求出错，错误原因： " + res.msg ? res.msg : JSON.stringify(res));
+                })
+            },
+            // 监听穿梭框组件添加
+            add(transfered){
+                this.savedCategories = transfered
+            },
+            // 监听穿梭框组件移除
+            remove(transfered){
+                this.savedCategories = transfered
+            },
+            // 限制最多选5个
+            checkLength(nodeObj, treeObj, checkAll){
+                // console.log(nodeObj, treeObj, checkAll)
+                let vm = this,
+                    treeComp = this.$refs.treeTransfer.$children[2],
+                    arr = treeComp.getCheckedNodes().filter(x => !x.children.length);
+
+                if((arr && ((arr.length + vm.savedCategories.length) > 5))){
+                    this.$message.error("最多只能选择5个最末级分类");
+                    treeComp.setCheckedKeys([]);
+                    this.$refs.treeTransfer.from_check_all = false
+                    this.$refs.treeTransfer.from_disabled =true
+                    this.$refs.treeTransfer.from_check_keys = []
+                }
+            },
+            // 关闭弹窗二次确认
+            handleCloseModel(done) {
+                this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
+            },
+            // 保存词条分类
+            saveCategory(){
+                // 处理一下savedCategories数组, 提出来id，重新弄个数组就ok
+                this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
+                this.dialogVisible = false;
+                // console.log(this.savedCategoriesArr)
+            },
+            // 获取目录数据
+            loadContent(data, node, component){
+                this.showFormat = false
+                this.selectedCategory = data.name
+                if(!data.children.length){
+                    templateApi.checkTemplateTreeData({
+                        id: data.id
+                    })
+                    .then(res => {
+                        this.contentData = res.data
+                        this.showFormat = Boolean(res.data.length)
+                    })
+                    .catch(e => {
+                        this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
+                    })
+                }else{
+                    this.contentData = []
+                }
             }
         }
     }
@@ -721,7 +879,7 @@
     }
     .el-tabs--border-card{
         position: fixed !important;
-        width: 200px;
+        width: 340px;
         margin-top: 100px;
         margin-left: 20px;
     }
@@ -737,6 +895,83 @@
         font-size: 12px;
         padding-left:20px;
         font-weight: lighter;
+    }
+    .el-dialog__wrapper /deep/ .el-dialog {
+        min-width: 780px;
+    }
+    .el-tag,.button-new-category {
+        min-width: 80px;
+        text-align: center;
+    } 
+    .el-tag + .el-tag, .button-new-category {
+        margin-left: 10px;
+    }
+    .el-dialog__wrapper /deep/ .u-clear {
+        color: #409EFF !important;
+    }
+
+    .el-tabs /deep/ .el-tabs__item {
+        width: 180px;
+        text-align: center;
+    }
+
+    .template-left {
+        position: absolute;
+        padding-right: 10px;
+        width: 130px;
+        border-right: 1px solid #f2f2f2;
+        height: 100%;
+    }
+    .template-right {
+        display: inline-block;
+        margin-left: 151px;
+        color: #606266;
+        font-size: 14px;
+        width: 160px;
+    }
+    #pane-first {
+        position: relative;
+        min-height: 300px;
+    }
+
+    .content-menu li {
+        margin: 10px 0;
+        list-style: initial;
+    }
+
+    .content-menu li ul {
+        padding-left: 30px;
+    }
+
+    .content-menu .thrid-class li {
+        list-style: circle;
+    }
+    .template-right .empty-list {
+        display: flex;
+        min-width: 150px;
+        height: 240px;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+        margin: 0
+    }
+
+    .category-title {
+        margin-top: 5px;
+        position: relative;
+    }
+
+    .category-title .formatting {
+        height: 18px;
+        width: 18px;
+        position: absolute;
+        top: -4px;
+        right: 0;
+        border: 1px solid #fff;
+        padding: 2px;
+    }
+    .category-title .formatting:hover{
+        border-color:#ccc;
     }
     /*属性form样式*/
     .classifyForm{
