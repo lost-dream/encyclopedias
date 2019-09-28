@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex;margin: 0 auto" id="entry-container">
+    <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container">
         <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
@@ -12,7 +12,11 @@
             <div class="mg-top-20" id="summary" v-if="wikiContent.entrySummarys.length">
                 <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex">
                     <div v-if="item.dataType == 1">
-                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px"></el-image>
+                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">
+                            <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">
+                                <i class="el-icon-picture-outline" style="margin-top: 42px"></i>
+                            </div>
+                        </el-image>
                     </div>
                     <div v-if="item.dataType == 1" style="padding-left: 20px">
                         <span v-if="item.summary">{{JSON.parse(item.summary).text}}</span>
@@ -23,7 +27,14 @@
             <!-- 词条属性 -->
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;margin: 20px" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%">
-                    <p style="padding-left: 30px;padding-bottom: 10px;border-bottom: 1px dotted #ccc"><strong style="width: 100px;display: inline-block">{{item.attributeKey}}</strong><span>{{item.attributeValue}}</span></p>
+                    <p style="padding: 10px 30px;border-bottom: 1px dotted #ccc">
+                        <strong style="width: 100px;display: inline-block">{{item.attributeKey}}</strong>
+                        <span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
+                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
+                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
+                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
+                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                    </p>
                 </div>
             </div>
             <!-- 目录 -->
