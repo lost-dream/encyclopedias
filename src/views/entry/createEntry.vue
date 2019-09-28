@@ -618,9 +618,13 @@
                 let attributesAry = []
                 this.classifyData.map((item)=>{
                 	if(item.val.trim()!==''){
-                		let obj = {}
-                		obj[item.attributeName] = item.val
-                		attributesAry.push(obj)
+                		attributesAry.push({
+                			key: item.attributeName,
+							value: item.val,
+							sourceType: '7',
+							sourceValue: null,
+							dataType:1
+                		})
                 	}
                 })
                 let data = {
