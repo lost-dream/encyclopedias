@@ -704,8 +704,9 @@
             // 保存词条分类
             saveCategory(){
                 // 处理一下savedCategories数组, 提出来id，重新弄个数组就ok
-                this.savedCategoriesArr = this.savedCategories.map(x => x.id)
+                this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
                 this.dialogVisible = false;
+                // console.log(this.savedCategoriesArr)
             },
             // 获取目录数据
             loadContent(data, node, component){
