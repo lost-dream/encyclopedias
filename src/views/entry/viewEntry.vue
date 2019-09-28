@@ -10,15 +10,15 @@
             </div>
             <!-- summary -->
             <div class="mg-top-20" id="summary" v-if="wikiContent.entrySummarys.length">
-                <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex">
-                    <div v-if="item.dataType == 1">
+                <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex" v-if="item.dataType == 1">
+                    <div>
                         <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">
                             <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">
                                 <i class="el-icon-picture-outline" style="margin-top: 42px"></i>
                             </div>
                         </el-image>
                     </div>
-                    <div v-if="item.dataType == 1" style="padding-left: 20px">
+                    <div  style="padding-left: 20px">
                         <span v-if="item.summary">{{JSON.parse(item.summary).text}}</span>
                         <span v-else>当前词条暂无描述</span>
                     </div>
@@ -130,7 +130,7 @@
                         <span >快速导航</span>
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
-
+                    <div style="max-height: 500px;overflow-y: scroll"></div>
                     <a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
                     <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
                     <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>
