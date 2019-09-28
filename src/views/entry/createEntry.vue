@@ -52,11 +52,48 @@
             <!-- 属性 -->
             <div class="mg-top-20">
                 <h4 class="block">属性</h4>
-                <div class="block-container">
-                    <!--分类树-->
-					<el-row>
-						<!-- <treemenu @parentMethod="chooseItem" :list="treeData"></treemenu> -->
+                <div class="block-container" style="background: white;">
+                	<!--分类树-->
+					<el-row style="background: #459DF6;">
+						<treemenu @parentMethod="chooseClassifyItem" :list="categoryTreeData"></treemenu>
 					</el-row>
+                    <!--根据属性动态创建form表单-->
+					<ul class="classifyForm">
+						<li v-for="(item,index) in classifyData">
+							<span class="name">{{item.attributeName}}</span>
+							<div>
+								<!--文本-->
+								<span v-if="item.attributeType===1">
+									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+								</span>
+								<!--数字-->
+								<span v-if="item.attributeType===2">
+									<el-input type="number" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+								</span>
+								<!--枚举-->
+								<span v-if="item.attributeType===3">
+									<el-select v-model="item.val" placeholder="请选择">
+									    <el-option v-for="item1 in options" :key="item1.value" :label="item1.label" :value="item1.value"></el-option>
+									  </el-select>
+								</span>
+								<!--时间-->
+								<span v-if="item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7">
+									<el-date-picker
+								      v-model="item.val"
+								      :type="datetimeObj[item.attributeType]"
+								      placeholder="选择日期时间"
+								      align="right"
+								      value-format="timestamp"
+								      :data-begin="item.attributeRangeBegin"
+								      :data-end="item.attributeRangeEnd"
+								      :picker-options="pickerOptionsList[index]"
+								      >
+								    </el-date-picker>
+								</span>
+								
+							</div>
+						</li>
+					</ul>
                 </div>
             </div>
             <!-- 正文 -->
@@ -207,18 +244,32 @@
     import CKEditor from '@ckeditor/ckeditor5-build-decoupled-document'
     import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
-    import tabMenu from '../../components/treeMenu'
-    import {categoryTree} from '@/api/classifyManager/index.js'
+    import {categoryTree,getAllAttributesByCategoryId} from '@/api/classifyManager/index.js'
     import categoryApi from '@/api/categoryManager/index.js'
     import treemenu from '@/components/treeMenu'
     import templateApi from '@/api/contentTemplate/index.js'
     import _ from 'lodash'
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
-        components: {ElForm,tabMenu,treemenu,treeTransfer},
+        components: {ElForm,treemenu,treeTransfer},
         name: 'editor',
         data() {
             return {
+            	//------------属性模板----------------
+            	pickerOptionsList:[],
+		    	options:[
+		    		{value:'1',label:'没得数据1'},
+		    		{value:'2',label:'没得数据2'},
+		    		{value:'3',label:'没得数据3'},
+		    	],
+		    	datetimeObj:{
+		    		7:'datetime',
+		    		6:'date',
+		    		5:'month',
+		    		4:'year'
+		    	},
+		    	classifyData:[],
+		    	//------------属性模板----------------
                 entryName: '',
                 isInit: false,
                 formLabelWidth: '120px',
@@ -237,7 +288,6 @@
                     url:'',
                     inntroduce: ''
                 },
-                treeData: [],
                 editIndex: -1,
                 activeName: 'first',
                 menuList: [],
@@ -262,42 +312,39 @@
         mounted() {
             this.setModel()
             this.initCKEditor()
-            this.categoryTree()
         },
         methods: {
+        	chooseClassifyItem(item,parentItem) {
+				this.getAllAttributesByCategoryId(item.id)
+			},
+        	getAllAttributesByCategoryId(id) {
+        		this.classifyData = []
+        		this.pickerOptionsList = []
+        		getAllAttributesByCategoryId({categoryId:id}).then((res)=>{
+        			res.data.map((item,index)=>{
+					item.val = ''
+					if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+						this.pickerOptionsList.push({
+							disabledDate(time){
+								return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+							}
+						})
+					}
+					else{
+						this.pickerOptionsList.push('')
+					}	
+				})
+        		
+                this.classifyData = res.data
+        		})
+        	},
+        	
+        	
+        	
             setModel () {
                 document.getElementById('editor').innerHTML = ''
             },
-            //分类树
-            categoryTree() {
-                categoryTree({}).then(res =>{
-                    //从第一级开始取
-                    res.data.children.forEach((item)=>{
-                        if(!item.children.length){
-                            delete item.children
-                        }
-                        else{
-                            item.children.forEach((item1)=>{
-                                if(!item1.children.length){
-                                    delete item1.children
-                                }
-                                else{
-                                    item1.children.forEach((item2)=>{
-                                        if(!item2.children.length){
-                                            delete item2.children
-                                        }
-                                    })
-                                }
-                            })	
-                        }
-                    })
-                    console.log(res.data.children)
-                    this.treeData = res.data.children
-                })
-                .catch(res=>{
-                    console.log(res)
-                })
-            },
+            
             initCKEditor() {
                 var vm = this
                 // const ft = new FocusTracker()
@@ -568,6 +615,14 @@
             },
             commit (method) {
                 let vm = this
+                let attributesAry = []
+                this.classifyData.map((item)=>{
+                	if(item.val.trim()!==''){
+                		let obj = {}
+                		obj[item.attributeName] = item.val
+                		attributesAry.push(obj)
+                	}
+                })
                 let data = {
                     operate: method,
                     editReson: '',
@@ -576,7 +631,7 @@
                     entryName: vm.entryName,
                     summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
                     categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
-                    attributes: [], // 进哥 - [{key: keyName,value: value}]
+                    attributes: attributesAry, // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
                     label: vm.tagList,
                     referrences: vm.quoteList,
@@ -670,7 +725,7 @@
         }
     }
 </script>
-<style scoped>
+<style lang="scss" scoped>
     .ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable), .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners{
         border: 1px solid #ccc
     }
@@ -814,4 +869,29 @@
     .category-title .formatting:hover{
         border-color:#ccc;
     }
+    /*属性form样式*/
+    .classifyForm{
+		font-size: 0;
+		li{
+			display: inline-block;
+			width: 50%;
+			font-size: 14px;
+			color: black;
+			line-height: 30px;
+			margin-top: 20px;
+			.name{
+				margin-right: 15px;
+				display: inline-block;
+				width: 200px;
+				text-align: right;
+				vertical-align: middle;
+				max-height: 60px;
+				overflow: hidden;
+			}
+			div{
+				display: inline-block;
+				
+			}
+		}
+	}
 </style>

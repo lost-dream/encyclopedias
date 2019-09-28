@@ -120,60 +120,7 @@
 		  </span>
 		</el-dialog>
 		
-		<!--根据属性动态创建form表单-->
-		<ul class="classifyForm">
-			<li v-for="(item,index) in classifyData">
-				<span class="name">{{item.attributeName}}</span>
-				<div>
-					<!--文本-->
-					<span v-if="item.attributeType===1">
-						<el-input
-							type="text"
-						  placeholder="请输入属性内容"
-						  v-model="item.val"
-						  clearable>
-						</el-input>
-					</span>
-					<!--数字-->
-					<span v-if="item.attributeType===2">
-						<el-input
-							type="number"
-							:min="item.attributeRangeBegin"
-							:max="item.attributeRangeEnd"
-						  placeholder="请输入属性内容"
-						  v-model="item.val"
-						  clearable>
-						</el-input>
-					</span>
-					<!--枚举-->
-					<span v-if="item.attributeType===3">
-						<el-select v-model="item.val" placeholder="请选择">
-						    <el-option
-						      v-for="item1 in options"
-						      :key="item1.value"
-						      :label="item1.label"
-						      :value="item1.value">
-						    </el-option>
-						  </el-select>
-					</span>
-					<!--时间-->
-					<span v-if="item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7">
-						<el-date-picker
-					      v-model="item.val"
-					      :type="datetimeObj[item.attributeType]"
-					      placeholder="选择日期时间"
-					      align="right"
-					      value-format="timestamp"
-					      :data-begin="item.attributeRangeBegin"
-					      :data-end="item.attributeRangeEnd"
-					      :picker-options="pickerOptionsList[index]"
-					      >
-					    </el-date-picker>
-					</span>
-					
-				</div>
-			</li>
-		</ul>
+		
 		
 	</div>
 </template>
@@ -189,12 +136,7 @@ export default {
 	},
 	data() {
 	    return {
-	    	pickerOptionsList:[],
-	    	options:[
-	    		{value:'1',label:'没得数据1'},
-	    		{value:'2',label:'没得数据2'},
-	    		{value:'3',label:'没得数据3'},
-	    	],
+	    	
 	    	datetimeObj:{
 	    		7:'datetime',
 	    		6:'date',
@@ -391,28 +333,6 @@ export default {
 				pageNumber: 1,
 				pageSize: 100,
 			}).then(res =>{
-				this.pickerOptionsList = []
-				res.data.records.map((item,index)=>{
-					item.val = ''
-					
-				})
-				this.pickerOptionsList.push(
-					{
-						disabledDate(time){
-							return time.getTime() <= "1514736000000"
-						}
-					}
-				)
-				
-				this.pickerOptionsList.push(
-					{
-						disabledDate(time){
-							return (time.getTime() <= "1325347200000" || time.getTime() >= "1388505600000")
-							
-						}
-					}
-				)
-				
 				
                 this.classifyData = res.data.records
             })
@@ -423,27 +343,6 @@ export default {
 		
 		categoryTree() {
 			categoryTree({}).then(res =>{
-				//从第一级开始取
-				res.data.children.forEach((item)=>{
-					if(!item.children.length){
-						delete item.children
-					}
-					else{
-						item.children.forEach((item1)=>{
-							if(!item1.children.length){
-								delete item1.children
-							}
-							else{
-								item1.children.forEach((item2)=>{
-									if(!item2.children.length){
-										delete item2.children
-									}
-								})
-							}
-						})	
-					}
-				})
-				console.log(res.data.children)
                 this.treeData = res.data.children
             })
             .catch(res=>{
@@ -469,7 +368,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .classifyForm{
 	font-size: 0;
 	li{

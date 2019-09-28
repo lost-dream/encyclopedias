@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<ul class="nav">
-			<li class="dropdown" @mouseout="hideSecondCategory(item)" @mouseover="showSecondCategory(item)" v-for="(item,index) in list" :key="index">
-				<a @click.stop="clickFirstCategory(item)">{{item.name}}</a>
+			<li :class="item.status?'choosed':''" class="dropdown" @mouseout="hideSecondCategory(item)" @mouseover="showSecondCategory(item)" v-for="(item,index) in list" :key="index">
+				<a @click.stop="clickFirstCategory(item,list)">{{item.name}}</a>
 				<ul class="dropdown-menu" v-show="item.show">
-					<li class="dropdown-submenu" @mouseout="hideThirdCategory(item1)" @mouseover="showThirdCategory(item1)" v-for="(item1,index1) in item.children">
-						<a @click.stop="clickSecondCategory(item1,item)">{{item1.name}}</a>
+					<li :class="item1.status?'choosed':''" class="dropdown-submenu" @mouseout="hideThirdCategory(item1)" @mouseover="showThirdCategory(item1)" v-for="(item1,index1) in item.children">
+						<a @click.stop="clickSecondCategory(item1,item,index,list)">{{item1.name}}</a>
 						<ul class="dropdown-menu" v-show="item1.show">
-							<li class="dropdown-submenu" v-for="(item2,index2) in item1.children">
-								<a @click.stop="clickThirdCategory(item2,item1)">{{item2.name}}</a>
+							<li :class="item2.status?'choosed':''" class="dropdown-submenu" v-for="(item2,index2) in item1.children">
+								<a @click.stop="clickThirdCategory(item2,item1,index1,index,list)">{{item2.name}}</a>
 							</li>
 						</ul>
 					</li>
@@ -42,14 +42,33 @@ export default {
   beforeRouteLeave(to,from,next) {},
   
   methods: {
-  	clickFirstCategory(item) {
+  	//清空status
+  	clearStatus(list) {
+  		list.map((item)=>{
+  			item.status = false
+  			item.children.map((item1)=>{
+  				item1.status = false
+  				item1.children.map((item2)=>{
+  					item2.status = false
+  				})
+  			})
+  		})
+  	},
+  	
+  	clickFirstCategory(item,list) {
+  		this.clearStatus(list)
+  		item.status = true
   		this.$emit('parentMethod',item);
   	},
-  	clickSecondCategory(item,parentItem) {
+  	clickSecondCategory(item,parentItem,index,list) {
+  		this.clearStatus(list)
+  		item.status = true
   		this.hideSecondCategory(parentItem)
   		this.$emit('parentMethod',item,parentItem);
   	},
-  	clickThirdCategory(item,parentItem) {
+  	clickThirdCategory(item,parentItem,index1,index,list) {
+  		this.clearStatus(list)
+  		item.status = true
   		this.hideThirdCategory(parentItem)
   		this.$emit('parentMethod',item,parentItem);
   	},
@@ -71,7 +90,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.choosed{
+	background-color: #298CF1 !important;
+}
 
  
 ul.nav>li {
@@ -91,6 +112,7 @@ ul.nav li:hover {
     padding: 10px 15px;
     display: block;
     color: white;
+    text-align: center;
 }
  
 .dropdown-menu {
