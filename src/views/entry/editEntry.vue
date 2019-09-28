@@ -16,7 +16,7 @@
                         type="primary">
                         {{ item.name }}
                     </el-tag>
-                    <el-button class="button-new-category" size="small" @click="dialogVisible = true"> + 添加分类</el-button>
+                    <el-button class="button-new-category" size="small" @click="showModal"> + 添加分类</el-button>
                 </div>
             </div>
             <!-- 同义词 -->
@@ -224,7 +224,7 @@
                 height="540px"
                 :title="title" 
                 :from_data='categoryTreeData' 
-                :to_data='toData' 
+                :to_data='toData'
                 :defaultProps="{label:'name'}" 
                 pid="parentId" 
                 @addBtn='add' 
@@ -232,7 +232,6 @@
                 @left-check-change="checkLength"
                 :mode='mode' 
                 :addressOptions="{num: 1, connector: ''}" 
-                filter
                 style="margin: 0 auto;min-width: 740px"></tree-transfer>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -309,6 +308,10 @@
                 contentData: [],
                 selectedCategory: '',
                 showFormat: false,
+
+                // 临时保存当前词条数据
+                tempData: '',
+                requestCount: 0,
             }
         },
         watch: {
@@ -386,9 +389,6 @@
                         vm.initCKEditor()
                         vm.setModel()
                         
-                        
-                        
-                        
                         data.entryAttributes.map((item,index)=>{
 							item.val = item.attributeValue
 							item.attributeType = item.attributeType
@@ -408,27 +408,33 @@
                         vm.classifyData = data.entryAttributes
                         console.log(vm.classifyData,'vm.classifyData')
 
-                        // 处理已选分类
-                        let tempArr = [];
-                        data.categories.forEach(x => {
-                            vm.categoryTreeData.forEach(y => {
-                                if(y.children.length){
-                                    y.children.forEach(z => {
-                                        if(z.children.length){
-                                            z.children.forEach(s => {
-                                                s.id == x && (tempArr.push(s))
-                                            })
-                                        }else{
-                                            z.id == x && (tempArr.push(z))
-                                        }
-                                    })
-                                }else{
-                                    y.id == x && (tempArr.push(y))
-                                }
-                            })
-                        })
-                        vm.savedCategories = tempArr
-                        vm.toData = [].concat(tempArr)
+
+                        vm.requestCount ++
+
+                        // if(vm.requestCount == 2){
+                            // 处理已选分类
+                            // console.log('tempData')
+                            // let tempArr = [];
+                            // vm.tempData.categories.forEach(x => {
+                            //     vm.categoryTreeData.forEach(y => {
+                            //         if(y.children.length){
+                            //             y.children.forEach(z => {
+                            //                 if(z.children.length){
+                            //                     z.children.forEach(s => {
+                            //                         s.id == x. && (tempArr.push(s))
+                            //                     })
+                            //                 }else{
+                            //                     z.id == x && (tempArr.push(z))
+                            //                 }
+                            //             })
+                            //         }else{
+                            //             y.id == x && (tempArr.push(y))
+                            //         }
+                            //     })
+                            // })
+                            vm.savedCategories = data.categories
+                            vm.toData = data.categories.map(x => {x.pid = x.parentId; return x})
+                    //     }
                     })
             }
 
@@ -438,7 +444,7 @@
         methods: {
         	categoryTree() {
 				categoryTree({}).then(res =>{
-	                this.categoryTreeData = res.data.children
+                    this.categoryTreeData = res.data.children
 	            })
 	            .catch(res=>{
 	            	console.log(res)
@@ -763,7 +769,7 @@
                         })
                     })
                 })
-                
+
                 this.$confirm('生成模板将删除正文所有内容, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -851,7 +857,7 @@
             checkLength(nodeObj, treeObj, checkAll){
                 // console.log(nodeObj, treeObj, checkAll)
                 let vm = this,
-                    treeComp = this.$refs.treeTransfer.$children[2],
+                    treeComp = this.$refs.treeTransfer.$children[1],
                     arr = treeComp.getCheckedNodes().filter(x => !x.children.length);
 
                 if((arr && ((arr.length + vm.savedCategories.length) > 5))){
@@ -895,6 +901,17 @@
                 }else{
                     this.contentData = []
                 }
+            },
+            showModal(){
+                let vm = this
+                this.dialogVisible = true
+                // console.log('showModal',this.$refs.treeTransfer.addressee )
+                let t = setTimeout(() => {
+                    vm.$refs.treeTransfer && (function(){
+                        vm.$refs.treeTransfer.addressee = vm.toData
+                        clearTimeout(t)
+                    })()
+                }, 100)
             }
         }
     }

@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<p>根据分类查询词条列表</p>
 		<ul class="categoryList">
 			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
 		</ul>
