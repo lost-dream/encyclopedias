@@ -6,7 +6,7 @@
       	
         <el-main>
         	<!--面包屑导航-->
-	      	<el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
+	      	<el-breadcrumb v-show="showBreadcrumb" class="breadcrumb-container" separator-class="el-icon-arrow-right">
 	            <el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
 	       </el-breadcrumb>
         <!-- Body -->
@@ -25,11 +25,19 @@ export default {
   },
   data() {
 	    return {
-	        levelList: []
+	        levelList: [],
+	        showBreadcrumb:false,
 	    }
 	},
 	watch: {
 	    $route() {
+	    	console.log(this.$route.path)
+	    	if(this.$route.path === '/index'){
+	    		this.showBreadcrumb = false
+	    	}
+	    	else{
+	    		this.showBreadcrumb = true
+	    	}
 	        this.getBreadcrumb()
 	    }
 	},

@@ -72,7 +72,7 @@ export default {
 				"keyword": ""
 			}).then((res)=>{
 				this.entryListData = res.data.records
-				this.pagination.count = total
+				this.pagination.count = res.data.total
 			})
 			
 		},
