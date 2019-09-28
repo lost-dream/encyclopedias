@@ -10,9 +10,12 @@
             </div>
             <!-- summary -->
             <div class="mg-top-20" id="summary">
-                <div class="block-container" v-for="item,index in wikiContent.entrySummarys" :key="index">
-                    <div v-if="item.status == 1">
-                        <span v-if="item.summary">{{item.summary}}</span>
+                <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex">
+                    <div >
+                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px"></el-image>
+                    </div>
+                    <div v-if="item.status == 1" style="padding-left: 20px">
+                        <span v-if="item.summary">{{JSON.parse(item.summary).text}}</span>
                         <span v-else>当前词条暂无描述</span>
                     </div>
                 </div>
@@ -61,7 +64,7 @@
                 <div id="demo" style="width: 100%;padding: 20px">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 class="block" :id="item.id">{{index+1}}{{item.contentTitle}}</h2>
+                            <h2 class="block" :id="item.id" v-if="item.contentTitle">{{index+1}}{{item.contentTitle}}</h2>
                             <div v-html="item.contentBody">}</div>
                             <template v-if="item.children.length > 0" v-for="key in item.children">
                                 <div style="margin-left: 20px">
@@ -90,7 +93,7 @@
                     </template>
                 </div>
             </div>
-            <!-- 引用 -->
+            <!-- 标签 -->
             <div class="mg-top-20">
                 <h3 id="tag">标签</h3>
                 <div>
@@ -166,6 +169,7 @@
                     console.log(res.data)
                     vm.wikiContent = res.data
                     vm.contentList = []
+                    vm.wikiContent.entrySummary = JSON.parse(res.data.entrySummary)
                     res.data.entryContentVos.map((item,index) => {
                         let obj1 = {
                             level: 1,
