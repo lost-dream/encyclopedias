@@ -2,8 +2,7 @@
     <div style="display: flex;width: 1280px;margin: 0 auto" >
         <div style="width: 80%;display: flex;flex-direction: column">
             <div>
-                <h3>[ci tiao ming cheng]</h3>
-
+                <h3>词条名称</h3>
                 <el-input  v-model="entryName"></el-input>
             </div>
             <!-- 词条分类 -->
@@ -41,10 +40,19 @@
             <!-- 摘要 -->
             <div class="mg-top-20">
                 <h4 class="block">摘要</h4>
-                <div>
-                    <el-input
+                <div style="display: flex;flex-direction: row;">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <i v-else class="el-icon-plus
+                        avatar-uploader-icon"></i>
+                    </el-upload>
+                    <el-input style="margin-left: 20px"
                             type="textarea"
-                            :rows="4"
+                            :rows="8"
                             placeholder="请输入内容"
                             v-model="summary">
                     </el-input>
@@ -256,6 +264,7 @@
         name: 'editor',
         data() {
             return {
+                imageUrl: '',
             	//------------属性模板----------------
             	pickerOptionsList:[],
 		    	options:[
@@ -449,8 +458,9 @@
 	            	console.log(res)
 	            })
 			},
-        	
-        	
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
         	chooseClassifyItem(item,parentItem) {
 				this.getAllAttributesByCategoryId(item.id)
 			},
@@ -509,7 +519,7 @@
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
                         ckfinder: {
-                            uploadUrl: '/admin/Upload/uploadUrl'
+                            uploadUrl: 'http://106.12.208.84:8080/wiki-backend/upload/uploadImg'
                             //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                         }
                     }).then(editor => {
@@ -808,7 +818,7 @@
                     entryId: vm.entryId,  // 返回值
                     versionId:vm.versionId,
                     entryName: vm.entryName,
-                    summary: [{value:JSON.stringify({img: '',text:vm.summary}),sourceType:7,sourceValue: null}],
+                    summary: [{value:JSON.stringify({img: vm.imageUrl,text:vm.summary}),sourceType:7,sourceValue: null}],
                     categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
                     attributes: attributesAry, // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -1085,4 +1095,30 @@
 			}
 		}
 	}
+    /*----------------------upload---------------------------------------*/
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+        border: 1px dotted #ccc;
+        border-radius: 5px;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
 </style>
