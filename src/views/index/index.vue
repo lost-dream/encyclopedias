@@ -5,7 +5,7 @@
 				<span>最新词条</span>
 			</div>
 			<el-row>
-				<el-col :span="16">
+				<el-col class="w800">
 					<el-carousel :interval="2000000">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList">
@@ -19,7 +19,7 @@
 						</el-carousel-item>
 					</el-carousel>
 				</el-col>
-				<el-col :span="8">
+				<el-col class="w480">
 					<div id="entryStatisticalData">
 						<p>
 							<img src="../../assets/index/01.png"/>
@@ -36,6 +36,8 @@
 							<span class="data">{{entryStatisticalData.totalEditor}}</span>
 							<span>人编写</span>
 						</p>
+
+						<el-button type="primary">创建词条</el-button>
 						
 					</div>
 				</el-col>
@@ -188,9 +190,9 @@ export default {
 					  return a-b;
 					})
 					
-					for(let i = 0;i<list.length;i++){
-						list[i].style.width = ary[ary.length-1]+'px'
-					}
+					// for(let i = 0;i<list.length;i++){
+					// 	list[i].style.width = ary[ary.length-1]+'px'
+					// }
 				})
 				
 			})
@@ -220,6 +222,12 @@ export default {
 	.w1280 {
 		width: 1280px;
 		margin: 0 auto;
+	}
+	.w800 {
+		width: 800px;
+	}
+	.w480 {
+		width: 480px;
 	}
 }
 .categoryTreeList{
@@ -334,17 +342,36 @@ export default {
 	background: url('/static/image/title.png') no-repeat;
 }
 #entryStatisticalData{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	height: 400px;
+	padding: 40px 50px;
+	box-sizing: border-box;
 	color: #338ce6;
 	font-size: 15px;
 	img{
 		vertical-align: sub;
 	}
 	p{
-		line-height: 35px;
+		width: 100%;
+		vertical-align: middle;
+    display: flex;
+    align-items: center;
+		justify-content: space-between;
+		// line-height: 35px;
+		img {
+			margin-right: 16px;
+		}
 		.data{
 			font-size: 30px;
-			text-align: right;
+			text-align: center;
 			display: inline-block;
+			min-width: 100px;
+			max-width: 270px;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 		span:last-child{
 			margin-left: 20px;
