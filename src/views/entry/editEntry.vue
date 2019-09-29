@@ -353,7 +353,7 @@
                         data.entrySummarys.map(item => {
                             if(item.dataType ==1 ){
                                 vm.summary = JSON.parse(item.summary).text
-                                vm.summaryImg = JSON.parse(item.summary).img
+                                vm.imageUrl = JSON.parse(item.summary).img
                             }
                         })
                         data.entryContentVos.map(item =>{
@@ -459,7 +459,7 @@
 	            })
 			},
             handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+        	    this.imageUrl = res.url
             },
         	chooseClassifyItem(item,parentItem) {
 				this.getAllAttributesByCategoryId(item.id)

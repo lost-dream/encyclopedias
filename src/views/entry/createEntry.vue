@@ -352,7 +352,7 @@
 
 
             handleAvatarSuccess(res, file) {
-                this.imageUrl = res.data[0].fileUrl
+                this.imageUrl = res.url
                 console.log(this.imageUrl)
             },
         	
