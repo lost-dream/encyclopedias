@@ -71,7 +71,7 @@
             </div>
             <!-- 词条详情 -->
             <div style="display: flex"  class="mg-top-20">
-                <div id="demo" style="width: 100%;padding: 20px">
+                <div class="ck-content" style="width: 100%;padding: 20px">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
                             <h2 class="shadow" :id="item.id" v-if="item.contentTitle"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
