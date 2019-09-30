@@ -1,22 +1,12 @@
 <template>
   <div id="app">
-    <el-container style="min-width: 1280px">
-      <el-header class="header">
-        <vheader />
-      </el-header>
-      <!-- Body -->
       <router-view></router-view>
-    </el-container>
   </div>
 </template>
 <script>
-import Header from '@/components/TopHeader'
 
 export default {
   name: 'app',
-  components: {
-    'vheader': Header
-  }
 }
 
 </script>

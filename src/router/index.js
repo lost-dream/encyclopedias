@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import classifyManagerRouter from './classifyManagerRouter'
-import categoryManagerRouter from './categoryManagerRouter'
-import contentTemplateRouter from './contentTemplateRouter'
+// import classifyManagerRouter from './classifyManagerRouter'
+// import categoryManagerRouter from './categoryManagerRouter'
+// import contentTemplateRouter from './contentTemplateRouter'
 import entryRouter from './entryRouter'
 import visitorRouter from './visitorPageRouter'
 import commonUserRouter from './commonUserRouter'
 import administratorRouter from './administratorRouter'
-import SpecialManagerRouter from './SpecialManagerRouter'
+// import SpecialManagerRouter from './SpecialManagerRouter'
 
 Vue.use(Router)
 /**
@@ -16,14 +16,14 @@ Vue.use(Router)
  * all roles can be accessed
  */
 export const constantRoutes = [
-  ...classifyManagerRouter,
-  ...categoryManagerRouter,
-  ...contentTemplateRouter,
+  // ...classifyManagerRouter,
+  // ...categoryManagerRouter,
+  // ...contentTemplateRouter,
   ...entryRouter,
   ...visitorRouter,
   ...commonUserRouter,
   ...administratorRouter,
-  ...SpecialManagerRouter
+  // ...SpecialManagerRouter
 ]
 
 /**

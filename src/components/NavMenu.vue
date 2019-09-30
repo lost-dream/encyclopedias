@@ -2,14 +2,13 @@
   <el-row class="tac">
   <el-col :span="24">
     <el-menu
-      class="el-menu-vertical-demo"
       router
       unique-opened
       @open="handleOpen"
       @close="handleClose"
-      background-color="#fff"
-      text-color="black"
-      active-text-color="#F56C6C">
+      background-color="#212f54"
+      text-color="white"
+      active-text-color="#ffffff">
 			<!--一级路由-->
 			<el-menu-item v-if="item.componentName" v-for="item in menu" :index="item.componentName" :key="item.componentName">
         <template slot="title">
@@ -26,21 +25,27 @@
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-			
-			
     </el-menu>
   </el-col>
 </el-row>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
   .over-hide{
     overflow: hidden;
   }
   .el-menu {
     border: none;
-    margin-top: 20px;
+    margin-top: 15px;
+    .el-menu-item {
+      border-left: 5px solid rgba(0,0,0,0); 
+    }
+    .el-menu-item.is-active {
+      background: rgba(0,0,0,.25) !important;
+      border-left: 5px solid #337ab7 !important; 
+    }
   }
+  
 </style>
 
 <script>

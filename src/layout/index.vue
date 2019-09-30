@@ -1,33 +1,42 @@
 <template>
-	<el-main class="top-wrap">
-		<el-container>
-			<el-aside width="200px">
-			<!-- 侧边栏 -->
-					<navmenu></navmenu>
-			</el-aside>
-			<el-main>
-			<!-- Body -->
-				<router-view></router-view>
-			</el-main>
-		</el-container>
-	</el-main>
+	<el-container>
+		<el-header height="40px">
+			<vheader></vheader>
+		</el-header>
+		<el-aside width="200px" class="left-menu">
+		<!-- 侧边栏 -->
+				<navmenu></navmenu>
+		</el-aside>
+		<el-main>
+		<!-- Body -->
+			<router-view></router-view>
+		</el-main>
+	</el-container>
 </template>
 <script>
+import Header from '@/components/AdminHeader'
 import NavMenu from '@/components/NavMenu'
 export default {
   name: 'layout',
   components: {
-    'navmenu': NavMenu
+		'navmenu': NavMenu,
+		'vheader': Header
   }
 }
 
 </script>
 
 <style lang="scss" scoped>
+.el-container {
+	position: relative;
+}
+
 .el-main{
 	overflow-y: auto;
-	width: 100vw;
-	min-height: 70vh;
+	margin-left: 200px;
+	width: calc(100vw - 200px);
+	height: calc(100vh - 40px);
+	border-left: 1px solid #e6e6e6;
 	
 	&::-webkit-scrollbar {
 	  width: 5px;
@@ -49,13 +58,21 @@ export default {
 	  background-color: #ddd;
 	}
 }
-.top-wrap {
-	padding: 0;
-	width: 1280px;
-	margin: 0 auto;
 
-	.el-main {
-		border-left: 1px solid #e6e6e6;
-	}
+.left-menu {
+	width: 200px;
+	position: absolute;
+	top: 40px;
+	height: calc(100vh - 40px);
+	background: rgb(33,47,84);
 }
+// .top-wrap {
+// 	padding: 0;
+// 	width: 1280px;
+// 	margin: 0 auto;
+
+// 	.el-main {
+// 		border-left: 1px solid #e6e6e6;
+// 	}
+// }
 </style>

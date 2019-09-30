@@ -1,21 +1,24 @@
 <template>
-		<el-container class="page-wrapper" :class="showBreadcrumb ? '' : 'index-page'">
+		<el-container class="page-wrapper" >
 			<el-main>
 				<!--面包屑导航-->
 				<el-breadcrumb v-show="showBreadcrumb" class="breadcrumb-container" separator-class="el-icon-arrow-right">
 						<el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
 				</el-breadcrumb>
+				<header>
+					<vheader></vheader>
+				</header>
 			<!-- Body -->
-				<router-view></router-view>
+				<router-view :class="showBreadcrumb ? '' : 'index-page'"></router-view>
 		</el-main>
 		</el-container>
 </template>
 <script>
-
+import Header from '@/components/TopHeader'
 export default {
   name: 'visitor',
   components: {
-    
+    'vheader': Header
   },
   data() {
 	    return {
