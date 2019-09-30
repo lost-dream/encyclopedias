@@ -1,5 +1,5 @@
 <template>
-		<el-container class="page-wrapper">
+		<el-container class="page-wrapper" :class="showBreadcrumb ? '' : 'index-page'">
 			<el-main>
 				<!--面包屑导航-->
 				<el-breadcrumb v-show="showBreadcrumb" class="breadcrumb-container" separator-class="el-icon-arrow-right">
@@ -62,31 +62,38 @@ export default {
 		padding: 0;
 	}
 }
+.index-page {
+	background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	background-size: 100% 550px;
+}
 .el-main{
 	padding-top: 0;
-	overflow-y: auto;
+	overflow-y: visible;
 	// width: 1280px;
 	// margin: 0 auto;
 	/*height: 70vh;*/
-	
-	&::-webkit-scrollbar {
-	  width: 5px;
-	  height: 4px;
+}
+
+</style>
+
+<style>
+*::-webkit-scrollbar {
+	  width: 8px;
+	  height: 8px;
 	  background-color: #F5F5F5;
 	}
 	
 	/*定义滚动条轨道 内阴影+圆角*/
-	&::-webkit-scrollbar-track {
-	  -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
-	  border-radius: 10px;
-	  background-color: #F5F5F5;
-	}
-	
-	/*定义滑块 内阴影+圆角*/
-	&::-webkit-scrollbar-thumb {
-	  border-radius: 10px;
-	  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-	  background-color: #ddd;
-	}
+*::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+/*定义滑块 内阴影+圆角*/
+*::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	background-color: #ddd;
 }
 </style>

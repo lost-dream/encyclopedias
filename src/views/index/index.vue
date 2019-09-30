@@ -6,7 +6,7 @@
 			</div>
 			<el-row>
 				<el-col class="w800">
-					<el-carousel :interval="2000000">
+					<el-carousel :interval="5000">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList">
 								<!--<img :src="item.specialCoverUrl" alt="" />-->
@@ -49,11 +49,14 @@
 			<div class="title">
 				<span>特色专题</span>
 			</div>
-			<el-carousel :interval="2000000" type="card" height="530px">
+			<el-carousel :interval="5000" type="card" height="530px">
 				<el-carousel-item v-for="item in specialListData" :key="item.id">
 					<div @click="routeToSpecial(item.id)" class="specialList">
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
-						<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
+						<el-image 
+							:fit="'cover'"
+							:src="'https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg'">
+						</el-image>
 						<div>
 							<p>{{item.specialName}}</p>
 							<div>{{item.specialDesc}}</div>
@@ -217,8 +220,8 @@ export default {
 <style lang="scss" scoped>
 .main-page {
 	padding-top: 30px;
-	background: url('/static/image/index-bg.png') 0 0 no-repeat;
-	background-size: 100% 550px;
+	// background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	// background-size: 100% 550px;
 	.w1280 {
 		width: 1280px;
 		margin: 0 auto;
@@ -229,6 +232,12 @@ export default {
 	.w480 {
 		width: 480px;
 	}
+}
+.title+.el-row {
+	margin-bottom: 30px
+}
+.el-col-6+.el-col-6{
+	padding-left: 40px;
 }
 .categoryTreeList{
 	padding-bottom: 10px;
@@ -241,6 +250,8 @@ export default {
 		line-height: 40px;
 		color: white;
 		text-align: center;
+		box-shadow: 0 2px 5px 1px #848484;
+		margin-bottom: 5px;
 	}
 	ul{
 		list-style: none;
@@ -248,6 +259,7 @@ export default {
 		padding: 0;
 		width: 50%;
 		display: inline-block;
+		min-height: 160px;	
 		li{
 			margin: 0;
 			padding: 0;
@@ -306,10 +318,11 @@ export default {
 	background: #f6fafb;
 	margin: auto;
 	position: relative;
-	img{
+	&/deep/ img{
 		width: 100%;
+		height: 200px;
 	}
-	>div{
+	>div:not(.el-image){
 		width: 324px;
 		height: 288px;
 		padding: 20px 0 30px 0;
@@ -330,7 +343,7 @@ export default {
 	}
 }
 .el-carousel__item{
-	background: white;
+	// background: white;
 }
 .title{
 	margin: 15px 0;

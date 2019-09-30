@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-container>
+    <el-container style="min-width: 1280px">
       <el-header class="header">
         <vheader />
       </el-header>
