@@ -1,16 +1,16 @@
 <template>
 		<el-container class="page-wrapper" >
 			<el-main>
+				<header>
+					<vheader></vheader>
+				</header>
 				<!--面包屑导航-->
 				<el-breadcrumb v-show="showBreadcrumb" class="breadcrumb-container" separator-class="el-icon-arrow-right">
 						<el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
 				</el-breadcrumb>
-				<header>
-					<vheader></vheader>
-				</header>
-			<!-- Body -->
-				<router-view :class="showBreadcrumb ? '' : 'index-page'"></router-view>
-		</el-main>
+				<!-- Body -->
+				<router-view :class="pageClass"></router-view>
+			</el-main>
 		</el-container>
 </template>
 <script>
@@ -23,17 +23,20 @@ export default {
   data() {
 	    return {
 	        levelList: [],
-	        showBreadcrumb:false,
+					showBreadcrumb:false,
+					pageClass: ''
 	    }
 	},
 	watch: {
 	    $route() {
 	    	console.log(this.$route.path)
 	    	if(this.$route.path === '/index'){
-	    		this.showBreadcrumb = false
+					this.showBreadcrumb = false
+					this.pageClass = 'index-page'
 	    	}
 	    	else{
-	    		this.showBreadcrumb = true
+					this.showBreadcrumb = true
+					this.pageClass = ''
 	    	}
 	        this.getBreadcrumb()
 	    }
@@ -76,13 +79,17 @@ export default {
 	// margin: 0 auto;
 	/*height: 70vh;*/
 }
+.breadcrumb-container {
+	width: 1280px;
+	margin: 0 auto;
+}
 
 </style>
 
 <style>
 *::-webkit-scrollbar {
-	  width: 8px;
-	  height: 8px;
+	  width: 5px;
+	  height: 4px;
 	  background-color: #F5F5F5;
 	}
 	
