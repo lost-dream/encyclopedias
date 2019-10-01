@@ -54,6 +54,29 @@ const visitorRouter = [
 				title: '精选分类',
 			},
 		},
+		{
+			path: '/viewEntry',
+			component: () => import('@/views/entry/viewEntry'),
+			name: 'viewEntry',
+			meta: {
+					title: '词条浏览',
+			}
+		},
+		{
+				path: '/createEntry',
+				component: () => import('@/views/entry/createEntry'),
+				name: 'createEntry',
+				meta: {
+						title: '词条创建',
+				}
+		}, {
+				path: '/editEntry',
+				component: () => import('@/views/entry/editEntry'),
+				name: 'editEntry',
+				meta: {
+						title: '词条编辑',
+				},
+		}
 	]
 }
 

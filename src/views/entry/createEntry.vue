@@ -1,6 +1,6 @@
 <template>
-    <div style="display: flex;width: 1280px;margin: 0 auto" >
-        <div style="width: 80%;display: flex;flex-direction: column">
+    <div>
+        <div style="display: flex;flex-direction: column;width: 1280px;margin: 0 auto">
             <div>
                 <h3>词条名称</h3>
                 <el-input  v-model="entryName"></el-input>
