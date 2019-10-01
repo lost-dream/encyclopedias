@@ -1,113 +1,143 @@
 <template>
 	<div>
-		<!--分类树-->
 		<el-row>
-			<treemenu @parentMethod="chooseItem" :list="treeData"></treemenu>
+			<el-col :span="4">
+				<div class="myTree">
+					<el-tree
+			        ref="tree"
+			        :props="defaultProps"
+			        current-node-key="1"
+			        :data="treeData"
+			        node-key="space_id"
+			        @node-click="handleNodeClick"
+			        :expand-on-click-node="true"
+			        highlight-current
+			      >
+			        <!--<div class="custom-tree-node" slot-scope="{ node, data}">
+			          <div>
+			            <span @click.stop="chooseItem(data)">{{ data.name }}</span>
+			          </div>
+			          <span class="el-ic"></span>
+			        </div>-->
+			      </el-tree>
+				</div>
+			</el-col>
+			<el-col :span="20">
+				<!--展示选中的分类对应的属性模板（只读）-->
+				<el-card v-show="checkedParentId" shadow="hover">
+					<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+						<span class="leftBorder"></span>
+						继承属性
+					</div>
+					<el-table
+						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
+						  ref="table" :data="parentClassifyData" class="departTable" border stripe>
+				        <el-table-column prop="attributeName" label="属性名称" />
+				        <el-table-column prop="attributeType" label="属性值类型" />
+				        <el-table-column width="250px" label="约束值">
+				          <template slot-scope="scope">
+				          	<span v-if="scope.row.attributeType===4||scope.row.attributeType===5||scope.row.attributeType===6||scope.row.attributeType===7">{{parseTime(scope.row.attributeRangeBegin)}}~{{parseTime(scope.row.attributeRangeEnd)}}</span>
+				          	<span v-else>{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}</span>
+				          </template>
+				        </el-table-column>
+				        <el-table-column prop="editType" label="编辑模式" />
+				        <el-table-column prop="editSource" label="编辑内容来源" />
+				    </el-table>
+			    </el-card>
+				<!--展示选中的分类对应的属性模板（编辑）-->
+				<el-card v-show="checkedId" shadow="hover">
+					<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+						<span class="leftBorder"></span>
+						自身属性
+						<el-button style="float: right;margin-top: -10px;background: #56bd9d;" @click="addClassify" type="success">添加</el-button>
+					</div>
+					
+					<el-table 
+						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
+						height="300" ref="table" :data="classifyData" class="departTable" border stripe>
+						<el-table-column width="200px" label="属性名称">
+				          <template slot-scope="scope">
+				            <el-input v-model="scope.row.attributeName" placeholder="请输入属性名称"></el-input>
+				          </template>
+				        </el-table-column>
+				        
+				        
+				        <el-table-column width="150px" label="属性值类型">
+				          <template slot-scope="scope">
+				          	<el-select @change="attributeTypeChange($event,scope.row)" placeholder="请选择类型" v-model="scope.row.attributeType">
+					          <el-option v-for="(item, index) in attributeTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					        </el-select>
+				          </template>
+				        </el-table-column>
+				        <el-table-column width="250px" label="约束值">
+				        	<template slot-scope="scope">
+				        		<!--数字范围-->
+				        		<el-row v-if="scope.row.attributeType===2">
+				        			<el-col :span="11">
+										<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeBegin"></el-input>
+									</el-col>
+									<el-col style="line-height: 40px;" :span="1">-</el-col>
+									<el-col :span="11">
+										<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeEnd"></el-input>
+									</el-col>
+				        		</el-row>
+				        		
+				        		<!--时间范围-->
+				        		<el-row v-if="scope.row.attributeType===7||scope.row.attributeType===6||scope.row.attributeType===5||scope.row.attributeType===4">
+				        			<el-col :span="11">
+										<el-date-picker
+									      v-model="scope.row.attributeRangeBegin"
+									      :type="datetimeObj[scope.row.attributeType]"
+									      placeholder="选择日期时间"
+									      align="right"
+									      value-format="timestamp"
+									      >
+									    </el-date-picker>
+						          	</el-col>
+									<el-col style="line-height: 40px;" :span="1">-</el-col>
+									<el-col :span="11">
+										<el-date-picker
+									      v-model="scope.row.attributeRangeEnd"
+									      :type="datetimeObj[scope.row.attributeType]"
+									      placeholder="选择日期时间"
+									      align="right"
+									      value-format="timestamp"
+									      >
+									    </el-date-picker>
+									</el-col>
+				        		</el-row>
+				        		
+				        		
+				        	</template>
+				        	
+				        </el-table-column>
+				        <el-table-column width="200" label="编辑模式">
+				          <template slot-scope="scope">
+				            <el-select disabled placeholder="请选择模式" v-model="scope.row.editType">
+					          <el-option v-for="(item, index) in editTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					        </el-select>
+				          </template>
+				        </el-table-column>
+				        <el-table-column width="150" label="编辑内容来源">
+				          <template slot-scope="scope">
+				            <el-select disabled placeholder="请选择来源" v-model="scope.row.editSource">
+					          <el-option v-for="(item, index) in editSourceAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					        </el-select>
+				          </template>
+				        </el-table-column>
+				        <el-table-column fixed="right" label="操作" width="50">
+							<template slot-scope="scope">
+								<el-button @click="deleteHandle(scope.$index)" type="text" size="small">删除</el-button>
+							</template>
+						</el-table-column>
+				     </el-table>
+				     <el-row style="text-align: center;margin-top: 20px;">
+				     	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="dialogVisible = true" type="primary">取消</el-button>
+					  	<el-button style="background: #5b7dd7;" @click="save" type="primary">保存</el-button>
+					</el-row>
+			    </el-card>
+			</el-col>
 		</el-row>
-		<!--展示选中的分类对应的属性模板（只读）-->
-		<el-card v-show="checkedParentId" shadow="hover">
-			<div slot="header" class="clearfix">继承属性</div>
-			<el-table ref="table" :data="parentClassifyData" class="departTable" border stripe>
-		        <el-table-column prop="attributeName" label="属性名称" />
-		        <el-table-column prop="attributeType" label="属性值类型" />
-		        <el-table-column width="250px" label="约束值">
-		          <template slot-scope="scope">
-		          	<span v-if="scope.row.attributeType===4||scope.row.attributeType===5||scope.row.attributeType===6||scope.row.attributeType===7">{{parseTime(scope.row.attributeRangeBegin)}}~{{parseTime(scope.row.attributeRangeEnd)}}</span>
-		          	<span v-else>{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}</span>
-		          </template>
-		        </el-table-column>
-		        <el-table-column prop="editType" label="编辑模式" />
-		        <el-table-column prop="editSource" label="编辑内容来源" />
-		    </el-table>
-	    </el-card>
-		<!--展示选中的分类对应的属性模板（编辑）-->
-		<el-card v-show="checkedId" shadow="hover">
-			<div slot="header" class="clearfix">自身属性</div>
-			<el-row style="text-align: right;">
-				<el-button @click="addClassify" type="success">新增属性</el-button>
-			</el-row>
-			<el-table ref="table" :data="classifyData" class="departTable" border stripe>
-				<el-table-column width="200px" label="属性名称">
-		          <template slot-scope="scope">
-		            <el-input v-model="scope.row.attributeName" placeholder="请输入属性名称"></el-input>
-		          </template>
-		        </el-table-column>
-		        
-		        
-		        <el-table-column width="150px" label="属性值类型">
-		          <template slot-scope="scope">
-		          	<el-select @change="attributeTypeChange($event,scope.row)" placeholder="请选择类型" v-model="scope.row.attributeType">
-			          <el-option v-for="(item, index) in attributeTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
-			        </el-select>
-		          </template>
-		        </el-table-column>
-		        <el-table-column width="250px" label="约束值">
-		        	<template slot-scope="scope">
-		        		<!--数字范围-->
-		        		<el-row v-if="scope.row.attributeType===2">
-		        			<el-col :span="11">
-								<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeBegin"></el-input>
-							</el-col>
-							<el-col style="line-height: 40px;" :span="1">-</el-col>
-							<el-col :span="11">
-								<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeEnd"></el-input>
-							</el-col>
-		        		</el-row>
-		        		
-		        		<!--时间范围-->
-		        		<el-row v-if="scope.row.attributeType===7||scope.row.attributeType===6||scope.row.attributeType===5||scope.row.attributeType===4">
-		        			<el-col :span="11">
-								<el-date-picker
-							      v-model="scope.row.attributeRangeBegin"
-							      :type="datetimeObj[scope.row.attributeType]"
-							      placeholder="选择日期时间"
-							      align="right"
-							      value-format="timestamp"
-							      >
-							    </el-date-picker>
-				          	</el-col>
-							<el-col style="line-height: 40px;" :span="1">-</el-col>
-							<el-col :span="11">
-								<el-date-picker
-							      v-model="scope.row.attributeRangeEnd"
-							      :type="datetimeObj[scope.row.attributeType]"
-							      placeholder="选择日期时间"
-							      align="right"
-							      value-format="timestamp"
-							      >
-							    </el-date-picker>
-							</el-col>
-		        		</el-row>
-		        		
-		        		
-		        	</template>
-		        	
-		        </el-table-column>
-		        <el-table-column width="150px" label="编辑模式">
-		          <template slot-scope="scope">
-		            <el-select disabled placeholder="请选择模式" v-model="scope.row.editType">
-			          <el-option v-for="(item, index) in editTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
-			        </el-select>
-		          </template>
-		        </el-table-column>
-		        <el-table-column width="200px" label="编辑内容来源">
-		          <template slot-scope="scope">
-		            <el-select disabled placeholder="请选择来源" v-model="scope.row.editSource">
-			          <el-option v-for="(item, index) in editSourceAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
-			        </el-select>
-		          </template>
-		        </el-table-column>
-		        <el-table-column fixed="right" label="操作" width="100">
-					<template slot-scope="scope">
-						<el-button @click="deleteHandle(scope.$index)" type="danger" size="small">删除</el-button>
-					</template>
-				</el-table-column>
-		     </el-table>
-		     <el-row style="text-align: center;margin-top: 20px;">
-		     	<!--<el-button @click="dialogVisible = true" type="warning">取消修改</el-button>-->
-			  	<el-button @click="save" type="primary">保存</el-button>
-			</el-row>
-	    </el-card>
 	    <!--是否取消修改弹窗-->
 	    <el-dialog
 		  title="提示"
@@ -237,6 +267,7 @@ export default {
 			this.$set(row,'attributeRangeEnd',0)
 			}
 		},
+		
 		chooseItem(item,parentItem) {
 			parentItem?this.checkedParentId = parentItem.id:this.checkedParentId = ''
 			this.checkedId = item.id
@@ -262,6 +293,7 @@ export default {
 			}
 			var obj = JSON.parse(JSON.stringify(this.defaultClassifyItem))
 			this.classifyData.push(obj)
+			
 		},
 		deleteHandle(index) {
 			this.classifyData.splice(index,1)
@@ -338,7 +370,6 @@ export default {
 				pageNumber: 1,
 				pageSize: 100,
 			}).then(res =>{
-				
                 this.classifyData = res.data.records
             })
             .catch(res=>{
@@ -348,6 +379,26 @@ export default {
 		
 		categoryTree() {
 			categoryTree({}).then(res =>{
+				res.data.children.map((item)=>{
+					if(!item.children.length){
+						delete item.children
+					}
+					else{
+						item.children.map((item1)=>{
+							if(!item1.children.length){
+								delete item1.children
+							}
+							else{
+								item1.children.map((item2)=>{
+									if(!item2.children.length){
+										delete item2.children
+									}
+								})
+							}
+						})
+					}
+				})
+				console.log(res.data.children,'111')
                 this.treeData = res.data.children
             })
             .catch(res=>{
@@ -355,14 +406,7 @@ export default {
             })
 		},
 		handleNodeClick(data, checked, node) {
-		    if(checked === true) {
-		        this.checkedId = data.id;
-		        this.$refs.treeForm.setCheckedKeys([data.id]);
-		    } else {
-		        if (this.checkedId == data.id) {
-		            this.$refs.treeForm.setCheckedKeys([data.id]);
-		        }
-		    }
+		    this.checkedId = data.id;
 		    //获取选中分类的父级分类id，查询回父级分类的属性模板展示出来
 		    this.checkedParentId = data.parentId
 		    this.list()
@@ -374,6 +418,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.leftBorder{
+	display: inline-block;
+	vertical-align: middle;
+	background: #5d7cd8;
+	width: 5px;
+	height: 20px;
+	margin-right: 15px;
+}
 .classifyForm{
 	font-size: 0;
 	li{

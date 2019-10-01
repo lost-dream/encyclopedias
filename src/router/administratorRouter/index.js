@@ -31,6 +31,14 @@ const administratorRouter = [
 			meta: {
 				title: '信息百科 - 属性模板管理',
 			},
+		},
+		{
+			path: '/dataSourceManager',
+			component: () => import('@/views/dataSourceManager/dataSourceManager'),
+			name: 'dataSourceManager',
+			meta: {
+				title: '信息百科 - 数据源管理',
+			},
 		}
 	]
 }
