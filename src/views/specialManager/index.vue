@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <h2>专题管理<el-button type="primary" style="float:right" @click="dialogVisible = true">增加新专题</el-button></h2>
+        <h2>专题管理<el-button type="primary" style="float:right" @click="dialogVisible = true;isEdit = false">增加新专题</el-button></h2>
         <el-table
                 class="departTable"
                 :data="specialList"
@@ -28,6 +28,8 @@
 
             <el-table-column fixed="right" label="操作" width="150">
                 <template slot-scope="scope">
+                    <el-button @click="routeToSpecial(scope.row)" type="text" size="small">详情</el-button>
+                    <el-button @click="getSpecialDetail(scope.row);dialogVisible = true;isEdit = true" type="text" size="small">修改</el-button>
                     <el-button @click="deleteSpecial(scope.row)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -36,7 +38,7 @@
         <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
         <!-- 弹窗 -->
         <el-dialog
-                title="选择分类"
+                :title="isEdit?'编辑专题':'添加专题'"
                 :visible.sync="dialogVisible">
             <span slot="footer" class="dialog-footer">
                 <el-form ref="form" :model="form" label-width="80px">
@@ -44,7 +46,7 @@
                         <el-input v-model="form.specialName"></el-input>
                     </el-form-item>
                     <el-form-item label="专题描述">
-                        <el-input v-model="form.specialDesc"></el-input>
+                        <el-input v-model="form.specialDesc" type="textarea" :rows="2"></el-input>
                     </el-form-item>
 
                     <el-form-item label="专题封面">
@@ -93,7 +95,8 @@
                     </el-form-item>
                 </el-form>
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="createNewSpecial">确 定</el-button>
+                <el-button type="primary" @click="createNewSpecial" v-if="!isEdit">确 定</el-button>
+                <el-button type="primary" @click="updateSpecial" v-else>确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -109,7 +112,7 @@
         components: {
             ElFormItem,
             ElForm},
-        name: 'entryVersionList',
+        name: 'specialManager',
         data() {
             return {
                 entryId:'',
@@ -121,13 +124,15 @@
                     count: 0
                 },
                 dialogVisible: false,
+                isEdit: false,
                 form: {
                     specialName: '',
                     specialDesc:'',
                     categoryIds:'',
                     keyWords: '',
                     labels: '',
-                    specialCoverUrl: ''
+                    specialCoverUrl: '',
+                    id: ''
                 },
                 keywords: [],
                 keyword: '',
@@ -212,10 +217,53 @@
                     });
                 })
             },
+            getSpecialDetail (index) {
+                let vm = this
+                console.log(vm.form)
+                this.$axios.post('/wiki-backend/api/special/info', {id: index.id})
+                    .then(res => {
+                        vm.form = res.data.special
+                    })
+            },
+            routeToSpecial (index) {
+                this.$router.push({
+                    path: '/specialDetail',
+                    query: {
+                        id: index.id
+                    }
+                })
+            },
+            updateSpecial () {
+                let vm = this
+                vm.form.keyWords = vm.keywords.join(',')
+                vm.form.labels = vm.labels.join(',')
+                console.log(vm.form)
+                this.$axios.post('/wiki-backend/api/special/update', vm.form)
+                    .then(res => {
+                        vm.getSpecialList()
+                        vm.$message({
+                            showClose: true,
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        vm.dialogVisible = false
+                        vm.keywords = []
+                        vm.labels = []
+                        vm.form = {
+                            specialName: '',
+                            specialDesc:'',
+                            categoryIds:'',
+                            keyWords: '',
+                            labels: '',
+                            specialCoverUrl: ''
+                        }
+                    })
+            },
             createNewSpecial () {
                 let vm = this
                 vm.form.keyWords = vm.keywords.join(',')
                 vm.form.labels = vm.labels.join(',')
+                if(vm.form.id) delete vm.from.id
                 console.log(vm.form)
                 this.$axios.post('/wiki-backend/api/special/save', vm.form)
                     .then(res => {
@@ -226,6 +274,8 @@
                             type: 'success'
                         });
                         vm.dialogVisible = false
+                        vm.keywords = []
+                        vm.labels = []
                         vm.form = {
                             specialName: '',
                             specialDesc:'',
