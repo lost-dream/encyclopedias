@@ -7,7 +7,7 @@ import entryRouter from './entryRouter'
 import visitorRouter from './visitorPageRouter'
 import commonUserRouter from './commonUserRouter'
 import administratorRouter from './administratorRouter'
-// import SpecialManagerRouter from './SpecialManagerRouter'
+import specialManagerRouter from './specialManagerRouter'
 
 Vue.use(Router)
 /**
@@ -23,7 +23,7 @@ export const constantRoutes = [
   ...visitorRouter,
   ...commonUserRouter,
   ...administratorRouter,
-  // ...SpecialManagerRouter
+  ...specialManagerRouter
 ]
 
 /**
