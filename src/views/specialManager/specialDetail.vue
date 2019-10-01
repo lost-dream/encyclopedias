@@ -156,11 +156,14 @@
             getSpecialDetail (index) {
                 let vm = this
                 console.log(vm.form)
-                this.$axios.post('/wiki-backend/api/special/info', {id: index,pageNumber:vm.pagination.page,pageSize:vm.pagination.limit})
+                this.$axios.post('/wiki-backend/api/special/info', {id: index})
                     .then(res => {
                         vm.form = res.data.special
-                        vm.entryList = res.data.entry.records
-                        vm.pagination.count = res.data.entry.total
+                    })
+                this.$axios.post('/wiki-backend/api/specialDemandEntry/list',{specialId: index,pageNumber:vm.pagination.page,pageSize:vm.pagination.limit})
+                    .then(res =>{
+                        vm.entryList = res.data.specialDemandEntry.records
+                        vm.pagination.count = res.data.specialDemandEntry.total
                     })
             },
             addToSpecial () {
