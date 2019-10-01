@@ -30,6 +30,13 @@ export default {
 	text-align: center;
 	padding: 20px 0;
 }
+/*我的表单*/
+.myForm{
+	.el-form-item__label{
+		padding: 0;
+	}
+}
+
 /*我的分类树*/
 .myTree{
 	.el-tree-node{

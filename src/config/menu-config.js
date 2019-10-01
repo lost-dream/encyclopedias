@@ -7,7 +7,14 @@ module.exports = [
 	{name: '词条版本审核',componentName: ''},
 	{name: '专题管理',componentName: ''},
 	{name: '我的词条',componentName: 'myEntry'},
-	{name: '数据源管理',componentName: 'dataSourceManager'},
+	{
+		name: '数据源',
+		id: 'form',
+		sub: [
+			{name: '数据源管理',componentName: 'dataSourceManager'},
+			{name: '数据源列表',componentName: 'dataSourceList'}
+		]
+	},
 	
 	
 	//二级路由

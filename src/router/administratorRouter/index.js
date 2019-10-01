@@ -39,7 +39,16 @@ const administratorRouter = [
 			meta: {
 				title: '信息百科 - 数据源管理',
 			},
-		}
+		},
+		{
+			path: '/dataSourceList',
+			component: () => import('@/views/dataSourceManager/dataSourceList'),
+			name: 'dataSourceList',
+			meta: {
+				title: '信息百科 - 数据源列表',
+			},
+		},
+		
 	]
 }
 
