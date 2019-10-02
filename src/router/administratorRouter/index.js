@@ -48,6 +48,40 @@ const administratorRouter = [
 				title: '信息百科 - 数据源列表',
 			},
 		},
+		{
+			path: '/entryVersionExamine',
+			component: () => import('@/views/entryVersionExamine/entryVersionExamine'),
+			name: 'entryVersionExamine',
+			meta: {
+				title: '信息百科 - 词条版本审核',
+			},
+		},
+		{
+			path: '/extractTask',
+			component: () => import('@/views/extractTask/extractTask'),
+			name: 'extractTask',
+			meta: {
+				title: '信息百科 - 提取任务列表',
+			},
+		},
+		{
+			path: '/extractTaskManager',
+			component: () => import('@/views/extractTask/extractTaskManager'),
+			name: 'extractTaskManager',
+			meta: {
+				title: '信息百科 - 提取任务管理',
+			},
+		},
+		{
+			path: '/extractTaskLog',
+			component: () => import('@/views/extractTask/extractTaskLog'),
+			name: 'extractTaskLog',
+			meta: {
+				title: '信息百科 - 提取日志',
+			},
+		},
+		
+		
 		
 	]
 }

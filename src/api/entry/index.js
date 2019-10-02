@@ -23,5 +23,21 @@ export function entryInfo(data) {
     data
   })
 }
+//获取审核数据
+export function auditList(data) {
+  return request({
+    url: '/wiki-backend/api/entry/auditList',
+    method: 'post',
+    data
+  })
+}
+//审核
+export function audit(data) {
+  return request({
+    url: '/wiki-backend/api/entry/audit',
+    method: 'post',
+    data
+  })
+}
 
 

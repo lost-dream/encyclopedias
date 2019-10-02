@@ -2,79 +2,98 @@
 	<div>
 		
 		
-		
 		<el-card class="myForm" shadow="hover">
 			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
-				数据源管理列表
+				词条版本审核列表
 			</div>
-			
-			<el-row>
-				<span>名称：</span>
+			<el-row style="margin: 0 0 0 20px;">
+				
+				
+				<span class="label">词条名称：</span>
 				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
-				<span class="label">类型：</span>
-				<el-select style="width: 100px;margin-bottom: 20px;" v-model="dataSourceType" placeholder="请选择数据源类别">
-			      <el-option label="oracle" value="1"></el-option>
-			      <el-option label="达梦" value="2"></el-option>
-			      <el-option label="ftp" value="3"></el-option>
+				<!--<span>标签：</span>
+				<el-input style="width: 125px;" type="text" placeholder=""></el-input>-->
+				<span class="label">状态：</span>
+				<el-select style="width: 125px;margin-bottom: 20px;" v-model="auditState" placeholder="请选择词条状态">
+			      <el-option label="待审核" value="2"></el-option>
+			      <el-option label="审核通过" value="3"></el-option>
+			      <el-option label="审核不通过" value="4"></el-option>
 			    </el-select>
 			    
 			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
-			    <el-button style="background: #56bd9d;margin-left: 35px;" @click="add" type="primary">新增</el-button>
+			    
+			    
 			</el-row>
-			
 			<el-table
 			class="departTable"
 		    :data="dataSourceList"
 		    border
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%">
-		    <el-table-column prop="dataSourceName" label="数据源名称"></el-table-column>
-		    <el-table-column prop="dataSourceType" label="数据源类别">
+		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
+		    <el-table-column prop="EDIT_REASON" label="描述"></el-table-column>
+		    <el-table-column prop="CREATOR" label="创建人员"></el-table-column>
+		    <el-table-column prop="CREATE_TIME" label="创建时间">
 		    	<template slot-scope="scope">
-					{{dataSourceTypeObj[scope.row.dataSourceType]}}
+					{{parseTime(scope.row.CREATE_TIME)}}
 				</template>
 		    </el-table-column>
-		    <el-table-column prop="creator" label="创建人员"></el-table-column>
-		    <el-table-column prop="createTime" label="创建时间">
+		    <el-table-column prop="STATE" label="状态">
 		    	<template slot-scope="scope">
-					{{parseTime(scope.row.createTime)}}
+					{{statusObj[scope.row.STATE]}}
 				</template>
 		    </el-table-column>
-		    
-		    
-			<el-table-column fixed="right" label="操作" width="200">
+		    <el-table-column prop="RN" label="版本"></el-table-column>
+			<el-table-column fixed="right" label="操作" width="150">
 				<template slot-scope="scope">
-					<el-button @click="modify(scope.row)" type="text" size="small">编辑</el-button>
-        			<el-button style="margin-left: 50px;" @click="deleteData(scope.row)" type="text" size="small">删除</el-button>
-        			<!--<el-button @click="see(scope.row)" type="text" size="small">查看</el-button>-->
+					<el-button v-if="scope.row.STATE!==3" style="color: #7291e1;" @click="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
+        			
+        			<el-button v-if="scope.row.STATE!==4" style="color: #e36d72;" @click="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
 				</template>
 			</el-table-column>
 		  </el-table>
 		  
 		</el-card>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
+		<el-dialog title="审核意见" :visible.sync="dialogFormVisible">
+		  <el-form>
+		    <el-form-item label="审核意见">
+		      <el-input v-model="modifyReason" autocomplete="off"></el-input>
+		    </el-form-item>
+		  </el-form>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="dialogFormVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="modify">确 定</el-button>
+		  </div>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
-import {list,deleteSource} from '@/api/dataSource/index.js'
+import {auditList,audit} from '@/api/entry/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 export default {
-	name: 'dataSourceList',
+	name: 'entryVersionExamine',
 	data() {
 	    return {
 	    	dataSourceList:[],
+	    	dialogFormVisible:false,
+	    	modifyCode:'',
+	    	modifyID:'',
+	    	modifyReason:'',
 	    	dataSourceType:'1',
-	    	keyword:'',
 	    	dataSourceTypeObj:{
 	    		'1':'oracle',
 	    		'2':'达梦',
 	    		'3':'ftp',
 	    	},
+	    	keyword:'',
+	    	auditState:'2',
 	    	statusObj:{
-	    		'1':'成功',
-	    		'2':'失败'
+	    		'2':'待审核',
+	    		'3':'审核通过',
+	    		'4':'审核不通过',
 	    	},
 	    	pagination: {
 		      page: 1,
@@ -84,11 +103,11 @@ export default {
       	}
     },
 	created() {
-		this.list()
+		this.auditList()
 	},
 	watch: {
-		dataSourceType() {
-			this.list()
+		auditState() {
+			this.auditList()
 		}
 	},
 	mounted() {
@@ -97,18 +116,25 @@ export default {
 		
 	},
 	methods: {
-		add() {
-			this.$router.push({
-				name:'dataSourceManager',
-			})
+		openDialog(item,code) {
+			this.modifyCode = code
+	    	this.modifyID = item.ID
+	    	this.modifyReason = ''
+	    	this.dialogFormVisible = true
 		},
-		modify(item) {
-			this.$router.push({
-				name:'dataSourceManager',
-				query:{
-					id:item.id,
-					type:'modify'
-				}
+		modify() {
+			if(this.modifyReason.trim() === ''){
+				this.$message('请输入审核意见');
+				return
+			}
+			this.dialogFormVisible = false
+			audit({
+				versionId:this.modifyID,
+				auditContent:this.modifyReason,
+				state:this.modifyCode,
+			}).then((res)=>{
+				this.$message('词条状态修改成功');
+				this.auditList()
 			})
 		},
 		deleteData(item) {
@@ -149,17 +175,18 @@ export default {
 		handleSizeChange(val) {
 			this.pagination.page = 1
 			this.pagination.limit = val
-			this.list()
+			this.auditList()
 		},
 		handleCurrentChange(val) {
 			this.pagination.page = val
-			this.list()
+			this.auditList()
 		},
-		list() {
-			list({
+		auditList() {
+			auditList({
 				pageNumber: this.pagination.page,
 				pageSize: this.pagination.limit,
-				dataSourceType: this.dataSourceType
+				auditState: parseInt(this.auditState),
+				keyword:this.keyword
 			}).then(res =>{
 				this.dataSourceList = res.data.records
 				this.pagination.count = res.data.total

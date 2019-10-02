@@ -2,26 +2,11 @@
 	<div>
 		
 		
-		
 		<el-card class="myForm" shadow="hover">
 			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
-				数据源管理列表
+				提取日志
 			</div>
-			
-			<el-row>
-				<span>名称：</span>
-				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
-				<span class="label">类型：</span>
-				<el-select style="width: 100px;margin-bottom: 20px;" v-model="dataSourceType" placeholder="请选择数据源类别">
-			      <el-option label="oracle" value="1"></el-option>
-			      <el-option label="达梦" value="2"></el-option>
-			      <el-option label="ftp" value="3"></el-option>
-			    </el-select>
-			    
-			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
-			    <el-button style="background: #56bd9d;margin-left: 35px;" @click="add" type="primary">新增</el-button>
-			</el-row>
 			
 			<el-table
 			class="departTable"
@@ -29,61 +14,86 @@
 		    border
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%">
-		    <el-table-column prop="dataSourceName" label="数据源名称"></el-table-column>
-		    <el-table-column prop="dataSourceType" label="数据源类别">
+		    <el-table-column label="任务名称">{{taskName}}</el-table-column>
+		    <el-table-column prop="startTime" label="开始时间">
 		    	<template slot-scope="scope">
-					{{dataSourceTypeObj[scope.row.dataSourceType]}}
+					{{parseTime(scope.row.startTime)}}
 				</template>
 		    </el-table-column>
-		    <el-table-column prop="creator" label="创建人员"></el-table-column>
-		    <el-table-column prop="createTime" label="创建时间">
+		    <el-table-column prop="endTime" label="结束时间">
 		    	<template slot-scope="scope">
-					{{parseTime(scope.row.createTime)}}
+					{{parseTime(scope.row.endTime)}}
+				</template>
+		    </el-table-column>
+		    <el-table-column prop="status" label="运行状态">
+		    	<template slot-scope="scope">
+					{{statusObj[scope.row.runStatus]}}
 				</template>
 		    </el-table-column>
 		    
 		    
-			<el-table-column fixed="right" label="操作" width="200">
-				<template slot-scope="scope">
-					<el-button @click="modify(scope.row)" type="text" size="small">编辑</el-button>
-        			<el-button style="margin-left: 50px;" @click="deleteData(scope.row)" type="text" size="small">删除</el-button>
-        			<!--<el-button @click="see(scope.row)" type="text" size="small">查看</el-button>-->
-				</template>
-			</el-table-column>
+		    
+		    <el-table-column prop="processedTotalNum" label="处理条数"></el-table-column>
+		    <el-table-column prop="processedSuccessNum" label="成功条数"> </el-table-column>
+		    <el-table-column prop="processedFailNum" label="失败条数"></el-table-column>
+			
 		  </el-table>
 		  
 		</el-card>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
+		<el-dialog title="审核意见" :visible.sync="dialogFormVisible">
+		  <el-form>
+		    <el-form-item label="审核意见">
+		      <el-input v-model="modifyReason" autocomplete="off"></el-input>
+		    </el-form-item>
+		  </el-form>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="dialogFormVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="modify">确 定</el-button>
+		  </div>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
-import {list,deleteSource} from '@/api/dataSource/index.js'
+import {extractTaskLog} from '@/api/extractTask/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 export default {
-	name: 'dataSourceList',
+	name: 'extractTaskLog',
 	data() {
 	    return {
 	    	dataSourceList:[],
+	    	dialogFormVisible:false,
+	    	modifyCode:'',
+	    	modifyID:'',
+	    	modifyReason:'',
 	    	dataSourceType:'1',
-	    	keyword:'',
 	    	dataSourceTypeObj:{
 	    		'1':'oracle',
 	    		'2':'达梦',
 	    		'3':'ftp',
 	    	},
+	    	taskName:'',
+	    	auditState:'2',
 	    	statusObj:{
-	    		'1':'成功',
-	    		'2':'失败'
+	    		'-1':'删除',
+	    		'0':'停止',
+	    		'1':'待运行',
+	    		'2':'运行中',
+	    		'3':'运行完成',
+	    		'4':'运行失败',
 	    	},
 	    	pagination: {
 		      page: 1,
 		      limit: 10,
 		      count: 0
 		    },
+		    extractTaskId:''
       	}
     },
 	created() {
+		this.extractTaskId = this.$route.query.id
+		this.taskName = this.$route.query.taskName
 		this.list()
 	},
 	watch: {
@@ -97,18 +107,36 @@ export default {
 		
 	},
 	methods: {
-		add() {
-			this.$router.push({
-				name:'dataSourceManager',
-			})
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		openDialog(item,code) {
+			this.modifyCode = code
+	    	this.modifyID = item.ID
+	    	this.modifyReason = ''
+	    	this.dialogFormVisible = true
 		},
-		modify(item) {
-			this.$router.push({
-				name:'dataSourceManager',
-				query:{
-					id:item.id,
-					type:'modify'
-				}
+		modify() {
+			if(this.modifyReason.trim() === ''){
+				this.$message('请输入审核意见');
+				return
+			}
+			this.dialogFormVisible = false
+			audit({
+				versionId:this.modifyID,
+				auditContent:this.modifyReason,
+				state:this.modifyCode,
+			}).then((res)=>{
+				this.$message('词条状态修改成功');
+				this.list()
 			})
 		},
 		deleteData(item) {
@@ -156,10 +184,10 @@ export default {
 			this.list()
 		},
 		list() {
-			list({
+			extractTaskLog({
 				pageNumber: this.pagination.page,
 				pageSize: this.pagination.limit,
-				dataSourceType: this.dataSourceType
+				extractTaskId: this.extractTaskId,
 			}).then(res =>{
 				this.dataSourceList = res.data.records
 				this.pagination.count = res.data.total

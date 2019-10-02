@@ -2,79 +2,101 @@
 	<div>
 		
 		
-		
 		<el-card class="myForm" shadow="hover">
 			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
-				数据源管理列表
+				提取任务列表
 			</div>
-			
-			<el-row>
-				<span>名称：</span>
-				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
+			<el-row style="margin: 0 0 0 20px;">
+				<span class="label">名称：</span>
+				<el-input style="width: 125px;" v-model="taskName" type="text" placeholder=""></el-input>
 				<span class="label">类型：</span>
 				<el-select style="width: 100px;margin-bottom: 20px;" v-model="dataSourceType" placeholder="请选择数据源类别">
 			      <el-option label="oracle" value="1"></el-option>
 			      <el-option label="达梦" value="2"></el-option>
 			      <el-option label="ftp" value="3"></el-option>
-			    </el-select>
+			   </el-select>
 			    
-			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
+			    <el-button style="background: #587dda;margin-left: 35px;" @click="list" type="primary">查询</el-button>
+			    
 			    <el-button style="background: #56bd9d;margin-left: 35px;" @click="add" type="primary">新增</el-button>
 			</el-row>
-			
 			<el-table
 			class="departTable"
 		    :data="dataSourceList"
 		    border
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%">
-		    <el-table-column prop="dataSourceName" label="数据源名称"></el-table-column>
-		    <el-table-column prop="dataSourceType" label="数据源类别">
-		    	<template slot-scope="scope">
-					{{dataSourceTypeObj[scope.row.dataSourceType]}}
-				</template>
+		    <el-table-column prop="taskName" label="任务名称"></el-table-column>
+		    <el-table-column prop="dataSourceId" label="数据源名称">
+		    	
 		    </el-table-column>
+		    <el-table-column prop="dataSourceId" label="数据源类别"></el-table-column>
 		    <el-table-column prop="creator" label="创建人员"></el-table-column>
 		    <el-table-column prop="createTime" label="创建时间">
 		    	<template slot-scope="scope">
 					{{parseTime(scope.row.createTime)}}
 				</template>
 		    </el-table-column>
-		    
-		    
-			<el-table-column fixed="right" label="操作" width="200">
+		    <el-table-column prop="status" label="运行状态">
+		    	<template slot-scope="scope">
+					{{statusObj[scope.row.status]}}
+				</template>
+		    </el-table-column>
+			<el-table-column fixed="right" label="操作" width="250">
 				<template slot-scope="scope">
-					<el-button @click="modify(scope.row)" type="text" size="small">编辑</el-button>
-        			<el-button style="margin-left: 50px;" @click="deleteData(scope.row)" type="text" size="small">删除</el-button>
-        			<!--<el-button @click="see(scope.row)" type="text" size="small">查看</el-button>-->
+					<el-button style="color: #9aa6e1;" @click="start(scope.row)" type="text" size="small">启动</el-button>
+        			<el-button style="color: #fac2a9;" @click="stop(scope.row)" type="text" size="small">停止</el-button>
+        			<el-button style="color: #a0d6c4;" @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+        			<el-button style="color: #f7b2ad;" @click="deleteTask(scope.row)" type="text" size="small">删除</el-button>
+        			<el-button style="color: #95cfde;" @click="see(scope.row)" type="text" size="small">查看日志</el-button>
 				</template>
 			</el-table-column>
 		  </el-table>
 		  
 		</el-card>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
+		<el-dialog title="审核意见" :visible.sync="dialogFormVisible">
+		  <el-form>
+		    <el-form-item label="审核意见">
+		      <el-input v-model="modifyReason" autocomplete="off"></el-input>
+		    </el-form-item>
+		  </el-form>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="dialogFormVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="modify">确 定</el-button>
+		  </div>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
-import {list,deleteSource} from '@/api/dataSource/index.js'
+import {list,save,info,update,deleteTask} from '@/api/extractTask/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 export default {
-	name: 'dataSourceList',
+	name: 'extractTask',
 	data() {
 	    return {
 	    	dataSourceList:[],
+	    	dialogFormVisible:false,
+	    	modifyCode:'',
+	    	modifyID:'',
+	    	modifyReason:'',
 	    	dataSourceType:'1',
-	    	keyword:'',
 	    	dataSourceTypeObj:{
 	    		'1':'oracle',
 	    		'2':'达梦',
 	    		'3':'ftp',
 	    	},
+	    	taskName:'',
+	    	auditState:'2',
 	    	statusObj:{
-	    		'1':'成功',
-	    		'2':'失败'
+	    		'-1':'删除',
+	    		'0':'停止',
+	    		'1':'待运行',
+	    		'2':'运行中',
+	    		'3':'运行完成',
+	    		'4':'运行失败',
 	    	},
 	    	pagination: {
 		      page: 1,
@@ -99,16 +121,59 @@ export default {
 	methods: {
 		add() {
 			this.$router.push({
-				name:'dataSourceManager',
+				name:'extractTaskManager'
 			})
 		},
-		modify(item) {
+		start(item) {
+			
+		},
+		stop(item) {
+			
+		},
+		edit(item) {
+			
+		},
+		deleteTask(item) {
+			
+		},
+		see(item) {
 			this.$router.push({
-				name:'dataSourceManager',
+				name:'extractTaskLog',
 				query:{
 					id:item.id,
-					type:'modify'
+					taskName:item.taskName
 				}
+			})
+		},
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		openDialog(item,code) {
+			this.modifyCode = code
+	    	this.modifyID = item.ID
+	    	this.modifyReason = ''
+	    	this.dialogFormVisible = true
+		},
+		modify() {
+			if(this.modifyReason.trim() === ''){
+				this.$message('请输入审核意见');
+				return
+			}
+			this.dialogFormVisible = false
+			audit({
+				versionId:this.modifyID,
+				auditContent:this.modifyReason,
+				state:this.modifyCode,
+			}).then((res)=>{
+				this.$message('词条状态修改成功');
+				this.list()
 			})
 		},
 		deleteData(item) {
@@ -131,16 +196,7 @@ export default {
 	        });
 			
 		},
-		see(item) {
-			console.log(item)
-			this.$router.push({
-				name:'dataSourceManager',
-				query:{
-					id:item.id,
-					type:'see'
-				}
-			})
-		},
+		
 		
 		
 		parseTime(str) {
@@ -159,7 +215,8 @@ export default {
 			list({
 				pageNumber: this.pagination.page,
 				pageSize: this.pagination.limit,
-				dataSourceType: this.dataSourceType
+				taskName: this.taskName,
+				dataSourceType:parseInt(this.dataSourceType)
 			}).then(res =>{
 				this.dataSourceList = res.data.records
 				this.pagination.count = res.data.total
