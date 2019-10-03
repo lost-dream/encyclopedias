@@ -5,38 +5,47 @@
 				<span class="leftBorder"></span>
 				提取任务
 			</div>
-			<el-form style="width: 800px;" :disabled="type==='see'" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="110px" class="demo-ruleForm">
+			<el-form :disabled="type==='see'" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="110px" class="demo-ruleForm">
 			  <el-form-item label="任务名称：" prop="taskName">
 			    <el-input style="width: 300px;" v-model="ruleForm.taskName"></el-input>
 			  </el-form-item>
 			  <el-form-item label="数据源：" prop="dataSourceId">
 			    <el-select style="width: 300px;" v-model="ruleForm.dataSourceId" placeholder="请选择数据源">
-			      <el-option label="oracle" value="1"></el-option>
-			      <el-option label="达梦" value="2"></el-option>
-			      <el-option label="ftp" value="3"></el-option>
+			    	<el-option :label="item.dataSourceName" :value="item.id" v-for="item in dataSourceList"></el-option>
 			    </el-select>
 			  </el-form-item>
-			  <el-form-item label="时间（每天）：" prop="taskScheduleTime">
-			  	<el-date-picker
+			  <el-form-item style="display: inline-block;width: 50%;vertical-align: top;" label="时间（每天）：" prop="taskScheduleTime">
+			  	<el-time-picker
 			  		style="width: 300px;"
 			      v-model="ruleForm.taskScheduleTime"
-			      type="datetime"
+			      value-format="timestamp"
 			      placeholder="选择日期时间">
-			   </el-date-picker>
-			  </el-form-item>
-			  <el-form-item label="表：" prop="tableName">
-			    <el-input style="width: 700px;" v-model="ruleForm.tableName"></el-input>
-			  </el-form-item>
-			  <el-form-item label="列：" prop="columns">
-			    <el-input style="width: 700px;" v-model="ruleForm.columns"></el-input>
+			   </el-time-picker>
 			  </el-form-item>
 			  
-			  <el-form-item v-if="type!=='see'" style="text-align: center;margin-top: 20px;margin-left: 0;">
-			  	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="resetForm('ruleForm')">取消</el-button>
+			  <el-form-item v-if="type!=='see'" style="margin-left: -110px;display: inline-block;width: 50%;vertical-align: top;">
+			  	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;margin-left: 0;" @click="resetForm('ruleForm')">取消</el-button>
 			    
 			    <el-button style="background: #5b7dd7;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
 			    
 			  </el-form-item>
+			  
+			  
+			  
+			  
+			  <el-form-item v-show="rules.tableName[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="表：" prop="tableName">
+			  	<el-radio style="display: block;margin: 0;" v-for="item in tableNameList" v-model="ruleForm.tableName" :label="item" border>{{item}}</el-radio>
+			  </el-form-item>
+			  <el-form-item v-show="rules.columns[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="列：" prop="columns">
+			    <el-radio style="display: block;margin: 0;" v-for="item in columnNameList" v-model="ruleForm.columns" :label="item" border>{{item}}</el-radio>
+			  </el-form-item>
+			  
+			  <!--<el-form-item v-if="type!=='see'" style="text-align: center;margin-top: 20px;margin-left: 0;">
+			  	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="resetForm('ruleForm')">取消</el-button>
+			    
+			    <el-button style="background: #5b7dd7;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
+			    
+			  </el-form-item>-->
 			</el-form>
 		</el-card>
 	</div>
@@ -44,6 +53,7 @@
 
 <script>
 import {save,info,update} from '@/api/extractTask/index.js'
+import {allList,getTableNames,getColumnNames} from '@/api/dataSource/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 export default {
 	name: 'extractTaskManager',
@@ -69,35 +79,51 @@ export default {
 //	            { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
 	          ],
 	          tableName: [
-	            { required: true, message: '请选择表', trigger: 'change' }
+	            { required: false, message: '请选择表', trigger: 'change' }
 	          ],
 	          columns: [
-	            { required: true, message: '请选择列', trigger: 'change' }
+	            { required: false, message: '请选择列', trigger: 'change' }
 	          ],
 	        },
+	        dataSourceList:[],
 	        type:'',
 	        id:'',
+	        tableNameList:[],
+	        columnNameList:[],
       	}
     },
 	created() {
+		this.allList()
 		this.type = this.$route.query.type?this.$route.query.type:''
 		this.id = this.$route.query.id?this.$route.query.id:''
-		if(this.id){
-			this.info()
-		}
+		
 	},
 	watch: {
 		'ruleForm.dataSourceId':{
 			handler:function(){
-				let type = this.ruleForm.dataSourceId
-				this.rules.serverName[0].required = false
-				this.rules.filePath[0].required = false
-				if(type === '1'){
-					this.rules.serverName[0].required = true
+				this.ruleForm.tableName = ''
+				this.ruleForm.columns = ''
+				let type = ''
+				this.rules.tableName[0].required = false
+				this.rules.columns[0].required = false
+				this.dataSourceList.map((item)=>{
+					if(item.id === this.ruleForm.dataSourceId){
+						type = item.dataSourceType
+					}
+				})
+				if(type === 1){
+					this.rules.tableName[0].required = true
+					this.rules.columns[0].required = true
+					this.getTableNames()
 				}
-				if(type === '3'){
-					this.rules.filePath[0].required = true
-				}
+				
+			}
+		},
+		'ruleForm.tableName':{
+			handler:function(){
+				this.ruleForm.columns = ''
+				this.columnNameList = []
+				this.getColumnNames()
 			}
 		}
 	},
@@ -107,12 +133,27 @@ export default {
 		
 	},
 	methods: {
+		getTableNames() {
+			getTableNames({'id':this.ruleForm.dataSourceId}).then((res)=>{
+				this.tableNameList = res.data
+				if(this.ruleForm.tableName){
+					this.getColumnNames()
+				}
+			})
+		},
+		getColumnNames() {
+			getColumnNames({
+				'id':this.ruleForm.dataSourceId,
+				'tableName':this.ruleForm.tableName
+			}).then((res)=>{
+				this.columnNameList = res.data
+			})
+		},
 		info() {
 			info({id:this.id}).then((res)=>{
 				for(let i in this.ruleForm){
 					this.ruleForm[i] = res.data[i].toString()
 				}
-				
 			})
 		},
 		submitForm(formName) {
@@ -120,6 +161,11 @@ export default {
           if (valid) {
           	this.id?this.update():this.save()
           } else {
+          	console.log(valid)
+          	this.$message({
+	          message: '请完善任务信息',
+	          type: 'success'
+	       	});
             return false;
           }
         });
@@ -156,7 +202,18 @@ export default {
       	else{
       		this.$refs[formName].resetFields();
       	}
-      }
+      },
+      allList() {
+			allList({}).then(res =>{
+				this.dataSourceList = res.data
+				if(this.id){
+					this.info()
+				}
+			})
+	        .catch(res=>{
+	        	console.log(res)
+	        })
+		},
 	}
 }
 </script>

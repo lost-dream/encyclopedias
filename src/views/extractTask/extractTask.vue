@@ -28,10 +28,14 @@
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%">
 		    <el-table-column prop="taskName" label="任务名称"></el-table-column>
-		    <el-table-column prop="dataSourceId" label="数据源名称">
+		    <el-table-column prop="" label="数据源名称">
 		    	
 		    </el-table-column>
-		    <el-table-column prop="dataSourceId" label="数据源类别"></el-table-column>
+		    <el-table-column prop="dataSourceId" label="数据源类别">
+		    	<template slot-scope="scope">
+					{{dataSourceTypeObj[dataSourceType]}}
+				</template>
+		    </el-table-column>
 		    <el-table-column prop="creator" label="创建人员"></el-table-column>
 		    <el-table-column prop="createTime" label="创建时间">
 		    	<template slot-scope="scope">
@@ -71,7 +75,7 @@
 </template>
 
 <script>
-import {list,save,info,update,deleteTask} from '@/api/extractTask/index.js'
+import {list,save,info,update,deleteTask,updateStatus} from '@/api/extractTask/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 export default {
 	name: 'extractTask',
@@ -125,16 +129,47 @@ export default {
 			})
 		},
 		start(item) {
-			
+			this.updateStatus(item.id,'1')
 		},
 		stop(item) {
-			
+			this.updateStatus(item.id,'0')
 		},
 		edit(item) {
-			
+			this.$router.push({
+				name:'extractTaskManager',
+				query:{
+					id:item.id,
+					type:'modify'
+				}
+			})
 		},
 		deleteTask(item) {
-			
+			this.$confirm('确认删除该任务？', '提示', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          type: 'warning',
+	          center: true
+	        }).then(() => {
+	        	deleteTask({
+	        		id:item.id
+	        	}).then((res)=>{
+	        		this.$message('删除成功');
+	        		this.pagination.page = 1
+					this.list()
+	        	})
+	        	
+	        }).catch(() => {
+	          
+	        });
+		},
+		updateStatus(id,status) {
+			updateStatus({
+				'id':id,
+				'status':status
+			}).then((res)=>{
+				this.list()
+				this.$message(status==='1'?'任务启动成功':'任务停止成功');
+			})
 		},
 		see(item) {
 			this.$router.push({

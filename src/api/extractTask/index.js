@@ -49,4 +49,13 @@ export function extractTaskLog(data) {
     data
   })
 }
+//启动/停止提取任务
+export function updateStatus(data) {
+  return request({
+    url: '/wiki-backend/api/extractTask/updateStatus',
+    method: 'post',
+    data
+  })
+}
+
 
