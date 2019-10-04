@@ -28,9 +28,7 @@
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%">
 		    <el-table-column prop="taskName" label="任务名称"></el-table-column>
-		    <el-table-column prop="" label="数据源名称">
-		    	
-		    </el-table-column>
+		    <el-table-column prop="dataSourceName" label="数据源名称"></el-table-column>
 		    <el-table-column prop="dataSourceId" label="数据源类别">
 		    	<template slot-scope="scope">
 					{{dataSourceTypeObj[dataSourceType]}}
@@ -107,6 +105,7 @@ export default {
 		      limit: 10,
 		      count: 0
 		    },
+		    dataSourceObj:'',
       	}
     },
 	created() {
@@ -253,8 +252,19 @@ export default {
 				taskName: this.taskName,
 				dataSourceType:parseInt(this.dataSourceType)
 			}).then(res =>{
-				this.dataSourceList = res.data.records
-				this.pagination.count = res.data.total
+				if(!this.dataSourceObj){
+					let dataSource = res.data.dataSource
+					let obj = {}
+					dataSource.map((item)=>{
+						obj[item.id] = item.dataSourceName
+					})
+					this.dataSourceObj = obj
+				}
+				res.data.task.records.map((item)=>{
+					item.dataSourceName = this.dataSourceObj[item.dataSourceId]
+				})
+				this.dataSourceList = res.data.task.records
+				this.pagination.count = res.data.task.total
 			})
             .catch(res=>{
             	console.log(res)

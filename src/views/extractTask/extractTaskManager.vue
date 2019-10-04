@@ -90,6 +90,7 @@ export default {
 	        id:'',
 	        tableNameList:[],
 	        columnNameList:[],
+	        isModifyFirst:false,
       	}
     },
 	created() {
@@ -101,8 +102,10 @@ export default {
 	watch: {
 		'ruleForm.dataSourceId':{
 			handler:function(){
-				this.ruleForm.tableName = ''
-				this.ruleForm.columns = ''
+				if(!this.isModifyFirst){
+					this.ruleForm.tableName = ''
+					this.ruleForm.columns = ''
+				}
 				let type = ''
 				this.rules.tableName[0].required = false
 				this.rules.columns[0].required = false
@@ -121,9 +124,14 @@ export default {
 		},
 		'ruleForm.tableName':{
 			handler:function(){
-				this.ruleForm.columns = ''
+				if(!this.isModifyFirst){
+					this.ruleForm.columns = ''
+				}
+				this.isModifyFirst = false
 				this.columnNameList = []
-				this.getColumnNames()
+				if(this.ruleForm.tableName){
+					this.getColumnNames()
+				}
 			}
 		}
 	},
@@ -207,6 +215,7 @@ export default {
 			allList({}).then(res =>{
 				this.dataSourceList = res.data
 				if(this.id){
+					this.isModifyFirst = true
 					this.info()
 				}
 			})
