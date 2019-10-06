@@ -4,8 +4,13 @@
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
                 <h1 style="font-weight: normal">{{wikiContent.entryName}}
-                    <span style="font-size: 14px;color: #338ce6">同义词：<template v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
-                    <span v-if="index+1<wikiContent.entrySynonyms.length">，</span></template></span>
+                    <span style="font-size: 14px;color: #338ce6">同义词：
+                        <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
+                            <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
+                        </template>
+                        <template v-if="!wikiContent.entrySynonyms.length">暂无同义词
+                        </template>
+                    </span>
                 </h1>
             </div>
             <!-- summary -->
@@ -75,16 +80,19 @@
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
                             <h2 class="shadow" :id="item.id" v-if="item.contentTitle"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
-                            <div v-html="item.contentBody">}</div>
-                            <template v-if="item.children.length > 0" v-for="key in item.children">
+                            <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
+                            <div v-else><p>&nbsp;</p></div>
+                            <template v-if="item.children.length" v-for="key in item.children">
                                 <div style="margin-left: 20px">
                                     <h3 :id="key.id">{{key.contentTitle}}</h3>
-                                    <div v-html="key.contentBody"></div>
+                                    <div v-html="key.contentBody" v-if="key.contentBody !== '<p>null</p>'&&key.contentBody !== null&&key.contentBody !== 'null'"></div>
+                                    <div v-else><p>&nbsp;</p></div>
                                 </div>
-                                <template v-if="key.children.length > 0" v-for="v in key.children">
+                                <template v-if="key.children.length" v-for="v in key.children">
                                     <div style="margin-left: 20px">
                                         <h4 :id="v.id">{{v.contentTitle}}</h4>
-                                        <div v-html="v.contentBody"></div>
+                                        <div v-html="v.contentBody" v-if="v.contentBody !== '<p>null</p>'&&v.contentBody !== null&&v.contentBody !== 'null'"></div>
+                                        <div v-else="v.contentBody == '<p>null</p>'"><p>&nbsp;</p></div>
                                     </div>
                                 </template>
                             </template>
