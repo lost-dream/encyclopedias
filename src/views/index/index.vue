@@ -9,11 +9,11 @@
 					<el-carousel :interval="5000">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList">
-								<!--<img :src="item.specialCoverUrl" alt="" />-->
-								<img src="/static/image/tank.png"/>
+								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+								<!--<img src="/static/image/tank.png"/>-->
 								<div>
 									<p class="entry-title">{{item.ENTRY_NAME}}</p>
-									<div v-if="item.SUMMARY.length">{{item.SUMMARY[0].summary}}</div>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</el-carousel-item>

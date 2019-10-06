@@ -3,6 +3,16 @@
 		<ul class="categoryList">
 			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
 		</ul>
+		<ul class="entryList">
+			<li v-for="item in entryListData">
+				<!--<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
+				<img src="/static/image/tank.png"/>
+				<div>
+					<p class="entry-title">{{item.ENTRY_NAME}}</p>
+					<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+				</div>
+			</li>
+		</ul>
 		<div class="noDataRemindContent" v-if="!entryListData.length">当前分类暂无词条</div>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
 	</div>
@@ -97,6 +107,56 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.entryList{
+	
+	width: 1200px;
+	margin: auto;
+	margin-top: 20px;
+	li{
+		display:inline-block;
+		vertical-align: top;
+		width: 280px;
+		height: 430px;
+		background: #f6fafb;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		line-height: 25px;
+		margin-right: 30px;
+		margin-bottom: 30px;
+		font-size: 14px;
+		color: #666666;
+		&:nth-child(4n+4){
+			margin-right: 0;
+		}
+		img{
+			width: 100%;
+			height: 120px;
+			border-radius: 5px;
+			margin-bottom: 10px;
+		}
+		.entry-title{
+			line-height: 45px;
+			font-weight: bold;
+			font-size: 16px;
+			color: black;
+			text-align: center;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			overflow: hidden;
+		}
+		div{
+			padding: 0 20px;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 8;
+			overflow: hidden;
+		}
+	}
+}
+
+
+
 .highlight{
 	color: #338ce6;
 }
@@ -114,7 +174,7 @@ export default {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	
+	margin-top: 20px;
 	li{
 		display: inline-block;
 		margin: 0;
