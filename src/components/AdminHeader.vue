@@ -3,7 +3,7 @@
     <img src="" alt="LOGO.png">
 
     <div class="action-box">
-      <a><i class="el-icon-s-home"></i>首页</a>
+      <a href=""><i class="el-icon-s-home"></i>首页</a>
       <a><i class="el-icon-switch-button"></i>退出</a>
     </div>
   </div>
@@ -42,6 +42,8 @@
     height: 40px;
     line-height: 40px;
     a {
+    	color: white;
+    	text-decoration: none;
       text-align: center;
       cursor: pointer;
       display: inline-block;

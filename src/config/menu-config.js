@@ -6,8 +6,12 @@ module.exports = [
 	{name: '词条创建',componentName: 'createEntry'},
 	{name: '词条版本审核',componentName: ''},
 	{name: '专题管理',componentName: ''},
+	{name: '词条版本审核',componentName: 'entryVersionExamine'},
 	{name: '我的词条',componentName: 'myEntry'},
 	
+	{name: '数据源管理',componentName: 'dataSourceList'},
+	{name: '提取任务管理',componentName: 'extractTask'},
+	{name: '抽取词条审核',componentName: ''},
 	
 	
 	//二级路由
