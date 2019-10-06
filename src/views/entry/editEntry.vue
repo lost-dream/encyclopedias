@@ -1,6 +1,6 @@
 <template>
     <div style="display: flex;width: 1280px;margin: 0 auto" >
-        <div style="width: 80%;display: flex;flex-direction: column">
+        <div style="width: 900px;display: flex;flex-direction: column">
             <div>
                 <h3>词条名称</h3>
                 <el-input  v-model="entryName"></el-input>
@@ -359,20 +359,20 @@
                         data.entryContentVos.map(item =>{
                             let obj1 = {
                                 'title': item.contentTitle,
-                                'content': item.contentBody,
+                                'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
                                 'children': []
                             }
                             item.children.map(k => {
                                 let obj2 = {
                                     'title': k.contentTitle,
-                                    'content': k.contentBody,
+                                    'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
                                     'children': []
                                 }
                                 obj1.children.push(obj2)
                                 k.children.map(v => {
                                     let obj3 = {
                                         'title': v.contentTitle,
-                                        'content': v.contentBody,
+                                        'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
                                     }
                                     obj2.children.push(obj3)
                                 })
@@ -495,14 +495,17 @@
                 console.log(vm.model)
                 vm.model.map((item)=>{
                     let h2 = '<h2>' + item.title + '</h2>'
+                    item.content=='<p>null</p>'||item.content=='null'||item.content==null?item.content = '<p>&nbsp</p>':''
                     wiki = wiki + h2 + item.content
                     if(item.children.length){
                         item.children.map(k => {
                             let h3 = '<h3>' + k.title + '</h3>'
+                            k.content=='<p>null</p>'||k.content=='null'||k.content==null?k.content = '<p>&nbsp</p>':''
                             wiki = wiki + h3 + k.content
                             if(k.children.length){
                                 k.children.map(v => {
                                     let h4 = '<h4>' + v.title + '</h4>'
+                                    v.content=='<p>null</p>'||v.content=='null'||v.content==null?v.content = '<p>&nbsp</p>':''
                                     wiki = wiki + h4 + v.content
                                 })
                             }
@@ -1120,5 +1123,8 @@
         width: 178px;
         height: 178px;
         display: block;
+    }
+    div#pane-second p {
+        padding-bottom: 10px;
     }
 </style>

@@ -2,6 +2,10 @@
     <div>
 
         <h2>专题管理<el-button type="primary" style="float:right" @click="dialogVisible = true;isEdit = false">增加新专题</el-button></h2>
+        <el-input placeholder="请输入内容" v-model="searchKeyword" style="margin-bottom: 10px;width: 30%">
+            <!--<el-button slot="append" @clcik="entrySearchList">搜索</el-button>-->
+            <el-button slot="append" @click="getSpecialList">搜索专题</el-button>
+        </el-input>
         <el-table
                 class="departTable"
                 :data="specialList"
@@ -137,7 +141,8 @@
                 keywords: [],
                 keyword: '',
                 labels: [],
-                label: ''
+                label: '',
+                searchKeyword: ''
             }
         },
         watch: {
@@ -188,7 +193,7 @@
                 this.$axios.post('/wiki-backend/api/special/list',{
                     pageNumber: this.pagination.page,
                     pageSize: this.pagination.limit,
-                    keyword: ''
+                    keyword: vm.searchKeyword
                 }).then(res => {
                     vm.specialList = res.data.records
                     vm.pagination.count = res.data.total

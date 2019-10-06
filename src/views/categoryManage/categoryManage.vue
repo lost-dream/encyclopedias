@@ -71,7 +71,7 @@
       <el-form :model="form" :rules="rules" ref="ruleForm" :label-position="labelPos">
         <el-form-item label="上级目录" :label-width="formLabelWidth" prop="parentId">
           <el-cascader
-            :value="form.parentId"
+            v-model="form.parentId"
             :options="options"
             :props="cascaderProps"
             @change="handleChange"></el-cascader>

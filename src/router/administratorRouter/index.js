@@ -79,7 +79,22 @@ const administratorRouter = [
 			meta: {
 				title: '信息百科 - 提取日志',
 			},
-		},
+		},{
+            path: '/specialManager',
+            component: () => import('@/views/specialManager/index'),
+            name: 'specialManager',
+            meta: {
+                title: '专题管理',
+            },
+        },
+        {
+            path: '/specialDetail',
+            component: () => import('@/views/specialManager/specialDetail'),
+            name: 'specialDetail',
+            meta: {
+                title: '专题详情',
+            }
+        }
 		
 		
 		

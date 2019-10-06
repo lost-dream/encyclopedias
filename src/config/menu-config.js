@@ -5,7 +5,7 @@ module.exports = [
 	{name: '目录模板管理',componentName: ''},
 	{name: '词条创建',componentName: 'createEntry'},
 	{name: '词条版本审核',componentName: ''},
-	{name: '专题管理',componentName: ''},
+	{name: '专题管理',componentName: 'specialManager'},
 	{name: '词条版本审核',componentName: 'entryVersionExamine'},
 	{name: '我的词条',componentName: 'myEntry'},
 	

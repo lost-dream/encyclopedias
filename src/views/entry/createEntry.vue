@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div style="display: flex;flex-direction: column;width: 1280px;margin: 0 auto">
+    <div style="display: flex;width: 1280px;margin: 0 auto">
+        <div style="width: 900px;display: flex;flex-direction: column">
             <div>
                 <h3>词条名称</h3>
                 <el-input  v-model="entryName"></el-input>
@@ -962,5 +962,8 @@
         width: 178px;
         height: 178px;
         display: block;
+    }
+    div#pane-second p {
+        padding-bottom: 10px;
     }
 </style>
