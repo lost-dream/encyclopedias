@@ -77,7 +77,7 @@
 								</span>
 								<!--数字-->
 								<span v-if="item.attributeType===2">
-									<el-input type="number" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+									<el-input style="width: 220px;" type="number" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" :placeholder="'属性值在'+item.attributeRangeBegin+'～'+item.attributeRangeEnd+'之间'" v-model="item.val" clearable></el-input>
 								</span>
 								<!--枚举-->
 								<span v-if="item.attributeType===3">

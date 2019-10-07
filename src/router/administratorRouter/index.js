@@ -57,6 +57,14 @@ const administratorRouter = [
 			},
 		},
 		{
+			path: '/entryExamine',
+			component: () => import('@/views/entryExamine/entryExamine'),
+			name: 'entryExamine',
+			meta: {
+				title: '信息百科 - 抽取词条审核',
+			},
+		},
+		{
 			path: '/extractTask',
 			component: () => import('@/views/extractTask/extractTask'),
 			name: 'extractTask',
