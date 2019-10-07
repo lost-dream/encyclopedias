@@ -76,8 +76,9 @@
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
 								<!--数字-->
-								<span v-if="item.attributeType===2">
-									<el-input style="width: 220px;" type="number" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" :placeholder="'属性值在'+item.attributeRangeBegin+'～'+item.attributeRangeEnd+'之间'" v-model="item.val" clearable></el-input>
+								<span style="position: relative;" v-if="item.attributeType===2">
+									<input type="number" class="el-input__inner" :class="item.noValid?'border-red':''" @focus="item.noValid=false" @blur="watchNumber(item)" style="width: 220px;" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" :placeholder="'属性值在'+item.attributeRangeBegin+'～'+item.attributeRangeEnd+'之间'" v-model="item.val"></input>
+									<span style="top: 200%;" class="el-form-item__error" v-show="item.noValid">属性值在{{item.attributeRangeBegin}}～{{item.attributeRangeEnd}}之间</span>
 								</span>
 								<!--枚举-->
 								<span v-if="item.attributeType===3">
@@ -450,6 +451,15 @@
             // vm.setModel()
         },
         methods: {
+        	watchNumber(item) {
+        		let val = parseFloat(item.val)
+        		if(val!==''&&(val>item.attributeRangeEnd || val<item.attributeRangeBegin)){
+        			this.$set(item,'noValid',true)
+        		}
+        		else{
+        			this.$set(item,'noValid',false)
+        		}
+        	},
         	categoryTree() {
 				categoryTree({}).then(res =>{
                     this.categoryTreeData = res.data.children
@@ -470,6 +480,7 @@
         		getAllAttributesByCategoryId({categoryId:id}).then((res)=>{
         			res.data.map((item,index)=>{
 					item.val = ''
+					item.noValid = false
 					if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
 						this.pickerOptionsList.push({
 							disabledDate(time){
@@ -799,7 +810,11 @@
             commit (method) {
             	let vm = this
                 let attributesAry = []
+                let noValid = false
                 this.classifyData.map((item)=>{
+                	if(item.noValid){
+                		noValid = true
+                	}
                 	if(item.val&&item.val!==''){
                 		attributesAry.push({
                 			key: item.attributeName,
@@ -815,6 +830,10 @@
                 		})
                 	}
                 })
+                if(noValid){
+                	this.$message.warning('属性值输入不符合条件，请检查后重新输入');
+                	return
+                }
                 let data = {
                     operate: method,
                     editReson: '',
@@ -929,6 +948,12 @@
     }
 </script>
 <style lang="scss" scoped>
+	.border-red{
+		border: 1px solid #f56c6c;
+	}
+	.border-transfer{
+		border: 1px solid #DCDFE6;
+	}
     .ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable), .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners{
         border: 1px solid #ccc
     }
