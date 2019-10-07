@@ -34,15 +34,10 @@
 				</div>
 				<span class="label">词条名称：</span>
 				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
-				<span class="label">标签：</span>
-				<el-input style="width: 125px;" v-model="label" type="text" placeholder=""></el-input>
+				
 				<span class="label">数据源：</span>
-				<el-select style="width: 125px;margin-bottom: 20px;" v-model="auditState" placeholder="请选择词条状态">
-			      <el-option label="待审核" value="2"></el-option>
-			      <el-option label="审核通过" value="3"></el-option>
-			      <el-option label="审核不通过" value="4"></el-option>
-			      <el-option label="已发布" value="5"></el-option>
-			      <el-option label="取消发布" value="6"></el-option>
+				<el-select style="width: 125px;margin-bottom: 20px;" v-model="dataSourceId" placeholder="请选择数据源">
+			      <el-option :label="item.dataSourceName" :value="item.id" v-for="item in sourceList"></el-option>
 			    </el-select>
 			    
 			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
@@ -56,12 +51,12 @@
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%">
 		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
-		    <el-table-column prop="SUMMARY" label="描述">
+		    <el-table-column prop="SUMMARY" label="预分类">
 		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
 					{{JSON.parse(scope.row.SUMMARY.summary).text}}
 				</template>
 		    </el-table-column>
-		    <el-table-column prop="CREATOR" label="创建人员"></el-table-column>
+		    <el-table-column prop="CREATOR" label="数据源"></el-table-column>
 		    <el-table-column prop="CREATE_TIME" label="创建时间">
 		    	<template slot-scope="scope">
 					{{parseTime(scope.row.CREATE_TIME)}}
@@ -72,7 +67,6 @@
 					{{statusObj[scope.row.STATE]}}
 				</template>
 		    </el-table-column>
-		    <el-table-column prop="RN" label="版本"></el-table-column>
 			<el-table-column fixed="right" label="操作" width="150">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.STATE===2||scope.row.STATE===4" style="color: #7291e1;" @click="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
@@ -102,6 +96,7 @@
 
 <script>
 import {auditList,audit} from '@/api/entry/index.js'
+import {allList} from '@/api/dataSource/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
@@ -122,6 +117,8 @@ export default {
 	    	keyword:'',
 	    	label:'',
 	    	categoryId:'',
+	    	dataSourceId:'',
+	    	sourceList:[],
 	    	auditState:'2',
 	    	statusObj:{
 	    		'2':'待审核',
@@ -144,6 +141,7 @@ export default {
     },
 	created() {
 		this.auditList()
+		this.allList()
 		this.categoryTree()
 	},
 	watch: {
@@ -157,6 +155,15 @@ export default {
 		
 	},
 	methods: {
+		allList() {
+			allList({}).then(res =>{
+				this.sourceList = res.data
+			})
+	        .catch(res=>{
+	        	console.log(res)
+	        })
+		},
+		
 		changeTreeShow() {
 			this.showTree = !this.showTree
 		},
