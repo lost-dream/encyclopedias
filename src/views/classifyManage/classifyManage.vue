@@ -33,7 +33,7 @@
 						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 						  ref="table" :data="parentClassifyData" class="departTable" border stripe>
 				        <el-table-column prop="attributeName" label="属性名称" />
-				        <el-table-column prop="attributeType" label="属性值类型" />
+				        <el-table-column prop="attributeTypeName" label="属性值类型" />
 				        <el-table-column width="250px" label="约束值">
 				          <template slot-scope="scope">
 				          	<span v-if="scope.row.attributeType===4||scope.row.attributeType===5||scope.row.attributeType===6||scope.row.attributeType===7">{{parseTime(scope.row.attributeRangeBegin)}}~{{parseTime(scope.row.attributeRangeEnd)}}</span>
@@ -218,7 +218,7 @@ export default {
 				res.data.records.map((item)=>{
 					this.attributeTypeAry.map((item1)=>{
 						if(item1.id === item.attributeType){
-							item.attributeType = item1.name
+							item.attributeTypeName = item1.name
 						}
 					})
 					this.editTypeAry.map((item1)=>{

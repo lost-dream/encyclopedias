@@ -2,14 +2,36 @@
 	<div>
 		
 		
-		<el-card class="myForm" shadow="hover">
+		<el-card style="min-height: 500px;" class="myForm" shadow="hover">
 			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
 				词条版本审核列表
 			</div>
 			<el-row style="margin: 0 0 0 20px;">
-				<span class="label">分类：</span>
-				<el-input style="width: 125px;" v-model="categoryId" type="text" placeholder=""></el-input>
+				<div class="categoryChoose">
+					<span class="label">分类：</span>
+					<span @click="changeTreeShow" class="el-input__inner changeTreeShow">{{checkedCategoryName}}</span>
+					<div v-show="showTree" class="myTree">
+						<el-tree
+				        ref="tree"
+				        :props="defaultProps"
+				        :default-expand-all="true"
+				        current-node-key="1"
+				        :data="treeData"
+				        node-key="space_id"
+				        @node-click="handleNodeClick"
+				        :expand-on-click-node="false"
+				        highlight-current
+				      >
+				        <!--<div class="custom-tree-node" slot-scope="{ node, data}">
+				          <div>
+				            <span @click.stop="chooseItem(data)">{{ data.name }}</span>
+				          </div>
+				          <span class="el-ic"></span>
+				        </div>-->
+				      </el-tree>
+					</div>
+				</div>
 				<span class="label">词条名称：</span>
 				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
 				<span class="label">标签：</span>
@@ -81,6 +103,7 @@
 <script>
 import {auditList,audit} from '@/api/entry/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
+import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
 	name: 'entryVersionExamine',
 	data() {
@@ -110,10 +133,18 @@ export default {
 		      limit: 10,
 		      count: 0
 		    },
+		    checkedCategoryName:'',
+		    treeData:[],
+		    defaultProps: {
+	            children: 'children',
+	            label: 'name'
+	        },
+	        showTree:false,
       	}
     },
 	created() {
 		this.auditList()
+		this.categoryTree()
 	},
 	watch: {
 		auditState() {
@@ -126,6 +157,16 @@ export default {
 		
 	},
 	methods: {
+		changeTreeShow() {
+			this.showTree = !this.showTree
+		},
+		
+		handleNodeClick(data, checked, node) {
+			console.log(data)
+		    this.categoryId = data.id;
+		    this.checkedCategoryName = data.name;
+		    this.showTree = false
+		},
 		openDialog(item,code) {
 			this.modifyCode = code
 	    	this.modifyID = item.ID
@@ -207,6 +248,34 @@ export default {
             	console.log(res)
             })
 		},
+		categoryTree() {
+			categoryTree({}).then(res =>{
+				res.data.children.map((item)=>{
+					if(!item.children.length){
+						delete item.children
+					}
+					else{
+						item.children.map((item1)=>{
+							if(!item1.children.length){
+								delete item1.children
+							}
+							else{
+								item1.children.map((item2)=>{
+									if(!item2.children.length){
+										delete item2.children
+									}
+								})
+							}
+						})
+					}
+				})
+				console.log(res.data.children,'111')
+                this.treeData = res.data.children
+            })
+            .catch(res=>{
+            	console.log(res)
+            })
+		},
 	}
 }
 </script>
@@ -215,7 +284,27 @@ export default {
 .label{
     margin-left: 30px;
 }
-
+.categoryChoose{
+	display: inline-block;
+	position:relative;
+	.myTree{
+		background: white;
+		position: absolute;
+	    left: 78px;
+	    top: 40px;
+	    z-index: 999;
+	    padding: 5px 5px 5px 0;
+	    border: 1px solid #ebebeb;
+	}
+	.changeTreeShow{
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;
+		width: 125px;
+		display: inline-block;
+		vertical-align: middle;
+	}
+}
 
 .leftBorder{
 	display: inline-block;

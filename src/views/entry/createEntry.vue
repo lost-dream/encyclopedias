@@ -925,7 +925,7 @@
 			.name{
 				margin-right: 15px;
 				display: inline-block;
-				width: 200px;
+				width: 180px;
 				text-align: right;
 				vertical-align: middle;
 				max-height: 60px;
