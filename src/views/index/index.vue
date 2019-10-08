@@ -37,7 +37,7 @@
 							<span>人编写</span>
 						</p>
 
-						<el-button type="primary">创建词条</el-button>
+						<!--<el-button type="primary">创建词条</el-button>-->
 						
 					</div>
 				</el-col>
