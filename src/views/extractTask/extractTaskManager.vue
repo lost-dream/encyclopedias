@@ -15,12 +15,17 @@
 			    </el-select>
 			  </el-form-item>
 			  <el-form-item style="display: inline-block;width: 50%;vertical-align: top;" label="时间（每天）：" prop="taskScheduleTime">
-			  	<el-time-picker
-			  		style="width: 300px;"
+			  	
+			   <el-time-select
+			   		style="width: 300px;"
 			      v-model="ruleForm.taskScheduleTime"
-			      value-format="timestamp"
-			      placeholder="选择日期时间">
-			   </el-time-picker>
+				  :picker-options="{
+				    start: '00:00',
+				    step: '01:00',
+				    end: '23:00'
+				  }"
+				  placeholder="选择时间">
+				</el-time-select>
 			  </el-form-item>
 			  
 			  <el-form-item v-if="type!=='see'" style="margin-left: -110px;display: inline-block;width: 50%;vertical-align: top;">
@@ -75,7 +80,7 @@ export default {
 	            { required: true, message: '请选择数据源', trigger: 'change' }
 	          ],
 	          taskScheduleTime: [
-	            { required: true, message: '请输入taskScheduleTime', trigger: 'blur' },
+	            { required: true, message: '请输入时间', trigger: 'blur' },
 //	            { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
 	          ],
 	          tableName: [
@@ -160,14 +165,20 @@ export default {
 		info() {
 			info({id:this.id}).then((res)=>{
 				for(let i in this.ruleForm){
-					this.ruleForm[i] = res.data[i].toString()
+					res.data[i]!==null?this.ruleForm[i] = res.data[i].toString():''
 				}
+				let time = this.ruleForm.taskScheduleTime
+				if(time.length === 1){
+					time = '0'+time
+				}
+				time += ':00'
+				this.ruleForm.taskScheduleTime = time
 			})
 		},
 		submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-          	this.id?this.update():this.save()
+            this.id?this.update():this.save()
           } else {
           	console.log(valid)
           	this.$message({
@@ -179,8 +190,12 @@ export default {
         });
       },
       update() {
-      	var obj = this.ruleForm
+      	var obj = JSON.parse(JSON.stringify(this.ruleForm))
       	obj.id = this.id
+      	obj.taskScheduleTime = obj.taskScheduleTime.split(':')[0]
+      	if(obj.taskScheduleTime.charAt(0) === '0'){
+      		obj.taskScheduleTime = obj.taskScheduleTime.slice(1)
+      	}
       	update(obj).then((res)=>{
       		this.$message({
 	          message: '提取任务修改成功！',
@@ -192,7 +207,13 @@ export default {
       	})
       },
       save() {
-      	save(this.ruleForm).then((res)=>{
+      	var obj = JSON.parse(JSON.stringify(this.ruleForm))
+      	obj.id = this.id
+      	obj.taskScheduleTime = obj.taskScheduleTime.split(':')[0]
+      	if(obj.taskScheduleTime.charAt(0) === '0'){
+      		obj.taskScheduleTime = obj.taskScheduleTime.slice(1)
+      	}
+      	save(obj).then((res)=>{
       		this.$message({
 	          message: '提取任务保存成功！',
 	          type: 'success'
