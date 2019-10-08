@@ -2,8 +2,8 @@
   <el-row>
     <el-col :span="24">
       <div class="head-wrap">
-      	<img src="../assets/logo.png"/>
-      	<span class="title">信息百科</span>
+      	<img @click="gotoIndex" src="../assets/logo.png"/>
+      	<span @click="gotoIndex" class="title">信息百科</span>
       	<el-input
       		style='width: 500px;'
 			    placeholder="请输入内容"
@@ -43,6 +43,9 @@
     	
     },
     methods: {
+    	gotoIndex() {
+    		this.$router.push('index')
+    	},
       search() {
       	this.content = this.content.trim()
       	if(this.content!=''){

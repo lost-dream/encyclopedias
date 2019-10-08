@@ -12,6 +12,7 @@
 			<!--一级路由-->
 			<el-menu-item v-if="item.componentName" v-for="item in menu" :index="item.componentName" :key="item.componentName">
         <template slot="title">
+        	<img style="margin-right: 10px;" :src="item.icon" alt="" />
           <span v-text="item.name"></span>
         </template>
       </el-menu-item>

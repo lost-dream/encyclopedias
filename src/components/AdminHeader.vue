@@ -1,7 +1,10 @@
 <template>
   <div class="admin-header">
-    <img src="" alt="LOGO.png">
-
+  	<span>
+  		<img src="../../public/static/image/icon/logo.png" alt="LOGO.png">
+			<span>信息百科</span>
+  	</span>
+    
     <div class="action-box">
       <a href=""><i class="el-icon-s-home"></i>首页</a>
       <a><i class="el-icon-switch-button"></i>退出</a>
@@ -38,6 +41,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  img{
+  	margin-right: 10px;
+  	vertical-align: middle;
+  }
+  span{
+  	font-weight: bold;
+  	font-size: 20px;
+  	vertical-align: sub;
+  }
   .action-box {
     height: 40px;
     line-height: 40px;

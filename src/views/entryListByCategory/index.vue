@@ -4,7 +4,7 @@
 			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
 		</ul>
 		<ul class="entryList">
-			<li v-for="item in entryListData">
+			<li @click="seeEntry(item)" v-for="item in entryListData">
 				<!--<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
 				<img src="/static/image/tank.png"/>
 				<div>
@@ -51,6 +51,17 @@ export default {
 		
 	},
 	methods: {
+		seeEntry (hash) {
+            console.log(hash)
+            this.$router.push({
+                name:'viewEntry',
+                query:{
+                    entryId:hash.ENTRY_ID,
+//                    versionId: hash.ID,
+                    viewType: 'view'
+                }
+            })
+		},
 		choose(item) {
 			this.categoryList.map((item)=>{
 				item.choosed = false
