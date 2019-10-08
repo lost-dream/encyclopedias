@@ -1,7 +1,9 @@
 <template>
-  <div class="pos-rltv padding-20">
-    <h2>分类管理</h2>
-    <div v-loading="isLoading" class="comp-tree">
+  <div class="pos-rltv height-100 bg-fff">
+    <h2 class="page-title">
+      <span>分类管理</span>
+    </h2>
+    <div v-loading="isLoading" class="comp-tree myTree">
       <el-button class="comp-tr-top" 
         type="primary" 
         size="small" 
@@ -14,7 +16,7 @@
         highlight-current
         :node-key="NODE_KEY"
         :default-expanded-keys="expanded">
-				<div class="comp-tr-node" slot-scope="{ node, data }">
+        	<div class="comp-tr-node" slot-scope="{ node, data }">
 					<!-- 编辑状态 -->
 					<template v-if="node.isEdit">
 						<el-input v-model="data.name" 
@@ -62,10 +64,38 @@
 				</div>
 			</el-tree>
 	  </div>
+    
+    <div class="right-form">
+      <el-form :disabled="formDisabled" :model="form" :rules="rules" ref="ruleForm" :label-position="labelPos">
+        <el-form-item label="上级目录" :label-width="formLabelWidth" prop="parentId">
+          <el-cascader
+            v-model="form.parentId"
+            :options="options"
+            :props="cascaderProps"
+            @change="handleChange"></el-cascader>
+        </el-form-item>
+        <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="分类编码" :label-width="formLabelWidth">
+          <el-input v-model="form.code" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" :label-width="formLabelWidth">
+          <el-input v-model="form.descM" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
+          <el-input v-model.number="form.sort" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item style="text-align: right">
+          <el-button @click="form = {}; formDisabled = true;">取 消</el-button>
+          <el-button type="primary" @click="doSaveAction">保 存</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
 
     <!-- <el-button class="diag-btn" type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button> -->
 
-    <el-dialog 
+    <!-- <el-dialog 
       :title="diagTitle.text" 
       :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="ruleForm" :label-position="labelPos">
@@ -93,7 +123,7 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="doSaveAction">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -154,7 +184,8 @@ export default{
         value: 'id',
         checkStrictly: true
       },
-      options: []
+      options: [],
+      formDisabled: true, 
 		}
 	},
 	created(){
@@ -329,6 +360,7 @@ export default{
     // 处理category事件
     clickSlot(type, _data){
 
+      this.$refs['ruleForm'] && this.$refs['ruleForm'].resetFields();
       this.diagTitle.text = this.diagTitle[type]
 
       switch(type){
@@ -338,12 +370,11 @@ export default{
 
           this.disableNode(_data.id)
 
-          this.dialogFormVisible = true;
+          this.formDisabled = false;
 
           break;
         }
         case 'add': {
-          this.$refs['ruleForm'] && this.$refs['ruleForm'].resetFields();
           this.form = {}
           _.merge(this.form, {
             parentId: _data.id,
@@ -351,7 +382,7 @@ export default{
           })
           this.disableNode()
 
-          this.dialogFormVisible = true;
+          this.formDisabled = false;
 
           break;
         }
@@ -447,6 +478,25 @@ export default{
     margin:  0 auto;
   }
 
+  .page-title {
+    margin: 0;
+    padding: 10px 10px 10px 0;
+    border-bottom: 10px solid #f5f5f5;
+    font-size: 18px;
+    font-weight: bold;
+    span {
+      border-left: 5px solid #007fff;
+      padding-left: 15px;
+    }
+  }
+
+  .right-form {
+    margin-left: 300px;
+    padding-top: 40px;
+    border-left: 10px solid #f5f5f5;
+    height: calc(100% - 90px);
+  }
+
 	/* common end */
   
 	.comp-tree{
@@ -454,11 +504,16 @@ export default{
 		max-width: 300px;
 		max-height: 80vh;
     overflow: visible;
+    position: absolute;
+
+    &/deep/ .el-tree-node {
+      padding: 2px 16px;
+    }
   
 		// 顶部按钮
 		.comp-tr-top{
 			width: 100px;
-			margin-bottom: 2em;
+			margin: 16px ;
 		}
 		// 自定义节点
 		.comp-tr-node{
@@ -467,6 +522,8 @@ export default{
 				display: inline-block;
 				line-height: 40px;
 				min-height: 40px;
+        padding-left: 4px;
+        font-size: 14px;
 				// 新增
 				&.is-new{
 					font-weight: bold;

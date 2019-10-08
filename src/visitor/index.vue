@@ -89,7 +89,7 @@ export default {
 <style>
 *::-webkit-scrollbar {
 	  width: 5px;
-	  height: 4px;
+	  height: 8px;
 	  background-color: #F5F5F5;
 	}
 	

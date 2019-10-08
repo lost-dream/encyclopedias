@@ -37,7 +37,7 @@
 							<span>人编写</span>
 						</p>
 
-						<!--<el-button type="primary">创建词条</el-button>-->
+						<el-button type="primary" @click="gotoCreate">创建词条</el-button>
 						
 					</div>
 				</el-col>
@@ -68,24 +68,22 @@
 			<div class="title">
 				<span>精选分类</span>
 			</div>
-			<el-row>
-				<el-col :span="24/categoryTreeList.length" v-for="(item,index) in categoryTreeList" :key="index">
-					<el-card>
-						<div :style="'background:#'+categoryBgColor[index]" class="categoryTreeList">
-							<p :style="'background:#'+categoryTitleColor[index]">{{item.name}}</p>
-							<ul>
-								<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
-									{{item1.name}}
-									<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
-										<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
-									</ul>
-								</li>
-							</ul>
-							
-						</div>
-					</el-card>
-				</el-col>
-			</el-row>
+			<div class="category-container">
+				<el-card class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
+					<div :style="'background:#'+categoryBgColor[index % 5]" class="categoryTreeList">
+						<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>
+						<ul>	
+							<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
+								{{item1.name}}
+								<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
+									<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
+								</ul>
+							</li>
+						</ul>
+						
+					</div>
+				</el-card>
+			</div>
 		</div>
 	</div>
 </template>
@@ -201,16 +199,21 @@ export default {
 			})
 		},
 
-        seeEntry (hash) {
-            console.log(hash)
-            this.$router.push({
-                name:'viewEntry',
-                query:{
-                    entryId:hash.ENTRY_ID,
+		seeEntry (hash) {
+				console.log(hash)
+				this.$router.push({
+						name:'viewEntry',
+						query:{
+								entryId:hash.ENTRY_ID,
 //                    versionId: hash.ID,
-                    viewType: 'view'
-                }
-            })
+								viewType: 'view'
+						}
+				})
+		},
+		gotoCreate(){
+			this.$router.push({
+				name: 'createEntry'
+			})
 		}
 	}
 
@@ -236,8 +239,19 @@ export default {
 .title+.el-row {
 	margin-bottom: 30px
 }
-.el-col-6+.el-col-6{
-	padding-left: 40px;
+.category-container {
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	margin-bottom: 50px;
+	overflow-x: auto;
+	justify-content: center;
+}
+.category-item {
+	min-width: 200px;
+}
+.category-item + .category-item {
+	margin-left: 40px;
 }
 .categoryTreeList{
 	padding-bottom: 10px;
