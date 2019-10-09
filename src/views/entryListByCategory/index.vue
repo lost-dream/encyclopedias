@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="margin-bottom: 20px">
 		<ul class="categoryList">
 			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
 		</ul>

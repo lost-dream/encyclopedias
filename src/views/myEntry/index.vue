@@ -1,6 +1,6 @@
 <template>
 	<div >
-		<el-row class="versionHistory" style="max-width:1080px;margin: 40px auto">
+		<el-row class="versionHistory" style="max-width:1080px;margin: 40px auto 20px">
 			<el-col :span="4">
 				<el-image src="" style="width: 160px;height: 160px;padding:10px"></el-image>
 			</el-col>
