@@ -52,6 +52,7 @@
                     </el-upload>
                     <el-input style="margin-left: 20px"
                             type="textarea"
+                            resize="none"
                             :rows="8"
                             placeholder="请输入内容"
                             v-model="summary">
