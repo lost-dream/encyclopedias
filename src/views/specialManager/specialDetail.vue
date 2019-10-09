@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div style="display: flex">
+        <div class="card-box">
 
-            <el-card style="width: 50%;margin: 10px" class="myForm" shadow="hover">
+            <el-card class="myForm" shadow="hover">
                 <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
                     <span class="leftBorder"></span>
                     基础信息
@@ -11,9 +11,9 @@
                 <div style="display: flex;">
                     <el-form style="width: 100%">
                         <div style="display: flex">
-                            <div style="display: flex;flex-direction: column;width: 50%">
-                                <el-form-item label="专题名称：" style="display: flex;width: 100%">
-                                    <el-input v-model="form.specialName" style="width: 170px"></el-input>
+                            <div style="display: flex;flex-direction: column;min-width: 50%">
+                                <el-form-item label="专题名称：" style="display: flex">
+                                    <el-input v-model="form.specialName" style="width: 250px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="专题描述：" style="display: flex">
                                     <el-input v-model="form.specialDesc" resize="none" type="textarea" style="width: 250px" :rows="6"></el-input>
@@ -23,7 +23,7 @@
 
                             <el-form-item label="专题封面：" style="display: flex;">
                                 <el-upload
-                                        style="float: left;width: 170px;"
+                                        style="float: left;max-width: 170px;"
                                         class="avatar-uploader"
                                         action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
                                         :show-file-list="false"
@@ -36,7 +36,7 @@
                     </el-form>
                 </div>
             </el-card>
-            <el-card style="width: 50%;margin: 10px;overflow: unset" class="myForm" shadow="hover">
+            <el-card class="myForm" shadow="hover">
                 <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
                     <span class="leftBorder"></span>
                     聚合规则
@@ -115,7 +115,7 @@
                                             v-for="tag in labels"
                                             :key="tag"
                                             closable
-                                            @close="handleClose(tag, 1)"
+                                            @close="handleClose(tag, 2)"
                                             type="info">
                                         {{tag}}
                                     </el-tag>
@@ -746,5 +746,21 @@
         background: #337ab7;
         color: white;
     }
+    }
+    @media (min-width: 1501px) {
+        .card-box{
+            display: flex;
+        }
+        .myForm{
+            width: 50%;margin: 10px;overflow: unset
+        }
+    }
+    @media (max-width: 1500px) {
+        .card-box{
+            display: block;
+        }
+        .myForm{
+            margin: 10px;overflow: unset
+        }
     }
 </style>
