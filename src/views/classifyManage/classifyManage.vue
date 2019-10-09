@@ -54,7 +54,7 @@
 					
 					<el-table 
 						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
-						height="300" ref="table" :data="classifyData" class="departTable" border stripe>
+						 ref="table" :data="classifyData" class="departTable" border stripe>
 						<el-table-column width="200px" label="属性名称">
 				          <template slot-scope="scope">
 				            <el-input v-model="scope.row.attributeName" placeholder="请输入属性名称"></el-input>

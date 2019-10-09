@@ -36,7 +36,8 @@ export default {
 	margin-left: 200px;
 	width: calc(100vw - 200px);
 	height: calc(100vh - 40px);
-	border-left: 1px solid #e6e6e6;
+	// border-left: 1px solid #e6e6e6;
+	background: #f5f5f5;
 	
 	&::-webkit-scrollbar {
 	  width: 5px;

@@ -121,4 +121,11 @@ ul,li,p{
 	padding: 0;
 }
 
+.height-100 {
+  height: 100%;
+}
+.bg-fff {
+  background: #ffffff;
+}
+
 </style>

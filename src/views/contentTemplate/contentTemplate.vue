@@ -1,6 +1,8 @@
 <template>
-  <div class="pos-rltv padding-20">
-    <h2>分类目录模板</h2>
+  <div class="pos-rltv height-100 bg-fff">
+    <h2 class="page-title">
+      <span>目录模板管理</span>
+    </h2>
     <div class="flex-box">
       <div class="left">
         <h3>词条类目</h3>
@@ -304,6 +306,17 @@ export default{
   .el-form {
     width: 85%;
     margin:  0 auto;
+  }
+  .page-title {
+    margin: 0;
+    padding: 10px 10px 10px 0;
+    border-bottom: 10px solid #f5f5f5;
+    font-size: 18px;
+    font-weight: bold;
+    span {
+      border-left: 5px solid #007fff;
+      padding-left: 15px;
+    }
   }
 
 	/* common end */

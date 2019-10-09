@@ -42,14 +42,14 @@
 		    </el-table-column>
 		    <el-table-column prop="status" label="运行状态">
 		    	<template slot-scope="scope">
-					{{statusObj[scope.row.status]}}
+		    		<span :style="'color:'+statusColorObj[scope.row.status]">{{statusObj[scope.row.status]}}</span>
 				</template>
 		    </el-table-column>
 			<el-table-column fixed="right" label="操作" width="250">
 				<template slot-scope="scope">
-					<el-button style="color: #9aa6e1;" @click="start(scope.row)" type="text" size="small">启动</el-button>
-        			<el-button style="color: #fac2a9;" @click="stop(scope.row)" type="text" size="small">停止</el-button>
-        			<el-button style="color: #a0d6c4;" @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+					<el-button v-if="scope.row.status!==2&&scope.row.status!==3" style="color: #9aa6e1;" @click="start(scope.row)" type="text" size="small">启动</el-button>
+        			<el-button v-if="scope.row.status!==0&&scope.row.status!==3" style="color: #fac2a9;" @click="stop(scope.row)" type="text" size="small">停止</el-button>
+        			<el-button v-if="scope.row.status!==3" style="color: #a0d6c4;" @click="edit(scope.row)" type="text" size="small">编辑</el-button>
         			<el-button style="color: #f7b2ad;" @click="deleteTask(scope.row)" type="text" size="small">删除</el-button>
         			<el-button style="color: #95cfde;" @click="see(scope.row)" type="text" size="small">查看日志</el-button>
 				</template>
@@ -93,12 +93,20 @@ export default {
 	    	taskName:'',
 	    	auditState:'2',
 	    	statusObj:{
-	    		'-1':'删除',
-	    		'0':'停止',
+	    		'-1':'已删除',
+	    		'0':'已停止',
 	    		'1':'待运行',
 	    		'2':'运行中',
 	    		'3':'运行完成',
 	    		'4':'运行失败',
+	    	},
+	    	statusColorObj:{
+	    		'-1':'#f7b2ad',
+	    		'0':'#fac2a9',
+	    		'1':'#9aa6e1',
+	    		'2':'green',
+	    		'3':'blue',
+	    		'4':'red',
 	    	},
 	    	pagination: {
 		      page: 1,

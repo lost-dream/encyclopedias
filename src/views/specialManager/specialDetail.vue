@@ -13,16 +13,17 @@
                         <div style="display: flex">
                             <div style="display: flex;flex-direction: column;width: 50%">
                                 <el-form-item label="专题名称：" style="display: flex;width: 100%">
-                                    <el-input v-model="form.specialName" style="width: 250px"></el-input>
+                                    <el-input v-model="form.specialName" style="width: 170px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="专题描述：" style="display: flex">
                                     <el-input v-model="form.specialDesc" resize="none" type="textarea" style="width: 250px" :rows="6"></el-input>
+
                                 </el-form-item>
                             </div>
 
                             <el-form-item label="专题封面：" style="display: flex;">
                                 <el-upload
-                                        style="float: left"
+                                        style="float: left;width: 170px;"
                                         class="avatar-uploader"
                                         action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
                                         :show-file-list="false"
