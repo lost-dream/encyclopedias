@@ -26,7 +26,24 @@ const visitorRouter = [
 			meta: {
 				title: '首页',
 			},
-		},
+		},{
+            path: '/myEntry',
+            component: () =>
+                import('@/views/myEntry/index'),
+            name: 'myEntry',
+            meta: {
+                title: '我的词条',
+            },
+        },
+        {
+            path: '/entryVersionList',
+            component: () =>
+                import('@/views/versionHistory/index'),
+            name: 'entryVersionList',
+            meta: {
+                title: '历史版本',
+            },
+        },
 		{
 			path: '/searchResultList',
 			component: () =>

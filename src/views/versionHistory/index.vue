@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<el-row class="versionHistory">
+	<div >
+		<el-row class="versionHistory" style="max-width: 1680px;margin: 40px auto">
 			<el-col :span="6">{{info.entryName}}</el-col>
 			<el-col :span="6">编辑次数：{{info.versionApprovingCount}}次</el-col>
 			<el-col :span="6">创建者：{{info.creator}}</el-col>
@@ -10,7 +10,7 @@
 			class="departTable"
 		    :data="MyEntryList"
 		    border
-		    style="width: 100%">
+		    style="max-width: 1280px;margin: 0 auto">
 			<el-table-column label="版本时间" width="180">
 				<template slot-scope="scope">
 					{{parseTime(scope.row.createTime)}}

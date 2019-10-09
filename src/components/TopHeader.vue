@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="24">
+    <el-col :span="24" >
       <div class="head-wrap">
-      	<img @click="gotoIndex" src="../../public/static/image/icon/logo.png"/>
-      	<span @click="gotoIndex" class="title">信息百科</span>
+      	<img @click="gotoIndex" src="../../public/static/image/logo.png" />
+      	<span @click="gotoIndex" class="title" >信息百科</span>
       	<el-input
       		style='width: 500px;'
 			    placeholder="请输入内容"
@@ -89,6 +89,12 @@
 	}
 	.title{
 		margin-right: 75px;
+		display: inline-block;
+		font-size: 18px;
+		font-weight: bold;
+		transform: translateY(4px);
+		padding-top: 5px;
+		color: #c6341f;
 	}
 }
 .el-button--primary{

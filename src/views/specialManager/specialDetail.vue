@@ -741,6 +741,7 @@
         line-height: 40px;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+        cursor: pointer;
     }
     .choosed{
         background: #337ab7;

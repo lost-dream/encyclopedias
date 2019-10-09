@@ -7,7 +7,7 @@
 			<el-row>
 				<el-col class="w800">
 					<el-carousel :interval="5000">
-						<el-carousel-item v-for="isecondCategorytem in entryListData" :key="item.id">
+						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList">
 								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />
 								<!--<img src="/static/image/tank.png"/>-->
@@ -38,14 +38,15 @@
 						</p>
 
 						<el-button type="primary" @click="gotoCreate">创建词条</el-button>
-						
+						<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
+
 					</div>
 				</el-col>
 			</el-row>
-			
-			
-			
-			
+
+
+
+
 			<div class="title">
 				<span>特色专题</span>
 			</div>
@@ -53,7 +54,7 @@
 				<el-carousel-item v-for="item in specialListData" :key="item.id">
 					<div @click="routeToSpecial(item.id)" class="specialList">
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
-						<el-image 
+						<el-image
 							:fit="'cover'"
 							:src="'https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg'">
 						</el-image>
@@ -64,7 +65,7 @@
 					</div>
 				</el-carousel-item>
 			</el-carousel>
-			
+
 			<div class="title">
 				<span>精选分类</span>
 			</div>
@@ -72,7 +73,7 @@
 				<el-card class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
 					<div :style="'background:#'+categoryBgColor[index % 5]" class="categoryTreeList">
 						<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>
-						<ul>	
+						<ul>
 							<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
 								{{item1.name}}
 								<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
@@ -80,7 +81,7 @@
 								</ul>
 							</li>
 						</ul>
-						
+
 					</div>
 				</el-card>
 			</div>
@@ -93,7 +94,7 @@ import {entryStatistical,entryList} from '@/api/onlyShowData/index.js'
 import {specialList,} from '@/api/special/index.js'
 import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
-	
+
 	name: 'index',
 	data() {
 	    return {
@@ -106,7 +107,7 @@ export default {
 	    }
 	},
 	watch: {
-		
+
 	},
 	created() {
 		this.entryStatistical()
@@ -117,7 +118,7 @@ export default {
 	mounted() {
 	},
 	destroyed() {
-		
+
 	},
 	methods: {
 		entryList() {
@@ -130,7 +131,7 @@ export default {
 				this.entryListData = res.data.records
 			})
 		},
-		
+
 		routeToEntryList(id2,index2,thirdAry) {
 			var choosedCategoryInfo = {
 				'id2':id2,
@@ -168,7 +169,7 @@ export default {
 			sessionStorage.setItem('specialId',id)
 			this.$router.push('special')
 		},
-		
+
 		specialList() {
 			specialList({
 				"pageNumber": 1,
@@ -190,12 +191,12 @@ export default {
 					ary.sort(function (a, b) {
 					  return a-b;
 					})
-					
+
 					// for(let i = 0;i<list.length;i++){
 					// 	list[i].style.width = ary[ary.length-1]+'px'
 					// }
 				})
-				
+
 			})
 		},
 
@@ -214,7 +215,12 @@ export default {
 			this.$router.push({
 				name: 'createEntry'
 			})
-		}
+		},
+        gotoMyEntry(){
+            this.$router.push({
+                name: 'myEntry'
+            })
+        },
 	}
 
 }
@@ -274,7 +280,7 @@ export default {
 		padding: 0;
 		width: 50%;
 		display: inline-block;
-		min-height: 160px;	
+		min-height: 160px;
 		li{
 			margin: 0;
 			padding: 0;
@@ -285,16 +291,12 @@ export default {
 	.secondCategory{
 		position: relative;
 		border-right: 1px solid white;
-		cursor: pointer;
 		ul{
 			position: absolute;
 			right: -100%;
 			top: 0;
 			width: 100%;
 		}
-	}
-	.secondCategory:hover{
-		color: #338ce6;
 	}
 }
 
