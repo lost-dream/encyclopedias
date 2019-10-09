@@ -120,7 +120,7 @@ export default {
 <style lang="scss" scoped>
 .entryList{
 	
-	width: 1200px;
+	width: 1210px;
 	margin: auto;
 	margin-top: 20px;
 	li{
