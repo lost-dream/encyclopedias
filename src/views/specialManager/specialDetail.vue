@@ -16,7 +16,7 @@
                                     <el-input v-model="form.specialName" style="width: 250px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="专题描述：" style="display: flex">
-                                    <el-input v-model="form.specialDesc" type="textarea" style="width: 250px" :rows="5"></el-input>
+                                    <el-input v-model="form.specialDesc" resize="none" type="textarea" style="width: 250px" :rows="6"></el-input>
                                 </el-form-item>
                             </div>
 
@@ -45,7 +45,17 @@
                         <el-form ref="form" :model="form" label-width="80px">
 
                             <el-form-item label="专题分类：" >
-                                <span @click="changeTreeShow" class="el-input__inner changeTreeShow">{{checkedCategoryName}}</span>
+                                <span @click="changeTreeShow" class="el-input__inner changeTreeShow" style="padding: 0;color: rgb(192, 196, 204);">
+                                    <el-tag
+                                            style="float: left"
+                                            v-for="tag in categoryName"
+                                            :key="tag"
+                                            closable
+                                            @close="handleClose(tag, 3)"
+                                            type="info">
+                                        {{tag}}
+                                    </el-tag>点击添加
+                                </span>
                                 <div v-show="showTree" class="myTree">
                                     <el-tree
                                             ref="tree"
@@ -126,40 +136,63 @@
                 </div>
             </el-card>
         </div>
-
         <el-card style="min-height: 500px;margin: 10px">
-
             <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
                 <span class="leftBorder"></span>
                 词条列表
                 <el-button size="small" type="primary" style="float:right;background: rgb(86, 189, 157)" @click="dialogVisible = true,entrySearchList()">新增</el-button>
 
             </div>
-            <el-table
-                    class="departTable"
-                    :data="entryList"
-                    border
-                    style="width: 100%">
-                <el-table-column prop="entryName" label="词条名称" ></el-table-column>
-                <el-table-column prop="summarys" label="描述" ></el-table-column>
-                <el-table-column prop="creator" label="创建人" ></el-table-column>
-                <el-table-column label="创建时间" >
-                    <template slot-scope="scope">
-                        {{parseTime(scope.row.createTime)}}
-                    </template>
-                </el-table-column>
-                <el-table-column label="添加类型" >
-                    <template slot-scope="scope">
-                        {{scope.row.status == 1?'聚合':'手动'}}
-                    </template>
-                </el-table-column>
-                <el-table-column fixed="right" label="操作">
-                    <template slot-scope="scope">
-                        <el-button @click="deleteFromSpecial(scope.row)" type="text" size="small">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
+            <ul class="statusList">
+                <li :class="item.chosen?'chosen':''" @click="chooseStatus(item)" v-for="(item,index) in statusList">{{item.name}}</li>
+            </ul>
+            <div v-show="activeTab == 1">
+                <el-table
+                        class="departTable"
+                        :data="conditionList"
+                        border
+                        style="width: 100%">
+                    <el-table-column prop="ENTRY_NAME" label="词条名称" ></el-table-column>
+                    <el-table-column prop="summarys" label="描述" ></el-table-column>
+                    <el-table-column prop="CREATOR" label="创建人" ></el-table-column>
+                    <el-table-column label="创建时间" >
+                        <template slot-scope="scope">
+                            {{parseTime(scope.row.CREATE_TIME)}}
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                        background
+                        @size-change="handleConditionSizeChange"
+                        @current-change="handleConditionCurrentChange"
+                        :current-page="conditionPagination.page"
+                        :page-size="conditionPagination.limit"
+                        layout="total, sizes, prev, pager, next"
+                        :total="conditionPagination.count"></el-pagination>
+            </div>
+            <!-- 手动添加 -->
+            <div v-show="activeTab == 2">
+                <el-table
+                        class="departTable"
+                        :data="entryList"
+                        border
+                        style="width: 100%">
+                    <el-table-column prop="entryName" label="词条名称" ></el-table-column>
+                    <el-table-column prop="summarys" label="描述" ></el-table-column>
+                    <el-table-column prop="creator" label="创建人" ></el-table-column>
+                    <el-table-column label="创建时间" >
+                        <template slot-scope="scope">
+                            {{parseTime(scope.row.createTime)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作">
+                        <template slot-scope="scope">
+                            <el-button @click="deleteFromSpecial(scope.row)" type="text" size="small">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
+            </div>
             <div style="text-align: center;margin-top: 20px">
 <!--                <el-button @click="dialogVisible = false" size="small">取 消</el-button>-->
                 <el-button type="primary" @click="createNewSpecial" v-if="!isEdit" size="small">确 定</el-button>
@@ -220,6 +253,7 @@
                 entrySearch: '',
                 dialogVisible: false,
                 entryList:[],
+                conditionList: [],
                 keyword: '',
                 categoryId:'',
                 form: {
@@ -235,6 +269,11 @@
                     limit: 10,
                     count: 0
                 },
+                conditionPagination: {
+                    page: 1,
+                    limit: 10,
+                    count: 0
+                },
                 entryListData: [],
                 paginationEntry: {
                     page: 1,
@@ -242,7 +281,8 @@
                     count: 0
                 },
                 entryIds: [],
-                checkedCategoryName:'',
+                categoryName:[],
+                categoryIds: [],
                 treeData:[],
                 defaultProps: {
                     children: 'children',
@@ -253,6 +293,11 @@
                 label: '',
                 showTree:false,
                 isEdit: false,
+                statusList:[
+                    {id:'1',name:'聚合词条',chosen:true},
+                    {id:'2',name:'固有词条'},
+                ],
+                activeTab: '1',
             }
         },
         watch: {
@@ -267,6 +312,7 @@
                 vm.isEdit = true
             }
             vm.getSpecialDetail(vm.$route.query.id)
+            vm.getSpecialEntryList()
         },
         mounted() {
         },
@@ -278,9 +324,13 @@
             handleClose(tag, index) {
                 if(index == 1){
                     this.keywords.splice(this.keywords.indexOf(tag), 1);
-                } else {
+                } else if(index == 2) {
                     this.labels.splice(this.labels.indexOf(tag), 1);
+                } else {
+                    this.categoryIds.splice(this.categoryIds.indexOf(tag), 1);
+                    this.categoryName.splice(this.categoryName.indexOf(tag), 1);
                 }
+                this.getConditionEntryList()
             },
             addKeyword () {
                 let vm = this;
@@ -292,6 +342,7 @@
                     vm.keywords.push(vm.keyword)
                     vm.keyword = '';
                 }
+                this.getConditionEntryList()
             },
             addLabel() {
                 let vm = this;
@@ -303,33 +354,39 @@
                     vm.labels.push(vm.label)
                     vm.label = '';
                 }
+                this.getConditionEntryList()
             },
             changeTreeShow() {
                 this.showTree = !this.showTree
             },
             handleNodeClick(data, checked, node) {
                 console.log(data)
-                this.categoryId = data.id;
-                this.checkedCategoryName = data.name;
-                this.showTree = false
+                if(this.categoryIds.includes(data.id)){
+                    this.$message.error('专题已经拥有该分类');
+                } else {
+                    this.categoryIds.push(data.id);
+                    this.categoryName.push(data.name);
+                    this.showTree = false
+                    this.getConditionEntryList()
+                }
             },
             categoryTree() {
                 let vm = this
                 categoryTree({}).then(res =>{
                     res.data.children.map((item)=>{
-                        if(vm.form.categoryIds == item.id) vm.checkedCategoryName = item.name
+                        if(vm.form.categoryIds.includes(item.id)) vm.categoryName.push(item.name)
                         if(!item.children.length){
                             delete item.children
                         }
                         else{
                             item.children.map((item1)=>{
-                                if(vm.form.categoryIds == item1.id) vm.checkedCategoryName = item1.name
+                                if(vm.form.categoryIds.includes(item1.id)) vm.categoryName.push(item1.name)
                                 if(!item1.children.length){
                                     delete item1.children
                                 }
                                 else{
                                     item1.children.map((item2)=>{
-                                        if(vm.form.categoryIds == item2.id) vm.checkedCategoryName = item2.name
+                                        if(vm.form.categoryIds.includes(item2.id)) vm.categoryName.push(item2.name)
                                         if(!item2.children.length){
                                             delete item2.children
                                         }
@@ -358,13 +415,35 @@
             handleSizeChange(val) {
                 this.pagination.page = 1
                 this.pagination.limit = val
-                this.getSpecialList()
+                this.getSpecialEntryList()
             },
             handleCurrentChange(val) {
                 this.pagination.page = val
-                this.getSpecialList()
+                this.getSpecialEntryList()
             },
-            getSpecialList () {
+            handleConditionSizeChange(val) {
+                this.conditionPagination.page = 1
+                this.conditionPagination.limit = val
+                this.getConditionEntryList()
+            },
+            handleConditionCurrentChange(val) {
+                this.conditionPagination.page = val
+                this.getConditionEntryList()
+            },
+            getConditionEntryList () {
+                let vm = this
+                vm.$axios.post('/wiki-backend/api/entry/list',{
+                    pageNumber: vm.paginationEntry.page,
+                    pageSize: vm.paginationEntry.limit,
+                    "categoryId": vm.categoryIds.join(','),
+                    "keyword": vm.keywords.join(','),
+                    "label": vm.labels.join(',')
+                }).then((res)=>{
+                    vm.conditionList = res.data.records
+                    vm.conditionPagination.count = res.data.total
+                })
+            },
+            getSpecialEntryList () {
                 let vm = this
                 this.$axios.post('/wiki-backend/api/specialDemandEntry/list',{specialId: vm.specialId,pageNumber:vm.pagination.page,pageSize:vm.pagination.limit})
                     .then(res =>{
@@ -392,12 +471,9 @@
                             vm.form = res.data.special
                             vm.keywords = res.data.special.keyWords.split(',')
                             vm.labels = res.data.special.labels.split(',')
+                            vm.categoryIds = res.data.special.categoryIds.split(',')
                             vm.categoryTree()
-                        })
-                    this.$axios.post('/wiki-backend/api/specialDemandEntry/list',{specialId: index,pageNumber:vm.pagination.page,pageSize:vm.pagination.limit})
-                        .then(res =>{
-                            vm.entryList = res.data.specialDemandEntry.records
-                            vm.pagination.count = res.data.specialDemandEntry.total
+                            vm.getConditionEntryList()
                         })
                 }
             },
@@ -434,7 +510,7 @@
                         message: '删除成功',
                         type: 'success'
                     });
-                    vm.getSpecialDetail(vm.specialId)
+                    vm.getSpecialEntryList(vm.specialId)
                 })
             },
             entrySearchList(){
@@ -454,12 +530,12 @@
                 let vm = this
                 vm.form.keyWords = vm.keywords.join(',')
                 vm.form.labels = vm.labels.join(',')
-                vm.form.categoryIds =  vm.categoryId
+                vm.form.categoryIds =  vm.categoryIds.join(',')
                 console.log(vm.form, 'update')
                 this.$axios.post('/wiki-backend/api/special/update', vm.form)
                     .then(res => {
                         vm.$router.replace({name: 'specialManager'})
-                        vm.getSpecialList()
+                        vm.getSpecialEntryList()
                         vm.$message({
                             showClose: true,
                             message: '修改成功',
@@ -482,13 +558,13 @@
                 let vm = this
                 vm.form.keyWords = vm.keywords.join(',')
                 vm.form.labels = vm.labels.join(',')
-                vm.form.categoryIds =  vm.categoryId
+                vm.form.categoryIds =  vm.categoryIds.join(',')
                 if(vm.form.id) delete vm.from.id
                 console.log(vm.form, 'create')
                 this.$axios.post('/wiki-backend/api/special/save', vm.form)
                     .then(res => {
                         vm.$router.replace({name: 'specialManager'})
-                        vm.getSpecialList()
+                        vm.getSpecialEntryList()
                         vm.$message({
                             showClose: true,
                             message: '添加成功',
@@ -506,7 +582,16 @@
                             specialCoverUrl: ''
                         }
                     })
-            }
+            },
+
+            chooseStatus(item) {
+                this.statusList.map((item)=>{
+                    item.chosen = false
+                })
+                this.status = item.id
+                item.chosen = true
+                this.activeTab = item.id
+            },
         }
 
     }
@@ -535,7 +620,7 @@
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
         }
-        .choosed{
+        .chosen{
             background: #337ab7;
             color: white;
         }
@@ -641,5 +726,24 @@
     }
     .el-tag.el-tag--info {
         margin: 4px;
+    }
+    .statusList{
+    li{
+        display: inline-block;
+        background: #e6e6e6;
+        color: #adadad;
+        font-weight: bold;
+        font-size: 18px;
+        width: 90px;
+        text-align: center;
+        border-right: 1px solid #d0d0d0;
+        line-height: 40px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+    .choosed{
+        background: #337ab7;
+        color: white;
+    }
     }
 </style>
