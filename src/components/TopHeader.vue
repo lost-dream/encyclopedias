@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="24">
       <div class="head-wrap">
-      	<img @click="gotoIndex" src="../assets/logo.png"/>
+      	<img @click="gotoIndex" src="../../public/static/image/icon/logo.png"/>
       	<span @click="gotoIndex" class="title">信息百科</span>
       	<el-input
       		style='width: 500px;'

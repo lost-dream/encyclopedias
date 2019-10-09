@@ -196,7 +196,10 @@ export default {
 		p{
 			padding: 0 20px;
 			border-right: 1px solid white;
-			
+			cursor: pointer;
+		}
+		p:hover{
+			color: #338ce6;
 		}
 		
 	}

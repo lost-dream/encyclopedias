@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex;width: 1280px;margin: 0 auto">
+    <div style="display: flex;width: 1280px;margin: 0 auto 20px">
         <div style="width: 900px;display: flex;flex-direction: column">
             <div>
                 <h3>词条名称</h3>
@@ -212,7 +212,7 @@
                     <!-- <el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>
                     <el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button> -->
                 </el-tab-pane>
-                <el-tab-pane label="修改目录" name="second">
+                <el-tab-pane label="词条目录" name="second">
                     <div v-for="item in menuList">
                         <p class="p1">{{item.title}}</p>
                         <div v-for="k in item.children">

@@ -196,8 +196,8 @@
             </div>
             <div style="text-align: center;margin-top: 20px">
 <!--                <el-button @click="dialogVisible = false" size="small">取 消</el-button>-->
-                <el-button type="primary" @click="createNewSpecial" v-if="!isEdit" size="small">确 定</el-button>
-                <el-button type="primary" @click="updateSpecial" size="small" v-else>确 定</el-button>
+                <el-button type="primary" @click="createNewSpecial" v-if="!isEdit" size="small" style="background: rgb(86, 189, 157)">确 定</el-button>
+                <el-button type="primary" @click="updateSpecial" size="small" style="background: rgb(86, 189, 157)" v-else>确 定</el-button>
             </div>
             <!-- 弹窗 -->
             <el-dialog

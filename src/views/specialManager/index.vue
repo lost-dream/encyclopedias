@@ -14,7 +14,6 @@
                 <el-button type="primary" style="float:right;background: rgb(86, 189, 157)" @click="routeToSpecial('new')">新增</el-button>
 
             </el-row>
-        </el-input>
             <el-table
                     class="departTable"
                     :data="specialList"

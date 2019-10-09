@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex;width: 1280px;margin: 0 auto" >
+    <div style="display: flex;width: 1280px;margin: 0 auto 20px" >
         <div style="width: 900px;display: flex;flex-direction: column">
             <div>
                 <h3>词条名称</h3>

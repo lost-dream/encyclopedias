@@ -7,7 +7,7 @@
 			<el-row>
 				<el-col class="w800">
 					<el-carousel :interval="5000">
-						<el-carousel-item v-for="item in entryListData" :key="item.id">
+						<el-carousel-item v-for="isecondCategorytem in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList">
 								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />
 								<!--<img src="/static/image/tank.png"/>-->
@@ -285,12 +285,16 @@ export default {
 	.secondCategory{
 		position: relative;
 		border-right: 1px solid white;
+		cursor: pointer;
 		ul{
 			position: absolute;
 			right: -100%;
 			top: 0;
 			width: 100%;
 		}
+	}
+	.secondCategory:hover{
+		color: #338ce6;
 	}
 }
 
