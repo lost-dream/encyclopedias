@@ -453,7 +453,7 @@ export default{
     margin: 0;
     padding: 10px 10px 10px 0;
     border-bottom: 10px solid #f5f5f5;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     span {
       border-left: 5px solid #007fff;

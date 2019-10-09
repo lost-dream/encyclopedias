@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<el-card>
 		<el-row>
 			<el-col :span="4">
 				<div class="myTree">
@@ -153,7 +153,7 @@
 		
 		
 		
-	</div>
+	</el-card>
 </template>
 
 <script>

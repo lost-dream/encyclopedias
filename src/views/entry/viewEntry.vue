@@ -1,6 +1,11 @@
 <template>
-    <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container">
+    <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container" v-if="!doReload">
         <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
+            <div v-show="auditShow" class="audit-box">
+                <p class="audit-title"><span>审核操作</span></p>
+                <el-button type="primary" @click="modalShow = true; code = '3'">审核通过</el-button>
+                <el-button type="danger" @click="modalShow = true; code = '4'">审核不通过</el-button>
+            </div>
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
                 <h1 style="font-weight: normal">{{wikiContent.entryName}}
@@ -162,10 +167,22 @@
                 <!--</el-tab-pane>-->
             <!--</el-tabs>-->
         </div>
+        <el-dialog title="审核意见" :visible.sync="modalShow">
+		  <el-form>
+		    <el-form-item label="审核意见">
+		      <el-input v-model="comment" autocomplete="off"></el-input>
+		    </el-form-item>
+		  </el-form>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="modalShow = false">取 消</el-button>
+		    <el-button type="primary" @click="modify">确 定</el-button>
+		  </div>
+		</el-dialog>
     </div>
 
 </template>
 <script>
+import {audit} from '@/api/entry/index.js'
     export default {
         name: 'editor',
         data() {
@@ -173,7 +190,12 @@
                 wikiContent: {entrySummary: {summary: ''}},
                 activeName: 'second',
                 contentList: [],
-                wikiInfo: {}
+                wikiInfo: {},
+                comment: '',  // 审核意见
+                auditShow: false,  // 审核操作框
+                modalShow: false,  // 审核diag对话框
+                code: '',  // 提交状态
+                doReload: false,
             }
         },
         mounted() {
@@ -181,6 +203,7 @@
             vm.entryId = vm.$route.query.entryId
             vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
             vm.viewType = vm.$route.query.viewType
+            vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
             if(vm.viewType == 'preview') {
                 vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
                     .then(res => {
@@ -263,6 +286,11 @@
                     })
             }
         },
+        beforeRouteEnter(to, from, next){
+            console.log(from)
+            sessionStorage.setItem('auditShow', from.path === '/entryVersionExamine')
+            next()
+        },
         methods: {
             goLink (link) {
                 if(link.slice(0,4)=='http'){
@@ -282,11 +310,28 @@
                         entryId: target
                     }
                 })
+            },
+            modify() {
+                if(this.comment.trim() === ''){
+				this.$message('请输入审核意见');
+				    return
+                }
+                audit({
+                    versionId:this.versionId,
+                    auditContent:this.comment,
+                    state: this.code, // 3 通过  4 拒绝
+                }).then((res)=>{
+                    let vm = this;
+                    sessionStorage.setItem('auditShow', false)
+                    this.modalShow = false
+                    this.auditShow = false
+                    this.$message.success('词条状态修改成功');
+                })
             }
         }
     }
 </script>
-<style scoped>
+<style lang="scss" scoped>
     .card-title{
         font-weight: bold;
         margin-bottom:10px;
@@ -383,5 +428,16 @@
     }
     ul li{
         line-height: 20px;
+    }
+
+    .audit-title {
+        margin: 0;
+        padding: 10px 10px 10px 0;
+        font-size: 18px;
+        font-weight: bold;
+        span {
+            border-left: 5px solid #007fff;
+            padding-left: 15px;
+        }
     }
 </style>
