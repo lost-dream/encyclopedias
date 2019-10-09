@@ -4,7 +4,7 @@
       <span>目录模板管理</span>
     </h2>
     <div class="flex-box">
-      <div class="left">
+      <div class="left myTree">
         <h3>词条类目</h3>
         <el-tree 
           :data="categoryTree" 
@@ -78,7 +78,7 @@
           </div>
         </el-tree>
 
-        <div class="button-box" v-show="showSave">
+        <div class="button-box">
           <el-button 
             type="success"
             :loading="saveLoading" 
@@ -119,7 +119,6 @@ export default{
 				children: []
 			},
       showContent: false,
-      showSave: false,
       saveLoading: false,
       currentCategory: {},
 
@@ -143,7 +142,6 @@ export default{
 					this.$nextTick(() => {
 						if(this.$refs.SlotTree){
               this.$refs.SlotTree.remove(_node)
-              this.showSave = true;
 							// this.$message.success("删除成功！")
 						}
 					})
@@ -168,7 +166,6 @@ export default{
 			if(_node.isEdit){
 				this.$set(_node, 'isEdit', false)
       }
-      this.showSave = true;
 		},
 		handleEdit(_node, _data){// 编辑节点
 			// console.log(_node, _data)
@@ -256,7 +253,6 @@ export default{
         this.showContent = true;
         this.isLoading = true;
         this.currentCategory = data;
-        this.showSave= false;
         this.checkTemplateTreeData(data.id)
       }
     },
@@ -379,18 +375,37 @@ export default{
 
 .flex-box {
   display: flex;
+  height: calc(100% - 50px);
 
   .el-tree-node__content {
     height: 28px;
   }
   .left {
     width: 300px;
-    margin-right: 60px;
+    height: calc(100% - 50px);
+    // margin-right: 60px;
+    padding: 0 16px;
+    position: absolute;
+    box-sizing: border-box;
+    .el-tree {
+      height: calc(100% - 50px);
+      overflow: auto;
+    }
   }
 
   h3 {
     font-weight: 400;
-    margin-top: 0;
+    font-size: 16px;
+    margin: 0;
+    padding: 20px 0 10px;
+    border-bottom: 1px solid #e4e4e4;
+  }
+
+  &/deep/ .el-tree-node {
+    padding: 2px 0;
+    .el-tree-node {
+      padding-left: 16px;
+    }
   }
 
   .sub-box {
@@ -398,14 +413,24 @@ export default{
     justify-content: space-between;
     align-items: center;
     .add-top {
-      margin: 16px 0;
+      margin: 5px 0;
     }
   }
 
-  .el-tree {
-    padding: 10px;
-    border: 1px solid #e6e6e6;
-    border-radius: 6px;
+  .comp-tree {
+    max-width: unset;
+    max-height: unset;
+    margin-left: 300px;
+    border-left: 10px solid #f5f5f5;
+    height: 100%;
+    padding: 0 16px;
+    font-size: 14px;
+
+    .el-tree {
+      padding: 0 20%;
+      height: calc(100% - 160px);
+      overflow: auto;
+    }
   }
 
   .button-box {
@@ -419,6 +444,16 @@ export default{
 
 .el-tree /deep/ .el-tree-node__content {
   height: 28px !important;
+}
+
+.el-tree::-webkit-scrollbar {
+  width: 3px;
+  height: 5px;
+  background-color: #fff;
+}
+
+.el-tree::-webkit-scrollbar-track{
+  background-color: #fff;
 }
 
 </style>

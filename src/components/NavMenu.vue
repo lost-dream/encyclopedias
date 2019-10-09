@@ -8,7 +8,8 @@
       @close="handleClose"
       background-color="#212f54"
       text-color="white"
-      active-text-color="#ffffff">
+      active-text-color="#ffffff"
+      :default-active="currentIndex">
 			<!--一级路由-->
 			<el-menu-item v-if="item.componentName" v-for="item in menu" :index="item.componentName" :key="item.componentName">
         <template slot="title">
@@ -55,8 +56,12 @@
   export default {
     data () {
       return {
-        menu: menu
+        menu: menu,
+        currentIndex: ''
       }
+    },
+    created(){
+      this.currentIndex = this.$route.name;
     },
     methods: {
       handleOpen (key, keyPath) {

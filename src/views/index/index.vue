@@ -234,6 +234,7 @@ export default {
 	}
 	.w480 {
 		width: 480px;
+		padding: 0 30px;
 	}
 }
 .title+.el-row {
@@ -245,7 +246,7 @@ export default {
 	flex-direction: row;
 	margin-bottom: 50px;
 	overflow-x: auto;
-	justify-content: center;
+	// justify-content: center;
 }
 .category-item {
 	min-width: 200px;
