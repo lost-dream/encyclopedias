@@ -389,7 +389,7 @@ export default {
 		vertical-align: sub;
 	}
 	p{
-		width: 100%;
+		width: 80%;
 		vertical-align: middle;
     display: flex;
     align-items: center;
@@ -400,15 +400,15 @@ export default {
 		}
 		.data{
 			font-size: 30px;
-			text-align: center;
+			text-align: right;
 			display: inline-block;
-			min-width: 100px;
+			min-width: 140px;
 			max-width: 270px;
 			text-overflow: ellipsis;
 			overflow: hidden;
 		}
 		span:last-child{
-			margin-left: 20px;
+			margin-left: 0px;
 			color: #666666;
 		}
 	}
