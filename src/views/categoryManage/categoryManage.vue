@@ -4,12 +4,15 @@
       <span>分类管理</span>
     </h2>
     <div v-loading="isLoading" class="comp-tree myTree">
-      <el-button class="comp-tr-top" 
+      <div>
+        <el-button class="comp-tr-top" 
         type="primary" 
         size="small" 
         @click="handleAddTop">新增分类</el-button>
+      </div>
       <!-- tree -->
-		  <el-tree ref="SlotTree"
+		  <el-tree
+        ref="SlotTree"
         :data="setTree"
         :props="defaultProps"
         :expand-on-click-node="false"
@@ -92,38 +95,6 @@
         </el-form-item>
       </el-form>
     </div>
-
-    <!-- <el-button class="diag-btn" type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button> -->
-
-    <!-- <el-dialog 
-      :title="diagTitle.text" 
-      :visible.sync="dialogFormVisible">
-      <el-form :model="form" :rules="rules" ref="ruleForm" :label-position="labelPos">
-        <el-form-item label="上级目录" :label-width="formLabelWidth" prop="parentId">
-          <el-cascader
-            v-model="form.parentId"
-            :options="options"
-            :props="cascaderProps"
-            @change="handleChange"></el-cascader>
-        </el-form-item>
-        <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="分类编码" :label-width="formLabelWidth">
-          <el-input v-model="form.code" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" :label-width="formLabelWidth">
-          <el-input v-model="form.descM" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-          <el-input v-model.number="form.sort" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="doSaveAction">确 定</el-button>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -502,12 +473,30 @@ export default{
 	.comp-tree{
 		width: 100%;
 		max-width: 300px;
-		max-height: 80vh;
+		height: calc(100% - 50px);
     overflow: visible;
     position: absolute;
 
     &/deep/ .el-tree-node {
       padding: 2px 16px;
+      .el-tree-node {
+        padding-right: 0;
+      }
+    }
+
+    .el-tree {
+      height: calc(100% - 64px);
+      overflow: auto;
+    }
+
+    .el-tree::-webkit-scrollbar {
+      width: 3px;
+      height: 5px;
+      background-color: #fff;
+    }
+
+    .el-tree::-webkit-scrollbar-track{
+      background-color: #fff;
     }
   
 		// 顶部按钮
