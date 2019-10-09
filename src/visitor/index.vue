@@ -41,8 +41,15 @@ export default {
 	        this.getBreadcrumb()
 	    }
 	},
+	beforeRouteEnter(to, from, next){
+		console.log(to);
+		next(vm => {
+			vm.showBreadcrumb = !(to.path === '/index');
+			vm.pageClass = to.path === '/index' ? 'index-page' : ''
+		})
+	},
 	created(){
-	    this.getBreadcrumb()
+		this.getBreadcrumb()
 	},
 	methods:{
 	    getBreadcrumb() {//停留在首页时点击首页会报错
