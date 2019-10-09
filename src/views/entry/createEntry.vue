@@ -62,16 +62,19 @@
             <!-- 属性 -->
             <div class="mg-top-20">
                 <h4 class="block">属性</h4>
-                <div class="block-container" style="background: white;">
+                <div class="" style="background: white;">
                 	<!--分类树-->
-					<el-row style="background: #459DF6;">
+					<!--<el-row style="background: #459DF6;">
 						<treemenu @parentMethod="chooseClassifyItem" :list="categoryTreeData"></treemenu>
-					</el-row>
+					</el-row>-->
                     <!--根据属性动态创建form表单-->
 					<ul class="classifyForm">
 						<li v-for="(item,index) in classifyData">
-							<span class="name">{{item.attributeName}}</span>
-							<div>
+							<span v-if="!item.addBySelf" class="name">{{item.attributeName}}</span>
+							<span v-else class="name">
+								<el-input maxlength="10" style="width: 100px;" type="text" v-model="item.attributeName" clearable></el-input>
+							</span>
+							<div v-if="!item.addBySelf">
 								<!--文本-->
 								<span v-if="item.attributeType===1">
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
@@ -104,8 +107,27 @@
 								</span>
 								
 							</div>
+							<div v-else>
+								<span>
+									<el-input type="text" v-model="item.val" clearable></el-input>
+								</span>
+							</div>
 						</li>
 					</ul>
+					
+					<!--手动添加属性-->
+					<div v-show="classifyData.length" class="addClassifyFrom">
+						<span class="name">
+							<el-button @click="addClassifyFrom" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
+						</span>
+						
+					</div>
+					<!--选择属性模板-->
+					<div style="text-align: center;">
+						<el-button @click="showChooseClassify=true" type="text">选择属性模板<i class="el-icon-plus el-icon--right"></i></el-button>
+					</div>
+					
+					
                 </div>
             </div>
             <!-- 正文 -->
@@ -249,6 +271,24 @@
                 <el-button type="primary" @click="saveCategory">确 定</el-button>
             </span>
         </el-dialog>
+        <!--选择属性模板-->
+        <el-dialog
+		  title="选择属性模板"
+		  :visible.sync="showChooseClassify"
+		  width="50%"
+		  >
+		  <!--分类树-->
+			<el-row style="background: #459DF6;">
+				<treemenu @parentMethod="chooseClassifyItem" :list="categoryTreeData"></treemenu>
+			</el-row>
+		  <span slot="footer" class="dialog-footer">
+		    <el-button @click="showChooseClassify = false">取 消</el-button>
+		    <el-button type="primary" @click="chooseClassify">确 定</el-button>
+		  </span>
+		</el-dialog>
+        
+        
+        
     </div>
 </template>
 <script>
@@ -269,6 +309,7 @@
             return {
                 imageUrl: '',
             	//------------属性模板----------------
+            	showChooseClassify:false,
             	pickerOptionsList:[],
 		    	options:[
 		    		{value:'1',label:'没得数据1'},
@@ -327,6 +368,23 @@
             this.initCKEditor()
         },
         methods: {
+        	chooseClassify() {
+        		
+        		this.showChooseClassify = false
+        	},
+        	addClassifyFrom() {
+        		this.classifyData.push({
+        			attributeName: '',
+					attributeRangeBegin: 0,
+					attributeRangeEnd: 0,
+					attributeType: 1,
+					editSource: null,
+					editType: 1,
+					noValid: false,
+					val: '',
+					addBySelf:true
+        		})
+        	},
         	watchNumber(item) {
         		let val = parseFloat(item.val)
         		if(val!==''&&(val>item.attributeRangeEnd || val<item.attributeRangeBegin)){
@@ -957,6 +1015,24 @@
 			}
 		}
 	}
+	.addClassifyFrom{
+		display: inline-block;
+		width: 50%;
+		font-size: 14px;
+		color: black;
+		line-height: 30px;
+		margin-top: 20px;
+		.name{
+			margin-right: 15px;
+			display: inline-block;
+			width: 180px;
+			text-align: right;
+			vertical-align: middle;
+			max-height: 60px;
+			overflow: hidden;
+		}
+	}
+	
     /*----------------------upload---------------------------------------*/
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;

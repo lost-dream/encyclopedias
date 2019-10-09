@@ -70,8 +70,11 @@
                     <!--根据属性动态创建form表单-->
 					<ul class="classifyForm">
 						<li v-for="(item,index) in classifyData">
-							<span class="name">{{item.attributeName}}</span>
-							<div>
+							<span v-if="!item.addBySelf" class="name">{{item.attributeName}}</span>
+							<span v-else class="name">
+								<el-input maxlength="10" style="width: 100px;" type="text" v-model="item.attributeName" clearable></el-input>
+							</span>
+							<div v-if="!item.addBySelf">
 								<!--文本-->
 								<span v-if="item.attributeType===1">
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
@@ -92,6 +95,7 @@
 									<el-date-picker
 								      v-model="item.val"
 								      :type="datetimeObj[item.attributeType]"
+								      :default-value="item.val"
 								      placeholder="选择日期时间"
 								      align="right"
 								      value-format="timestamp"
@@ -103,8 +107,23 @@
 								</span>
 								
 							</div>
+							<div v-else>
+								<span>
+									<el-input type="text" v-model="item.val" clearable></el-input>
+								</span>
+							</div>
+							
+							
+							
 						</li>
 					</ul>
+					<!--手动添加属性-->
+					<div class="addClassifyFrom">
+						<span class="name">
+							<el-button @click="addClassifyFrom" v-show="classifyData.length" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
+						</span>
+						
+					</div>
                 </div>
             </div>
             <!-- 正文 -->
@@ -452,6 +471,28 @@
             // vm.setModel()
         },
         methods: {
+        	addClassifyFrom() {
+        		console.log(this.classifyData)
+        		this.classifyData.push({
+        			attributeName: '',
+					attributeRangeBegin: 0,
+					attributeRangeEnd: 0,
+					attributeType: 1,
+					categoryId: '',
+					createTime: '',
+					creator: '',
+					editSource: null,
+					editType: 1,
+					id: '',
+					noValid: false,
+					sort: 1,
+					status: 1,
+					updateTime: '',
+					updator: '',
+					val: '',
+					addBySelf:true
+        		})
+        	},
         	watchNumber(item) {
         		let val = parseFloat(item.val)
         		if(val!==''&&(val>item.attributeRangeEnd || val<item.attributeRangeBegin)){
@@ -949,6 +990,23 @@
     }
 </script>
 <style lang="scss" scoped>
+	.addClassifyFrom{
+		display: inline-block;
+		width: 50%;
+		font-size: 14px;
+		color: black;
+		line-height: 30px;
+		margin-top: 20px;
+		.name{
+			margin-right: 15px;
+			display: inline-block;
+			width: 180px;
+			text-align: right;
+			vertical-align: middle;
+			max-height: 60px;
+			overflow: hidden;
+		}
+	}
 	.border-red{
 		border: 1px solid #f56c6c;
 	}
