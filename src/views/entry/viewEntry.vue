@@ -29,7 +29,7 @@
 <!--                        </el-image>-->
 <!--                    </div>-->
                     <div class="ck-content ck-summary" style="width: 100%;padding: 20px">
-                        <div v-if="summaryEditor !== ''" v-html="summaryEditor"></div>
+                        <div v-if="summaryEditor !== ''" v-html="summaryEditor" class="main-content"></div>
                         <span v-else>当前词条暂无描述</span>
                     </div>
 
@@ -37,7 +37,7 @@
                         <el-collapse-item :title="showOtherSummaries?'收起':'展开其他来源摘要'"  style="background: #eeeeee">
                             <div style="display: flex;padding: 10px" v-for="item in otherSummaries">
                                 <img :src="item.img" class="avatar" style="width: 25%">
-                                <p style="margin-left: 10px">{{item.text}}
+                                <p class="main-content" style="margin-left: 10px">{{item.text}}
                                     [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
                                     <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
                                     <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
@@ -100,18 +100,18 @@
                 <div class="ck-content" style="width: 100%;padding: 20px">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
+                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
                             <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <div v-else><p>&nbsp;</p></div>
                             <template v-if="item.children.length" v-for="key in item.children">
                                 <div style="margin-left: 20px">
-                                    <h3 :id="key.id">{{key.contentTitle}}</h3>
+                                    <h3 :id="key.id" v-if="key.contentTitle!==null&&key.contentTitle!=='null'">{{key.contentTitle}}</h3>
                                     <div v-html="key.contentBody" v-if="key.contentBody !== '<p>null</p>'&&key.contentBody !== null&&key.contentBody !== 'null'"></div>
                                     <div v-else><p>&nbsp;</p></div>
                                 </div>
                                 <template v-if="key.children.length" v-for="v in key.children">
                                     <div style="margin-left: 20px">
-                                        <h4 :id="v.id">{{v.contentTitle}}</h4>
+                                        <h4 :id="v.id" v-if="v.contentTitle!==null&&v.contentTitle!=='null'">{{v.contentTitle}}</h4>
                                         <div v-html="v.contentBody" v-if="v.contentBody !== '<p>null</p>'&&v.contentBody !== null&&v.contentBody !== 'null'"></div>
                                         <div v-else="v.contentBody == '<p>null</p>'"><p>&nbsp;</p></div>
                                     </div>
@@ -211,7 +211,7 @@ import {audit} from '@/api/entry/index.js'
                     sourceType: 1
                 }],
                 activeNames: ['1'],
-                wikiContent: {entrySummary: {summary: ''}},
+                wikiContent: {entryContentVos:[],entrySummarys:[],entryReferrences:[],entrySynonyms:[],entryAttributes:[],categories:[],entryLabels:[]},
                 activeName: 'second',
                 contentList: [],
                 wikiInfo: {},
@@ -257,7 +257,9 @@ import {audit} from '@/api/entry/index.js'
                                 id: item.id,
                                 mark: index
                             }
-                            vm.contentList.push(obj1)
+                            if(obj1.value !== 'null'&&obj1.value !== null) {
+                                vm.contentList.push(obj1)
+                            }
                             item.children.map(k => {
                                 let obj2 = {
                                     level: 2,
@@ -265,7 +267,9 @@ import {audit} from '@/api/entry/index.js'
                                     id: k.id,
                                     mark: index
                                 }
-                                vm.contentList.push(obj2)
+                                if(obj2.value !== 'null'&&obj2.value !== null) {
+                                    vm.contentList.push(obj2)
+                                }
                                 k.children.map(v => {
                                     let obj3 = {
                                         level: 3,
@@ -273,7 +277,9 @@ import {audit} from '@/api/entry/index.js'
                                         id: v.id,
                                         mark: index
                                     }
-                                    vm.contentList.push(obj3)
+                                    if(obj3.value !== 'null'&&obj3.value !== null) {
+                                        vm.contentList.push(obj3)
+                                    }
                                 })
                             })
                         })
@@ -315,7 +321,9 @@ import {audit} from '@/api/entry/index.js'
                                         id: item.id,
                                         mark: index
                                     }
-                                    vm.contentList.push(obj1)
+                                    if(obj1.value !== 'null'&&obj1.value !== null) {
+                                        vm.contentList.push(obj1)
+                                    }
                                     item.children.map(k => {
                                         let obj2 = {
                                             level: 2,
@@ -323,7 +331,9 @@ import {audit} from '@/api/entry/index.js'
                                             id: k.id,
                                             mark: index
                                         }
-                                        vm.contentList.push(obj2)
+                                        if(obj2.value !== 'null'&&obj2.value !== null) {
+                                            vm.contentList.push(obj2)
+                                        }
                                         k.children.map(v => {
                                             let obj3 = {
                                                 level: 3,
@@ -331,7 +341,9 @@ import {audit} from '@/api/entry/index.js'
                                                 id: v.id,
                                                 mark: index
                                             }
-                                            vm.contentList.push(obj3)
+                                            if(obj3.value !== 'null'&&obj3.value !== null) {
+                                                vm.contentList.push(obj3)
+                                            }
                                         })
                                     })
                                 })

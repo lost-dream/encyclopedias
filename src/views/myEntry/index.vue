@@ -5,7 +5,7 @@
 				<el-image src="" style="width: 160px;height: 160px;padding:10px"></el-image>
 			</el-col>
 			<el-col :span="20" style="margin-top: 10px;">
-				<el-row style="padding: 20px 40px;font-size: 20px;font-weight: bold;color:rgb(51, 140, 230);border-bottom: 1px solid #eee">{{MyEntryList[0].CREATOR}}</el-row>
+				<el-row style="padding: 20px 40px;font-size: 20px;font-weight: bold;color:rgb(51, 140, 230);border-bottom: 1px solid #eee">Creator</el-row>
 				<el-row>
 					<el-col :span="4" style="border-right: 1px solid #eee;">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">提交版本</el-row>
