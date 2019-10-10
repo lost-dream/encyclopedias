@@ -40,24 +40,27 @@
             <!-- 摘要 -->
             <div class="mg-top-20">
                 <h4 class="block">摘要</h4>
-                <div style="display: flex;flex-direction: row;">
-                    <el-upload
-                            class="avatar-uploader"
-                            action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus
-                        avatar-uploader-icon"></i>
-                    </el-upload>
-                    <el-input style="margin-left: 20px"
-                            type="textarea"
-                            resize="none"
-                            :rows="8"
-                            placeholder="请输入内容"
-                            v-model="summary">
-                    </el-input>
-                </div>
+
+                <div id="summaryToolbar"></div>
+                <div id="summaryEditor"></div>
+<!--                <div style="display: flex;flex-direction: row;">-->
+<!--                    <el-upload-->
+<!--                            class="avatar-uploader"-->
+<!--                            action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"-->
+<!--                            :show-file-list="false"-->
+<!--                            :on-success="handleAvatarSuccess">-->
+<!--                        <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+<!--                        <i v-else class="el-icon-plus-->
+<!--                        avatar-uploader-icon"></i>-->
+<!--                    </el-upload>-->
+<!--                    <el-input style="margin-left: 20px"-->
+<!--                            type="textarea"-->
+<!--                            resize="none"-->
+<!--                            :rows="8"-->
+<!--                            placeholder="请输入内容"-->
+<!--                            v-model="summary">-->
+<!--                    </el-input>-->
+<!--                </div>-->
             </div>
             <!-- 属性 -->
             <div class="mg-top-20">
@@ -341,6 +344,7 @@
                 // 临时保存当前词条数据
                 tempData: '',
                 requestCount: 0,
+                summaryEditor: ''
             }
         },
         watch: {
@@ -373,8 +377,11 @@
                         })
                         data.entrySummarys.map(item => {
                             if(item.dataType ==1 ){
-                                vm.summary = JSON.parse(item.summary).text
-                                vm.imageUrl = JSON.parse(item.summary).img
+                                // vm.summaryEditor = JSON.parse(item.summary).text
+                                document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
+                                console.log(JSON.parse(item.summary).text,1111)
+                                vm.initSummaryEditor()
+                                // vm.imageUrl = JSON.parse(item.summary).img
                             }
                         })
                         data.entryContentVos.map(item =>{
@@ -466,11 +473,35 @@
                     //     }
                     })
             }
-
             // vm.initCKEditor()
             // vm.setModel()
         },
         methods: {
+            initSummaryEditor() {
+                let vm = this
+                // const ft = new FocusTracker()
+                CKEditor.create(document.querySelector('#summaryEditor'), {
+                    language: 'zh-cn',
+                    ckfinder: {
+                        uploadUrl: 'http://106.12.208.84:8080/wiki-backend/upload/uploadImg'
+                        //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
+                    }
+                }).then(editor => {
+                    const toolbarContainer = document.querySelector('#summaryToolbar');
+                    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+                    this.summaryEditor = editor //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
+                    // vm.updateEditorContent()
+                    // editor.editing.view.document.on("change:isFocused", (evt, name, value) => {
+                    //     if (value) {
+                    //         return false
+                    //     } else {
+                    //         vm.updateEditorContent()
+                    //     }
+                    // })
+                }).catch(error => {
+                    console.error(error);
+                });
+            },
         	addClassifyFrom() {
         		console.log(this.classifyData)
         		this.classifyData.push({
@@ -719,8 +750,6 @@
                         }
                     })
                 })
-                console.log('提交格式为')
-                console.log(arr_main)
                 vm.submitList = arr_main
                 let arr = []
                 arr_main.map(item => {
@@ -882,7 +911,7 @@
                     entryId: vm.entryId,  // 返回值
                     versionId:vm.versionId,
                     entryName: vm.entryName,
-                    summary: [{value:JSON.stringify({img: vm.imageUrl,text:vm.summary}),sourceType:7,sourceValue: null}],
+                    summary: [{value:JSON.stringify({img: vm.imageUrl,text:vm.summaryEditor.getData()}),sourceType:7,sourceValue: null}],
                     categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
                     attributes: attributesAry, // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
