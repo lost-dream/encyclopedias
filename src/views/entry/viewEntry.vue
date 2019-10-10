@@ -28,7 +28,7 @@
 <!--                            </div>-->
 <!--                        </el-image>-->
 <!--                    </div>-->
-                    <div class="ck-content" style="width: 100%;padding: 20px">
+                    <div class="ck-content ck-summary" style="width: 100%;padding: 20px">
                         <div v-if="item.summary" v-html="JSON.parse(item.summary).text"></div>
                         <span v-else>当前词条暂无描述</span>
                     </div>

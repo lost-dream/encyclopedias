@@ -41,26 +41,31 @@
             <div class="mg-top-20">
                 <h4 class="block">摘要</h4>
 
-                <div id="summaryToolbar"></div>
-                <div id="summaryEditor"></div>
-<!--                <div style="display: flex;flex-direction: row;">-->
-<!--                    <el-upload-->
-<!--                            class="avatar-uploader"-->
-<!--                            action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"-->
-<!--                            :show-file-list="false"-->
-<!--                            :on-success="handleAvatarSuccess">-->
-<!--                        <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-<!--                        <i v-else class="el-icon-plus-->
-<!--                        avatar-uploader-icon"></i>-->
-<!--                    </el-upload>-->
-<!--                    <el-input style="margin-left: 20px"-->
-<!--                            type="textarea"-->
-<!--                            resize="none"-->
-<!--                            :rows="8"-->
-<!--                            placeholder="请输入内容"-->
-<!--                            v-model="summary">-->
-<!--                    </el-input>-->
-<!--                </div>-->
+                <div style="display: flex;flex-direction: row;">
+                    <div style="display: flex;flex-direction: column">
+                        <el-upload
+                                class="avatar-uploader"
+                                action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess">
+                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus
+                        avatar-uploader-icon"></i>
+                        </el-upload>
+                        <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
+                    </div>
+                    <div style="display: flex;flex-direction: column;margin-left: 10px">
+                        <div id="summaryToolbar"></div>
+                        <div id="summaryEditor" class="ck-summary"></div>
+                    </div>
+                    <!--                    <el-input style="margin-left: 20px"-->
+                    <!--                            type="textarea"-->
+                    <!--                            resize="none"-->
+                    <!--                            :rows="8"-->
+                    <!--                            placeholder="请输入内容"-->
+                    <!--                            v-model="summary">-->
+                    <!--                    </el-input>-->
+                </div>
             </div>
             <!-- 属性 -->
             <div class="mg-top-20">
@@ -381,7 +386,7 @@
                                 document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
                                 console.log(JSON.parse(item.summary).text,1111)
                                 vm.initSummaryEditor()
-                                // vm.imageUrl = JSON.parse(item.summary).img
+                                vm.imageUrl = JSON.parse(item.summary).img
                             }
                         })
                         data.entryContentVos.map(item =>{
@@ -482,6 +487,71 @@
                 // const ft = new FocusTracker()
                 CKEditor.create(document.querySelector('#summaryEditor'), {
                     language: 'zh-cn',
+                    fontColor: {
+                        colors: [
+                            {
+                                color: 'hsl(0, 0%, 0%)',
+                                label: 'Black'
+                            },
+                            {
+                                color: 'hsl(0, 0%, 30%)',
+                                label: 'Dim grey'
+                            },
+                            {
+                                color: 'hsl(0, 0%, 60%)',
+                                label: 'Grey'
+                            },
+                            {
+                                color: 'hsl(0, 0%, 90%)',
+                                label: 'Light grey'
+                            },
+                            {
+                                color: 'hsl(0, 0%, 100%)',
+                                label: 'White',
+                                hasBorder: true
+                            },
+                            {
+                                color: 'hsl(0, 75%, 60%)',
+                                label: 'Red'
+                            },
+                            {
+                                color: 'hsl(30, 75%, 60%)',
+                                label: 'Orange'
+                            },
+                            {
+                                color: 'hsl(60, 75%, 60%)',
+                                label: 'Yellow'
+                            },
+                            {
+                                color: 'hsl(90, 75%, 60%)',
+                                label: 'Light green'
+                            },
+                            {
+                                color: 'hsl(120, 75%, 60%)',
+                                label: 'Green'
+                            },
+                            {
+                                color: 'hsl(150, 75%, 60%)',
+                                label: 'Aquamarine'
+                            },
+                            {
+                                color: 'hsl(180, 75%, 60%)',
+                                label: 'Turquoise'
+                            },
+                            {
+                                color: 'hsl(210, 75%, 60%)',
+                                label: 'Light blue'
+                            },
+                            {
+                                color: 'hsl(240, 75%, 60%)',
+                                label: 'Blue'
+                            },
+                            {
+                                color: 'hsl(270, 75%, 60%)',
+                                label: 'Purple'
+                            }
+                        ]
+                    },
                     ckfinder: {
                         uploadUrl: 'http://106.12.208.84:8080/wiki-backend/upload/uploadImg'
                         //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段

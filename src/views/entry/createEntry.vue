@@ -41,26 +41,31 @@
             <div class="mg-top-20">
                 <h4 class="block">摘要</h4>
 
-                <div id="summaryToolbar"></div>
-                <div id="summaryEditor"></div>
-<!--                <div style="display: flex;flex-direction: row;">-->
-<!--                    <el-upload-->
-<!--                            class="avatar-uploader"-->
-<!--                            action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"-->
-<!--                            :show-file-list="false"-->
-<!--                            :on-success="handleAvatarSuccess">-->
-<!--                        <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-<!--                        <i v-else class="el-icon-plus-->
-<!--                        avatar-uploader-icon"></i>-->
-<!--                    </el-upload>-->
-<!--                    <el-input style="margin-left: 20px"-->
-<!--                            type="textarea"-->
-<!--                            resize="none"-->
-<!--                            :rows="8"-->
-<!--                            placeholder="请输入内容"-->
-<!--                            v-model="summary">-->
-<!--                    </el-input>-->
-<!--                </div>-->
+                <div style="display: flex;flex-direction: row;">
+                    <div style="display: flex;flex-direction: column">
+                        <el-upload
+                                class="avatar-uploader"
+                                action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess">
+                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus
+                        avatar-uploader-icon"></i>
+                        </el-upload>
+                        <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
+                    </div>
+                    <div style="display: flex;flex-direction: column;margin-left: 10px">
+                        <div id="summaryToolbar"></div>
+                        <div id="summaryEditor" class="ck-summary"></div>
+                    </div>
+                    <!--                    <el-input style="margin-left: 20px"-->
+                    <!--                            type="textarea"-->
+                    <!--                            resize="none"-->
+                    <!--                            :rows="8"-->
+                    <!--                            placeholder="请输入内容"-->
+                    <!--                            v-model="summary">-->
+                    <!--                    </el-input>-->
+                </div>
             </div>
             <!-- 属性 -->
             <div class="mg-top-20">
