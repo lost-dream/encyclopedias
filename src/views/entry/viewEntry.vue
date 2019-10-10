@@ -35,18 +35,16 @@
 
                     <el-collapse accordion @change="showOtherSummaries = !showOtherSummaries" style="background: #eeeeee">
                         <el-collapse-item :title="showOtherSummaries?'收起':'展开其他来源摘要'"  style="background: #eeeeee">
-                            <div>
-                                <div style="display: flex" v-for="item in otherSummaries">
-                                    <img :src="item.img" class="avatar" style="width: 25%">
-                                    <p style="margin-left: 10px">{{item.text}}
-                                        [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
-                                        <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
-                                        <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
-                                        <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">词条来源：维基百科</span>
-                                        <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">词条来源：数据库抽取</span>
-                                        <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">词条来源：文件夹抽取</span>]
-                                    </p>
-                                </div>
+                            <div style="display: flex;padding: 10px" v-for="item in otherSummaries">
+                                <img :src="item.img" class="avatar" style="width: 25%">
+                                <p style="margin-left: 10px">{{item.text}}
+                                    [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
+                                    <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
+                                    <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
+                                    <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">词条来源：维基百科</span>
+                                    <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">词条来源：数据库抽取</span>
+                                    <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">词条来源：文件夹抽取</span>]
+                                </p>
                             </div>
                         </el-collapse-item>
                     </el-collapse>

@@ -41,22 +41,24 @@
             <div class="mg-top-20">
                 <h4 class="block">摘要</h4>
 
-                <div style="display: flex;flex-direction: row;">
-                    <div style="display: flex;flex-direction: column">
-                        <el-upload
-                                class="avatar-uploader"
-                                action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                            <i v-else class="el-icon-plus
+                <div style="display: flex;flex-direction: column;padding: 10px;background: #eeeeee;">
+                    <div style="display: flex;flex-direction: row">
+                        <div style="display: flex;flex-direction: column">
+                            <el-upload
+                                    class="avatar-uploader"
+                                    action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccess">
+                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <i v-else class="el-icon-plus
                         avatar-uploader-icon"></i>
-                        </el-upload>
-                        <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
-                    </div>
-                    <div style="display: flex;flex-direction: column;margin-left: 10px">
-                        <div id="summaryToolbar"></div>
-                        <div id="summaryEditor" class="ck-summary"></div>
+                            </el-upload>
+                            <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
+                        </div>
+                        <div style="display: flex;flex-direction: column;margin-left: 10px">
+                            <div id="summaryToolbar"></div>
+                            <div id="summaryEditor" class="ck-summary"></div>
+                        </div>
                     </div>
                     <!--                    <el-input style="margin-left: 20px"-->
                     <!--                            type="textarea"-->
@@ -69,18 +71,16 @@
 
                     <el-collapse accordion @change="showOtherSummaries = !showOtherSummaries" style="background: #eeeeee">
                         <el-collapse-item :title="showOtherSummaries?'收起':'展开其他来源摘要'"  style="background: #eeeeee">
-                            <div>
-                                <div style="display: flex" v-for="item in otherSummaries">
-                                    <img :src="item.img" class="avatar" style="width: 25%">
-                                    <p style="margin-left: 10px">{{item.text}}
-                                        [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
-                                        <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
-                                        <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
-                                        <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">词条来源：维基百科</span>
-                                        <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">词条来源：数据库抽取</span>
-                                        <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">词条来源：文件夹抽取</span>]
-                                    </p>
-                                </div>
+                            <div style="display: flex;padding: 10px" v-for="item in otherSummaries">
+                                <img :src="item.img" class="avatar" style="width: 25%">
+                                <p style="margin-left: 10px">{{item.text}}
+                                    [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
+                                    <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
+                                    <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
+                                    <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">词条来源：维基百科</span>
+                                    <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">词条来源：数据库抽取</span>
+                                    <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">词条来源：文件夹抽取</span>]
+                                </p>
                             </div>
                         </el-collapse-item>
                     </el-collapse>
