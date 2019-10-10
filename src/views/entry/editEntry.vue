@@ -65,6 +65,25 @@
                     <!--                            placeholder="请输入内容"-->
                     <!--                            v-model="summary">-->
                     <!--                    </el-input>-->
+
+
+                    <el-collapse accordion @change="showOtherSummaries = !showOtherSummaries" style="background: #eeeeee">
+                        <el-collapse-item :title="showOtherSummaries?'收起':'展开其他来源摘要'"  style="background: #eeeeee">
+                            <div>
+                                <div style="display: flex" v-for="item in otherSummaries">
+                                    <img :src="item.img" class="avatar" style="width: 25%">
+                                    <p style="margin-left: 10px">{{item.text}}
+                                        [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
+                                        <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
+                                        <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
+                                        <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">词条来源：维基百科</span>
+                                        <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">词条来源：数据库抽取</span>
+                                        <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">词条来源：文件夹抽取</span>]
+                                    </p>
+                                </div>
+                            </div>
+                        </el-collapse-item>
+                    </el-collapse>
                 </div>
             </div>
             <!-- 属性 -->
@@ -293,6 +312,12 @@
         name: 'editor',
         data() {
             return {
+                showOtherSummaries: false,
+                otherSummaries: [{
+                    img: 'http://106.12.208.84:8888/group1/M00/00/00/rBAABF2elj2AUOYtAANXnTl20iA914.jpg',
+                    text: '123',
+                    sourceType: 1
+                }],
                 imageUrl: '',
             	//------------属性模板----------------
             	pickerOptionsList:[],
@@ -387,6 +412,15 @@
                                 console.log(JSON.parse(item.summary).text,1111)
                                 vm.initSummaryEditor()
                                 vm.imageUrl = JSON.parse(item.summary).img
+                            } else {
+
+                                let obj = {
+                                    img : JSON.parse(item.summary).img,
+                                    text : JSON.parse(item.summary).text,
+                                    sourceType : item.sourceType,
+                                    sourceValue : item.sourceValue
+                                }
+                                vm.otherSummaries.push(obj)
                             }
                         })
                         data.entryContentVos.map(item =>{
