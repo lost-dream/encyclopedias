@@ -19,8 +19,8 @@
                 </h1>
             </div>
             <!-- summary -->
-            <div class="mg-top-20" id="summary" v-if="wikiContent.entrySummarys.length">
-                <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex" v-if="item.dataType == 1">
+            <div class="mg-top-20" id="summary" >
+                <div class="block-container" style="display: flex;flex-direction: column">
 <!--                    <div>-->
 <!--                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">-->
 <!--                            <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">-->
@@ -28,10 +28,26 @@
 <!--                            </div>-->
 <!--                        </el-image>-->
 <!--                    </div>-->
-                    <div class="ck-content" style="width: 100%;padding: 20px">
-                        <div v-if="item.summary" v-html="JSON.parse(item.summary).text"></div>
+                    <div class="ck-content ck-summary" style="width: 100%;padding: 20px">
+                        <div v-if="summaryEditor !== ''" v-html="summaryEditor"></div>
                         <span v-else>当前词条暂无描述</span>
                     </div>
+
+                    <el-collapse accordion @change="showOtherSummaries = !showOtherSummaries" style="background: #eeeeee">
+                        <el-collapse-item :title="showOtherSummaries?'收起':'展开其他来源摘要'"  style="background: #eeeeee">
+                            <div style="display: flex;padding: 10px" v-for="item in otherSummaries">
+                                <img :src="item.img" class="avatar" style="width: 25%">
+                                <p style="margin-left: 10px">{{item.text}}
+                                    [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">词条来源：百度百科</span>
+                                    <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">词条来源：搜狗百科</span>
+                                    <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">词条来源：互动百科</span>
+                                    <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">词条来源：维基百科</span>
+                                    <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">词条来源：数据库抽取</span>
+                                    <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">词条来源：文件夹抽取</span>]
+                                </p>
+                            </div>
+                        </el-collapse-item>
+                    </el-collapse>
                 </div>
             </div>
             <!-- 词条属性 -->
@@ -187,6 +203,13 @@ import {audit} from '@/api/entry/index.js'
         name: 'editor',
         data() {
             return {
+                summaryEditor: '',
+                otherSummaries: [{
+                    img: 'http://106.12.208.84:8888/group1/M00/00/00/rBAABF2elj2AUOYtAANXnTl20iA914.jpg',
+                    text: '123',
+                    sourceType: 1
+                }],
+                activeNames: ['1'],
                 wikiContent: {entrySummary: {summary: ''}},
                 activeName: 'second',
                 contentList: [],
@@ -196,6 +219,7 @@ import {audit} from '@/api/entry/index.js'
                 modalShow: false,  // 审核diag对话框
                 code: '',  // 提交状态
                 doReload: false,
+                showOtherSummaries: false,
             }
         },
         mounted() {
@@ -210,6 +234,20 @@ import {audit} from '@/api/entry/index.js'
                         console.log(res.data)
                         vm.wikiContent = res.data
                         vm.contentList = []
+                        res.data.entrySummarys.map(item => {
+                            if(item.dataType ==1 ){
+                                vm.summaryEditor = JSON.parse(item.summary).text
+                                vm.imageUrl = JSON.parse(item.summary).img
+                            } else {
+                                let obj = {
+                                    img : JSON.parse(item.summary).img,
+                                    text : JSON.parse(item.summary).text,
+                                    sourceType : item.sourceType,
+                                    sourceValue : item.sourceValue
+                                }
+                                vm.otherSummaries.push(obj)
+                            }
+                        })
                         res.data.entryContentVos.map((item, index) => {
                             let obj1 = {
                                 level: 1,

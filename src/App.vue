@@ -128,4 +128,15 @@ ul,li,p{
   background: #ffffff;
 }
 
+.ck-summary .image-style-align-center:not(.image_resized), .ck-summary .image-style-align-left:not(.image_resized), .ck-summary .image-style-align-right:not(.image_resized), .ck-summary .image-style-side:not(.image_resized) {
+    max-width: 35% !important;
+}
+
+.el-collapse-item__header{
+    background: #eeeeee !important;
+    display: block !important;
+    text-align: right;
+    color: rgb(51, 140, 230) !important;
+}
+
 </style>
