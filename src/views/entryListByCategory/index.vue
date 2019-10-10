@@ -29,7 +29,7 @@ export default {
 	    	categoryList:[],
 	    	pagination: {
 		      page: 1,
-		      limit: 10,
+		      limit: 12,
 		      count: 0
 		    },
 		    categoryId:'',
@@ -89,7 +89,7 @@ export default {
 			entryList({
 				"pageNumber": this.pagination.page,
 				"pageSize": this.pagination.limit,
-				"categoryId": this.categoryId,
+				"categoryIds": this.categoryId,
 				"keyword": ""
 			}).then((res)=>{
 				this.entryListData = res.data.records
