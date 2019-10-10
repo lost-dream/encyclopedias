@@ -96,7 +96,7 @@
                 </ul>
             </div>
             <!-- 词条详情 -->
-            <div style="display: flex"  class="mg-top-20">
+            <div style="display: flex"  class="mg-top-20" id="content">
                 <div class="ck-content" style="width: 100%;padding: 20px">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
@@ -277,7 +277,7 @@ import {audit} from '@/api/entry/index.js'
                                 })
                             })
                         })
-                        console.log(vm.contentList)
+
                     })
                 this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
                     .then(res => {
@@ -297,7 +297,6 @@ import {audit} from '@/api/entry/index.js'
                                 res.data.entrySummarys.map(item => {
                                     if(item.dataType ==1 ){
                                         vm.summaryEditor = JSON.parse(item.summary).text
-                                        console.log(vm.summaryEditor,1111111)
                                         vm.imageUrl = JSON.parse(item.summary).img
                                     } else {
                                         let obj = {
@@ -336,10 +335,26 @@ import {audit} from '@/api/entry/index.js'
                                         })
                                     })
                                 })
-                                console.log(vm.contentList)
                             })
                     })
             }
+        },
+        updated () {
+            this.$nextTick(()=>{
+                let target = document.getElementById('content').getElementsByTagName('img')
+                let target_parent = document.getElementById('content').getElementsByClassName('img_r')
+                setTimeout(()=>{
+                    for (let i = 0;i<target.length;i++){
+                        if(target[i].hasAttribute('data-original')) {
+                            target[i].src = target[i].getAttribute('data-original')
+                        }
+                    }
+                    for(let j = 0;j<target_parent.length;j++){
+                        target_parent[j].setAttribute('style', 'float: right;text-align: center;display:flex;flex-direction:column')
+
+                    }
+                },1000)
+            })
         },
         beforeRouteEnter(to, from, next){
             console.log(from)
@@ -495,4 +510,10 @@ import {audit} from '@/api/entry/index.js'
             padding-left: 15px;
         }
     }
+    /*.img_r /deep/ {*/
+    /*    float: right;*/
+    /*    text-align: center;*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*}*/
 </style>
