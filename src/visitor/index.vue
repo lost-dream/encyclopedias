@@ -9,7 +9,7 @@
 						<el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
 				</el-breadcrumb>
 				<!-- Body -->
-				<router-view style="margin: 0px auto;width: 1280px;" :class="pageClass"></router-view>
+				<router-view :class="pageClass"></router-view>
 			</el-main>
 		</el-container>
 </template>
@@ -36,7 +36,7 @@ export default {
 	    	}
 	    	else{
 					this.showBreadcrumb = true
-					this.pageClass = ''
+					this.pageClass = 'other-page'
 	    	}
 	        this.getBreadcrumb()
 	    }
@@ -45,7 +45,7 @@ export default {
 		console.log(to);
 		next(vm => {
 			vm.showBreadcrumb = !(to.path === '/index');
-			vm.pageClass = to.path === '/index' ? 'index-page' : ''
+			vm.pageClass = to.path === '/index' ? 'index-page' : 'other-page'
 		})
 	},
 	created(){
@@ -89,6 +89,11 @@ export default {
 .breadcrumb-container {
 	width: 1280px;
 	margin: 0 auto;
+}
+
+.other-page {
+	margin: 0px auto;
+	width: 1280px;
 }
 
 </style>
