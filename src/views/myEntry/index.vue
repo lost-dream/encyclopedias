@@ -9,15 +9,15 @@
 				<el-row>
 					<el-col :span="4" style="border-right: 1px solid #eee;">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">提交版本</el-row>
-						<el-row style="text-align: center;padding: 15px 0;color:#444">{{MyEntryList.length}}</el-row>
+						<el-row style="text-align: center;padding: 15px 0;color:#444">13</el-row>
 					</el-col>
 					<el-col :span="4" style="border-right: 1px solid #eee;">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">通过版本</el-row>
-						<el-row style="text-align: center;padding: 15px 0;color:#444">{{MyEntryList.length}}</el-row>
+						<el-row style="text-align: center;padding: 15px 0;color:#444">6</el-row>
 					</el-col>
 					<el-col :span="4">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">通过率</el-row>
-						<el-row style="text-align: center;padding: 15px 0;color:#444">100%</el-row>
+						<el-row style="text-align: center;padding: 15px 0;color:#444">46.15%</el-row>
 					</el-col>
 				</el-row>
 			</el-col>

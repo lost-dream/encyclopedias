@@ -159,19 +159,20 @@
                         <span >快速导航</span>
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
-                    <div style="max-height: 500px;overflow-y: scroll"></div>
-                    <a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
-                    <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
-                    <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>
-                    <div v-for="item in wikiContent.entryContentVos" class="pd-left-10">
-                        <a class="p1 catalogue" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
-                        <div v-for="k in item.children">
-                            <a class="p2 catalogue" @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
-                            <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
+                    <div style="max-height: 400px;overflow-y: scroll">
+                        <a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
+                        <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
+                        <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>
+                        <div v-for="item in wikiContent.entryContentVos" class="pd-left-10">
+                            <a class="p1 catalogue" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
+                            <div v-for="k in item.children">
+                                <a class="p2 catalogue" @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
+                                <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
+                            </div>
                         </div>
+                        <a @click="slideToAnchor('reference')" class="catalogue pd-left-10">引用</a>
+                        <a @click="slideToAnchor('tag')" class="catalogue pd-left-10">标签</a>
                     </div>
-                    <a @click="slideToAnchor('reference')" class="catalogue pd-left-10">引用</a>
-                    <a @click="slideToAnchor('tag')" class="catalogue pd-left-10">标签</a>
                 </el-card>
             </div>
             <!--<el-tabs v-model="activeName">-->
@@ -237,6 +238,7 @@ import {audit} from '@/api/entry/index.js'
                         res.data.entrySummarys.map(item => {
                             if(item.dataType ==1 ){
                                 vm.summaryEditor = JSON.parse(item.summary).text
+                                console.log(vm.summaryEditor,1111111)
                                 vm.imageUrl = JSON.parse(item.summary).img
                             } else {
                                 let obj = {
@@ -292,6 +294,21 @@ import {audit} from '@/api/entry/index.js'
                                 console.log(res.data)
                                 vm.wikiContent = res.data
                                 vm.contentList = []
+                                res.data.entrySummarys.map(item => {
+                                    if(item.dataType ==1 ){
+                                        vm.summaryEditor = JSON.parse(item.summary).text
+                                        console.log(vm.summaryEditor,1111111)
+                                        vm.imageUrl = JSON.parse(item.summary).img
+                                    } else {
+                                        let obj = {
+                                            img : JSON.parse(item.summary).img,
+                                            text : JSON.parse(item.summary).text,
+                                            sourceType : item.sourceType,
+                                            sourceValue : item.sourceValue
+                                        }
+                                        vm.otherSummaries.push(obj)
+                                    }
+                                })
                                 res.data.entryContentVos.map((item, index) => {
                                     let obj1 = {
                                         level: 1,
