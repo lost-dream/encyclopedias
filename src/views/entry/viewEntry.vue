@@ -349,10 +349,10 @@ import {audit} from '@/api/entry/index.js'
                             target[i].src = target[i].getAttribute('data-original')
                         }
                     }
-                    for(let j = 0;j<target_parent.length;j++){
-                        target_parent[j].setAttribute('style', 'float: right;text-align: center;display:flex;flex-direction:column')
+                    // for(let j = 0;j<target_parent.length;j++){
+                    //     target_parent[j].setAttribute('style', 'float: right;text-align: center;display:flex;flex-direction:column')
 
-                    }
+                    // }
                 },1000)
             })
         },
@@ -510,10 +510,10 @@ import {audit} from '@/api/entry/index.js'
             padding-left: 15px;
         }
     }
-    /*.img_r /deep/ {*/
-    /*    float: right;*/
-    /*    text-align: center;*/
-    /*    display: flex;*/
-    /*    flex-direction: column;*/
-    /*}*/
+    #content /deep/ .img_r  {
+       float: right;
+       text-align: center;
+       display: flex;
+       flex-direction: column;
+    }
 </style>
