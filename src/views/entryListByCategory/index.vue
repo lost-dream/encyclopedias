@@ -5,8 +5,8 @@
 		</ul>
 		<ul class="entryList">
 			<li @click="seeEntry(item)" v-for="item in entryListData">
-				<!--<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
-				<img src="/static/image/tank.png"/>
+				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.ENTRY_NAME}}</p>
 					<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -138,6 +138,10 @@ export default {
 		color: #666666;
 		&:nth-child(4n+4){
 			margin-right: 0;
+		}
+		&:hover{
+			cursor: pointer;
+			opacity: 0.8;
 		}
 		img{
 			width: 100%;

@@ -70,20 +70,20 @@
 				<span>精选分类</span>
 			</div>
 			<div class="category-container">
-				<el-card class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
+				<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
 					<div :style="'background:#'+categoryBgColor[index % 5]" class="categoryTreeList">
 						<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>
 						<ul>
-							<li @click="showThirdCategory(index1,index)" class="secondCategory" v-for="(item1,index1) in item.children">
+							<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
 								{{item1.name}}
-								<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
+								<!--<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
 									<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
-								</ul>
+								</ul>-->
 							</li>
 						</ul>
 
 					</div>
-				</el-card>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -159,7 +159,7 @@ export default {
 						}
 					})
 				})
-				this.categoryTreeList = res.data.children
+				this.categoryTreeList = res.data.children.slice(0,5)
             })
             .catch(res=>{
             	console.log(res)
@@ -278,19 +278,33 @@ export default {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		width: 50%;
+		width: 100%;
 		display: inline-block;
 		min-height: 160px;
+		width: 220px;
 		li{
 			margin: 0;
 			padding: 0;
+			display: inline-block;
+			width: calc(50% - 1px);
 			line-height: 30px;
 			text-align: center;
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+			&:nth-child(2n+1){
+				border-right: 1px solid white;
+			}
+			&:hover{
+				color: black;
+				cursor: pointer;
+			}
 		}
+		
 	}
 	.secondCategory{
 		position: relative;
-		border-right: 1px solid white;
+		/*border-right: 1px solid white;*/
 		ul{
 			position: absolute;
 			right: -100%;
@@ -307,6 +321,10 @@ export default {
 }
 
 .entryList{
+	&:hover{
+		cursor: pointer;
+		opacity: 0.8;
+	}
 	position: relative;
 	width: 800px;
 	height: 400px;

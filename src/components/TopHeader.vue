@@ -2,8 +2,11 @@
   <el-row>
     <el-col :span="24" >
       <div class="head-wrap">
-      	<img @click="gotoIndex" src="../../public/static/image/logo.png" />
-      	<span @click="gotoIndex" class="title" >信息百科</span>
+      	<span>
+      		<img @click="gotoIndex" src="../../public/static/image/logo.png" />
+      		<span @click="gotoIndex" class="title" >信息百科</span>
+      	</span>
+      	
       	<el-input
       		style='width: 500px;'
 			    placeholder="请输入内容"
@@ -83,6 +86,10 @@
 	color: #338ce6;
 	text-align: center;
 	margin: 15px 0;
+	>span:hover{
+		cursor: pointer;
+		opacity: 0.8;
+	}
 	img{
 		vertical-align: middle;
 		margin-right: 5px;

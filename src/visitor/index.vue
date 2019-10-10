@@ -9,7 +9,7 @@
 						<el-breadcrumb-item v-for="item in levelList" :to="item.path" v-bind:key="item.path">{{item.meta.title}}</el-breadcrumb-item>
 				</el-breadcrumb>
 				<!-- Body -->
-				<router-view :class="pageClass"></router-view>
+				<router-view style="margin: 0px auto;width: 1280px;" :class="pageClass"></router-view>
 			</el-main>
 		</el-container>
 </template>
