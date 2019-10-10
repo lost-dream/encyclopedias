@@ -89,11 +89,11 @@
             <!-- 属性 -->
             <div class="mg-top-20">
                 <h4 class="block">属性</h4>
-                <div class="block-container" style="background: white;">
+                <div class="" style="background: white;">
                 	<!--分类树-->
-					<el-row style="background: #459DF6;">
+					<!--<el-row style="background: #459DF6;">
 						<treemenu @parentMethod="chooseClassifyItem" :list="categoryTreeData"></treemenu>
-					</el-row>
+					</el-row>-->
                     <!--根据属性动态创建form表单-->
 					<ul class="classifyForm">
 						<li v-for="(item,index) in classifyData">
@@ -145,11 +145,15 @@
 						</li>
 					</ul>
 					<!--手动添加属性-->
-					<div class="addClassifyFrom">
+					<div v-show="classifyData.length" class="addClassifyFrom">
 						<span class="name">
-							<el-button @click="addClassifyFrom" v-show="classifyData.length" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
+							<el-button @click="addClassifyFrom" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
 						</span>
 						
+					</div>
+					<!--选择属性模板-->
+					<div style="text-align: center;">
+						<el-button @click="showChooseClassify=true" type="text">选择属性模板<i class="el-icon-plus el-icon--right"></i></el-button>
 					</div>
                 </div>
             </div>
@@ -294,6 +298,78 @@
                 <el-button type="primary" @click="saveCategory">确 定</el-button>
             </span>
         </el-dialog>
+        <!--选择属性模板-->
+        <el-dialog
+		  title="选择属性模板"
+		  :visible.sync="showChooseClassify"
+		  width="900px"
+		  >
+		  <el-tree 
+                class="template-left template-leftDialog"
+                :data="categoryTreeData" 
+                :props="{label: 'name'}"
+                @node-click="chooseClassifyItem">
+            </el-tree>
+            <div id="classifyFormDialog" class="template-right">
+                <h4 class="category-title">{{selectedClassify}}
+                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
+                </h4>
+                <ul v-if="classifyTemplateData.length" class="content-menu classifyForm">
+                    <!--<li v-for="item in classifyTemplateData" v-bind:key="item.id">{{item.attributeName}}</li>-->
+                    <li v-for="(item,index) in classifyTemplateData">
+							<span v-if="!item.addBySelf" class="name">{{item.attributeName}}</span>
+							<span v-else class="name">
+								<el-input disabled="disabled" maxlength="10" style="width: 100px;" type="text" v-model="item.attributeName" clearable></el-input>
+							</span>
+							<div v-if="!item.addBySelf">
+								<!--文本-->
+								<span v-if="item.attributeType===1">
+									<el-input disabled="disabled" type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+								</span>
+								<!--数字-->
+								<span style="position: relative;" v-if="item.attributeType===2">
+									<input disabled="disabled" type="number" class="el-input__inner" :class="item.noValid?'border-red':''" @focus="item.noValid=false" @blur="watchNumber(item)" style="width: 220px;" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" :placeholder="'属性值在'+item.attributeRangeBegin+'～'+item.attributeRangeEnd+'之间'" v-model="item.val"></input>
+									<!--<span style="top: 200%;" class="el-form-item__error" v-show="item.noValid">属性值在{{item.attributeRangeBegin}}～{{item.attributeRangeEnd}}之间</span>-->
+								</span>
+								<!--枚举-->
+								<span v-if="item.attributeType===3">
+									<el-select disabled="disabled" v-model="item.val" placeholder="请选择">
+									    <el-option v-for="item1 in options" :key="item1.value" :label="item1.label" :value="item1.value"></el-option>
+									  </el-select>
+								</span>
+								<!--时间-->
+								<span v-if="item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7">
+									<el-date-picker
+										 disabled="disabled"
+								      v-model="item.val"
+								      :type="datetimeObj[item.attributeType]"
+								      :default-value="item.val"
+								      placeholder="选择日期时间"
+								      align="right"
+								      value-format="timestamp"
+								      :data-begin="item.attributeRangeBegin"
+								      :data-end="item.attributeRangeEnd"
+								      :picker-options="pickerOptionsTemplateList[index]"
+								      >
+								    </el-date-picker>
+								</span>
+							</div>
+							<div v-else>
+								<span>
+									<el-input type="text" v-model="item.val" clearable></el-input>
+								</span>
+							</div>
+						</li>
+                </ul>
+                <p v-else class="empty-list">当前暂无属性模板数据</p>
+            </div>
+		  <span slot="footer" class="dialog-footer">
+		    <el-button @click="showChooseClassify = false">取 消</el-button>
+		    <!--<el-button type="primary" @click="chooseClassify">确 定</el-button>-->
+		  </span>
+		</el-dialog>
+        
+        
     </div>
 
 </template>
@@ -320,7 +396,10 @@
                 }],
                 imageUrl: '',
             	//------------属性模板----------------
+            	selectedClassify:'',
+            	showChooseClassify:false,
             	pickerOptionsList:[],
+            	pickerOptionsTemplateList:[],
 		    	options:[
 		    		{value:'1',label:'没得数据1'},
 		    		{value:'2',label:'没得数据2'},
@@ -334,6 +413,7 @@
 		    	},
 		    	classifyData:[],
 		    	categoryTreeData:[],
+		    	classifyTemplateData:[],
 		    	//------------属性模板----------------
                 entryName: '',
                 isInit: false,
@@ -541,24 +621,30 @@
                     console.error(error);
                 });
             },
+        	
+        	categoryTree() {
+				categoryTree({}).then(res =>{
+                    this.categoryTreeData = res.data.children
+	            })
+	            .catch(res=>{
+	            	console.log(res)
+	            })
+			},
+            handleAvatarSuccess(res, file) {
+        	    this.imageUrl = res.url
+            },
+        	chooseClassify() {
+        		this.showChooseClassify = false
+        	},
         	addClassifyFrom() {
-        		console.log(this.classifyData)
         		this.classifyData.push({
         			attributeName: '',
 					attributeRangeBegin: 0,
 					attributeRangeEnd: 0,
 					attributeType: 1,
-					categoryId: '',
-					createTime: '',
-					creator: '',
 					editSource: null,
 					editType: 1,
-					id: '',
 					noValid: false,
-					sort: 1,
-					status: 1,
-					updateTime: '',
-					updator: '',
 					val: '',
 					addBySelf:true
         		})
@@ -572,40 +658,69 @@
         			this.$set(item,'noValid',false)
         		}
         	},
-        	categoryTree() {
-				categoryTree({}).then(res =>{
-                    this.categoryTreeData = res.data.children
-	            })
-	            .catch(res=>{
-	            	console.log(res)
-	            })
+        	chooseClassifyItem(item) {
+        		this.selectedClassify = item.name
+				this.getAllAttributesTemplateByCategoryId(item.id)
 			},
-            handleAvatarSuccess(res, file) {
-        	    this.imageUrl = res.url
-            },
-        	chooseClassifyItem(item,parentItem) {
-				this.getAllAttributesByCategoryId(item.id)
+			setClassifyTemplate() {
+				this.$confirm('生成模板将删除原有属性模板, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '生成模板成功!'
+                    });
+                    this.showChooseClassify = false
+                    this.classifyData = JSON.parse(JSON.stringify(this.classifyTemplateData))
+                    console.log(this.classifyData)
+                    this.pickerOptionsList = this.pickerOptionsTemplateList
+                }).catch(() => {
+                });
+			},
+			getAllAttributesTemplateByCategoryId(id) {
+				this.classifyTemplateData = []
+        		this.pickerOptionsTemplateList = []
+        		getAllAttributesByCategoryId({categoryId:id}).then((res)=>{
+        			res.data.map((item,index)=>{
+						item.val = ''
+						item.noValid = false
+						if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+							this.pickerOptionsList.push({
+								disabledDate(time){
+									return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+								}
+							})
+						}
+						else{
+							this.pickerOptionsTemplateList.push('')
+						}	
+					})
+        		
+                	this.classifyTemplateData = res.data
+        		})
 			},
         	getAllAttributesByCategoryId(id) {
         		this.classifyData = []
         		this.pickerOptionsList = []
         		getAllAttributesByCategoryId({categoryId:id}).then((res)=>{
         			res.data.map((item,index)=>{
-					item.val = ''
-					item.noValid = false
-					if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
-						this.pickerOptionsList.push({
-							disabledDate(time){
-								return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
-							}
-						})
-					}
-					else{
-						this.pickerOptionsList.push('')
-					}	
-				})
+						item.val = ''
+						item.noValid = false
+						if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+							this.pickerOptionsList.push({
+								disabledDate(time){
+									return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+								}
+							})
+						}
+						else{
+							this.pickerOptionsList.push('')
+						}	
+					})
         		
-                this.classifyData = res.data
+                	this.classifyData = res.data
         		})
         	},
         	
@@ -1172,6 +1287,11 @@
         width: 130px;
         border-right: 1px solid #f2f2f2;
         height: 100%;
+        overflow-y: scroll;
+    }
+    .template-leftDialog{
+    	    height: calc(100% - 85px);
+    	    overflow-y: scroll;
     }
     .template-right {
         display: inline-block;
@@ -1225,7 +1345,39 @@
         border-color:#ccc;
     }
 
-    /*属性form样式*/
+     /*属性form样式*/
+   #classifyFormDialog{
+   	width: 700px;
+   		.category-title .formatting {
+	        height: 18px;
+	        width: 18px;
+	       position: relative;
+	       vertical-align: middle;
+	        border: 1px solid #fff;
+	        padding: 2px;
+	    }
+		li{
+			display: inline-block;
+			width: 50%;
+			font-size: 14px;
+			color: black;
+			line-height: 30px;
+			margin-top: 20px;
+			.name{
+				margin-right: 15px;
+				display: inline-block;
+				width: 100px;
+				text-align: right;
+				vertical-align: middle;
+				max-height: 60px;
+				overflow: hidden;
+			}
+			div{
+				display: inline-block;
+				
+			}
+		}
+   }
     .classifyForm{
 		font-size: 0;
 		li{
@@ -1248,6 +1400,23 @@
 				display: inline-block;
 				
 			}
+		}
+	}
+	.addClassifyFrom{
+		display: inline-block;
+		width: 50%;
+		font-size: 14px;
+		color: black;
+		line-height: 30px;
+		margin-top: 20px;
+		.name{
+			margin-right: 15px;
+			display: inline-block;
+			width: 180px;
+			text-align: right;
+			vertical-align: middle;
+			max-height: 60px;
+			overflow: hidden;
 		}
 	}
     /*----------------------upload---------------------------------------*/

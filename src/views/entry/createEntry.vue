@@ -344,20 +344,9 @@
                 </ul>
                 <p v-else class="empty-list">当前暂无属性模板数据</p>
             </div>
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  <!--分类树-->
-			<!--<el-row style="background: #459DF6;">
-				<treemenu @parentMethod="chooseClassifyItem" :list="categoryTreeData"></treemenu>
-			</el-row>-->
 		  <span slot="footer" class="dialog-footer">
 		    <el-button @click="showChooseClassify = false">取 消</el-button>
-		    <el-button type="primary" @click="chooseClassify">确 定</el-button>
+		    <!--<el-button type="primary" @click="chooseClassify">确 定</el-button>-->
 		  </span>
 		</el-dialog>
         
@@ -448,7 +437,6 @@
         },
         methods: {
         	chooseClassify() {
-        		
         		this.showChooseClassify = false
         	},
         	addClassifyFrom() {
@@ -488,7 +476,8 @@
                         message: '生成模板成功!'
                     });
                     this.showChooseClassify = false
-                    this.classifyData = this.classifyTemplateData
+                    this.classifyData = JSON.parse(JSON.stringify(this.classifyTemplateData))
+                    console.log(this.classifyData)
                     this.pickerOptionsList = this.pickerOptionsTemplateList
                 }).catch(() => {
                 });
