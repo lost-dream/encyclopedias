@@ -21,15 +21,15 @@
             <!-- summary -->
             <div class="mg-top-20" id="summary" v-if="wikiContent.entrySummarys.length">
                 <div class="block-container" v-for="item in wikiContent.entrySummarys" style="display: flex" v-if="item.dataType == 1">
-                    <div>
-                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">
-                            <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">
-                                <i class="el-icon-picture-outline" style="margin-top: 42px"></i>
-                            </div>
-                        </el-image>
-                    </div>
-                    <div  style="padding-left: 20px">
-                        <span v-if="item.summary">{{JSON.parse(item.summary).text}}</span>
+<!--                    <div>-->
+<!--                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">-->
+<!--                            <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">-->
+<!--                                <i class="el-icon-picture-outline" style="margin-top: 42px"></i>-->
+<!--                            </div>-->
+<!--                        </el-image>-->
+<!--                    </div>-->
+                    <div class="ck-content" style="width: 100%;padding: 20px">
+                        <div v-if="item.summary" v-html="JSON.parse(item.summary).text"></div>
                         <span v-else>当前词条暂无描述</span>
                     </div>
                 </div>
