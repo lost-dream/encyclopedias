@@ -70,8 +70,8 @@
 				<span>精选分类</span>
 			</div>
 			<div class="category-container">
-				<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
-					<div :style="'background:#'+categoryBgColor[index % 5]" class="categoryTreeList">
+				<div :style="'background:#'+categoryBgColor[index % 5]" class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
+					<div class="categoryTreeList">
 						<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>
 						<ul>
 							<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
@@ -159,7 +159,7 @@ export default {
 						}
 					})
 				})
-				this.categoryTreeList = res.data.children.slice(0,5)
+				this.categoryTreeList = res.data.children
             })
             .catch(res=>{
             	console.log(res)
@@ -247,18 +247,45 @@ export default {
 	margin-bottom: 30px
 }
 .category-container {
-	display: flex;
+	/*display: flex;
 	flex-wrap: nowrap;
-	flex-direction: row;
+	flex-direction: row;*/
 	margin-bottom: 50px;
-	overflow-x: auto;
-	// justify-content: center;
+	/*overflow-x: auto;*/
+	/*// justify-content: center;*/
 }
 .category-item {
-	min-width: 200px;
+	min-width: 220px;
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: 20px;
+	height: 240px;
+	ul{
+		overflow-y: scroll;
+		height: 200px;
+	}
+	
+}
+.category-item ul::-webkit-scrollbar {
+ width: 1px;
+}
+ .category-item ul::-webkit-scrollbar-track {
+ background-color:white;
+ -webkit-border-radius: 2em;
+ -moz-border-radius: 2em;
+ border-radius:2em;
+}
+ .category-item ul::-webkit-scrollbar-thumb {
+ background-color:white;
+ -webkit-border-radius: 2em;
+ -moz-border-radius: 2em;
+ border-radius:2em;
 }
 .category-item + .category-item {
-	margin-left: 40px;
+	margin-left: 25px;
+	&:nth-child(5n+1){
+		margin-left: 0;
+	}
 }
 .categoryTreeList{
 	padding-bottom: 10px;
