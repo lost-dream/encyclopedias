@@ -159,7 +159,7 @@
                         <span >快速导航</span>
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
-                    <div style="max-height: 400px;overflow-y: scroll">
+                    <div style="max-height: 330px;overflow-y: scroll">
                         <a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
                         <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
                         <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>
@@ -460,7 +460,7 @@ import {audit} from '@/api/entry/index.js'
     .box-card{
         position: fixed !important;
         width: 250px;
-        margin-top: 50px;
+        // margin-top: 50px;
         margin-left: 20px;
     }
     .el-card{
