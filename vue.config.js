@@ -27,5 +27,14 @@ module.exports = {
         .set('@',resolve('./src'))
         //set第一个参数：设置的别名，第二个参数：设置的路径
 　　　　
+    },
+    pwa: {
+        iconPaths: {
+            favicon32: './static/image/titlelogo.png',
+            favicon16: './static/image/titlelogo.png',
+            appleTouchIcon: './static/image/titlelogo.png',
+            maskIcon: './static/image/titlelogo.png',
+            msTileImage: './static/image/titlelogo.png'
+        }
     }
 }
