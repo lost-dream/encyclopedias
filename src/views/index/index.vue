@@ -24,7 +24,7 @@
 						<div>
 							<p>
 								<img src="../../assets/index/01.png"/>
-								<span class="data">{{toThousands(entryStatisticalData.totalEntry + 1038219037)}}</span>
+								<span class="data">{{toThousands(entryStatisticalData.totalEntry)}}</span>
 								<span>个词条</span>
 							</p>
 						</div>
