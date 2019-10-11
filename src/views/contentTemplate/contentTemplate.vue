@@ -4,7 +4,7 @@
       <span>目录模板管理</span>
     </h2>
     <div class="flex-box">
-      <div class="left myTree">
+      <div class="left myTree" v-loading="isLoading">
         <h3>词条类目</h3>
         <el-tree 
           :data="categoryTree" 
@@ -13,7 +13,7 @@
         </el-tree>
       </div>
       
-      <div v-show="showContent" v-loading="isLoading" class="comp-tree">
+      <div v-show="showContent" v-loading="rightLoading" class="comp-tree">
         <h3>目录模板</h3>
         <div class="sub-box"> 
           <p>当前分类： {{currentCategory.name}}</p>
@@ -98,7 +98,8 @@ export default{
 	name: 'contentTemplate',
 	data(){
 		return {
-			isLoading: false,// 是否加载
+      isLoading: false,// 是否加载
+      rightLoading: false,
       setTree: [], // 目录树
       categoryTree: [], // 
 			NODE_KEY: 'categoryId',// id对应字段
@@ -231,17 +232,18 @@ export default{
     },
     // 获取templateTree数据
     checkTemplateTreeData(id){
+      this.rightLoading = true
       templateApi.checkTemplateTreeData({
           id: id
         })
         .then(res => {
           // console.log(res);
           res.data && (this.setTree = res.data)
-          this.isLoading = false;
+          this.rightLoading = false;
         })
         .catch(e => {
           this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
-          this.isLoading = false;
+          this.rightLoading = false;
         })
     },
     // 处理选择分类事件
@@ -251,7 +253,7 @@ export default{
 
       if(request){
         this.showContent = true;
-        this.isLoading = true;
+        this.rightLoading = true;
         this.currentCategory = data;
         this.checkTemplateTreeData(data.id)
       }
@@ -387,6 +389,7 @@ export default{
     padding: 0 16px;
     position: absolute;
     box-sizing: border-box;
+    border-right: 10px solid #f5f5f5;
     .el-tree {
       height: calc(100% - 50px);
       overflow: auto;
@@ -420,8 +423,8 @@ export default{
   .comp-tree {
     max-width: unset;
     max-height: unset;
-    margin-left: 300px;
-    border-left: 10px solid #f5f5f5;
+    margin-left: 310px;
+    // border-left: 10px solid #f5f5f5;
     height: 100%;
     padding: 0 16px;
     font-size: 14px;
