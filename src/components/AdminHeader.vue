@@ -7,7 +7,7 @@
     
     <div class="action-box">
       <a href=""><i class="el-icon-s-home"></i>首页</a>
-      <a><i class="el-icon-switch-button"></i>退出</a>
+      <a @click="exit"><i class="el-icon-switch-button"></i>退出</a>
     </div>
   </div>
 </template>
@@ -26,7 +26,15 @@
     	
     },
     methods: {
-
+			exit() {
+				
+				sessionStorage.removeItem('token');
+				sessionStorage.removeItem('source');
+				window.opener=null;
+				window.open('','_self');
+				window.close();
+//				window.location.href='default.aspx';
+			},
     }
   }
 </script>
