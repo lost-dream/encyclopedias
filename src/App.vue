@@ -133,6 +133,7 @@ ul,li,p{
 }
 .ck-content p{
     line-height: 25px;
+    text-indent: 2em;
 }
 .el-collapse-item__header{
     background: #eeeeee !important;

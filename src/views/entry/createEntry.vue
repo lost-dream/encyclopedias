@@ -2,7 +2,7 @@
     <div style="display: flex;width: 1280px;margin: 0 auto 20px">
         <div style="width: 900px;display: flex;flex-direction: column">
             <div>
-                <h3>词条名称</h3>
+                <h4 class="block">词条名称</h4>
                 <el-input  v-model="entryName"></el-input>
             </div>
             <!-- 词条分类 -->

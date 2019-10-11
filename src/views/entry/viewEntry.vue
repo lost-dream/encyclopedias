@@ -102,7 +102,7 @@
                         <div >
                             <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
                             <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
-                            <div v-else><p>&nbsp;</p></div>
+                            <!-- <div v-else><p>&nbsp;</p></div> -->
                             <template v-if="item.children.length" v-for="key in item.children">
                                 <div style="margin-left: 20px">
                                     <h3 :id="key.id" v-if="key.contentTitle!==null&&key.contentTitle!=='null'">{{key.contentTitle}}</h3>
@@ -135,11 +135,14 @@
             <!-- 标签 -->
             <div class="mg-top-20">
                 <h3 id="tag">标签</h3>
-                <div>
-                    <template v-for="(item,index) in wikiContent.entryLabels">
+                <div v-if="wikiContent.entryLabels.length" >
+                    <template v-for="(item) in wikiContent.entryLabels">
                         <el-tag style="margin-right: 10px">{{item.labelName}}</el-tag>
-                    </template>
+                    </template>'
                 </div>
+                <template v-else>
+                    <span style="color: #999;">该词条暂时还没有添加标签哦~</span>
+                </template>
             </div>
         </div>
         <div >
@@ -447,6 +450,19 @@ import {audit} from '@/api/entry/index.js'
         color: white;
         padding: 5px 10px;
         background: #338ce6;
+        position: relative;
+    }
+    .block::after{
+        content: '';
+        display: block;
+        position: absolute;
+        box-shadow: -120px 0 10px 0px #bbb;
+        width: 116px;
+        height: 37px;
+        top: -11px;
+        right: -118px;
+        z-index: -1;
+        transform: skew(0, -11deg)
     }
     .el-card__header span{
         font-weight: bold;
@@ -522,10 +538,18 @@ import {audit} from '@/api/entry/index.js'
             padding-left: 15px;
         }
     }
+    #content {
+        color: #1a2237;
+    }
     #content /deep/ .img_r  {
        float: right;
        text-align: center;
        display: flex;
        flex-direction: column;
+       margin: 10px 30px 20px;
+       box-shadow: 0 0 5px 0 #b5b5b5;
+       strong {
+           padding: 5px;
+       }
     }
 </style>
