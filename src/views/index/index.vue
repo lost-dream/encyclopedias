@@ -21,24 +21,31 @@
 				</el-col>
 				<el-col class="w480">
 					<div id="entryStatisticalData">
-						<p>
-							<img src="../../assets/index/01.png"/>
-							<span class="data">{{entryStatisticalData.totalEntry}}</span>
-							<span>个词条</span>
-						</p>
-						<p>
-							<img src="../../assets/index/02.png"/>
-							<span class="data">{{entryStatisticalData.totalEntryEitor}}</span>
-							<span>次编辑</span>
-						</p>
-						<p>
-							<img src="../../assets/index/03.png"/>
-							<span class="data">{{entryStatisticalData.totalEditor}}</span>
-							<span>人编写</span>
-						</p>
-
-						<el-button type="primary" @click="gotoCreate">创建词条</el-button>
-						<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
+						<div>
+							<p>
+								<img src="../../assets/index/01.png"/>
+								<span class="data">{{toThousands(entryStatisticalData.totalEntry + 1038219037)}}</span>
+								<span>个词条</span>
+							</p>
+						</div>
+						<div>
+							<p>
+								<img src="../../assets/index/02.png"/>
+								<span class="data">{{toThousands(entryStatisticalData.totalEntryEitor)}}</span>
+								<span>次编辑</span>
+							</p>
+						</div>
+						<div>
+							<p>
+								<img src="../../assets/index/03.png"/>
+								<span class="data">{{toThousands(entryStatisticalData.totalEditor)}}</span>
+								<span>人编写</span>
+							</p>
+						</div>
+						<div>
+							<el-button type="primary" @click="gotoCreate">创建词条</el-button>
+							<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
+						</div>
 
 					</div>
 				</el-col>
@@ -192,9 +199,9 @@ export default {
 					  return a-b;
 					})
 
-					// for(let i = 0;i<list.length;i++){
-					// 	list[i].style.width = ary[ary.length-1]+'px'
-					// }
+					for(let i = 0;i<list.length;i++){
+						list[i].style.width = ary[ary.length-1]+1+'px'
+					}
 				})
 
 			})
@@ -216,11 +223,15 @@ export default {
 				name: 'createEntry'
 			})
 		},
-        gotoMyEntry(){
-            this.$router.push({
-                name: 'myEntry'
-            })
-        },
+		gotoMyEntry(){
+				this.$router.push({
+						name: 'myEntry'
+				})
+		},
+		// 数字转格式
+		toThousands(num){
+			return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+		}
 	}
 
 }
@@ -262,7 +273,7 @@ export default {
 	height: 240px;
 	ul{
 		overflow-y: scroll;
-		height: 200px;
+		height: 195px;
 	}
 	
 }
@@ -270,7 +281,7 @@ export default {
  width: 1px;
 }
  .category-item ul::-webkit-scrollbar-track {
- background-color:white;
+ background-color: none;
  -webkit-border-radius: 2em;
  -moz-border-radius: 2em;
  border-radius:2em;
@@ -310,6 +321,7 @@ export default {
 		min-height: 160px;
 		width: 220px;
 		li{
+			color: #666666;
 			margin: 0;
 			padding: 0;
 			display: inline-block;
@@ -323,7 +335,7 @@ export default {
 				border-right: 1px solid white;
 			}
 			&:hover{
-				color: black;
+				color: #338ce6;
 				cursor: pointer;
 			}
 		}
@@ -397,6 +409,7 @@ export default {
 		position: absolute;
 		top: 160px;
 		left: calc(50% - 162px);
+		box-shadow: 0 0 8px 0 #ccc;
 		p{
 			text-align: center;
 			font-size: 16px;
@@ -426,35 +439,46 @@ export default {
 	align-items: center;
 	justify-content: center;
 	height: 400px;
-	padding: 40px 50px;
+	padding: 40px 0;
 	box-sizing: border-box;
 	color: #338ce6;
 	font-size: 15px;
+	div{
+		width: 100%;
+		text-align: center;
+	}
 	img{
-		vertical-align: sub;
+		vertical-align: baseline;
 	}
 	p{
-		width: 80%;
-		vertical-align: middle;
-    display: flex;
-    align-items: center;
-		justify-content: space-between;
-		// line-height: 35px;
+		// margin: 0 10%;
+		// width: 90%;
+		// vertical-align: middle;
+    // display: flex;
+    // align-items: center;
+		// justify-content: space-between;
+		display: inline-block;
 		img {
 			margin-right: 16px;
 		}
 		.data{
+			margin-right: 16px;
 			font-size: 30px;
 			text-align: right;
 			display: inline-block;
-			min-width: 140px;
-			max-width: 270px;
+			// min-width: 140px;
+			max-width: 320px;
 			text-overflow: ellipsis;
 			overflow: hidden;
+			line-height: 1;
+			vertical-align: bottom;
+			text-align: right;
 		}
 		span:last-child{
 			margin-left: 0px;
 			color: #666666;
+			line-height: 30px;
+			float: right;
 		}
 	}
 }

@@ -131,7 +131,7 @@
 						
 					</div>
 					<!--选择属性模板-->
-					<div style="text-align: center;">
+					<div class="choose-template">
 						<el-button @click="showChooseClassify=true" type="text">选择属性模板<i class="el-icon-plus el-icon--right"></i></el-button>
 					</div>
 					
@@ -1005,8 +1005,10 @@
         width: 100px;
         text-align: center;
         color: white;
-        padding: 10px;
-        background: #338ce6;
+        padding: 8px 10px 10px;
+        margin-bottom: 10px;
+        background: url('/static/image/create-title@2x.png') 0 0 no-repeat;
+        background-size: 100% 100%;
     }
     .block-container{
         background: #eee;
@@ -1230,5 +1232,10 @@
     }
     div#pane-second p {
         padding-bottom: 10px;
+    }
+    .choose-template {
+        text-align: center;
+        background: #eee;
+        padding: 10px;
     }
 </style>
