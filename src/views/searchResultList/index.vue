@@ -8,8 +8,8 @@
 					<p>{{item.ENTRY_NAME}}</p>
 					<p class="desc">111122222</p>
 				</div>-->
-				<img v-if="item.SUMMARY.length" :src="JSON.parse(item.SUMMARY[0]).img" alt="" />
-				<img v-else src="../../assets/index/03.png" alt="" />
+				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p>{{item.ENTRY_NAME}}</p>
 					<p class="desc" v-if="item.SUMMARY.length">{{JSON.parse(item.SUMMARY[0]).text}}</p>

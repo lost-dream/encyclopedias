@@ -9,7 +9,7 @@
 					<el-carousel :interval="5000">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList ">
-								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
 								<!--<img src="/static/image/tank.png"/>-->
 								<div>
 									<p class="entry-title">{{item.ENTRY_NAME}}</p>
@@ -63,8 +63,18 @@
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
 						<el-image
 							:fit="'cover'"
-							:src="'https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg'">
+							:src="item.specialCoverUrl">
+							<div slot="error" class="image-slot">
+					       		<img src="/static/image/tank.png" alt="" />
+					      	</div>
 						</el-image>
+						
+						
+						
+						<!--<el-image
+							:fit="'cover'"
+							:src="'https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg'">
+						</el-image>-->
 						<div>
 							<p>{{item.specialName}}</p>
 							<div>{{item.specialDesc}}</div>

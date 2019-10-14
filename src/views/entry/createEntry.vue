@@ -45,7 +45,7 @@
                     <div style="display: flex;flex-direction: column">
                         <el-upload
                                 class="avatar-uploader"
-                                action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
+                                :action="PREFIX.UPLOAD_URL"
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess">
                             <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -542,7 +542,7 @@
                     CKEditor.create(document.querySelector('#summaryEditor'), {
                         language: 'zh-cn',
                         ckfinder: {
-                            uploadUrl: 'http://106.12.208.84:8080/wiki-backend/upload/uploadImg'
+                            uploadUrl: this.PREFIX.UPLOAD_URL
                             //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                         }
                     }).then(editor => {
@@ -568,7 +568,7 @@
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
                         ckfinder: {
-                            uploadUrl: 'http://106.12.208.84:8080/wiki-backend/upload/uploadImg'
+                            uploadUrl: this.PREFIX.UPLOAD_URL
                             //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                         }
                     }).then(editor => {
