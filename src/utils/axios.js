@@ -3,8 +3,9 @@ import { Message } from 'element-ui'
 
 // create an axios instance
 const service = axios.create({
-baseURL: 'http://106.12.208.84:8080', // url = base url + request url
-//baseURL: 'localhost:8080',
+//baseURL: 'http://106.12.208.84:8080', // url = base url + request url
+//baseURL: 'http://localhost:8080',
+baseURL: 'http://192.168.0.35:8080',
   withCredentials: false, // send cookies when cross-domain requests
   crossDomain: true,
   timeout: 5000, // request timeout
@@ -20,7 +21,7 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
 //    config.headers['token'] = token
 //  }
-//  config.headers['Authorization'] = sessionStorage.getItem('token')
+    config.headers['Authorization'] = sessionStorage.getItem('token')
 //  if(!sessionStorage.getItem('token')){
 //  	Message({
 //	      message: '您尚未登录！',

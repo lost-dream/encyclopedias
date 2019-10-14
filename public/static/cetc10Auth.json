@@ -1,5 +1,8 @@
+
+
+
 {
-	"auth-server-url": "http://localhost:8090/apis/v1/auth/token/validation", 
-	"auth-login-url": "http://www.baidu.com",
-	"software-flag": "QKYT" 
+	"auth-server-url": "http://192.168.0.31:10002/apis/v1/ga/auth/token/validation", 
+	"auth-login-url": "http://192.168.0.31:10002/#/login",
+	"software-flag": "xxfb" 
 }
