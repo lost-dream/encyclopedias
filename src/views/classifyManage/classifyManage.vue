@@ -1,143 +1,138 @@
 <template>
-	<el-card>
-		<el-row>
-			<el-col :span="4">
-				<div class="myTree">
-					<el-tree
-			        ref="tree"
-			        :props="defaultProps"
-			        current-node-key="1"
-			        :data="treeData"
-			        node-key="space_id"
-			        @node-click="handleNodeClick"
-			        :expand-on-click-node="true"
-			        highlight-current
-			      >
-			        <!--<div class="custom-tree-node" slot-scope="{ node, data}">
-			          <div>
-			            <span @click.stop="chooseItem(data)">{{ data.name }}</span>
-			          </div>
-			          <span class="el-ic"></span>
-			        </div>-->
-			      </el-tree>
-				</div>
-			</el-col>
-			<el-col :span="20">
+	<div class="pos-rltv height-100 bg-fff">
+		<h2 class="page-title">
+      <span>词条分类维护</span>
+    </h2>
+		<div class="flex-box">
+			<div class="left myTree" v-loading="isLoading">
+        <h3>词条类目</h3>
+        <el-tree
+						ref="tree"
+						:props="defaultProps"
+						current-node-key="1"
+						:data="treeData"
+						node-key="space_id"
+						@node-click="handleNodeClick"
+						:expand-on-click-node="true"
+						highlight-current
+					>
+        </el-tree>
+      </div>
+			<div class="right-box" v-loading="isLoading">
+				<h3>属性模板</h3>
+        <div class="sub-box"> 
+          <p class="add-top">当前分类： {{checkedParentItem.name || '暂无'}}</p>
+        </div>
 				<!--展示选中的分类对应的属性模板（只读）-->
-				<el-card v-show="checkedParentId" shadow="hover">
+				<el-card v-show="checkedParentId" shadow="never">
 					<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
 						<span class="leftBorder"></span>
 						继承属性
 					</div>
 					<el-table
 						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
-						  ref="table" :data="parentClassifyData" class="departTable" border stripe>
-				        <el-table-column prop="attributeName" label="属性名称" />
-				        <el-table-column prop="attributeTypeName" label="属性值类型" />
-				        <el-table-column width="250px" label="约束值">
-				          <template slot-scope="scope">
-				          	<span v-if="scope.row.attributeType===4||scope.row.attributeType===5||scope.row.attributeType===6||scope.row.attributeType===7">{{parseTime(scope.row.attributeRangeBegin)}}~{{parseTime(scope.row.attributeRangeEnd)}}</span>
-				          	<span v-else>{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}</span>
-				          </template>
-				        </el-table-column>
-				        <el-table-column prop="editType" label="编辑模式" />
-				        <el-table-column prop="editSource" label="编辑内容来源" />
-				    </el-table>
-			    </el-card>
+							ref="table" :data="parentClassifyData" class="departTable" border stripe>
+								<el-table-column prop="attributeName" label="属性名称" />
+								<el-table-column prop="attributeTypeName" label="属性值类型" />
+								<el-table-column width="250px" label="约束值">
+									<template slot-scope="scope">
+										<span v-if="scope.row.attributeType===4||scope.row.attributeType===5||scope.row.attributeType===6||scope.row.attributeType===7">{{parseTime(scope.row.attributeRangeBegin)}}~{{parseTime(scope.row.attributeRangeEnd)}}</span>
+										<span v-else>{{scope.row.attributeRangeBegin}}~{{scope.row.attributeRangeEnd}}</span>
+									</template>
+								</el-table-column>
+								<el-table-column prop="editType" label="编辑模式" />
+								<el-table-column prop="editSource" label="编辑内容来源" />
+						</el-table>
+					</el-card>
 				<!--展示选中的分类对应的属性模板（编辑）-->
-				<el-card v-show="checkedId" shadow="hover">
-					<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+				<el-card v-show="checkedId" shadow="never" class="mg-t-15">
+					<div style="font-weight: bold;font-size: 16px;" slot="header" class="clearfix">
 						<span class="leftBorder"></span>
 						自身属性
 						<el-button style="float: right;margin-top: -10px;background: #56bd9d;" @click="addClassify" type="success">添加</el-button>
 					</div>
-					
 					<el-table 
 						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
-						 ref="table" :data="classifyData" class="departTable" border stripe>
-						<el-table-column width="200px" label="属性名称">
-				          <template slot-scope="scope">
-				            <el-input v-model="scope.row.attributeName" placeholder="请输入属性名称"></el-input>
-				          </template>
-				        </el-table-column>
-				        
-				        
-				        <el-table-column width="150px" label="属性值类型">
-				          <template slot-scope="scope">
-				          	<el-select @change="attributeTypeChange($event,scope.row)" placeholder="请选择类型" v-model="scope.row.attributeType">
-					          <el-option v-for="(item, index) in attributeTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
-					        </el-select>
-				          </template>
-				        </el-table-column>
-				        <el-table-column width="250px" label="约束值">
-				        	<template slot-scope="scope">
-				        		<!--数字范围-->
-				        		<el-row v-if="scope.row.attributeType===2">
-				        			<el-col :span="11">
+							ref="table" :data="classifyData" class="departTable" border stripe>
+						<el-table-column label="属性名称">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.attributeName" placeholder="请输入属性名称"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="属性值类型">
+							<template slot-scope="scope">
+								<el-select @change="attributeTypeChange($event,scope.row)" placeholder="请选择类型" v-model="scope.row.attributeType">
+									<el-option v-for="(item, index) in attributeTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
+								</el-select>
+							</template>
+						</el-table-column>
+						<el-table-column label="约束值">
+							<template slot-scope="scope">
+								<!--数字范围-->
+								<el-row v-if="scope.row.attributeType===2">
+									<el-col :span="11">
 										<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeBegin"></el-input>
 									</el-col>
 									<el-col style="line-height: 40px;" :span="1">-</el-col>
 									<el-col :span="11">
 										<el-input type="number" placeholder="请输入约束值" style="width: 100px;display: inline-block;" v-model="scope.row.attributeRangeEnd"></el-input>
 									</el-col>
-				        		</el-row>
-				        		
-				        		<!--时间范围-->
-				        		<el-row v-if="scope.row.attributeType===7||scope.row.attributeType===6||scope.row.attributeType===5||scope.row.attributeType===4">
-				        			<el-col :span="11">
+								</el-row>
+										
+										<!--时间范围-->
+								<el-row v-if="scope.row.attributeType===7||scope.row.attributeType===6||scope.row.attributeType===5||scope.row.attributeType===4">
+									<el-col :span="11">
 										<el-date-picker
-									      v-model="scope.row.attributeRangeBegin"
-									      :type="datetimeObj[scope.row.attributeType]"
-									      placeholder="选择日期时间"
-									      align="right"
-									      value-format="timestamp"
-									      >
-									    </el-date-picker>
-						          	</el-col>
+												v-model="scope.row.attributeRangeBegin"
+												:type="datetimeObj[scope.row.attributeType]"
+												placeholder="选择日期时间"
+												align="right"
+												value-format="timestamp"
+												>
+											</el-date-picker>
+									</el-col>
 									<el-col style="line-height: 40px;" :span="1">-</el-col>
 									<el-col :span="11">
 										<el-date-picker
-									      v-model="scope.row.attributeRangeEnd"
-									      :type="datetimeObj[scope.row.attributeType]"
-									      placeholder="选择日期时间"
-									      align="right"
-									      value-format="timestamp"
-									      >
-									    </el-date-picker>
+												v-model="scope.row.attributeRangeEnd"
+												:type="datetimeObj[scope.row.attributeType]"
+												placeholder="选择日期时间"
+												align="right"
+												value-format="timestamp"
+												>
+										</el-date-picker>
 									</el-col>
-				        		</el-row>
-				        		
-				        		
-				        	</template>
-				        	
-				        </el-table-column>
-				        <el-table-column width="200" label="编辑模式">
-				          <template slot-scope="scope">
-				            <el-select disabled placeholder="请选择模式" v-model="scope.row.editType">
-					          <el-option v-for="(item, index) in editTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
-					        </el-select>
-				          </template>
-				        </el-table-column>
-				        <el-table-column width="150" label="编辑内容来源">
-				          <template slot-scope="scope">
-				            <el-select disabled placeholder="请选择来源" v-model="scope.row.editSource">
-					          <el-option v-for="(item, index) in editSourceAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
-					        </el-select>
-				          </template>
-				        </el-table-column>
-				        <el-table-column fixed="right" label="操作" width="50">
+								</el-row>
+							</template>
+						</el-table-column>
+						<el-table-column label="编辑模式">
+							<template slot-scope="scope">
+								<el-select disabled placeholder="请选择模式" v-model="scope.row.editType">
+									<el-option v-for="(item, index) in editTypeAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
+								</el-select>
+							</template>
+						</el-table-column>
+						<el-table-column label="编辑内容来源">
+							<template slot-scope="scope">
+								<el-select disabled placeholder="请选择来源" v-model="scope.row.editSource">
+									<el-option v-for="(item, index) in editSourceAry" :key="item.id" :label="item.name" :value="item.id"></el-option>
+								</el-select>
+							</template>
+						</el-table-column>
+						<el-table-column fixed="right" label="操作" >
 							<template slot-scope="scope">
 								<el-button @click="deleteHandle(scope.$index)" type="text" size="small">删除</el-button>
 							</template>
 						</el-table-column>
-				     </el-table>
-				     <el-row style="text-align: center;margin-top: 20px;">
-				     	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="dialogVisible = true" type="primary">取消</el-button>
-					  	<el-button style="background: #5b7dd7;" @click="save" type="primary">保存</el-button>
+					</el-table>
+					<el-row style="text-align: center;margin-top: 20px;">
+						<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="dialogVisible = true" type="primary">取消</el-button>
+						<el-button style="background: #5b7dd7;" @click="save" type="primary">保存</el-button>
 					</el-row>
-			    </el-card>
-			</el-col>
-		</el-row>
+				</el-card>
+			</div>
+		</div>
+		
 	    <!--是否取消修改弹窗-->
 	    <el-dialog
 		  title="提示"
@@ -151,9 +146,7 @@
 		  </span>
 		</el-dialog>
 		
-		
-		
-	</el-card>
+	</div>
 </template>
 
 <script>
@@ -167,36 +160,35 @@ export default {
 		treemenu
 	},
 	data() {
-	    return {
-	    	
-	    	datetimeObj:{
-	    		7:'datetime',
-	    		6:'date',
-	    		5:'month',
-	    		4:'year'
-	    	},
-	        checkedId: '',
-	        checkedParentId:'',
-	        checkedParentItem:{},
-	        treeData: [],
-	        defaultProps: {
-	            children: 'children',
-	            label: 'name'
-	        },
-	        props:{
-	        	expandTrigger:'hover',
-	        	checkStrictly: true,
-	        	value:'id',
-	        	label:'name',
-	        	children:'children',
-	        },
-	        classifyData:[],
-	        parentClassifyData:[],
-	        attributeTypeAry:attributeTypeAry,
-	        editTypeAry:editTypeAry,
-	        editSourceAry:editSourceAry,
-	        dialogVisible:false,
-	        defaultClassifyItem:{
+		return {
+			datetimeObj:{
+				7:'datetime',
+				6:'date',
+				5:'month',
+				4:'year'
+			},
+			checkedId: '',
+			checkedParentId:'',
+			checkedParentItem:{},
+			treeData: [],
+			defaultProps: {
+				children: 'children',
+				label: 'name'
+			},
+			props:{
+				expandTrigger:'hover',
+				checkStrictly: true,
+				value:'id',
+				label:'name',
+				children:'children',
+			},
+			classifyData:[],
+			parentClassifyData:[],
+			attributeTypeAry:attributeTypeAry,
+			editTypeAry:editTypeAry,
+			editSourceAry:editSourceAry,
+			dialogVisible:false,
+			defaultClassifyItem:{
 				"attributeName": "",
 				"attributeType": "",
 				"attributeRangeBegin": "",
@@ -204,8 +196,8 @@ export default {
 				"editType": "",
 				"editSource": ""
 			},
-			
-	    }
+			isLoading: false,
+		}
 	},
 	watch: {
 		
@@ -232,11 +224,11 @@ export default {
 						}
 					})
 				})
-                this.parentClassifyData = res.data.records
-            })
-            .catch(res=>{
-            	console.log(res)
-            })
+					this.parentClassifyData = res.data.records
+				})
+				.catch(res=>{
+					console.log(res)
+				})
 		}
 		
 	},
@@ -378,6 +370,7 @@ export default {
 		},
 		
 		categoryTree() {
+			this.isLoading = true
 			categoryTree({}).then(res =>{
 				res.data.children.map((item)=>{
 					if(!item.children.length){
@@ -399,16 +392,21 @@ export default {
 					}
 				})
 				console.log(res.data.children,'111')
-                this.treeData = res.data.children
-            })
-            .catch(res=>{
-            	console.log(res)
-            })
+				this.treeData = res.data.children
+				this.checkedParentItem = this.treeData[0]
+				this.checkedId = this.treeData[0].id
+				this.checkedParentId = this.treeData[0].parentId
+				this.isLoading = false
+			})
+			.catch(res=>{
+				console.log(res)
+			})
 		},
 		handleNodeClick(data, checked, node) {
 		    this.checkedId = data.id;
 		    //获取选中分类的父级分类id，查询回父级分类的属性模板展示出来
-		    this.checkedParentId = data.parentId
+				this.checkedParentId = data.parentId
+				this.checkedParentItem = data
 		    this.list()
 		},
 		
@@ -418,12 +416,90 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pos-rltv{
+	position: relative;
+}
+.mg-t-15 {
+	margin-top: 15px;
+}
+.page-title {
+	margin: 0;
+	padding: 10px 10px 10px 0;
+	border-bottom: 10px solid #f5f5f5;
+	font-size: 20px;
+	font-weight: bold;
+	span {
+		border-left: 5px solid #007fff;
+		padding-left: 15px;
+	}
+}
+
+.flex-box {
+  display: flex;
+  height: calc(100% - 50px);
+
+  .el-tree-node__content {
+    height: 28px;
+  }
+  .left {
+    width: 300px;
+    height: calc(100% - 52px);
+    // margin-right: 60px;
+    padding: 0 16px;
+    position: absolute;
+    box-sizing: border-box;
+    border-right: 10px solid #f5f5f5;
+    .el-tree {
+      height: calc(100% - 50px);
+      overflow: auto;
+    }
+  }
+
+  h3 {
+    font-weight: 400;
+    font-size: 16px;
+    margin: 0;
+    padding: 20px 0 10px;
+    border-bottom: 1px solid #e4e4e4;
+  }
+
+  &/deep/ .el-tree-node {
+    padding: 2px 0;
+    .el-tree-node {
+      padding-left: 16px;
+    }
+  }
+
+  .sub-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .add-top {
+      margin: 15px 0;
+    }
+  }
+
+  .right-box {
+		display: inline-block;
+    vertical-align: top;
+		width: 100%;
+    overflow: visible;
+    max-width: unset;
+    max-height: unset;
+    margin-left: 300px;
+    // border-left: 10px solid #f5f5f5;
+    height: 100%;
+    font-size: 14px;
+		padding: 0 16px;
+  }
+}
+
 .leftBorder{
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
 	background: #5d7cd8;
 	width: 5px;
-	height: 20px;
+	height: 16px;
 	margin-right: 15px;
 }
 .classifyForm{
@@ -450,12 +526,6 @@ export default {
 		}
 	}
 }
-
-
-
-
-
-
 
 .classifyList{
 	background: #459df5;

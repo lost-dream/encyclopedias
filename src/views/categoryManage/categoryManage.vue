@@ -1,7 +1,7 @@
 <template>
   <div class="pos-rltv height-100 bg-fff">
     <h2 class="page-title">
-      <span>分类管理</span>
+      <span>词条分类维护</span>
     </h2>
     <div v-loading="isLoading" class="comp-tree myTree">
       <div>
@@ -473,7 +473,7 @@ export default{
 	.comp-tree{
 		width: 100%;
 		max-width: 300px;
-		height: calc(100% - 50px);
+		height: calc(100% - 52px);
     overflow: visible;
     position: absolute;
 

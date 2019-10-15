@@ -122,7 +122,6 @@ export default{
       showContent: false,
       saveLoading: false,
       currentCategory: {},
-
 		}
 	},
 	created(){
@@ -221,13 +220,18 @@ export default{
           vm.categoryTree = data;
           vm.fromData = data;
           vm.isLoading = false;
+
+          let first = data[0].children.length 
+                      ? (data[0].children[0].children.length ? data[0].children[0].children[0] : data[0].children[0])
+                      : data[0]
+          vm.selectCategory(first)
         }else{
           this.$message.error("获取分类信息失败，请稍后重试！")
         }
       })
       .catch(res => {
         // console.log('error: ', res)
-        this.$message.error("请求出错，错误原因： " + res.msg ? res.msg : JSON.stringify(res));
+        vm.$message.error("请求出错，错误原因： " + res.msg ? res.msg : JSON.stringify(res));
       })
     },
     // 获取templateTree数据
@@ -384,7 +388,7 @@ export default{
   }
   .left {
     width: 300px;
-    height: calc(100% - 50px);
+    height: calc(100% - 52px);
     // margin-right: 60px;
     padding: 0 16px;
     position: absolute;

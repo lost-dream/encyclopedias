@@ -2,7 +2,7 @@
 	<div>
 		
 		
-		<el-card style="min-height: 500px;" class="myForm" shadow="hover">
+		<el-card class="myForm" shadow="hover">
 			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
 				词条版本审核列表
@@ -59,8 +59,8 @@
 		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
 		    <el-table-column prop="SUMMARY" label="描述">
 		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
-					{{JSON.parse(scope.row.SUMMARY.summary).text}}
-				</template>
+						<span :title="JSON.parse(scope.row.SUMMARY.summary).text" class="summary">{{JSON.parse(scope.row.SUMMARY.summary).text}}</span>
+					</template>
 		    </el-table-column>
 		    <el-table-column prop="CREATOR" label="创建人员"></el-table-column>
 		    <el-table-column prop="CREATE_TIME" label="创建时间">
@@ -77,16 +77,14 @@
 			<el-table-column fixed="right" label="操作" width="150">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.STATE===2||scope.row.STATE===4" style="color: #7291e1;" @click.stop="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
-        			
         			<el-button v-if="scope.row.STATE===2||scope.row.STATE===3||scope.row.STATE===6" style="color: #e36d72;" @click.stop="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
         			<el-button v-if="scope.row.STATE===3||scope.row.STATE===6" style="color: #e36d72;" @click.stop="openDialog(scope.row,'5')" type="text" size="small">发布</el-button>
         			<el-button v-if="scope.row.STATE===5" style="color: #e36d72;" @click.stop="openDialog(scope.row,'6')" type="text" size="small">取消发布</el-button>
 				</template>
 			</el-table-column>
 		  </el-table>
-		  
+			<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
 		</el-card>
-		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
 		<el-dialog title="审核意见" :visible.sync="dialogFormVisible">
 		  <el-form>
 		    <el-form-item label="审核意见">
@@ -231,7 +229,7 @@ export default {
 		},
 		handleCurrentChange(val) {
 			this.pagination.page = val
-			this.auditList()
+			// this.auditList()
 		},
 		auditList() {
 			auditList({
@@ -245,9 +243,9 @@ export default {
 				this.dataSourceList = res.data.records
 				this.pagination.count = res.data.total
 			})
-            .catch(res=>{
-            	console.log(res)
-            })
+			.catch(res=>{
+				console.log(res)
+			})
 		},
 		categoryTree() {
 			categoryTree({}).then(res =>{
@@ -293,6 +291,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-card {
+	overflow: visible;
+}
 .label{
     margin-left: 30px;
 }
@@ -307,6 +308,9 @@ export default {
 	    z-index: 999;
 	    padding: 5px 5px 5px 0;
 	    border: 1px solid #ebebeb;
+			max-height: 600px;
+			overflow-y: auto;
+			min-width: 200px;
 	}
 	.changeTreeShow{
 		overflow: hidden;
@@ -325,5 +329,13 @@ export default {
 	width: 5px;
 	height: 20px;
 	margin-right: 15px;
+}
+
+.summary {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	max-height: 47px;
 }
 </style>

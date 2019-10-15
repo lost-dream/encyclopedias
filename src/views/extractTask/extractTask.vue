@@ -55,9 +55,8 @@
 				</template>
 			</el-table-column>
 		  </el-table>
-		  
-		</el-card>
 		<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagination.page" :page-size="pagination.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
+		</el-card>
 		<el-dialog title="审核意见" :visible.sync="dialogFormVisible">
 		  <el-form>
 		    <el-form-item label="审核意见">
