@@ -1,11 +1,6 @@
 <template>
     <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container" v-if="!doReload">
         <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
-            <div v-show="auditShow" class="audit-box">
-                <p class="audit-title"><span>审核操作</span></p>
-                <el-button type="primary" @click="modalShow = true; code = '3'">审核通过</el-button>
-                <el-button type="danger" @click="modalShow = true; code = '4'">审核不通过</el-button>
-            </div>
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
                 <h1 style="font-weight: normal">{{wikiContent.entryName}}
@@ -100,18 +95,19 @@
                 <div class="ck-content" style="width: 100%;padding: 20px">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>
+                            <h2 :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
+<!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
                             <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <!-- <div v-else><p>&nbsp;</p></div> -->
                             <template v-if="item.children.length" v-for="key in item.children">
-                                <div style="margin-left: 20px">
-                                    <h3 :id="key.id" v-if="key.contentTitle!==null&&key.contentTitle!=='null'">{{key.contentTitle}}</h3>
+                                <div>
+                                    <h3 :id="key.id" v-if="key.contentTitle!==null&&key.contentTitle!=='null'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{key.contentTitle}}</h3>
                                     <div v-html="key.contentBody" v-if="key.contentBody !== '<p>null</p>'&&key.contentBody !== null&&key.contentBody !== 'null'"></div>
                                     <div v-else><p>&nbsp;</p></div>
                                 </div>
                                 <template v-if="key.children.length" v-for="v in key.children">
-                                    <div style="margin-left: 20px">
-                                        <h4 :id="v.id" v-if="v.contentTitle!==null&&v.contentTitle!=='null'">{{v.contentTitle}}</h4>
+                                    <div>
+                                        <h4 :id="v.id" v-if="v.contentTitle!==null&&v.contentTitle!=='null'">&nbsp;&nbsp;&nbsp;&nbsp;{{v.contentTitle}}</h4>
                                         <div v-html="v.contentBody" v-if="v.contentBody !== '<p>null</p>'&&v.contentBody !== null&&v.contentBody !== 'null'"></div>
                                         <div v-else="v.contentBody == '<p>null</p>'"><p>&nbsp;</p></div>
                                     </div>
@@ -147,8 +143,17 @@
         </div>
         <div >
             <div class="box-card">
-
-                <el-card>
+                <el-card v-show="auditShow">
+                    <div class="card-title">
+                        <span >审核操作</span>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                    </div>
+                    <div  class="audit-box">
+                        <el-button type="primary" style="background: #6b9cec" size="small" @click="modalShow = true; code = '3'">审核通过</el-button>
+                        <el-button type="danger" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
+                    </div>
+                </el-card>
+                <el-card style="margin-top: 20px">
                     <div class="card-title">
                         <span >词条统计</span>
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
@@ -156,6 +161,7 @@
                     <p class="pd-left-10">创建者：{{wikiInfo.creator}}</p>
                     <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}&nbsp;<a style="color:#338ce6;cursor:pointer;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
                     <p class="pd-left-10" v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
+
                 </el-card>
                 <el-card style="margin-top: 20px">
                     <div class="card-title">
