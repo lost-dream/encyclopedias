@@ -12,7 +12,14 @@ export default {
 </script>
 
 <style lang="scss">
-	
+.ck-editor__editable { 
+	min-height: 100px;
+	width: 700px;
+}
+#editor{
+	min-height: 200px;
+	width: 880px;
+}
 /*--------------------全局样式-------------------------------------------*/
 	/*分页居中*/
 .el-pagination{
