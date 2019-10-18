@@ -60,7 +60,7 @@ export default {
             this.$router.push({
                 name:'viewEntry',
                 query:{
-                    entryId:hash.ENTRY_ID,
+                    entryId:hash.id,
 //                    versionId: hash.ID,
                     viewType: 'view'
                 }
