@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import {entryList} from '@/api/onlyShowData/index.js'
+import {entryList,searchTotalStationEntryList} from '@/api/onlyShowData/index.js'
 export default {
 	
 	name: 'searchResultList',
@@ -37,6 +37,7 @@ export default {
 		      limit: 10,
 		      count: 0
 		    },
+		    searchTotalStation:false,
 		    entryListData:[]
 	    }
 	},
@@ -45,6 +46,7 @@ export default {
 	},
 	created() {
 		this.keyword = this.$route.query.content
+		this.searchTotalStation = this.$route.query.searchTotalStation?true:false
 		this.entryList()
 	},
 	mounted() {
@@ -63,15 +65,29 @@ export default {
 			this.entryList()
 		},
 		entryList(){
-			entryList({
-				pageNumber: this.pagination.page,
-				pageSize: this.pagination.limit,
-				"categoryId": "",
-				"keyword": this.keyword
-			}).then((res)=>{
-				this.entryListData = res.data.records
-				this.pagination.count = res.data.total
-			})
+			if(this.searchTotalStation){
+				searchTotalStationEntryList({
+					pageNumber: this.pagination.page,
+					pageSize: this.pagination.limit,
+					"sort":"",
+					"filter":"",
+					"query": this.keyword
+				}).then((res)=>{
+					this.entryListData = res.data.records
+					this.pagination.count = res.data.total
+				})
+			}
+			else{
+				entryList({
+					pageNumber: this.pagination.page,
+					pageSize: this.pagination.limit,
+					"categoryId": "",
+					"keyword": this.keyword
+				}).then((res)=>{
+					this.entryListData = res.data.records
+					this.pagination.count = res.data.total
+				})
+			}
 		},
         routeToEntry (index) {
 		    this.$router.push({

@@ -43,8 +43,9 @@
 		  }
 		},
     created() {
-    	
+    	this.content = sessionStorage.getItem('searchContent')
     },
+    
     methods: {
     	gotoIndex() {
     		this.$router.push('index')
@@ -74,7 +75,27 @@
       },
       searchTotalStation() {
       	this.content = this.content.trim()
-      	this.content!=''?this.$message('接口开发中'):this.$message('请输入内容')
+      	if(this.content!=''){
+      		sessionStorage.setItem('searchContent',this.content)
+      		if(this.$route.path === '/searchResultList'){
+      			var url = window.location.href.split('?')[0]+'?content='+this.content+'&searchTotalStation=true'
+      			history.pushState("", "", url)
+      			window.location.reload()
+      		}
+      		else{
+      			this.$router.push({
+		      		name:'searchResultList',
+		      		query:{
+		      			content:this.content,
+		      			searchTotalStation:true,
+		      		}
+		      	})
+      		}
+      		
+      	}
+      	else{
+      		this.$message('请输入内容')
+      	}
       }
     }
   }

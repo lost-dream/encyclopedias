@@ -23,6 +23,17 @@ export function entryList(data) {
     data
   })
 }
+
+//词条列表（搜索、词条分类）--全站搜索
+export function searchTotalStationEntryList(data) {
+  return request({
+    url: '/wiki-backend/encyclopedia/search/query',
+    method: 'post',
+    data
+  })
+}
+
+
 //通过ID查询分类模板详细---
 export function info111(data) {
   return request({
