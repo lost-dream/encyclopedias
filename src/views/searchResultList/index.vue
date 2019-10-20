@@ -1,13 +1,21 @@
 <template>
 	<div>
-		
-		<div class="entryListData">
+		<!--非全站搜索-->
+		<div v-if="!searchTotalStation" class="entryListData">
 			<div v-for="item,index in entryListData" @click="routeToEntry(item.ENTRY_ID)" class="entry-cell" :class="index==entryListData.length-1?'':'bd-bottom'">
-				<!--<img src="../../assets/index/03.png" alt="" />
+				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p>{{item.ENTRY_NAME}}</p>
-					<p class="desc">111122222</p>
-				</div>-->
+					<p class="desc" v-if="item.SUMMARY.length">{{JSON.parse(item.SUMMARY[0]).text}}</p>
+					<p class="desc" v-else>暂无描述</p>
+				</div>
+			</div>
+		</div>
+		
+		<!--全站搜索-->
+		<div v-else class="entryListData">
+			<div v-for="item,index in entryListData" @click="routeToEntry(item.ENTRY_ID)" class="entry-cell" :class="index==entryListData.length-1?'':'bd-bottom'">
 				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
 				<img v-else src="/static/image/tank.png"/>
 				<div>
@@ -65,7 +73,7 @@ export default {
 			this.entryList()
 		},
 		entryList(){
-			if(this.searchTotalStation){
+			if(this.searchTotalStation){//全站搜索
 				searchTotalStationEntryList({
 					pageNumber: this.pagination.page,
 					pageSize: this.pagination.limit,
