@@ -1,0 +1,7 @@
+
+{
+	"auth-server-url": "http://10.24.1.31:10002/apis/v1/ga/auth/token/validation", 
+	"auth-login-url": "http://10.24.1.31:10002/#/login",
+	"software-flag": "xxfb" 
+}
+

@@ -3,8 +3,8 @@
     <el-col :span="24" >
       <div class="head-wrap">
       	<span>
-      		<img @click="gotoIndex" src="../../public/static/image/logo.png" />
-      		<span @click="gotoIndex" class="title" >信息百科</span>
+      		<!--<img @click="gotoIndex" src="../../public/static/image/logo.png" />-->
+      		<span @click="gotoIndex" class="title" >情报百科</span>
       	</span>
       	
       	<el-input
@@ -14,8 +14,8 @@
 			    clearable
 			    v-model="content">
 			  </el-input>
-      	<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>
-      	<el-button @click="searchTotalStation" type="danger">全站搜索</el-button>
+      	<!--<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>-->
+      	<el-button style='margin: 0 20px;' @click="searchTotalStation" type="danger">全站搜索</el-button>
       </div>
     </el-col>
   </el-row>
