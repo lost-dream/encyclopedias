@@ -59,7 +59,7 @@
 		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
 		    <el-table-column prop="SUMMARY" label="描述">
 		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
-						<span :title="JSON.parse(scope.row.SUMMARY.summary).text" class="summary">{{JSON.parse(scope.row.SUMMARY.summary).text}}</span>
+						<span :title="JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g,'')" class="summary" v-html="JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g,'')"></span>
 					</template>
 		    </el-table-column>
 		    <el-table-column prop="CREATOR" label="创建人员"></el-table-column>

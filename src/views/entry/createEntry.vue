@@ -419,6 +419,8 @@
                 categoryTreeData: [],
                 toData:[],
                 savedCategories: [],
+                savedMiddleCategories: [],//分类选择弹窗选中分类临时数组
+                savedCategoriesKeysAry:[],//已选中分类key list
                 savedCategoriesArr: [],
                 leafNumber: 0,
                 // 目录
@@ -920,11 +922,11 @@
             },
             // 监听穿梭框组件添加
             add(transfered){
-                this.savedCategories = transfered
+                this.savedMiddleCategories = transfered
             },
             // 监听穿梭框组件移除
             remove(transfered){
-                this.savedCategories = transfered
+                this.savedMiddleCategories = transfered
             },
             // 限制最多选5个
             checkLength(nodeObj, treeObj, checkAll){
@@ -933,7 +935,7 @@
                     treeComp = this.$refs.treeTransfer.$children[2],
                     arr = treeComp.getCheckedNodes().filter(x => !x.children.length);
 
-                if((arr && ((arr.length + vm.savedCategories.length) > 5))){
+                if((arr && ((arr.length + vm.savedMiddleCategories.length) > 5))){
                     this.$message.error("最多只能选择5个最末级分类");
                     treeComp.setCheckedKeys([]);
                     this.$refs.treeTransfer.from_check_all = false
@@ -952,9 +954,11 @@
             // 保存词条分类
             saveCategory(){
                 // 处理一下savedCategories数组, 提出来id，重新弄个数组就ok
+                this.savedCategories = this.savedMiddleCategories//将临时分类数组赋值给页面
                 this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
+                this.savedCategoriesKeysAry = this.savedCategories.map(x => {return x.id})
                 this.dialogVisible = false;
-                // console.log(this.savedCategoriesArr)
+                   console.log(this.savedCategoriesArr,this.savedMiddleCategories,this.savedCategoriesKeysAry)
             },
             // 获取目录数据
             loadContent(data, node, component){

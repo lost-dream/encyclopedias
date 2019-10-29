@@ -19,7 +19,7 @@
 			      <el-option label="ftp" value="3"></el-option>
 			    </el-select>
 			    
-			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
+			    <el-button style="background: #587dda;margin-left: 35px;" @click="list" type="primary">查询</el-button>
 			    <el-button style="background: #56bd9d;margin-left: 35px;" @click="add" type="primary">新增</el-button>
 			</el-row>
 			
@@ -158,7 +158,8 @@ export default {
 			list({
 				pageNumber: this.pagination.page,
 				pageSize: this.pagination.limit,
-				dataSourceType: this.dataSourceType
+				dataSourceType: this.dataSourceType,
+				dataSourceName:this.keyword,
 			}).then(res =>{
 				this.dataSourceList = res.data.records
 				this.pagination.count = res.data.total

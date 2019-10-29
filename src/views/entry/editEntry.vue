@@ -3,7 +3,7 @@
         <div style="width: 900px;display: flex;flex-direction: column">
             <div>
                 <h3>词条名称</h3>
-                <el-input  v-model="entryName"></el-input>
+                <el-input disabled  v-model="entryName"></el-input>
             </div>
             <!-- 词条分类 -->
             <div class="mg-top-20">

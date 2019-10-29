@@ -23,7 +23,6 @@ export function allList(data) {
     data
   })
 }
-
 //查询数据源详情
 export function info(data) {
   return request({

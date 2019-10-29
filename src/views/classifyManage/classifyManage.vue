@@ -290,16 +290,17 @@ export default {
 		deleteHandle(index) {
 			this.classifyData.splice(index,1)
 		},
-		//撤销修改
+		//撤销修改(重新请求数据，不清空已保存数据)
 		cancelModify() {
 			this.dialogVisible = false
-			list({'id':this.checkedId}).then(res =>{
-                console.log(res)
-                this.classifyData = [res.data]
-            })
-            .catch(res=>{
-            	console.log(res)
-            })
+			this.list()
+//			list({'id':this.checkedId}).then(res =>{
+//              console.log(res)
+//              this.classifyData = [res.data]
+//          })
+//          .catch(res=>{
+//          	console.log(res)
+//          })
 		},
 		save() {
 			var ary = []

@@ -31,6 +31,14 @@ export function auditList(data) {
     data
   })
 }
+//查询全部抽取词条审核列表
+export function auditTaskList(data) {
+  return request({
+    url: '/wiki-backend/api/entry/auditTaskList',
+    method: 'post',
+    data
+  })
+}
 //审核
 export function audit(data) {
   return request({

@@ -119,7 +119,7 @@ export default {
 						type = item.dataSourceType
 					}
 				})
-				if(type === 1){
+				if(type === 1 || type === 2){
 					this.rules.tableName[0].required = true
 					this.rules.columns[0].required = true
 					this.getTableNames()

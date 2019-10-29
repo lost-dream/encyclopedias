@@ -53,7 +53,7 @@
 		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
 		    <el-table-column prop="SUMMARY" label="预分类">
 		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
-					{{JSON.parse(scope.row.SUMMARY.summary).text}}
+					{{JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g,'')}}
 				</template>
 		    </el-table-column>
 		    <el-table-column prop="CREATOR" label="数据源"></el-table-column>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import {auditList,audit} from '@/api/entry/index.js'
+import {auditTaskList,audit} from '@/api/entry/index.js'
 import {allList} from '@/api/dataSource/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 import {categoryTree} from '@/api/classifyManager/index.js'
@@ -239,13 +239,14 @@ export default {
 			this.auditList()
 		},
 		auditList() {
-			auditList({
-				pageNumber: this.pagination.page,
-				pageSize: this.pagination.limit,
+			auditTaskList({
+//				pageNumber: this.pagination.page,
+//				pageSize: this.pagination.limit,
 				auditState: parseInt(this.auditState),
 				keyword:this.keyword,
 				categoryId:this.categoryId,
-				label:this.label
+				label:this.label,
+				
 			}).then(res =>{
 				this.dataSourceList = res.data.records
 				this.pagination.count = res.data.total

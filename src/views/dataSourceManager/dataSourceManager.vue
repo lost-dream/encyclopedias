@@ -129,9 +129,8 @@ export default {
 		info() {
 			info({id:this.id}).then((res)=>{
 				for(let i in this.ruleForm){
-					this.ruleForm[i] = res.data[i].toString()
+					this.ruleForm[i] = res.data[i]!==null?res.data[i].toString():''
 				}
-				
 			})
 		},
 		submitForm(formName) {
