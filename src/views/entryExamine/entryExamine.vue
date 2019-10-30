@@ -250,8 +250,8 @@ export default {
 		},
 		auditList() {
 			auditTaskList({
-//				pageNumber: this.pagination.page,
-//				pageSize: this.pagination.limit,
+				pageNumber: this.pagination.page,
+				pageSize: this.pagination.limit,
 				auditState: parseInt(this.auditState),
 				keyword:this.keyword,
 				categoryId:this.categoryId,

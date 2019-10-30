@@ -448,7 +448,7 @@
                 let vm = this
                 this.$axios.post('/wiki-backend/api/specialDemandEntry/list',{specialId: vm.specialId,pageNumber:vm.pagination.page,pageSize:vm.pagination.limit})
                     .then(res =>{
-                        vm.entryList = res.data.specialDemandEntry.records
+                        vm.entryList = res.data.entry
                         vm.pagination.count = res.data.specialDemandEntry.total
                     })
             },
@@ -467,12 +467,12 @@
                 if(index == 'new') {
                     vm.categoryTree()
                 } else  {
-                    this.$axios.post('/wiki-backend/api/special/info', {id: index})
+                    this.$axios.post('/wiki-backend/api/special/info', {id: index,pageNumber:vm.pagination.page,pageSize:vm.pagination.limit})
                         .then(res => {
                             vm.form = res.data.special
-                            vm.keywords = res.data.special.keyWords.split(',')
-                            vm.labels = res.data.special.labels.split(',')
-                            vm.categoryIds = res.data.special.categoryIds.split(',')
+                            vm.keywords = res.data.special.keyWords?res.data.special.keyWords.split(','):[]
+                            vm.labels = res.data.special.labels?res.data.special.labels.split(','):[]
+                            vm.categoryIds = res.data.special.categoryIds?res.data.special.categoryIds.split(','):[]
                             vm.categoryTree()
                             vm.getConditionEntryList()
                         })
