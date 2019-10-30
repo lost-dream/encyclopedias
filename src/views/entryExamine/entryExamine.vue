@@ -49,7 +49,8 @@
 		    :data="dataSourceList"
 		    border
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
-		    style="width: 100%">
+		    style="width: 100%"
+		    @row-click="modifyEntry">
 		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
 		    <el-table-column prop="SUMMARY" label="预分类">
 		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
@@ -154,6 +155,15 @@ export default {
 		
 	},
 	methods: {
+		modifyEntry(item) {//编辑爬虫的词条，没有versionId
+			this.$router.push({
+				name:'editEntry',
+				query:{
+					entryId:item.id,
+					
+				}
+			})
+		},
 		allList() {
 			allList({}).then(res =>{
 				this.sourceList = res.data

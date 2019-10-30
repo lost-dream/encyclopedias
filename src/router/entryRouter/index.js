@@ -21,6 +21,13 @@ const EntryRouter = [
         meta: {
             title: '词条编辑',
         },
+    },{
+        path: '/editOthersEntry',
+        component: () => import('@/views/entry/editOthersEntry'),
+        name: 'editOthersEntry',
+        meta: {
+            title: '词条编辑',
+        },
     }
 ]
 export default EntryRouter

@@ -76,10 +76,10 @@
 		    <el-table-column prop="RN" label="版本"></el-table-column>
 			<el-table-column fixed="right" label="操作" width="150">
 				<template slot-scope="scope">
-					<el-button v-if="scope.row.STATE===2||scope.row.STATE===4" style="color: #7291e1;" @click.stop="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
-        			<el-button v-if="scope.row.STATE===2||scope.row.STATE===3||scope.row.STATE===6" style="color: #e36d72;" @click.stop="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
+					<el-button v-if="scope.row.STATE===2" style="color: #7291e1;" @click.stop="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
+        			<el-button v-if="scope.row.STATE===2" style="color: #e36d72;" @click.stop="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
         			<el-button v-if="scope.row.STATE===3||scope.row.STATE===6" style="color: #e36d72;" @click.stop="openDialog(scope.row,'5')" type="text" size="small">发布</el-button>
-        			<el-button v-if="scope.row.STATE===5" style="color: #e36d72;" @click.stop="openDialog(scope.row,'6')" type="text" size="small">取消发布</el-button>
+        			<el-button v-if="scope.row.STATE===3||scope.row.STATE===5" style="color: #e36d72;" @click.stop="openDialog(scope.row,'6')" type="text" size="small">取消发布</el-button>
 				</template>
 			</el-table-column>
 		  </el-table>
