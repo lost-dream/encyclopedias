@@ -15,7 +15,7 @@
                         type="primary">
                         {{ item.name }}
                     </el-tag>
-                    <el-button class="button-new-category" size="small" @click="dialogVisible = true"> + 添加分类</el-button>
+                    <el-button class="button-new-category" size="small" @click="showCategoryChooseModel"> + 添加分类</el-button>
                 </div>
             </div>
             <!-- 同义词 -->
@@ -438,6 +438,18 @@
             this.initSummaryEditor()
         },
         methods: {
+        	showCategoryChooseModel() {
+        		this.toData = this.savedCategories.map(x => {x.pid = x.parentId; return x})
+        		let vm = this
+                this.dialogVisible = true
+                // console.log('showModal',this.$refs.treeTransfer.addressee )
+                let t = setTimeout(() => {
+                    vm.$refs.treeTransfer && (function(){
+                        vm.$refs.treeTransfer.addressee = vm.toData
+                        clearTimeout(t)
+                    })()
+                }, 100)
+        	},
         	chooseClassify() {
         		this.showChooseClassify = false
         	},
