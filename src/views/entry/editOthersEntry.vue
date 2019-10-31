@@ -487,18 +487,16 @@
             let vm = this
             // 获取目录列表
             vm.entryId = vm.$route.query.entryId
-//          vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
+            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
             vm.viewType = 'preview'
             console.log(vm.entryId,'vm.entryId')
-            if(vm.viewType == 'preview'){
-            	this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:res.data.versionId})
+            
+                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
                     .then(res => {
                         console.log(res.data)
-                        let data = res.data
+                        let data = res
                         vm.entryName = data.entryName
-                        data.entrySynonyms.map(item => {
+                    	data.entrySynonyms&&data.entrySynonyms.map(item => {
                             let obj = {
                                 name:item.name,
                                 sourceType:item.sourceType,
@@ -506,7 +504,8 @@
                             }
                             vm.synonymList.push(obj)
                         })
-                        data.entrySummarys.map(item => {
+                        
+                        data.entrySummarys&&data.entrySummarys.map(item => {
                             if(item.dataType ==1 ){
                                 // vm.summaryEditor = JSON.parse(item.summary).text
                                 document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
@@ -524,7 +523,7 @@
                                 vm.otherSummaries.push(obj)
                             }
                         })
-                        data.entryContentVos.map(item =>{
+                        data.entryContentVos&&data.entryContentVos.map(item =>{
                             let obj1 = {
                                 'title': item.contentTitle,
                                 'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
@@ -547,14 +546,14 @@
                             })
                             vm.model.push(obj1)
                         })
-                        data.entryReferrences.map(item => {
+                        data.entryReferrences&&data.entryReferrences.map(item => {
                             let obj = {}
                             obj.title = item.referrenceTitle
                             obj.introduce = item.referrenceDesc
                             obj.url = item.referrenceUrl
                             vm.quoteList.push(obj)
                         })
-                        data.entryLabels.map(item => {
+                        data.entryLabels&&data.entryLabels.map(item => {
                             let obj = {
                                 name:item.labelName,
                                 sourceType:item.sourceType,
@@ -565,7 +564,7 @@
                         vm.initCKEditor()
                         vm.setModel()
                         
-                        data.entryAttributes.map((item,index)=>{
+                        data.entryAttributes&&data.entryAttributes.map((item,index)=>{
 							item.val = item.attributeValue
 							item.attributeType = item.attributeType
 							item.attributeName = item.attributeKey
@@ -612,8 +611,7 @@
                             vm.toData = data.categories.map(x => {x.pid = x.parentId; return x})
                     //     }
                     })
-                    })
-            }
+                    
             // vm.initCKEditor()
             // vm.setModel()
         },

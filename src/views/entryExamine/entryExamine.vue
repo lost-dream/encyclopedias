@@ -160,6 +160,7 @@ export default {
 				name:'editOthersEntry',
 				query:{
 					entryId:item.id,
+					versionId:item.versionId
 					
 				}
 			})
