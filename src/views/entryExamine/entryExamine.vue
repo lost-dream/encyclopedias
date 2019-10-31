@@ -51,30 +51,30 @@
 		    :header-cell-style="{background:'#ecedf2',color:'#67686d'}"
 		    style="width: 100%"
 		    @row-click="modifyEntry">
-		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
-		    <el-table-column prop="SUMMARY" label="预分类">
-		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
-					{{JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g,'')}}
+		    <el-table-column prop="entryName" label="名称"></el-table-column>
+		    <el-table-column prop="categories" label="预分类">
+		    	<template v-if="scope.row.categories" slot-scope="scope">
+					{{scope.row.categories.join(',')?scope.row.categories.join(','):'-'}}
 				</template>
 		    </el-table-column>
-		    <el-table-column prop="CREATOR" label="数据源"></el-table-column>
-		    <el-table-column prop="CREATE_TIME" label="创建时间">
+		    <el-table-column prop="dataSourceName" label="数据源"></el-table-column>
+		    <el-table-column prop="createTime" label="创建时间">
 		    	<template slot-scope="scope">
-					{{parseTime(scope.row.CREATE_TIME)}}
+					{{parseTime(scope.row.createTime)}}
 				</template>
 		    </el-table-column>
-		    <el-table-column prop="STATE" label="状态">
+		    <el-table-column prop="status" label="状态">
 		    	<template slot-scope="scope">
-					{{statusObj[scope.row.STATE]}}
+					{{statusObj[scope.row.status]}}
 				</template>
 		    </el-table-column>
 			<el-table-column fixed="right" label="操作" width="150">
 				<template slot-scope="scope">
-					<el-button v-if="scope.row.STATE===2||scope.row.STATE===4" style="color: #7291e1;" @click="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
+					<el-button v-if="scope.row.status===2||scope.row.status===4" style="color: #7291e1;" @click="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
         			
-        			<el-button v-if="scope.row.STATE===2||scope.row.STATE===3||scope.row.STATE===6" style="color: #e36d72;" @click="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
-        			<el-button v-if="scope.row.STATE===3||scope.row.STATE===6" style="color: #e36d72;" @click="openDialog(scope.row,'5')" type="text" size="small">发布</el-button>
-        			<el-button v-if="scope.row.STATE===5" style="color: #e36d72;" @click="openDialog(scope.row,'6')" type="text" size="small">取消发布</el-button>
+        			<el-button v-if="scope.row.status===2||scope.row.status===3||scope.row.status===6" style="color: #e36d72;" @click="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
+        			<el-button v-if="scope.row.status===3||scope.row.status===6" style="color: #e36d72;" @click="openDialog(scope.row,'5')" type="text" size="small">发布</el-button>
+        			<el-button v-if="scope.row.status===5" style="color: #e36d72;" @click="openDialog(scope.row,'6')" type="text" size="small">取消发布</el-button>
 				</template>
 			</el-table-column>
 		  </el-table>
@@ -157,7 +157,7 @@ export default {
 	methods: {
 		modifyEntry(item) {//编辑爬虫的词条，没有versionId
 			this.$router.push({
-				name:'editEntry',
+				name:'editOthersEntry',
 				query:{
 					entryId:item.id,
 					
@@ -254,8 +254,9 @@ export default {
 				pageSize: this.pagination.limit,
 				auditState: parseInt(this.auditState),
 				keyword:this.keyword,
-				categoryId:this.categoryId,
-				label:this.label,
+				categoryIds:this.categoryId,
+				entryName:this.label,
+				dataSourceId:this.dataSourceId
 				
 			}).then(res =>{
 				this.dataSourceList = res.data.records

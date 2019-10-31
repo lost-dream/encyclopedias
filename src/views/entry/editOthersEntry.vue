@@ -106,6 +106,10 @@
 								<span v-if="item.attributeType===1">
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
+								<!--爬虫数据-->
+								<span v-if="item.attributeType===null">
+									<el-input type="text" placeholder="请输入属性内容" v-model="item.attributeValue" clearable></el-input>
+								</span>
 								<!--数字-->
 								<span style="position: relative;" v-if="item.attributeType===2">
 									<input type="number" class="el-input__inner" :class="item.noValid?'border-red':''" @focus="item.noValid=false" @blur="watchNumber(item)" style="width: 220px;" :min="item.attributeRangeBegin" :max="item.attributeRangeEnd" :placeholder="'属性值在'+item.attributeRangeBegin+'～'+item.attributeRangeEnd+'之间'" v-model="item.val"></input>
