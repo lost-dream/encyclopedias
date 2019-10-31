@@ -11,9 +11,9 @@
                 <div class="block-container">
                     <el-tag
                         v-for="item in savedCategories"
-                        :key="item.id"
+                        :key="item&&item.id"
                         type="primary">
-                        {{ item.name }}
+                        {{ item&&item.name }}
                     </el-tag>
                     <el-button class="button-new-category" size="small" @click="showModal"> + 添加分类</el-button>
                 </div>
@@ -149,7 +149,7 @@
 						</li>
 					</ul>
 					<!--手动添加属性-->
-					<div v-show="classifyData.length" class="addClassifyFrom">
+					<div v-if="classifyData&&classifyData.length" class="addClassifyFrom">
 						<span class="name">
 							<el-button @click="addClassifyFrom" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
 						</span>
@@ -242,7 +242,7 @@
                         </h4>
                         <ul v-if="contentData.length" class="content-menu">
                             <li v-for="item in contentData" v-bind:key="item.id">
-                                <template v-if="item.children.length">
+                                <template v-if="item.children&&item.children.length">
                                     {{item.contentName}}
                                     <ul>
                                         <li v-for="el in item['children']" v-bind:key="el.id">
@@ -465,7 +465,7 @@
         },
         watch: {
             savedCategories: function(newValue, oldValue){
-                this.savedCategoriesArr = newValue.map(x => {return {'categoryId': x.id}})
+                this.savedCategoriesArr = newValue&&newValue.map(x => {return {'categoryId': x&&x.id?x.id:''}})
             }
         },
         created(){
@@ -494,7 +494,7 @@
                         vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
                     .then(res => {
                         console.log(res.data)
-                        let data = res
+                        let data = res.data
                         vm.entryName = data.entryName
                     	data.entrySynonyms&&data.entrySynonyms.map(item => {
                             let obj = {
@@ -504,25 +504,29 @@
                             }
                             vm.synonymList.push(obj)
                         })
+                        try{
+                        	data.entrySummarys&&data.entrySummarys.map(item => {
+	                            if(item.dataType ==1 ){
+	                                // vm.summaryEditor = JSON.parse(item.summary).text
+	                                document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
+	                                console.log(JSON.parse(item.summary).text,1111)
+	                                vm.initSummaryEditor()
+	                                vm.imageUrl = JSON.parse(item.summary).img
+	                            } else {
+	
+	                                let obj = {
+	                                    img : JSON.parse(item.summary).img,
+	                                    text : JSON.parse(item.summary).text,
+	                                    sourceType : item.sourceType,
+	                                    sourceValue : item.sourceValue
+	                                }
+	                                vm.otherSummaries.push(obj)
+	                            }
+	                        })
+                        }catch(e){
+                        	//TODO handle the exception
+                        }
                         
-                        data.entrySummarys&&data.entrySummarys.map(item => {
-                            if(item.dataType ==1 ){
-                                // vm.summaryEditor = JSON.parse(item.summary).text
-                                document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
-                                console.log(JSON.parse(item.summary).text,1111)
-                                vm.initSummaryEditor()
-                                vm.imageUrl = JSON.parse(item.summary).img
-                            } else {
-
-                                let obj = {
-                                    img : JSON.parse(item.summary).img,
-                                    text : JSON.parse(item.summary).text,
-                                    sourceType : item.sourceType,
-                                    sourceValue : item.sourceValue
-                                }
-                                vm.otherSummaries.push(obj)
-                            }
-                        })
                         data.entryContentVos&&data.entryContentVos.map(item =>{
                             let obj1 = {
                                 'title': item.contentTitle,
@@ -585,31 +589,11 @@
 
 
                         vm.requestCount ++
+                        if(!(data.categories.length === 1 && data.categories[0] === null)){
+                        	vm.savedCategories = data.categories
+                        }
 
-                        // if(vm.requestCount == 2){
-                            // 处理已选分类
-                            // console.log('tempData')
-                            // let tempArr = [];
-                            // vm.tempData.categories.forEach(x => {
-                            //     vm.categoryTreeData.forEach(y => {
-                            //         if(y.children.length){
-                            //             y.children.forEach(z => {
-                            //                 if(z.children.length){
-                            //                     z.children.forEach(s => {
-                            //                         s.id == x. && (tempArr.push(s))
-                            //                     })
-                            //                 }else{
-                            //                     z.id == x && (tempArr.push(z))
-                            //                 }
-                            //             })
-                            //         }else{
-                            //             y.id == x && (tempArr.push(y))
-                            //         }
-                            //     })
-                            // })
-                            vm.savedCategories = data.categories
-                            vm.toData = data.categories.map(x => {x.pid = x.parentId; return x})
-                    //     }
+                        vm.toData = data.categories&&data.categories.map(x => {x&&x.pid?x.pid = x.parentId:''; return x})
                     })
                     
             // vm.initCKEditor()
@@ -755,7 +739,7 @@
                     let h2 = '<h2>' + item.title + '</h2>'
                     item.content=='<p>null</p>'||item.content=='null'||item.content==null?item.content = '<p>&nbsp</p>':''
                     wiki = wiki + h2 + item.content
-                    if(item.children.length){
+                    if(item.children&&item.children.length){
                         item.children.map(k => {
                             let h3 = '<h3>' + k.title + '</h3>'
                             k.content=='<p>null</p>'||k.content=='null'||k.content==null?k.content = '<p>&nbsp</p>':''
