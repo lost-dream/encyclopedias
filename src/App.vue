@@ -42,6 +42,7 @@ export default {
 .el-card__body{
 		padding: 15px !important;
 		background: #f6fafb;
+		position: relative;
 	}
 .ck-editor__editable { 
 	min-height: 100px;
