@@ -12,6 +12,37 @@ export default {
 </script>
 
 <style lang="scss">
+.ck-content .table{
+	border-collapse: collapse;
+	td{
+		border: 1px solid #e2e5f3;
+    padding: 9px 15px 7px;
+    text-align: left;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-weight: normal;
+        font-size: 13px;
+    line-height: 24px;
+    b{
+    	font-weight: normal;
+    }
+	}
+	th{
+		background: #f7fbff;
+    border-bottom-width: 2px;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: arial,'pingfang sc',stheiti,'microsoft yahei',sans-serif;
+	}
+	
+}
+.el-card.is-always-shadow{
+	box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1) !important;
+}
+.el-card__body{
+		padding: 15px !important;
+		background: #f6fafb;
+	}
 .ck-editor__editable { 
 	min-height: 100px;
 	width: 700px;
@@ -143,7 +174,7 @@ ul,li,p{
     text-indent: 2em;
 }
 .el-collapse-item__header{
-    background: #eeeeee !important;
+    /*background: #eeeeee !important;*/
     display: block !important;
     text-align: right;
     color: rgb(51, 140, 230) !important;

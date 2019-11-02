@@ -60,7 +60,7 @@
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container" style="width: calc(14% - 40px);font-weight: bolder"><p class="vertical-middle">目录</p></div>
+                <div class="block-container" style="width: calc(14% - 40px);"><p class="vertical-middle">目录</p></div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(0,8)">
                         <a @click="slideToAnchor(item.id)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
@@ -133,7 +133,7 @@
                 <h3 id="tag">标签</h3>
                 <div v-if="wikiContent.entryLabels.length" >
                     <template v-for="(item) in wikiContent.entryLabels">
-                        <el-tag style="margin-right: 10px">{{item.labelName}}</el-tag>
+                        <el-tag @click="chooseTag(item)" :class="item.choosed?'el-tag-active':''">{{item.labelName}}</el-tag>
                     </template>'
                 </div>
                 <template v-else>
@@ -159,28 +159,32 @@
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
                     <p class="pd-left-10">创建者：{{wikiInfo.creator}}</p>
-                    <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}&nbsp;<a style="color:#338ce6;cursor:pointer;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
+                    <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#338ce6;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
                     <p class="pd-left-10" v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
 
                 </el-card>
                 <el-card style="margin-top: 20px">
                     <div class="card-title">
-                        <span >快速导航</span>
+                        <!--<span >快速导航</span>-->
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
-                    <div style="max-height: 330px;overflow-y: scroll">
-                        <a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
+                    <div class="rightNav" style="max-height: 360px;overflow-y: scroll">
+                        <!--<a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
                         <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
-                        <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>
-                        <div v-for="item in wikiContent.entryContentVos" class="pd-left-10">
-                            <a class="p1 catalogue" @click="slideToAnchor(item.id)">{{item.contentTitle}}</a>
-                            <div v-for="k in item.children">
-                                <a class="p2 catalogue" @click="slideToAnchor(k.id)">{{k.contentTitle}}</a>
-                                <a class="p3 catalogue" v-for="v in k.children" @click="slideToAnchor(v.id)">{{v.contentTitle}}</a>
+                        <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>-->
+                        <div v-for="(item,index) in wikiContent.entryContentVos" class="pd-left-10">
+                            <a v-if="item.contentTitle" class="catalogue1 catalogue" @click="slideToAnchor(item.id)"><span style="margin-right: 10px;">{{index+1}}</span>{{item.contentTitle}}</a>
+                            <div v-for="(k,index1) in item.children">
+                                <a v-if="k.contentTitle" class="catalogue2 catalogue" @click="slideToAnchor(k.id)">
+                                	<span style="margin-right: 10px;">{{index+1}}.{{index1}}</span>{{k.contentTitle}}
+                                </a>
+                                <a v-if="v.contentTitle" class="catalogue3 catalogue" v-for="(v,index2) in k.children" @click="slideToAnchor(v.id)">
+                                	<span style="margin-right: 10px;">{{index+1}}.{{index1}}.{{index2}}</span>{{v.contentTitle}}
+                                </a>
                             </div>
                         </div>
-                        <a @click="slideToAnchor('reference')" class="catalogue pd-left-10">引用</a>
-                        <a @click="slideToAnchor('tag')" class="catalogue pd-left-10">标签</a>
+                        <!--<a @click="slideToAnchor('reference')" class="catalogue pd-left-10">引用</a>
+                        <a @click="slideToAnchor('tag')" class="catalogue pd-left-10">标签</a>-->
                     </div>
                 </el-card>
             </div>
@@ -243,6 +247,9 @@ import {audit} from '@/api/entry/index.js'
                     .then(res => {
                         console.log(res.data)
                         vm.wikiContent = res.data
+                        if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
+                        	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
+                        }
                         vm.contentList = []
                         res.data.entrySummarys.map(item => {
                             if(item.dataType ==1 ){
@@ -308,6 +315,9 @@ import {audit} from '@/api/entry/index.js'
                             .then(res => {
                                 console.log(res.data)
                                 vm.wikiContent = res.data
+                                if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
+		                        	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
+		                        }
                                 vm.contentList = []
                                 res.data.entrySummarys.map(item => {
                                     if(item.dataType ==1 ){
@@ -383,6 +393,12 @@ import {audit} from '@/api/entry/index.js'
             next()
         },
         methods: {
+        	chooseTag(item) {
+        		this.wikiContent.entryLabels.map((item)=>{
+        			this.$set(item,'choosed',false)
+        		})
+        		this.$set(item,'choosed',true)
+        	},
             goLink (link) {
                 if(link.slice(0,4)=='http'){
                     window.open(link)
@@ -423,9 +439,46 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+	/*修改样式*/
+	.ck-content .table,.ck-content .table thead,.ck-content .table tr,.ck-content .table td{
+		border: 1px solid #e2e5f3;
+	    padding: 9px 15px 7px;
+	    text-align: left;
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+	.el-card__body{
+		padding: 15px;
+		background: #f6fafb;
+	}
+	.el-tag{
+		background: #f6fafb;
+		color: #909293;
+		padding: 0 15px;
+		line-height: 30px;
+		margin-right: 35px;
+		&:hover{
+			cursor: pointer;
+		}
+	}
+	.el-tag-active{
+		background: #338ce6;
+		color: #fff;
+	}
+	.ck-content,#attribute,{
+		font-size: 14px;
+		color: #6f727c;
+	}
+	#reference,#tag{
+		font-weight: normal;
+	}
+	
     .card-title{
-        font-weight: bold;
+        /*font-weight: bold;*/
         margin-bottom:10px;
+        span{
+        	color: #333333;
+        }
     }
     .pd-left-10{
         padding-left: 10px;
@@ -474,19 +527,26 @@ import {audit} from '@/api/entry/index.js'
         font-weight: bold;
     }
     .block-container{
-        background: #eee;
+        /*background: #eee;*/
         padding: 20px;
+        border-top: 1px solid #eee;
+        h6{
+        	font-weight: normal;
+        }
     }
     .pd-20{
         padding: 20px;
     }
     .quote-btn{
-        color:  #338ce6;
+        color:  #8a8a8a;
+        font-weight: normal;
         padding-right: 10px;
         cursor: pointer;
     }
     .box-card p{
         margin: 5px 0;
+        font-size: 14px;
+        line-height: 30px;
     }
     .el-form-item{
         margin-bottom: 10px;
@@ -520,7 +580,47 @@ import {audit} from '@/api/entry/index.js'
         display: block;
         cursor: pointer;
         margin: 5px 0;
+        font-weight: 500;
     }
+    
+    /*右侧导航样式*/
+   .rightNav{
+   	.catalogue{
+   		text-decoration: none;
+	    display: block;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    padding-bottom: 4px;
+	    height: 26px;
+    	line-height: 26px;
+   	}
+   	.catalogue1{
+   		font-weight: 700;
+    	color: #666;
+    	font-size: 14px;
+   	}
+   	.catalogue2{
+   		font-size: 12px;
+	    padding-left: 20px;
+	    color: #666;
+   	}
+   	.catalogue3{
+   		font-size: 12px;
+	    padding-left: 40px;
+	    color: #666;
+   	}
+   	.current{
+   		background: #e2eff9;
+   		
+   		
+   	}
+   }
+    
+    
+    
+    
+    
     .text-center{
         text-align: center;
     }
@@ -529,6 +629,7 @@ import {audit} from '@/api/entry/index.js'
         top: 50%;
         transform: translateY(-50%);
         margin: 0;
+        font-weight: 500;
     }
     ul li{
         line-height: 20px;
@@ -553,9 +654,12 @@ import {audit} from '@/api/entry/index.js'
        display: flex;
        flex-direction: column;
        margin: 10px 30px 20px;
-       box-shadow: 0 0 5px 0 #b5b5b5;
+       box-shadow: 0 0 1px 0 #b5b5b5;
+       
        strong {
            padding: 5px;
+           font-weight: normal;
+           color: #666666;
        }
     }
 </style>
