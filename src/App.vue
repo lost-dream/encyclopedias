@@ -189,7 +189,22 @@ ul,li,p{
     line-clamp:2;
     word-wrap: break-word;
 }
+.ellipsis3 {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:3;
+    line-clamp:3;
+    word-wrap: break-word;
+}
     .main-content{
         line-height: 25px;
     }
+    .w800 .el-carousel__item--card.is-active{
+        transform: translateX(200px) scale(0.83) !important;
+    }
+.cat-img  > img{
+    width: 150px;
+}
 </style>

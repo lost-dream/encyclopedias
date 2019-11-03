@@ -6,7 +6,7 @@
 			</div>
 			<el-row>
 				<el-col class="w800">
-					<el-carousel :interval="5000">
+					<el-carousel :interval="50000" type="card" height="500px">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList ">
 								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
@@ -82,26 +82,152 @@
 					</div>
 				</el-carousel-item>
 			</el-carousel>
+			<div class="bgf6fafb">
+				<div class="title" >
+					<span>精选分类</span>
+				</div>
+				<div class="category-container" style="margin: 0;">
+					<!--<div :style="'background:#'+categoryBgColor[index % 5]" class="category-item" v-for="(item,index) in categoryTreeList" :key="index">-->
+					<!--<div class="categoryTreeList">-->
+					<!--<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>-->
+					<!--<ul>-->
+					<!--<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">-->
+					<!--{{item1.name}}-->
+					<!--&lt;!&ndash;<ul v-show="item1.showThirdCategory" v-if="item1.children.length">-->
+					<!--<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>-->
+					<!--</ul>&ndash;&gt;-->
+					<!--</li>-->
+					<!--</ul>-->
 
-			<div class="title">
-				<span>精选分类</span>
-			</div>
-			<div class="category-container">
-				<div :style="'background:#'+categoryBgColor[index % 5]" class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
-					<div class="categoryTreeList">
-						<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>
-						<ul>
-							<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
-								{{item1.name}}
-								<!--<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
-									<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
-								</ul>-->
-							</li>
-						</ul>
+					<!--</div>-->
+					<!--</div>-->
+					<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
+						<div class="categoryTreeList">
+							<p style="color: #000;text-align: left">{{item.name}}</p>
+							<ul>
+								<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
+									{{item1.name}}
+									<!--<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
+                                        <li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
+                                    </ul>-->
+								</li>
+							</ul>
 
+						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="title">
+				<span>分类推荐</span>
+			</div>
+			<template>
+
+				<el-tabs tab-position="left" v-model="activeName" style="height: 450px;" @tab-click="handleClick">
+					<el-tab-pane label="科技" name="6">
+						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
+										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+									</div>
+								</el-image>
+								<!--<img src="/static/image/tank.png"/>-->
+								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+								</div>
+							</div>
+						</div>
+						<h2 v-else>该分类下没有词条</h2>
+					</el-tab-pane>
+					<el-tab-pane label="经济" name="5">
+						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
+										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+									</div>
+								</el-image>
+								<!--<img src="/static/image/tank.png"/>-->
+								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+								</div>
+							</div>
+						</div>
+						<h2 v-else>该分类下没有词条</h2>
+					</el-tab-pane>
+					<el-tab-pane label="安全" name="4">
+						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
+										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+									</div>
+								</el-image>
+								<!--<img src="/static/image/tank.png"/>-->
+								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+								</div>
+							</div>
+						</div>
+						<h2 v-else>该分类下没有词条</h2>
+					</el-tab-pane>
+					<el-tab-pane label="外交" name="3">
+						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
+										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+									</div>
+								</el-image>
+								<!--<img src="/static/image/tank.png"/>-->
+								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+								</div>
+							</div>
+						</div>
+						<h2 v-else>该分类下没有词条</h2>
+					</el-tab-pane>
+					<el-tab-pane label="军事" name="2">
+						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
+										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+									</div>
+								</el-image>
+								<!--<img src="/static/image/tank.png"/>-->
+								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+								</div>
+							</div>
+						</div>
+						<h2 v-else>该分类下没有词条</h2>
+					</el-tab-pane>
+					<el-tab-pane label="政治" name="1">
+						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
+										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+									</div>
+								</el-image>
+								<!--<img src="/static/image/tank.png"/>-->
+								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+								</div>
+							</div>
+						</div>
+						<h2 v-else>该分类下没有词条</h2>
+					</el-tab-pane>
+				</el-tabs>
+			</template>
 		</div>
 	</div>
 </template>
@@ -115,10 +241,12 @@ export default {
 	name: 'index',
 	data() {
 	    return {
+            activeName: '6',
 	    	entryStatisticalData:{},
 	    	specialListData:[],
 	    	categoryTreeList:[],
 	    	entryListData:[],
+            categoryList: [],
 	    	categoryTitleColor:['e9b937','6d56fb','079ea9','ec6b6b','199df2'],
 	    	categoryBgColor:['f3ebd1','d9d4f5','c1dfe2','f7dee0','c6e3f5'],
 	    }
@@ -131,6 +259,7 @@ export default {
 		this.specialList()
 		this.categoryTree()
 		this.entryList()
+		this.getCategoryList(6)
 	},
 	mounted() {
 	},
@@ -216,7 +345,21 @@ export default {
 
 			})
 		},
-
+		getCategoryList(id){
+		  let vm = this
+			vm.$axios.post('/wiki-backend/api/entry/list',{
+                pageNumber:1,
+				pageSize:6,
+                categoryIds: id
+			}).then(res=>{
+				console.log(res)
+				vm.categoryList = res.data.records
+			})
+		},
+        handleClick() {
+            console.log(this.activeName);
+            this.getCategoryList(this.activeName)
+        },
 		seeEntry (hash) {
 				console.log(hash)
 				this.$router.push({
@@ -276,7 +419,7 @@ export default {
 	/*// justify-content: center;*/
 }
 .category-item {
-	min-width: 220px;
+	min-width: 400px;
 	display: inline-block;
 	vertical-align: top;
 	margin-bottom: 20px;
@@ -302,42 +445,47 @@ export default {
  -moz-border-radius: 2em;
  border-radius:2em;
 }
-.category-item + .category-item {
+.category-item {
 	margin-left: 25px;
-	&:nth-child(5n+1){
-		margin-left: 0;
+	&:nth-child(3n){
+		ul{
+			border-right: 0;
+		}
 	}
+	/*&:nth-child(5n+1){*/
+		/*margin-left: 25px;*/
+	/*}*/
 }
 .categoryTreeList{
 	padding-bottom: 10px;
 	font-size: 14px;
 	color: #99acae;
+
 	p{
-		font-size: 16px;
 		font-size: 16px;
 		font-weight: bold;
 		line-height: 40px;
 		color: white;
 		text-align: center;
-		box-shadow: 0 2px 5px 1px #848484;
+		/*box-shadow: 0 2px 5px 1px #848484;*/
 		margin-bottom: 5px;
 	}
 	ul{
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		width: 100%;
 		display: inline-block;
 		min-height: 160px;
-		width: 220px;
+		width: 400px;
+		border-right: 1px solid #ccc;
 		li{
 			color: #666666;
 			margin: 0;
 			padding: 0;
 			display: inline-block;
-			width: calc(50% - 1px);
+			width: calc(25% - 1px);
 			line-height: 30px;
-			text-align: center;
+			text-align: left;
 			overflow: hidden;
 			text-overflow:ellipsis;
 			white-space: nowrap;
@@ -369,28 +517,62 @@ export default {
 	}
 }
 
+/*.entryList{*/
+	/*&:hover{*/
+		/*cursor: pointer;*/
+		/*opacity: 0.8;*/
+	/*}*/
+	/*position: relative;*/
+	/*width: 800px;*/
+	/*height: 400px;*/
+
+	/*image {*/
+		/*width: 100%;*/
+		/*height: 100%;*/
+	/*}*/
+
+	/*>div{*/
+		/*position: absolute;*/
+		/*left: 0;*/
+		/*bottom: 0;*/
+		/*background: rgba(0,0,0,0.3);*/
+		/*color: white;*/
+		/*width: calc(100% - 30px);*/
+		/*padding: 0 15px;*/
+		/*line-height: 25px;*/
+		/*font-size: 16px;*/
+		/*.entry-title{*/
+			/*line-height: 30px;*/
+			/*font-size: 14px;*/
+			/*font-weight: bold;*/
+		/*}*/
+	/*}*/
+/*}*/
 .entryList{
 	&:hover{
 		cursor: pointer;
 		opacity: 0.8;
 	}
+	margin-left: 65px;
 	position: relative;
-	width: 800px;
+	width: 267px;
 	height: 400px;
 
 	image {
 		width: 100%;
 		height: 100%;
 	}
-
+	>img{
+		width: 267px;
+	}
 	>div{
 		position: absolute;
 		left: 0;
 		bottom: 0;
-		background: rgba(0,0,0,0.3);
-		color: white;
-		width: calc(100% - 30px);
-		padding: 0 15px;
+		background: white;
+		color: black;
+		width: 247px;
+		padding: 0 10px;
 		line-height: 25px;
 		font-size: 16px;
 		.entry-title{
@@ -497,10 +679,18 @@ export default {
 	margin-top: 60px;
 }
 
-
 .page-index {
 	width: 1280px; 
 	margin: 0 auto;
 }
-	
+	.bgf6fafb::after{
+		content: '';
+		width: 20000px;
+		left: 0;
+		transform: translateY(-100%);
+		position: absolute;
+		min-height: 600px;
+		z-index: -10;
+		background: #f6fafb;
+	}
 </style>
