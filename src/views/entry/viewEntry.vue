@@ -28,7 +28,7 @@
                         <span v-else>当前词条暂无描述</span>
                     </div>
 
-                    <el-collapse accordion @change="showOtherSummaries = !showOtherSummaries" style="background: #eeeeee">
+                    <el-collapse accordion @change="showOtherSummaries = !showOtherSummaries" style="background: #eeeeee" v-if="otherSummaries.length">
                         <el-collapse-item :title="showOtherSummaries?'收起':'展开其他来源摘要'"  style="background: #eeeeee">
                             <div style="display: flex;padding: 10px" v-for="item in otherSummaries">
                                 <img :src="item.img" class="avatar" style="width: 25%">
@@ -222,11 +222,7 @@ import {audit} from '@/api/entry/index.js'
         data() {
             return {
                 summaryEditor: '',
-                otherSummaries: [{
-                    img: 'http://106.12.208.84:8888/group1/M00/00/00/rBAABF2elj2AUOYtAANXnTl20iA914.jpg',
-                    text: '123',
-                    sourceType: 1
-                }],
+                otherSummaries: [],
                 activeNames: ['1'],
                 wikiContent: {entryContentVos:[],entrySummarys:[],entryReferrences:[],entrySynonyms:[],entryAttributes:[],categories:[],entryLabels:[]},
                 activeName: 'second',
@@ -528,6 +524,7 @@ import {audit} from '@/api/entry/index.js'
 		background: #f6fafb;
 		color: #909293;
 		padding: 0 15px;
+        margin-bottom: 15px;
 		line-height: 30px;
 		margin-right: 35px;
 		&:hover{
