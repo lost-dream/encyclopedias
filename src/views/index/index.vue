@@ -126,7 +126,7 @@
 				<el-tabs tab-position="left" v-model="activeName" style="height: 450px;" @tab-click="handleClick">
 					<el-tab-pane label="科技" name="6">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
 								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
 										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
@@ -143,7 +143,7 @@
 					</el-tab-pane>
 					<el-tab-pane label="经济" name="5">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
 								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
 										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
@@ -160,7 +160,7 @@
 					</el-tab-pane>
 					<el-tab-pane label="安全" name="4">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
 								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
 										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
@@ -177,7 +177,7 @@
 					</el-tab-pane>
 					<el-tab-pane label="外交" name="3">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
 								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
 										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
@@ -194,7 +194,7 @@
 					</el-tab-pane>
 					<el-tab-pane label="军事" name="2">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
 								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
 										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
@@ -211,7 +211,7 @@
 					</el-tab-pane>
 					<el-tab-pane label="政治" name="1">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
 								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
 										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
@@ -391,6 +391,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.categoryListItem{
+	&:hover{
+		cursor: pointer;
+		opacity: 0.6;
+	}
+}
 .main-page {
 	padding-top: 30px;
 	// background: url('/static/image/index-bg.png') 0 0 no-repeat;

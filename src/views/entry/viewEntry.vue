@@ -164,7 +164,7 @@
 
                 </el-card>
                 <el-card style="margin-top: 20px;padding: 20px 0;">
-                	<div @click="scrollRightNav('up')" class="down-arrow-active"></div>
+                	<div @click="scrollRightNav('down')" class="down-arrow-active"></div>
                     <div class="card-title">
                         <!--<span >快速导航</span>-->
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
@@ -189,7 +189,7 @@
                         <!--<a @click="slideToAnchor('reference')" class="catalogue pd-left-10">引用</a>
                         <a @click="slideToAnchor('tag')" class="catalogue pd-left-10">标签</a>-->
                     </div>
-                    <div @click="scrollRightNav('down')" class="down-arrow"></div>
+                    <div @click="scrollRightNav('up')" class="down-arrow"></div>
                 </el-card>
             </div>
             <!--<el-tabs v-model="activeName">-->
@@ -527,6 +527,7 @@ import {audit} from '@/api/entry/index.js'
         margin-bottom: 15px;
 		line-height: 30px;
 		margin-right: 35px;
+		margin-bottom: 35px;
 		&:hover{
 			cursor: pointer;
 		}
