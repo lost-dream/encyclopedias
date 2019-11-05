@@ -6,7 +6,7 @@
 			</div>
 			<el-row>
 				<el-col class="w800">
-					<el-carousel :interval="50000" type="card" height="500px">
+					<el-carousel :interval="50000" type="card" height="400px">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList ">
 								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
@@ -57,7 +57,7 @@
 			<div class="title">
 				<span>特色专题</span>
 			</div>
-			<el-carousel :interval="5000" type="card" height="530px">
+			<el-carousel :interval="5000" type="card" height="400px">
 				<el-carousel-item v-for="item in specialListData" :key="item.id">
 					<div @click="routeToSpecial(item.id)" class="specialList">
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
@@ -123,17 +123,17 @@
 			</div>
 			<template>
 
-				<el-tabs tab-position="left" v-model="activeName" style="height: 450px;" @tab-click="handleClick">
+				<el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="科技" name="6">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
-								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
-									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
-										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" >
+										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
-								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+								<div class="text-desc">
 									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
@@ -144,13 +144,13 @@
 					<el-tab-pane label="经济" name="5">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
-								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
-									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
-										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" >
+										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
-								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+								<div class="text-desc">
 									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
@@ -161,13 +161,13 @@
 					<el-tab-pane label="安全" name="4">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
-								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
-									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
-										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" >
+										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
-								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+								<div class="text-desc">
 									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
@@ -178,13 +178,13 @@
 					<el-tab-pane label="外交" name="3">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
-								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
-									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
-										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" >
+										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
-								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+								<div class="text-desc">
 									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
@@ -195,13 +195,13 @@
 					<el-tab-pane label="军事" name="2">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
-								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
-									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
-										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" >
+										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
-								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+								<div class="text-desc">
 									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
@@ -212,13 +212,13 @@
 					<el-tab-pane label="政治" name="1">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
-								<el-image class="cat-img" style="width: 150px;height: 120px;overflow: visible;background: #eee" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
-									<div slot="error" class="image-slot" style="width: 150px;height: 120px">
-										<i class="el-icon-picture-outline" style="margin-left: 67px;margin-top: 52px"></i>
+								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
+									<div slot="error" class="image-slot" >
+										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
-								<div style="display: flex;flex-direction: column;padding: 10px;line-height: 25px">
+								<div class="text-desc">
 									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
@@ -411,6 +411,7 @@ export default {
 	.w480 {
 		width: 480px;
 		padding: 0 30px;
+		margin: 0 -80px;
 	}
 }
 .title+.el-row {
@@ -429,7 +430,10 @@ export default {
 	display: inline-block;
 	vertical-align: top;
 	margin-bottom: 20px;
-	height: 240px;
+	height: 200px;
+	.categoryTreeList {
+		height: 100%;
+	}
 	ul{
 		overflow-y: scroll;
 		height: 195px;
@@ -481,7 +485,7 @@ export default {
 		margin: 0;
 		padding: 0;
 		display: inline-block;
-		min-height: 160px;
+		height: 165px;
 		width: 400px;
 		border-right: 1px solid #ccc;
 		li{
@@ -495,9 +499,9 @@ export default {
 			overflow: hidden;
 			text-overflow:ellipsis;
 			white-space: nowrap;
-			&:nth-child(2n+1){
-				border-right: 1px solid white;
-			}
+			// &:nth-child(2n+1){
+				// border-right: 1px solid white;
+			// }
 			&:hover{
 				color: #338ce6;
 				cursor: pointer;
@@ -563,6 +567,7 @@ export default {
 	position: relative;
 	width: 267px;
 	height: 400px;
+	background: #ffffff;
 
 	image {
 		width: 100%;
@@ -590,7 +595,7 @@ export default {
 }
 .specialList{
 	width: 360px;
-	height: 530px;
+	height: 400px;
 	background: #f6fafb;
 	margin: auto;
 	position: relative;
@@ -600,7 +605,7 @@ export default {
 	}
 	>div:not(.el-image){
 		width: 324px;
-		height: 288px;
+		height: 160px;
 		padding: 20px 0 30px 0;
 		background: white;
 		border-radius: 5px;
@@ -616,6 +621,7 @@ export default {
 		div{
 			font-size: 14px;
 			padding: 0 30px;
+			line-height: 1.4;
 		}
 	}
 }
@@ -681,9 +687,9 @@ export default {
 	}
 }
 
-.el-row+.title{
-	margin-top: 60px;
-}
+// .el-row+.title{
+// 	margin-top: 60px;
+// }
 
 .page-index {
 	width: 1280px; 
@@ -695,8 +701,44 @@ export default {
 		left: 0;
 		transform: translateY(-100%);
 		position: absolute;
-		min-height: 600px;
+		min-height: 530px;
 		z-index: -10;
 		background: #f6fafb;
+	}
+	.cat-img {
+		width: 150px;
+		height: 96px;
+		overflow: visible;
+		background: #eee;
+		/deep/ .image-slot {
+			width: 150px;
+			height: 96px;
+			.el-icon-picture-outline {
+				margin-left: 68px;
+    		margin-top: 41px;
+			}
+		}
+	}
+	.text-desc {
+		display: flex;
+		flex-direction: column;
+		padding: 10px;
+		line-height: 1.2;
+	}
+	body {
+		overflow-x: hidden;
+	}
+	.el-tabs {
+		height: 354px;
+		padding-bottom: 20px;
+		/deep/ .el-tabs__item {
+			height: 58px;
+			line-height: 58px;
+			width: 120px;
+			text-align: center;
+		}
+		/deep/ .el-tabs__item.is-active {
+			background: #eee;
+		}
 	}
 </style>
