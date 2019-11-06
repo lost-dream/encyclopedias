@@ -169,7 +169,7 @@
                         <!--<span >快速导航</span>-->
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
-                    <div id="rightNav" class="rightNav" style="max-height: 360px;overflow-y: scroll">
+                    <div id="rightNav" class="rightNav" style="max-height: 310px;overflow-y: scroll">
                         <!--<a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
                         <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
                         <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>-->
