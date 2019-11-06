@@ -217,12 +217,16 @@
                             type="selection"
                             width="55">
                     </el-table-column>
-                    <el-table-column prop="ENTRY_NAME" label="词条名称" width="180"></el-table-column>
+                    <!--<el-table-column prop="ENTRY_NAME" label="词条名称" width="180"></el-table-column>
                     <el-table-column label="词条描述">
                         <template slot-scope="scope" v-for="item in entryListData.SUMMARY" v-if="item.dataType == 1">
                             {{JSON.parse(item).text}}
                         </template>
-                    </el-table-column>
+                    </el-table-column>-->
+                    
+                    
+                    <el-table-column prop="title" label="词条名称" width="180"></el-table-column>
+                    <el-table-column prop="desc" label="词条描述"></el-table-column>
                 </el-table>
                 <el-pagination background @size-change="handleEntrySizeChange" @current-change="handleEntryCurrentChange" :current-page="paginationEntry.page" :page-size="paginationEntry.limit" layout="total, sizes, prev, pager, next" :total="pagination.count"></el-pagination>
 
@@ -406,7 +410,8 @@
             handleSelectionChange(val) {
                 this.entryIds = []
                 val.map(item=>{
-                    this.entryIds.push(item.ENTRY_ID)
+//                  this.entryIds.push(item.ENTRY_ID)
+                    this.entryIds.push(item.itemid)
                 })
                 console.log(this.entryIds)
             },
@@ -514,14 +519,32 @@
                     vm.getSpecialEntryList(vm.specialId)
                 })
             },
-            entrySearchList(){
+            entrySearchList(){//换成全站搜索的接口，内网环境才能调通
                 let vm = this
-                vm.$axios.post('/wiki-backend/api/entry/list',{
+//              vm.$axios.post('/wiki-backend/api/entry/list',{
+//                  pageNumber: vm.paginationEntry.page,
+//                  pageSize: vm.paginationEntry.limit,
+//                  "categoryId": "",
+//                  "keyword": vm.entrySearch,
+//              }).then((res)=>{
+//                  vm.entryListData = res.data.records
+//                  vm.paginationEntry.count = res.data.total
+//              })
+                vm.$axios.post('/wiki-backend/encyclopedia/search/query',{
                     pageNumber: vm.paginationEntry.page,
                     pageSize: vm.paginationEntry.limit,
-                    "categoryId": "",
-                    "keyword": vm.entrySearch,
+                    "query": vm.entrySearch,
                 }).then((res)=>{
+                	res.data.records.map((item)=>{
+						try{
+							item.img = JSON.parse(item.text).img
+							item.desc = JSON.parse(item.text).text
+						}catch(e){
+							//TODO handle the exception
+							item.img = ''
+							item.desc = ''
+						}
+					})
                     vm.entryListData = res.data.records
                     vm.paginationEntry.count = res.data.total
                 })

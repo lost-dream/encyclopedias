@@ -3,8 +3,8 @@
 		<!--非全站搜索-->
 		<div v-if="!searchTotalStation" class="entryListData">
 			<div v-for="item,index in entryListData" @click="routeToEntry(item.ENTRY_ID)" class="entry-cell" :class="index==entryListData.length-1?'':'bd-bottom'">
-				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
-				<img v-else src="/static/image/tank.png"/>
+				<img style="width: 160px;height: 120px;margin-right: 20px;" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+				<img style="width: 160px;height: 120px;margin-right: 20px;" v-else src="/static/image/tank.png"/>
 				<div>
 					<p>{{item.ENTRY_NAME}}</p>
 					<p class="desc" v-if="item.SUMMARY.length">{{JSON.parse(item.SUMMARY[0]).text}}</p>
