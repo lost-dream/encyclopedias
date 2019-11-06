@@ -161,7 +161,7 @@
                     <p class="pd-left-10">创建者：{{wikiInfo.creator}}</p>
                     <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#338ce6;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
                     <p class="pd-left-10" v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
-
+                    <p v-if="viewType !== 'preview'" class="pd-left-10" @click="routeToEditOthersEntry()" style="color:#338ce6;cursor:pointer;">修改词条</p>
                 </el-card>
                 <el-card style="margin-top: 20px;padding: 20px 0;">
                 	<div @click="scrollRightNav('down')" class="down-arrow-active"></div>
@@ -175,12 +175,12 @@
                         <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>-->
                         
                         <div v-for="(item,index) in wikiContent.entryContentVos" class="pd-left-10">
-                            <a v-if="item.contentTitle" :class="item.choosed?'current':''" class="catalogue1 catalogue" @click="slideToAnchor1(item)"><span style="margin-right: 10px;">{{index+1}}</span>{{item.contentTitle}}</a>
+                            <a v-if="item.contentTitle&&item.contentTitle!=='null'" :class="item.choosed?'current':''" class="catalogue1 catalogue" @click="slideToAnchor1(item)"><span style="margin-right: 10px;">{{index+1}}</span>{{item.contentTitle}}</a>
                             <div v-for="(k,index1) in item.children">
-                                <a :class="k.choosed?'current':''" v-if="k.contentTitle" class="catalogue2 catalogue" @click="slideToAnchor1(k)">
+                                <a :class="k.choosed?'current':''" v-if="k.contentTitle&&k.contentTitle!=='null'" class="catalogue2 catalogue" @click="slideToAnchor1(k)">
                                 	<span style="margin-right: 10px;">{{index+1}}.{{index1}}</span>{{k.contentTitle}}
                                 </a>
-                                <a :class="v.choosed?'current':''" v-if="v.contentTitle" class="catalogue3 catalogue" v-for="(v,index2) in k.children" @click="slideToAnchor1(v)">
+                                <a :class="v.choosed?'current':''" v-if="v.contentTitle&&v.contentTitle!=='null'" class="catalogue3 catalogue" v-for="(v,index2) in k.children" @click="slideToAnchor1(v)">
                                 	<span style="margin-right: 10px;">{{index+1}}.{{index1}}.{{index2}}</span>{{v.contentTitle}}
                                 </a>
                             </div>
@@ -312,6 +312,7 @@ import {audit} from '@/api/entry/index.js'
                     .then(res => {
                         console.log(res.data)
                         vm.wikiInfo = res.data
+                        vm.versionId = res.data.versionId
                         vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:res.data.versionId})
                             .then(res => {
                                 console.log(res.data)
@@ -394,6 +395,16 @@ import {audit} from '@/api/entry/index.js'
             next()
         },
         methods: {
+            routeToEditOthersEntry () {
+              let vm = this
+              vm.$router.push({
+                  name: 'editOthersEntry',
+                  query: {
+                      versionId: vm.versionId,
+                      entryId: vm.entryId
+                  }
+              })
+            },
         	chooseTag(item) {
         		this.wikiContent.entryLabels.map((item)=>{
         			this.$set(item,'choosed',false)

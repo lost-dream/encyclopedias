@@ -46,6 +46,7 @@
                         <div style="display: flex;flex-direction: column">
                             <el-upload
                                     class="avatar-uploader"
+                                    style="background: white"
                                     :action="PREFIX.UPLOAD_URL"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess">
@@ -55,9 +56,9 @@
                             </el-upload>
                             <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
                         </div>
-                        <div style="display: flex;flex-direction: column;margin-left: 10px">
+                        <div style="display: flex;flex-direction: column;margin-left: 10px;width: 690px">
                             <div id="summaryToolbar"></div>
-                            <div id="summaryEditor" class="ck-summary"></div>
+                            <div id="summaryEditor" style="width: 669px;background: white;" class="ck-summary"></div>
                         </div>
                     </div>
                     <!--                    <el-input style="margin-left: 20px"-->
@@ -389,11 +390,7 @@
         data() {
             return {
                 showOtherSummaries: false,
-                otherSummaries: [{
-                    img: 'http://106.12.208.84:8888/group1/M00/00/00/rBAABF2elj2AUOYtAANXnTl20iA914.jpg',
-                    text: '123',
-                    sourceType: 1
-                }],
+                otherSummaries: [],
                 imageUrl: '',
             	//------------属性模板----------------
             	selectedClassify:'',
@@ -507,20 +504,20 @@
                         })
                         data.entryContentVos.map(item =>{
                             let obj1 = {
-                                'title': item.contentTitle,
+                                'title': item.contentTitle=='null'?'':item.contentTitle,
                                 'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
                                 'children': []
                             }
                             item.children.map(k => {
                                 let obj2 = {
-                                    'title': k.contentTitle,
+                                    'title': k.contentTitle?'':k.contentTitle,
                                     'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
                                     'children': []
                                 }
                                 obj1.children.push(obj2)
                                 k.children.map(v => {
                                     let obj3 = {
-                                        'title': v.contentTitle,
+                                        'title': v.contentTitle?'':v.contentTitle,
                                         'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
                                     }
                                     obj2.children.push(obj3)

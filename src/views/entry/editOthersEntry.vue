@@ -46,6 +46,7 @@
                         <div style="display: flex;flex-direction: column">
                             <el-upload
                                     class="avatar-uploader"
+                                    style="background: white"
                                     :action="PREFIX.UPLOAD_URL"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess">
@@ -55,9 +56,9 @@
                             </el-upload>
                             <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
                         </div>
-                        <div style="display: flex;flex-direction: column;margin-left: 10px">
+                        <div style="display: flex;flex-direction: column;margin-left: 10px;width: 690px">
                             <div id="summaryToolbar"></div>
-                            <div id="summaryEditor" class="ck-summary"></div>
+                            <div id="summaryEditor" style="width: 669px;background: white;" class="ck-summary"></div>
                         </div>
                     </div>
                     <!--                    <el-input style="margin-left: 20px"-->
@@ -389,15 +390,11 @@
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
         components: {ElForm,treemenu,treeTransfer},
-        name: 'editor',
+        name: 'editorOthers',
         data() {
             return {
                 showOtherSummaries: false,
-                otherSummaries: [{
-                    img: 'http://106.12.208.84:8888/group1/M00/00/00/rBAABF2elj2AUOYtAANXnTl20iA914.jpg',
-                    text: '123',
-                    sourceType: 1
-                }],
+                otherSummaries: [],
                 imageUrl: '',
             	//------------属性模板----------------
             	selectedClassify:'',
@@ -506,12 +503,12 @@
                         })
                         try{
                         	data.entrySummarys&&data.entrySummarys.map(item => {
+                                console.log(JSON.parse(item.summary).text,'try')
 	                            if(item.dataType ==1 ){
-	                                // vm.summaryEditor = JSON.parse(item.summary).text
-	                                document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
-	                                console.log(JSON.parse(item.summary).text,1111)
-	                                vm.initSummaryEditor()
-	                                vm.imageUrl = JSON.parse(item.summary).img
+                                    document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
+                                    console.log(JSON.parse(item.summary).text,1111)
+                                    vm.initSummaryEditor()
+                                    vm.imageUrl = JSON.parse(item.summary).img
 	                            } else {
 	
 	                                let obj = {
@@ -525,24 +522,27 @@
 	                        })
                         }catch(e){
                         	//TODO handle the exception
+                            document.getElementById('summaryEditor').innerHTML =  ''
+                            vm.initSummaryEditor()
+                            vm.imageUrl = ''
                         }
                         
                         data.entryContentVos&&data.entryContentVos.map(item =>{
                             let obj1 = {
-                                'title': item.contentTitle,
+                                'title': item.contentTitle=='null'?'':item.contentTitle,
                                 'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
                                 'children': []
                             }
                             item.children.map(k => {
                                 let obj2 = {
-                                    'title': k.contentTitle,
+                                    'title': k.contentTitle?'':k.contentTitle,
                                     'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
                                     'children': []
                                 }
                                 obj1.children.push(obj2)
                                 k.children.map(v => {
                                     let obj3 = {
-                                        'title': v.contentTitle,
+                                        'title': v.contentTitle?'':v.contentTitle,
                                         'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
                                     }
                                     obj2.children.push(obj3)
@@ -602,6 +602,7 @@
         methods: {
             initSummaryEditor() {
                 let vm = this
+                console.log('initSummaryEditor')
                 // const ft = new FocusTracker()
                 CKEditor.create(document.querySelector('#summaryEditor'), {
                     language: 'zh-cn',
@@ -613,6 +614,7 @@
                     const toolbarContainer = document.querySelector('#summaryToolbar');
                     toolbarContainer.appendChild(editor.ui.view.toolbar.element);
                     this.summaryEditor = editor //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
+                    console.log(this.summaryEditor,111)
                     // vm.updateEditorContent()
                     // editor.editing.view.document.on("change:isFocused", (evt, name, value) => {
                     //     if (value) {
@@ -736,17 +738,26 @@
                 let wiki = ''
                 console.log(vm.model)
                 vm.model.map((item)=>{
-                    let h2 = '<h2>' + item.title + '</h2>'
+                    let h2 = ''
+                    if(item.title !== ''){
+                        h2 = '<h2>' + item.title + '</h2>'
+                    }
                     item.content=='<p>null</p>'||item.content=='null'||item.content==null?item.content = '<p>&nbsp</p>':''
                     wiki = wiki + h2 + item.content
                     if(item.children&&item.children.length){
                         item.children.map(k => {
-                            let h3 = '<h3>' + k.title + '</h3>'
+                            let h3 = ''
+                            if(k.title !== ''){
+                                h3 = '<h3>' + k.title + '</h3>'
+                            }
                             k.content=='<p>null</p>'||k.content=='null'||k.content==null?k.content = '<p>&nbsp</p>':''
                             wiki = wiki + h3 + k.content
                             if(k.children.length){
                                 k.children.map(v => {
-                                    let h4 = '<h4>' + v.title + '</h4>'
+                                    let h4 = ''
+                                    if(v.title !== ''){
+                                        h4 = '<h4>' + v.title + '</h4>'
+                                    }
                                     v.content=='<p>null</p>'||v.content=='null'||v.content==null?v.content = '<p>&nbsp</p>':''
                                     wiki = wiki + h4 + v.content
                                 })

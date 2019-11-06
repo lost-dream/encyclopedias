@@ -16,7 +16,7 @@
 				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.entryName}}</p>
-					<div v-if="item.entrySummarys.length&&item.entrySummarys[0].summary">{{JSON.parse(item.entrySummarys[0].summary).text}}</div>
+					<div v-if="item.entrySummarys.length&&item.entrySummarys[0].summary" v-html="JSON.parse(item.entrySummarys[0].summary).text"></div>
 				</div>
 			</li>
 		</ul>
