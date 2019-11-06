@@ -529,20 +529,20 @@
                         
                         data.entryContentVos&&data.entryContentVos.map(item =>{
                             let obj1 = {
-                                'title': item.contentTitle=='null'?'':item.contentTitle,
+                                'title': item.contentTitle=='null'||item.contentTitle==null?'':item.contentTitle,
                                 'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
                                 'children': []
                             }
                             item.children.map(k => {
                                 let obj2 = {
-                                    'title': k.contentTitle?'':k.contentTitle,
+                                    'title': k.contentTitle=='null'||k.contentTitle==null?'':k.contentTitle,
                                     'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
                                     'children': []
                                 }
                                 obj1.children.push(obj2)
                                 k.children.map(v => {
                                     let obj3 = {
-                                        'title': v.contentTitle?'':v.contentTitle,
+                                        'title': v.contentTitle=='null'||v.contentTitle==null?'':v.contentTitle,
                                         'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
                                     }
                                     obj2.children.push(obj3)
@@ -748,6 +748,7 @@
                         item.children.map(k => {
                             let h3 = ''
                             if(k.title !== ''){
+                                console.log(k.title)
                                 h3 = '<h3>' + k.title + '</h3>'
                             }
                             k.content=='<p>null</p>'||k.content=='null'||k.content==null?k.content = '<p>&nbsp</p>':''
