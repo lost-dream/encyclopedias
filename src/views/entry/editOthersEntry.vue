@@ -1079,7 +1079,8 @@
                     operate: method,
                     editReson: '',
                     entryId: vm.entryId,  // 返回值
-                    versionId:vm.versionId,
+//                  versionId:'',//版本ID（新增和编辑他人词条的时候传空，更新草稿状态下的词条要传）
+                    lastVersionId:vm.versionId,//编辑已审核词条时，传递更改版本ID
                     entryName: vm.entryName,
                     summary: [{value:JSON.stringify({img: vm.imageUrl,text:vm.summaryEditor.getData()}),sourceType:7,sourceValue: null}],
                     categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
