@@ -9,15 +9,15 @@
 				<el-row>
 					<el-col :span="4" style="border-right: 1px solid #eee;">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">提交版本</el-row>
-						<el-row style="text-align: center;padding: 15px 0;color:#444">13</el-row>
+						<el-row style="text-align: center;padding: 15px 0;color:#444">{{userStatisticsObj.submitVersionCount}}</el-row>
 					</el-col>
 					<el-col :span="4" style="border-right: 1px solid #eee;">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">通过版本</el-row>
-						<el-row style="text-align: center;padding: 15px 0;color:#444">6</el-row>
+						<el-row style="text-align: center;padding: 15px 0;color:#444">{{userStatisticsObj.passVersionCount}}</el-row>
 					</el-col>
 					<el-col :span="4">
 						<el-row style="text-align: center;padding: 15px 0;font-weight: bold;color:#444">通过率</el-row>
-						<el-row style="text-align: center;padding: 15px 0;color:#444">46.15%</el-row>
+						<el-row style="text-align: center;padding: 15px 0;color:#444">{{userStatisticsObj.passRatio}}%</el-row>
 					</el-col>
 				</el-row>
 			</el-col>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import {userEntryList} from '@/api/onlyShowData/index.js'
+import {userEntryList,userStatistics} from '@/api/onlyShowData/index.js'
 import {deleteEntry} from '@/api/entry/index.js'
 import {parseTime} from '@/utils/commonMethod.js'
 import ElImage from "../../../node_modules/element-ui/packages/image/src/main.vue";
@@ -88,6 +88,7 @@ export default {
 		      limit: 10,
 		      count: 0
 		    },
+		    userStatisticsObj:{},//统计数据
 	    }
 	},
 	watch: {
@@ -98,6 +99,7 @@ export default {
 	},
 	created() {
 		this.userEntryList()
+		this.userStatistics()
 	},
 	mounted() {
 	},
@@ -105,6 +107,11 @@ export default {
 		
 	},
 	methods: {
+		userStatistics() {
+			userStatistics().then((res)=>{
+				this.userStatisticsObj = res.data
+			})
+		},
 		modifyEntry(item) {
 			this.$router.push({
 				name:'editEntry',

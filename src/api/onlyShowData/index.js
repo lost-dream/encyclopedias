@@ -53,7 +53,15 @@ export function info(data) {
 //通过ID删除对应的模板
 export function attrDelete(data) {
   return request({
-    url: 'wiki-backend/api/categoryAttributeTemplate/delete',
+    url: '/wiki-backend/api/categoryAttributeTemplate/delete',
+    method: 'post',
+    data
+  })
+}
+//通过用户ID查询该用户的词条统计数据
+export function userStatistics(data) {
+  return request({
+    url: '/wiki-backend/api/entry/userStatistics',
     method: 'post',
     data
   })
