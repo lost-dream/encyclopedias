@@ -6,14 +6,14 @@
 			</div>
 			<el-row>
 				<el-col class="w800">
-					<el-carousel :interval="50000" type="card" height="400px">
+					<el-carousel :interval="50000" type="card" height="360px">
 						<el-carousel-item v-for="item in entryListData" :key="item.id">
 							<div @click="seeEntry(item)" class="entryList ">
 								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
 								<!--<img src="/static/image/tank.png"/>-->
 								<div>
 									<p class="entry-title">{{item.ENTRY_NAME}}</p>
-									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</el-carousel-item>
@@ -103,7 +103,7 @@
 					<!--</div>-->
 					<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
 						<div class="categoryTreeList">
-							<p style="color: #000;text-align: left">{{item.name}}</p>
+							<p style="color: #333333;text-align: left">{{item.name}}</p>
 							<ul>
 								<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
 									{{item1.name}}
@@ -134,12 +134,12 @@
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
-									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</div>
-						<h2 v-else>该分类下没有词条</h2>
+						<p class="noData" v-else>当前分类暂无词条</p>
 					</el-tab-pane>
 					<el-tab-pane label="经济" name="5">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
@@ -151,12 +151,12 @@
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
-									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</div>
-						<h2 v-else>该分类下没有词条</h2>
+						<p class="noData" v-else>当前分类暂无词条</p>
 					</el-tab-pane>
 					<el-tab-pane label="安全" name="4">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
@@ -168,12 +168,12 @@
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
-									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</div>
-						<h2 v-else>该分类下没有词条</h2>
+						<p class="noData" v-else>当前分类暂无词条</p>
 					</el-tab-pane>
 					<el-tab-pane label="外交" name="3">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
@@ -185,12 +185,12 @@
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
-									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</div>
-						<h2 v-else>该分类下没有词条</h2>
+						<p class="noData" v-else>当前分类暂无词条</p>
 					</el-tab-pane>
 					<el-tab-pane label="军事" name="2">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
@@ -202,12 +202,12 @@
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
-									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</div>
-						<h2 v-else>该分类下没有词条</h2>
+						<p class="noData" v-else>当前分类暂无词条</p>
 					</el-tab-pane>
 					<el-tab-pane label="政治" name="1">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
@@ -219,12 +219,12 @@
 								</el-image>
 								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
-									<p class="entry-title"><strong>{{item.ENTRY_NAME}}</strong></p>
+									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 								</div>
 							</div>
 						</div>
-						<h2 v-else>该分类下没有词条</h2>
+						<p class="noData" v-else>当前分类暂无词条</p>
 					</el-tab-pane>
 				</el-tabs>
 			</template>
@@ -391,11 +391,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.noData{
+	text-align: center;
+	line-height: 354px;
+}
 .categoryListItem{
 	&:hover{
 		cursor: pointer;
 		opacity: 0.6;
 	}
+	.ellipsis3{
+		line-height: 25px;
+		font-size: 14px;
+		color: #959595;
+		
+	}
+	.entry-title{
+		line-height: 20px;
+		font-size: 18px;
+		color: #5a5a5a;
+		margin-bottom: 10px;
+	}
+	.text-desc{
+		padding: 0;
+		padding-left: 10px;
+	}
+	.cat-img{
+		
+		.image-slot{
+			width: 120px;
+			height: 90px;
+		}
+	}
+	
 }
 .main-page {
 	padding-top: 30px;
@@ -410,8 +439,8 @@ export default {
 	}
 	.w480 {
 		width: 480px;
-		padding: 0 30px;
-		margin: 0 -80px;
+		/*padding: 0 30px;*/
+		/*margin: 0 -150px;*/
 	}
 }
 .title+.el-row {
@@ -429,7 +458,7 @@ export default {
 	min-width: 400px;
 	display: inline-block;
 	vertical-align: top;
-	margin-bottom: 20px;
+	/*margin-bottom: 20px;*/
 	height: 200px;
 	.categoryTreeList {
 		height: 100%;
@@ -441,7 +470,7 @@ export default {
 	
 }
 .category-item ul::-webkit-scrollbar {
- width: 1px;
+ width: 0px;
 }
  .category-item ul::-webkit-scrollbar-track {
  background-color: none;
@@ -456,9 +485,22 @@ export default {
  border-radius:2em;
 }
 .category-item {
-	margin-left: 25px;
+	padding: 10px 0 10px 15px;
+	border-bottom: 1px solid #ccc;
+	&:nth-child(4){
+		border-bottom: none;
+	}
+	&:nth-child(5){
+		border-bottom: none;
+	}
+	&:nth-child(6){
+		border-bottom: none;
+	}
+	.categoryTreeList{
+		border-right: 1px solid #ccc;
+	}
 	&:nth-child(3n){
-		ul{
+		.categoryTreeList{
 			border-right: 0;
 		}
 	}
@@ -466,15 +508,23 @@ export default {
 		/*margin-left: 25px;*/
 	/*}*/
 }
+.category-item{
+	
+	&:nth-child(3n+3){
+		border-right: none;
+	}
+}
 .categoryTreeList{
-	padding-bottom: 10px;
+	/*padding-bottom: 10px;*/
 	font-size: 14px;
 	color: #99acae;
+	
+	
 
 	p{
-		font-size: 16px;
-		font-weight: bold;
-		line-height: 40px;
+		font-size: 20px;
+		/*font-weight: bold;*/
+		line-height: 20px;
 		color: white;
 		text-align: center;
 		/*box-shadow: 0 2px 5px 1px #848484;*/
@@ -487,7 +537,7 @@ export default {
 		display: inline-block;
 		height: 165px;
 		width: 400px;
-		border-right: 1px solid #ccc;
+		/*border-right: 1px solid #ccc;*/
 		li{
 			color: #666666;
 			margin: 0;
@@ -495,6 +545,8 @@ export default {
 			display: inline-block;
 			width: calc(25% - 1px);
 			line-height: 30px;
+			font-size: 14px;
+			color: #7d7e7e;
 			text-align: left;
 			overflow: hidden;
 			text-overflow:ellipsis;
@@ -565,32 +617,42 @@ export default {
 	}
 	margin-left: 65px;
 	position: relative;
-	width: 267px;
-	height: 400px;
+	width: 250px;
+	height: 360px;
 	background: #ffffff;
 
 	image {
 		width: 100%;
-		height: 100%;
+		height: 240px;
 	}
 	>img{
-		width: 267px;
+		width: 250px;
+		min-width: 250px;
+		height: 240px;
+		min-height: 240px;
 	}
 	>div{
-		position: absolute;
+		/*position: absolute;*/
 		left: 0;
 		bottom: 0;
 		background: white;
 		color: black;
-		width: 247px;
-		padding: 0 10px;
+		width: 100%;
+		/*padding: 0 10px;*/
 		line-height: 25px;
 		font-size: 16px;
 		.entry-title{
-			line-height: 30px;
-			font-size: 14px;
+			line-height: 36px;
+			font-size: 16px;
 			font-weight: bold;
+			padding-left: 10px;
 		}
+	}
+	.ellipsis3{
+		font-size: 14px;
+		line-height: 20px;
+		color: #7a7a7a;
+		padding: 0 10px 0 10px;
 	}
 }
 .specialList{
@@ -617,11 +679,13 @@ export default {
 			text-align: center;
 			font-size: 16px;
 			font-weight: bold;
+			margin-bottom: 10px;
 		}
 		div{
 			font-size: 14px;
 			padding: 0 30px;
 			line-height: 1.4;
+			color: #7d7e7e;
 		}
 	}
 }
@@ -642,14 +706,14 @@ export default {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	height: 400px;
-	padding: 40px 0;
+	height: 330px;
+	padding: 25px 0;
 	box-sizing: border-box;
 	color: #338ce6;
 	font-size: 15px;
 	div{
 		width: 100%;
-		text-align: center;
+		/*text-align: center;*/
 	}
 	img{
 		vertical-align: baseline;
@@ -730,15 +794,18 @@ export default {
 	}
 	.el-tabs {
 		height: 354px;
-		padding-bottom: 20px;
+		padding-bottom: 40px;
 		/deep/ .el-tabs__item {
 			height: 58px;
 			line-height: 58px;
-			width: 120px;
+			width: 100px;
 			text-align: center;
+			color: #333333;
 		}
 		/deep/ .el-tabs__item.is-active {
 			background: #eee;
+			color: #333333;
 		}
 	}
+	
 </style>
