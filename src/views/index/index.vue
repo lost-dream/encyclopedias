@@ -789,7 +789,7 @@ export default {
 }
 	.bgf6fafb::after{
 		content: '';
-		width: 100vw;
+		width: calc(100vw - 5px);
 		left: 0;
 		transform: translateY(-100%);
 		position: absolute;
