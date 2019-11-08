@@ -11,7 +11,12 @@
 							<div v-for="item in key" >
 <!--								{{item}}-->
 								<div @click="seeEntry(item)" class="entryList ">
-									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+									<el-image class="carousel-image" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" >
+										<div slot="error" class="image-slot" >
+											<i class="el-icon-picture-outline"></i>
+										</div>
+									</el-image>
+<!--									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
 									<!--<img src="/static/image/tank.png"/>-->
 									<div>
 										<p class="entry-title">{{item.ENTRY_NAME}}</p>
@@ -632,15 +637,27 @@ export default {
 	height: 360px;
 	background: #ffffff;
 
-	image {
+	.carousel-image {
 		width: calc(100% - 25px);
 		height: 240px;
 	}
-	>img{
+	>.carousel-image{
 		width: 256px;
 		min-width: 256px;
 		height: 240px;
 		min-height: 240px;
+		overflow: visible;
+		background: #eee;
+		/deep/ .image-slot {
+			width: 256px;
+			min-width: 256px;
+			height: 240px;
+			min-height: 240px;
+		.el-icon-picture-outline {
+			margin-left: 117px;
+			margin-top: 112px;
+		}
+}
 	}
 	>div{
 		/*position: absolute;*/
