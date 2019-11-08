@@ -209,7 +209,41 @@ ul,li,p{
     .w800 .el-carousel__item--card.is-active{
         transform: translateX(200px) scale(0.83) !important;
     }
-.cat-img  > img{
+.cat-img  > img {
     width: 150px;
 }
+.el-carousel__indicators--horizontal > .is-active > button{
+    background: #4C83C9;
+}
+.el-carousel__indicators--horizontal > li > button{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background: #C5C9CA;
+    margin-top: 10px;
+}
+#special-carousel ul {
+    display: none !important;
+}
+.category-container .el-loading-mask{
+    background: none !important;
+}
+/*#index-carousel ul li:nth-child(1){*/
+/*    display: none !important;*/
+/*}*/
+/*#index-carousel ul li:nth-child(3){*/
+/*    display: none;*/
+/*}*/
+/*#index-carousel ul li:nth-child(4){*/
+/*    display: none;*/
+/*}*/
+/*#index-carousel ul li:nth-child(6){*/
+/*    display: none;*/
+/*}*/
+/*#index-carousel ul li:nth-child(7){*/
+/*    display: none;*/
+/*}*/
+/*#index-carousel ul li:nth-child(9){*/
+/*    display: none;*/
+/*}*/
 </style>

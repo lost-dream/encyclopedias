@@ -77,7 +77,7 @@ export default {
 }
 .index-page {
 	background: url('/static/image/index-bg.png') 0 0 no-repeat;
-	background-size: 100% 550px;
+	background-size: 100% 520px;
 }
 .el-main{
 	padding-top: 0;

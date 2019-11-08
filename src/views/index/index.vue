@@ -6,20 +6,23 @@
 			</div>
 			<el-row>
 				<el-col class="w800">
-					<el-carousel :interval="50000" type="card" height="360px">
-						<el-carousel-item v-for="item in entryListData" :key="item.id">
-							<div @click="seeEntry(item)" class="entryList ">
-								<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
-								<!--<img src="/static/image/tank.png"/>-->
-								<div>
-									<p class="entry-title">{{item.ENTRY_NAME}}</p>
-									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+					<el-carousel :interval="5000" height="360px" id="index-carousel" style="height: 400px;overflow: hidden" v-loading="!entryListData.length">
+						<el-carousel-item v-for="key in entryListData" style="display: flex">
+							<div v-for="item in key" >
+<!--								{{item}}-->
+								<div @click="seeEntry(item)" class="entryList ">
+									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
+									<!--<img src="/static/image/tank.png"/>-->
+									<div>
+										<p class="entry-title">{{item.ENTRY_NAME}}</p>
+										<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+									</div>
 								</div>
 							</div>
 						</el-carousel-item>
 					</el-carousel>
 				</el-col>
-				<el-col class="w480">
+				<el-col class="w480" >
 					<div id="entryStatisticalData">
 						<div>
 							<p>
@@ -54,10 +57,10 @@
 
 
 
-			<div class="title">
+			<div class="title" style="margin-top: 25px">
 				<span>特色专题</span>
 			</div>
-			<el-carousel :interval="5000" type="card" height="400px">
+			<el-carousel :interval="5000" type="card" height="400px" id="special-carousel" v-loading="!specialListData.length">
 				<el-carousel-item v-for="item in specialListData" :key="item.id">
 					<div @click="routeToSpecial(item.id)" class="specialList">
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
@@ -82,11 +85,11 @@
 					</div>
 				</el-carousel-item>
 			</el-carousel>
-			<div class="bgf6fafb">
+			<div class="bgf6fafb" style="margin-top: 30px;min-height: 560px">
 				<div class="title" >
 					<span>精选分类</span>
 				</div>
-				<div class="category-container" style="margin: 0;">
+				<div class="category-container" style="margin: 0;min-height: 441px" v-loading="loading">
 					<!--<div :style="'background:#'+categoryBgColor[index % 5]" class="category-item" v-for="(item,index) in categoryTreeList" :key="index">-->
 					<!--<div class="categoryTreeList">-->
 					<!--<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>-->
@@ -101,7 +104,7 @@
 
 					<!--</div>-->
 					<!--</div>-->
-					<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index">
+					<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index" >
 						<div class="categoryTreeList">
 							<p style="color: #333333;text-align: left">{{item.name}}</p>
 							<ul>
@@ -123,7 +126,7 @@
 			</div>
 			<template>
 
-				<el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick">
+				<el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick" v-loading="!categoryList.length">
 					<el-tab-pane label="科技" name="6">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
@@ -241,6 +244,7 @@ export default {
 	name: 'index',
 	data() {
 	    return {
+	    	loading: true,
             activeName: '6',
 	    	entryStatisticalData:{},
 	    	specialListData:[],
@@ -270,11 +274,14 @@ export default {
 		entryList() {
 			entryList({
 				"pageNumber": "1",
-				"pageSize": "4",
+				"pageSize": "9",
 				"categoryId": "",
 				"keyword": ""
 			}).then((res)=>{
-				this.entryListData = res.data.records
+				for (let i = 0;i<res.data.records.length;i+=3){
+					this.entryListData.push(res.data.records.slice(i,i+3))
+				}
+				console.log(this.entryListData)
 			})
 		},
 
@@ -306,6 +313,7 @@ export default {
 					})
 				})
 				this.categoryTreeList = res.data.children
+				this.loading = false
             })
             .catch(res=>{
             	console.log(res)
@@ -444,7 +452,7 @@ export default {
 	}
 }
 .title+.el-row {
-	margin-bottom: 30px
+	margin-bottom: 25px
 }
 .category-container {
 	/*display: flex;
@@ -487,19 +495,19 @@ export default {
 .category-item {
 	padding: 10px 0 10px 15px;
 	border-bottom: 1px solid #ccc;
-	&:nth-child(4){
-		border-bottom: none;
-	}
 	&:nth-child(5){
 		border-bottom: none;
 	}
 	&:nth-child(6){
 		border-bottom: none;
 	}
+	&:nth-child(7){
+		border-bottom: none;
+	}
 	.categoryTreeList{
 		border-right: 1px solid #ccc;
 	}
-	&:nth-child(3n){
+	&:nth-child(3n+1){
 		.categoryTreeList{
 			border-right: 0;
 		}
@@ -615,19 +623,19 @@ export default {
 		cursor: pointer;
 		opacity: 0.8;
 	}
-	margin-left: 65px;
+	margin: 0 5px;
 	position: relative;
-	width: 250px;
+	width: 256px;
 	height: 360px;
 	background: #ffffff;
 
 	image {
-		width: 100%;
+		width: calc(100% - 25px);
 		height: 240px;
 	}
 	>img{
-		width: 250px;
-		min-width: 250px;
+		width: 256px;
+		min-width: 256px;
 		height: 240px;
 		min-height: 240px;
 	}
@@ -707,7 +715,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	height: 330px;
-	padding: 25px 0;
+	padding: 25px 0 25px 50px;
 	box-sizing: border-box;
 	color: #338ce6;
 	font-size: 15px;
@@ -807,5 +815,4 @@ export default {
 			color: #333333;
 		}
 	}
-	
 </style>
