@@ -126,7 +126,7 @@
 			</div>
 			<template>
 
-				<el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick" v-loading="!categoryList.length">
+				<el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick" v-loading="panelLoading">
 					<el-tab-pane label="科技" name="6">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
 							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
@@ -245,6 +245,7 @@ export default {
 	data() {
 	    return {
 	    	loading: true,
+			panelLoading: true,
             activeName: '6',
 	    	entryStatisticalData:{},
 	    	specialListData:[],
@@ -362,9 +363,11 @@ export default {
 			}).then(res=>{
 				console.log(res)
 				vm.categoryList = res.data.records
+				vm.panelLoading = false
 			})
 		},
         handleClick() {
+			this.panelLoading = true
             console.log(this.activeName);
             this.getCategoryList(this.activeName)
         },
