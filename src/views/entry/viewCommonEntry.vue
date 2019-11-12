@@ -1,6 +1,6 @@
 <template>
     <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
-        <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
+        <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
                 <h1 style="font-weight: normal;font-size: 35px;">{{wikiContent.entryName}}
