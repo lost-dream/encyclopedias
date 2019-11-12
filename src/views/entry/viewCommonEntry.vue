@@ -45,7 +45,11 @@
                     </el-collapse>
                 </div>
             </div>
-            <!-- 词条属性 -->
+            
+            
+            <p class="seeMore" v-show="!seeMore" @click="seeMore=true">查看更多</p>
+            <div v-show="seeMore">
+            	<!-- 词条属性 -->
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
@@ -141,7 +145,10 @@
                 </template>
             </div>
         </div>
-        <div >
+        
+            </div>
+            
+        <div v-show="seeMore">
             <div class="box-card">
                 <el-card v-show="auditShow">
                     <div class="card-title">
@@ -153,17 +160,16 @@
                         <el-button type="danger" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
                     </div>
                 </el-card>
-                <el-card style="margin-top: 20px">
+                <!--<el-card style="margin-top: 20px">
                     <div class="card-title">
                         <span >词条统计</span>
-                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
                     <p class="pd-left-10">创建者：{{wikiInfo.creator}}</p>
                     <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#338ce6;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
                     <p class="pd-left-10" v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
                     <p v-if="viewType !== 'preview'" class="pd-left-10" @click="routeToEditOthersEntry()" style="color:#338ce6;cursor:pointer;">修改词条</p>
-                </el-card>
-                <el-card style="margin-top: 20px;padding: 20px 0;">
+                </el-card>-->
+                <el-card style="margin-top: 120px;padding: 20px 0;">
                 	<div @click="scrollRightNav('down')" class="down-arrow-active"></div>
                     <div class="card-title">
                         <!--<span >快速导航</span>-->
@@ -192,15 +198,7 @@
                     <div @click="scrollRightNav('up')" class="down-arrow"></div>
                 </el-card>
             </div>
-            <!--<el-tabs v-model="activeName">-->
-                <!--&lt;!&ndash;<el-tab-pane label="目录模板" name="first">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>&ndash;&gt;-->
-                <!--&lt;!&ndash;</el-tab-pane>&ndash;&gt;-->
-                <!--<el-tab-pane label="目录" name="second">-->
-                <!--</el-tab-pane>-->
-            <!--</el-tabs>-->
-        </div>
+        </div>    
         <el-dialog title="审核意见" :visible.sync="modalShow">
 		  <el-form>
 		    <el-form-item label="审核意见">
@@ -234,7 +232,8 @@ import {audit} from '@/api/entry/index.js'
                 code: '',  // 提交状态
                 doReload: false,
                 showOtherSummaries: false,
-                viewType:'',
+                viewType:'view',
+                seeMore:false,
             }
         },
         mounted() {
@@ -242,7 +241,7 @@ import {audit} from '@/api/entry/index.js'
             let vm = this
             vm.entryId = vm.$route.query.entryId
             vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
-            vm.viewType = vm.$route.query.viewType
+//          vm.viewType = vm.$route.query.viewType
             vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
             if(vm.viewType == 'preview') {
                 vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
@@ -477,6 +476,15 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+.seeMore{
+	text-align: center;
+	color: rgb(51, 140, 230);
+	font-size: 14px;
+	&:hover{
+		cursor: pointer;
+		opacity: 0.8;
+	}
+}
 	.down-arrow,.down-arrow-active {
 	    display :block;
 	    position: relative;
