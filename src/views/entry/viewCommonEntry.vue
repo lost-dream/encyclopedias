@@ -148,7 +148,7 @@
         
             </div>
             
-        <div v-show="seeMore">
+        <div style="display: none;">
             <div class="box-card">
                 <el-card v-show="auditShow">
                     <div class="card-title">
