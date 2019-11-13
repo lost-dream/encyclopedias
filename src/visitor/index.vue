@@ -48,6 +48,7 @@ export default {
 		next(vm => {
 			vm.showBreadcrumb = !(to.path === '/index'||to.path === '/viewCommonEntry');
 			vm.pageClass = to.path === '/index' ? 'index-page' : 'other-page'
+			vm.authFun()
 		})
 	},
 	created(){
@@ -55,6 +56,14 @@ export default {
 		this.showHeaderFun()
 	},
 	methods:{
+		//权限请求函数
+		authFun() {
+			if(this.$route.path !== '/viewCommonEntry'){
+				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
+				cetc10Auth.init();
+			}
+			
+		},
 		showHeaderFun() {
 			if(this.$route.path === '/viewCommonEntry'){
 	        	this.showHeader = false
