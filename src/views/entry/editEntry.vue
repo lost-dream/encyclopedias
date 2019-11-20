@@ -383,6 +383,7 @@
    	import treemenu from '@/components/treeMenu'
     import categoryApi from '@/api/categoryManager/index.js'
     import templateApi from '@/api/contentTemplate/index.js'
+    import 'babel-polyfill';
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
         components: {ElForm,treemenu,treeTransfer},
