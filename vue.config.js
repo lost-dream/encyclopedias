@@ -29,7 +29,7 @@ module.exports = {
         //set第一个参数：设置的别名，第二个参数：设置的路径
 　　　　
     },
-    transpileDependencies: ["@ckeditor"],
+//  transpileDependencies: ["@ckeditor"],
     pwa: {
         iconPaths: {
             favicon32: './static/image/titlelogo.png',

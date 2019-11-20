@@ -5,8 +5,8 @@ import router from './router/index'
 import store from './store'
 import './assets/normalize.css'
 import axios from './utils/axios'
-import '@ckeditor/ckeditor5-build-decoupled-document'
-import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
+//import '@ckeditor/ckeditor5-build-decoupled-document'
+//import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
 
 import PREFIX from '@/config/const'
 Vue.prototype.PREFIX = PREFIX
