@@ -1,10 +1,10 @@
 <template>
-    <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
+    <div style="display: flex;margin: 0 auto;max-width: 1920px;width: 100%;background: #f0f0f0;" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
         <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 35px;">{{wikiContent.entryName}}
-                    <span style="font-size: 14px;color: #338ce6">同义词：
+                <h1 style="font-weight: normal;font-size: 28px;color: #333;">{{wikiContent.entryName}}
+                    <span style="font-size: 14px;color: #5c92ff">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -64,33 +64,33 @@
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: #fbfbfb;text-align: center;position: relative;">
+                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: inherit;text-align: center;position: relative;">
                 	<p class="vertical-middle">目录</p>
                 </div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(0,8)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(8,16)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(16,24)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
                     <li v-for="(item,index) in contentList.slice(24,32)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
@@ -102,7 +102,7 @@
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
                             <h2 :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
-<!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
+<!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #5c92ff;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
                             <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <!-- <div v-else><p>&nbsp;</p></div> -->
                             <template v-if="item.children.length" v-for="key in item.children">
@@ -167,9 +167,9 @@
                         <span >词条统计</span>
                     </div>
                     <p class="pd-left-10">创建者：{{wikiInfo.creator}}</p>
-                    <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#338ce6;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
+                    <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#5c92ff;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
                     <p class="pd-left-10" v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
-                    <p v-if="viewType !== 'preview'" class="pd-left-10" @click="routeToEditOthersEntry()" style="color:#338ce6;cursor:pointer;">修改词条</p>
+                    <p v-if="viewType !== 'preview'" class="pd-left-10" @click="routeToEditOthersEntry()" style="color:#5c92ff;cursor:pointer;">修改词条</p>
                 </el-card>-->
                 <el-card style="margin-top: 120px;padding: 20px 0;">
                 	<div @click="scrollRightNav('down')" class="down-arrow-active"></div>
@@ -478,9 +478,16 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+h3{
+	font-size: 20px;
+}
+*{
+	font-family: "仿宋 GB2312";
+}
 .seeMore{
 	text-align: center;
-	color: rgb(51, 140, 230);
+	/*color: rgb(51, 140, 230);*/
+	color: #5c92ff;
 	font-size: 14px;
 	&:hover{
 		cursor: pointer;
@@ -498,7 +505,7 @@ import {audit} from '@/api/entry/index.js'
 	    &:hover{
 	    	cursor: pointer;
 	    	:after{
-	    		border-color: #338ce6;
+	    		border-color: #5c92ff;
 	    	}
 	    }
 	}
@@ -531,8 +538,11 @@ import {audit} from '@/api/entry/index.js'
 	    transition: transform .3s;
 	}
 	/*修改样式*/
-	.ck-content .table,.ck-content .table thead,.ck-content .table tr,.ck-content .table td{
-		border: 1px solid #e2e5f3;
+	.ck-content /deep/  .table{
+		margin-bottom: 10px;
+	}
+	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
+		border: 1px solid #f6f6f6;
 	    padding: 9px 15px 7px;
 	    text-align: left;
 	    word-wrap: break-word;
@@ -555,12 +565,17 @@ import {audit} from '@/api/entry/index.js'
 		}
 	}
 	.el-tag-active{
-		background: #338ce6;
+		background: #5c92ff;
 		color: #fff;
 	}
 	.ck-content,#attribute,#catalogue{
 		font-size: 14px;
-		color: #6f727c;
+		/*color: #6f727c;*/
+		color: #666;
+		.innerlink{
+			color: #5c92ff;
+			text-decoration: none;
+		}
 	}
 	#reference,#tag{
 		font-weight: normal;
@@ -601,7 +616,7 @@ import {audit} from '@/api/entry/index.js'
     .block{
         color: white;
         padding: 5px 10px;
-        background: #338ce6;
+        background: #5c92ff;
         position: relative;
     }
     .block::after{
@@ -631,7 +646,8 @@ import {audit} from '@/api/entry/index.js'
         padding: 20px;
     }
     .quote-btn{
-        color:  #8a8a8a;
+        /*color:  #8a8a8a;*/
+        color: #5c92ff;
         font-weight: normal;
         padding-right: 10px;
         cursor: pointer;
@@ -682,7 +698,7 @@ import {audit} from '@/api/entry/index.js'
         height:0px;
     }
    .rightNav::-webkit-scrollbar-thumb {
-        background-color:#338ce6;
+        background-color:#5c92ff;
         background-clip:padding-box;
         min-height:5px;
         -webkit-border-radius: 1em;
@@ -724,7 +740,7 @@ import {audit} from '@/api/entry/index.js'
    			content: '';
    			width: 5px;
    			height: 20px;
-   			background: #338ce6;
+   			background: #5c92ff;
    			position: absolute;
    			left: 0;
    			top: 5px;
@@ -782,5 +798,10 @@ import {audit} from '@/api/entry/index.js'
            font-weight: normal;
            color: #666666;
        }
+       
+    }
+    #content /deep/ .innerlink{
+    	color: #5c92ff;
+    	text-decoration: none;
     }
 </style>
