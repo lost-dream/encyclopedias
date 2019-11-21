@@ -51,7 +51,7 @@
             <div v-show="seeMore">
             	<!-- 词条属性 -->
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
-                <div v-for="item in wikiContent.entryAttributes" style="width: 50%">
+                <div v-for="item in wikiContent.entryAttributes" style="width: 50%;display: inline-block;">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                         <strong style="width: 100px;display: inline-block;padding-left: 120px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.attributeKey}}</strong>
                         <span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
@@ -64,29 +64,31 @@
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container" style="width: calc(14% - 40px);background: #fbfbfb;text-align: center;"><p class="vertical-middle">目录</p></div>
-                <ul style="padding: 15px;width: calc(21.5% - 31px);border-right: 1px dotted #ccc">
+                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: #fbfbfb;text-align: center;position: relative;">
+                	<p class="vertical-middle">目录</p>
+                </div>
+                <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(0,8)">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
+                <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(8,16)">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);border-right: 1px dotted #ccc">
+                <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(16,24)">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px)">
+                <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
                     <li v-for="(item,index) in contentList.slice(24,32)">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
@@ -738,12 +740,17 @@ import {audit} from '@/api/entry/index.js'
     .text-center{
         text-align: center;
     }
+    .juedui_middle{
+    	position: relative;
+    }
     .vertical-middle{
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        margin: 0;
+        
         font-weight: 500;
+        width: 50%;
+	  	height: 16px;
+	  	margin: auto;
+	 	position: absolute;
+	  	top: 0; left: 0; bottom: 0; right: 0;
     }
     ul li{
         line-height: 20px;
