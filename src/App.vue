@@ -19,6 +19,7 @@ export default {
 }
 .ck-content .table{
 	border-collapse: collapse;
+	margin-bottom: 10px;
 	td{
 		border: 1px solid #e2e5f3;
     padding: 9px 15px 7px;
