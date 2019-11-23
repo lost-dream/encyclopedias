@@ -1,10 +1,10 @@
 <template>
-    <div style="display: flex;margin: 0 auto;max-width: 1920px;width: 100%;background: #f0f0f0;" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
+    <div style="display: flex;padding: 0 10px;max-width: 1920px;width: 100%;background: #f0f0f0;" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
         <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 28px;color: #333;">{{wikiContent.entryName}}
-                    <span style="font-size: 14px;color: #5c92ff">同义词：
+                <h1 style="font-weight: normal;font-size: 30px;color: #333;">{{wikiContent.entryName}}
+                    <span style="font-size: 16px;color: #5c92ff">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -128,7 +128,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 25px;font-size: 12px;">
+                        <p style="line-height: 30px;font-size: 16px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -479,16 +479,16 @@ import {audit} from '@/api/entry/index.js'
 </script>
 <style lang="scss" scoped>
 h3{
-	font-size: 20px;
+	font-size: 24px;
 }
 *{
-	font-family: "仿宋 GB2312";
+	font-family: "仿宋";
 }
 .seeMore{
 	text-align: center;
 	/*color: rgb(51, 140, 230);*/
 	color: #5c92ff;
-	font-size: 14px;
+	font-size: 16px;
 	&:hover{
 		cursor: pointer;
 		opacity: 0.8;
@@ -547,6 +547,7 @@ h3{
 	    text-align: left;
 	    word-wrap: break-word;
 	    word-break: break-all;
+	    font-size: 16px;
 	}
 	.el-card__body{
 		padding: 15px;
@@ -560,6 +561,7 @@ h3{
 		line-height: 30px;
 		margin-right: 35px;
 		margin-bottom: 35px;
+		font-size:16px;
 		&:hover{
 			cursor: pointer;
 		}
@@ -569,7 +571,7 @@ h3{
 		color: #fff;
 	}
 	.ck-content,#attribute,#catalogue{
-		font-size: 14px;
+		font-size: 16px;
 		/*color: #6f727c;*/
 		color: #666;
 		.innerlink{
@@ -654,7 +656,7 @@ h3{
     }
     .box-card p{
         margin: 5px 0;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 30px;
     }
     .el-form-item{
@@ -674,7 +676,7 @@ h3{
         font-weight: bolder;
     }
     .p2{
-        font-size: 14px;
+        font-size: 16px;
         padding-left:10px;
     }
     .p3{
@@ -721,7 +723,7 @@ h3{
    		font-weight: 700;
     	color: #666;
     	padding-left: 10px;
-    	font-size: 14px;
+    	font-size: 16px;
    	}
    	.catalogue2{
    		font-size: 12px;

@@ -59,8 +59,8 @@ export default {
 		//权限请求函数
 		authFun() {
 			if(this.$route.path !== '/viewCommonEntry'){
-//				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
-//				cetc10Auth.init();
+				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
+				cetc10Auth.init();
 			}
 			
 		},
