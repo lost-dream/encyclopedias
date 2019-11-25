@@ -129,7 +129,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 25px;font-size: 16px;">
+                        <p style="line-height: 30px;font-size: 16px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -487,7 +487,8 @@ h3{
 	font-size: 22px;
 }
 *{
-	font-family: "仿宋 GB2312";
+	font-family: "仿宋_GB2312";
+	/*font-family: "仿宋";*/
 }
 .seeMore{
 	text-align: center;
@@ -553,6 +554,7 @@ h3{
 	    text-align: left;
 	    word-wrap: break-word;
 	    word-break: break-all;
+	    font-size: 16px;
 	}
 	.el-card__body{
 		padding: 15px;
@@ -566,6 +568,7 @@ h3{
 		line-height: 30px;
 		margin-right: 35px;
 		margin-bottom: 35px;
+		font-size:16px;
 		&:hover{
 			cursor: pointer;
 		}
