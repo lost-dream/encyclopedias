@@ -59,8 +59,8 @@ export default {
 		//权限请求函数
 		authFun() {
 			if(this.$route.path !== '/viewCommonEntry'){
-//				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
-//				cetc10Auth.init();
+				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
+				cetc10Auth.init();
 			}
 			
 		},
@@ -68,10 +68,12 @@ export default {
 			if(this.$route.path === '/viewCommonEntry'){
 	        	this.showHeader = false
 	        	this.showBreadcrumb = false
+	        	document.body.style.background = '#f0f0f0'
 	        }
 	        else{
 	        	this.showHeader = true
 	        	this.showBreadcrumb = true
+	        	document.body.style.background = '#FFFFFF'
 	        }
 		},
 	    getBreadcrumb() {//停留在首页时点击首页会报错

@@ -1,10 +1,11 @@
 <template>
-    <div style="display: flex;margin: 0 auto;max-width: 1920px;width: 100%;background: #f0f0f0;" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
+    <div style="display: flex;margin: 0 auto;max-width: 1920px;width: 99%;background: #f0f0f0;" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
         <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 28px;color: #333;">{{wikiContent.entryName}}
-                    <span style="font-size: 14px;color: #5c92ff">同义词：
+                <h1 style="font-weight: normal;font-size: 28px;color: #333;">
+                	<span style="font-weight: bold;">{{wikiContent.entryName}}</span>
+                    <span style="font-size: 16px;color: #5c92ff;margin-left: 10px;">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -65,7 +66,7 @@
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
                 <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: inherit;text-align: center;position: relative;">
-                	<p class="vertical-middle">目录</p>
+                	<p style="font-weight: bold;" class="vertical-middle">目录</p>
                 </div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(0,8)">
@@ -101,7 +102,7 @@
                 <div class="ck-content" style="width: 100%;padding: 20px 0">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
+                            <h2 style="font-weight: bold;" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
 <!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #5c92ff;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
                             <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <!-- <div v-else><p>&nbsp;</p></div> -->
@@ -128,7 +129,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 25px;font-size: 12px;">
+                        <p style="line-height: 25px;font-size: 16px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -478,8 +479,12 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+h2{
+	font-weight: bold;
+}
 h3{
-	font-size: 20px;
+	font-weight: bold;
+	font-size: 22px;
 }
 *{
 	font-family: "仿宋 GB2312";
@@ -488,7 +493,7 @@ h3{
 	text-align: center;
 	/*color: rgb(51, 140, 230);*/
 	color: #5c92ff;
-	font-size: 14px;
+	font-size: 16px;
 	&:hover{
 		cursor: pointer;
 		opacity: 0.8;
@@ -542,8 +547,9 @@ h3{
 		margin-bottom: 10px;
 	}
 	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
-		border: 1px solid #f6f6f6;
+		border: 1px solid #666;
 	    padding: 9px 15px 7px;
+	    font-size: 16px;
 	    text-align: left;
 	    word-wrap: break-word;
 	    word-break: break-all;
@@ -569,7 +575,7 @@ h3{
 		color: #fff;
 	}
 	.ck-content,#attribute,#catalogue{
-		font-size: 14px;
+		font-size: 16px;
 		/*color: #6f727c;*/
 		color: #666;
 		.innerlink{
@@ -578,7 +584,7 @@ h3{
 		}
 	}
 	#reference,#tag{
-		font-weight: normal;
+		/*font-weight: normal;*/
 	}
 	
     .card-title{
@@ -654,7 +660,7 @@ h3{
     }
     .box-card p{
         margin: 5px 0;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 30px;
     }
     .el-form-item{
@@ -670,15 +676,15 @@ h3{
         background: #f6fafb;
     }
     .p1{
-        font-size: 16px;
+        font-size: 18px;
         font-weight: bolder;
     }
     .p2{
-        font-size: 14px;
+        font-size: 16px;
         padding-left:10px;
     }
     .p3{
-        font-size: 12px;
+        font-size: 16px;
         padding-left:20px;
         font-weight: lighter;
     }
@@ -721,15 +727,15 @@ h3{
    		font-weight: 700;
     	color: #666;
     	padding-left: 10px;
-    	font-size: 14px;
+    	font-size: 16px;
    	}
    	.catalogue2{
-   		font-size: 12px;
+   		font-size: 14px;
 	    padding-left: 20px;
 	    color: #666;
    	}
    	.catalogue3{
-   		font-size: 12px;
+   		font-size: 14px;
 	    padding-left: 40px;
 	    color: #666;
    	}
@@ -775,7 +781,7 @@ h3{
     .audit-title {
         margin: 0;
         padding: 10px 10px 10px 0;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
         span {
             border-left: 5px solid #007fff;
