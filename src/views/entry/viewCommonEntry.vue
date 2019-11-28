@@ -487,8 +487,8 @@ h3{
 	font-size: 22px;
 }
 *{
-	font-family: "仿宋_GB2312";
-	/*font-family: "仿宋";*/
+	/*font-family: "仿宋_GB2312";*/
+	font-family: "仿宋";
 }
 .seeMore{
 	text-align: center;

@@ -12,6 +12,8 @@ export default {
 </script>
 
 <style lang="scss">
+
+
 .el-tabs--left .el-tabs__active-bar.is-left{
 	left: 0 !important;
 	right: auto !important;

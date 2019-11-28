@@ -73,7 +73,7 @@ export default {
 	        else{
 	        	this.showHeader = true
 	        	this.showBreadcrumb = true
-	        	document.body.style.background = '#FFFFFF'
+	        	document.body.style.background = '#FAFAFA'
 	        }
 		},
 	    getBreadcrumb() {//停留在首页时点击首页会报错
@@ -101,7 +101,9 @@ export default {
 }
 .index-page {
 	background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	background-color: #FAFAFA;
 	background-size: 100% 520px;
+	font-family: '仿宋';
 }
 .el-main{
 	padding-top: 0;
@@ -118,6 +120,7 @@ export default {
 .other-page {
 	margin: 0px auto;
 	width: 1280px;
+	font-family: '仿宋';
 }
 
 </style>
