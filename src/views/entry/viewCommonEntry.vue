@@ -1,10 +1,11 @@
 <template>
-    <div style="display: flex;margin: 0 auto;width: 1280px" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
-        <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
+    <div style="display: flex;margin: 0 auto;max-width: 1920px;width: 99%;background: #f0f0f0;" id="entry-container" v-if="!doReload" v-loading="!wikiContent.entryName">
+        <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 35px;">{{wikiContent.entryName}}
-                    <span style="font-size: 14px;color: #338ce6">同义词：
+                <h1 style="font-weight: normal;font-size: 28px;color: #333;">
+                	<span style="font-weight: bold;">{{wikiContent.entryName}}</span>
+                    <span style="font-size: 16px;color: #5c92ff;margin-left: 10px;">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -45,7 +46,11 @@
                     </el-collapse>
                 </div>
             </div>
-            <!-- 词条属性 -->
+            
+            
+            <p class="seeMore" v-show="!seeMore" @click="seeMore=true">查看更多</p>
+            <div v-show="seeMore">
+            	<!-- 词条属性 -->
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%;display: inline-block;">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
@@ -60,33 +65,33 @@
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: #fbfbfb;text-align: center;position: relative;">
-                	<p class="vertical-middle">目录</p>
+                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: inherit;text-align: center;position: relative;">
+                	<p style="font-weight: bold;" class="vertical-middle">目录</p>
                 </div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(0,8)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(8,16)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(16,24)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
                     <li v-for="(item,index) in contentList.slice(24,32)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
@@ -97,8 +102,8 @@
                 <div class="ck-content" style="width: 100%;padding: 20px 0">
                     <template v-for="item,index in wikiContent.entryContentVos">
                         <div >
-                            <h2 :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
-<!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
+                            <h2 style="font-weight: bold;" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
+<!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #5c92ff;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
                             <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <!-- <div v-else><p>&nbsp;</p></div> -->
                             <template v-if="item.children.length" v-for="key in item.children">
@@ -124,7 +129,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 25px;font-size: 12px;">
+                        <p style="line-height: 30px;font-size: 16px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -143,7 +148,10 @@
                 </template>
             </div>
         </div>
-        <div >
+        
+            </div>
+            
+        <div style="display: none;">
             <div class="box-card">
                 <el-card v-show="auditShow">
                     <div class="card-title">
@@ -155,17 +163,16 @@
                         <el-button type="danger" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
                     </div>
                 </el-card>
-                <el-card style="margin-top: 20px">
+                <!--<el-card style="margin-top: 20px">
                     <div class="card-title">
                         <span >词条统计</span>
-                        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
                     <p class="pd-left-10">创建者：{{wikiInfo.creator}}</p>
-                    <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#338ce6;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
+                    <p class="pd-left-10">编辑次数：{{wikiInfo.versionApprovingCount}}次<a style="color:#5c92ff;cursor:pointer;margin-left: 10px;" @click="toHistoryList(wikiInfo.id)">历史版本</a></p>
                     <p class="pd-left-10" v-if="wikiContent.entryVersion">最近更新：{{new Date(wikiContent.entryVersion.updateTime).getFullYear()+'-'+(new Date(wikiContent.entryVersion.updateTime).getMonth()+1)+'-'+new Date(wikiContent.entryVersion.updateTime).getDate()}}</p>
-                    <p v-if="viewType !== 'preview'" class="pd-left-10" @click="routeToEditOthersEntry()" style="color:#338ce6;cursor:pointer;">修改词条</p>
-                </el-card>
-                <el-card style="margin-top: 20px;padding: 20px 0;">
+                    <p v-if="viewType !== 'preview'" class="pd-left-10" @click="routeToEditOthersEntry()" style="color:#5c92ff;cursor:pointer;">修改词条</p>
+                </el-card>-->
+                <el-card style="margin-top: 120px;padding: 20px 0;">
                 	<div @click="scrollRightNav('down')" class="down-arrow-active"></div>
                     <div class="card-title">
                         <!--<span >快速导航</span>-->
@@ -194,15 +201,7 @@
                     <div @click="scrollRightNav('up')" class="down-arrow"></div>
                 </el-card>
             </div>
-            <!--<el-tabs v-model="activeName">-->
-                <!--&lt;!&ndash;<el-tab-pane label="目录模板" name="first">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(1)" class="btn-column">预设模板1</el-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-button type="danger" @click="setTemplate(2)" class="btn-column">预设模板2</el-button>&ndash;&gt;-->
-                <!--&lt;!&ndash;</el-tab-pane>&ndash;&gt;-->
-                <!--<el-tab-pane label="目录" name="second">-->
-                <!--</el-tab-pane>-->
-            <!--</el-tabs>-->
-        </div>
+        </div>    
         <el-dialog title="审核意见" :visible.sync="modalShow">
 		  <el-form>
 		    <el-form-item label="审核意见">
@@ -236,7 +235,8 @@ import {audit} from '@/api/entry/index.js'
                 code: '',  // 提交状态
                 doReload: false,
                 showOtherSummaries: false,
-                viewType:'',
+                viewType:'view',
+                seeMore:false,
             }
         },
         mounted() {
@@ -244,7 +244,7 @@ import {audit} from '@/api/entry/index.js'
             let vm = this
             vm.entryId = vm.$route.query.entryId
             vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
-            vm.viewType = vm.$route.query.viewType
+//          vm.viewType = vm.$route.query.viewType
             vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
             if(vm.viewType == 'preview') {
                 vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
@@ -479,6 +479,27 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+h2{
+	font-weight: bold;
+}
+h3{
+	font-weight: bold;
+	font-size: 22px;
+}
+*{
+	/*font-family: "仿宋_GB2312";*/
+	font-family: "仿宋";
+}
+.seeMore{
+	text-align: center;
+	/*color: rgb(51, 140, 230);*/
+	color: #5c92ff;
+	font-size: 16px;
+	&:hover{
+		cursor: pointer;
+		opacity: 0.8;
+	}
+}
 	.down-arrow,.down-arrow-active {
 	    display :block;
 	    position: relative;
@@ -490,7 +511,7 @@ import {audit} from '@/api/entry/index.js'
 	    &:hover{
 	    	cursor: pointer;
 	    	:after{
-	    		border-color: #338ce6;
+	    		border-color: #5c92ff;
 	    	}
 	    }
 	}
@@ -523,12 +544,17 @@ import {audit} from '@/api/entry/index.js'
 	    transition: transform .3s;
 	}
 	/*修改样式*/
-	.ck-content .table,.ck-content .table thead,.ck-content .table tr,.ck-content .table td{
-		border: 1px solid #e2e5f3;
+	.ck-content /deep/  .table{
+		margin-bottom: 10px;
+	}
+	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
+		border: 1px solid #666;
 	    padding: 9px 15px 7px;
+	    font-size: 16px;
 	    text-align: left;
 	    word-wrap: break-word;
 	    word-break: break-all;
+	    font-size: 16px;
 	}
 	.el-card__body{
 		padding: 15px;
@@ -542,20 +568,26 @@ import {audit} from '@/api/entry/index.js'
 		line-height: 30px;
 		margin-right: 35px;
 		margin-bottom: 35px;
+		font-size:16px;
 		&:hover{
 			cursor: pointer;
 		}
 	}
 	.el-tag-active{
-		background: #338ce6;
+		background: #5c92ff;
 		color: #fff;
 	}
 	.ck-content,#attribute,#catalogue{
-		font-size: 14px;
-		color: #6f727c;
+		font-size: 16px;
+		/*color: #6f727c;*/
+		color: #666;
+		.innerlink{
+			color: #5c92ff;
+			text-decoration: none;
+		}
 	}
 	#reference,#tag{
-		font-weight: normal;
+		/*font-weight: normal;*/
 	}
 	
     .card-title{
@@ -593,7 +625,7 @@ import {audit} from '@/api/entry/index.js'
     .block{
         color: white;
         padding: 5px 10px;
-        background: #338ce6;
+        background: #5c92ff;
         position: relative;
     }
     .block::after{
@@ -623,14 +655,15 @@ import {audit} from '@/api/entry/index.js'
         padding: 20px;
     }
     .quote-btn{
-        color:  #8a8a8a;
+        /*color:  #8a8a8a;*/
+        color: #5c92ff;
         font-weight: normal;
         padding-right: 10px;
         cursor: pointer;
     }
     .box-card p{
         margin: 5px 0;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 30px;
     }
     .el-form-item{
@@ -646,15 +679,15 @@ import {audit} from '@/api/entry/index.js'
         background: #f6fafb;
     }
     .p1{
-        font-size: 16px;
+        font-size: 18px;
         font-weight: bolder;
     }
     .p2{
-        font-size: 14px;
+        font-size: 16px;
         padding-left:10px;
     }
     .p3{
-        font-size: 12px;
+        font-size: 16px;
         padding-left:20px;
         font-weight: lighter;
     }
@@ -674,7 +707,7 @@ import {audit} from '@/api/entry/index.js'
         height:0px;
     }
    .rightNav::-webkit-scrollbar-thumb {
-        background-color:#338ce6;
+        background-color:#5c92ff;
         background-clip:padding-box;
         min-height:5px;
         -webkit-border-radius: 1em;
@@ -697,15 +730,15 @@ import {audit} from '@/api/entry/index.js'
    		font-weight: 700;
     	color: #666;
     	padding-left: 10px;
-    	font-size: 14px;
+    	font-size: 16px;
    	}
    	.catalogue2{
-   		font-size: 12px;
+   		font-size: 14px;
 	    padding-left: 20px;
 	    color: #666;
    	}
    	.catalogue3{
-   		font-size: 12px;
+   		font-size: 14px;
 	    padding-left: 40px;
 	    color: #666;
    	}
@@ -716,7 +749,7 @@ import {audit} from '@/api/entry/index.js'
    			content: '';
    			width: 5px;
    			height: 20px;
-   			background: #338ce6;
+   			background: #5c92ff;
    			position: absolute;
    			left: 0;
    			top: 5px;
@@ -751,7 +784,7 @@ import {audit} from '@/api/entry/index.js'
     .audit-title {
         margin: 0;
         padding: 10px 10px 10px 0;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
         span {
             border-left: 5px solid #007fff;
@@ -774,5 +807,10 @@ import {audit} from '@/api/entry/index.js'
            font-weight: normal;
            color: #666666;
        }
+       
+    }
+    #content /deep/ .innerlink{
+    	color: #5c92ff;
+    	text-decoration: none;
     }
 </style>

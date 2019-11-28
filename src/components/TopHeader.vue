@@ -15,7 +15,7 @@
 			    v-model="content">
 			  </el-input>
       	<!--<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>-->
-      	<el-button style='margin: 0 20px;' @click="searchTotalStation" type="danger">全站搜索</el-button>
+      	<el-button style='margin: 0 20px;vertical-align: top;' @click="searchTotalStation" type="danger">全站搜索</el-button>
       </div>
     </el-col>
   </el-row>
@@ -102,7 +102,12 @@
 </script>
 	
 <style lang="scss" scoped>
-
+/deep/ .el-input--prefix .el-input__inner{
+	height: 52px;
+}
+/deep/ .el-button--danger{
+	font-size: 26px;
+}
 .head-wrap{
 	color: #338ce6;
 	text-align: center;

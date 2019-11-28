@@ -54,8 +54,8 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
+  "bowserslist": [
+    "defaults",
+    "not ie <= 8"
   ]
 }

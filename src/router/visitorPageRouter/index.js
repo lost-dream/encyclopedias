@@ -80,6 +80,14 @@ const visitorRouter = [
 			}
 		},
 		{
+			path: '/viewCommonEntry',
+			component: () => import('@/views/entry/viewCommonEntry'),
+			name: 'viewCommonEntry',
+			meta: {
+					title: '词条浏览',
+			}
+		},
+		{
 				path: '/createEntry',
 				component: () => import('@/views/entry/createEntry'),
 				name: 'createEntry',

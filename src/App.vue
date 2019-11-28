@@ -12,6 +12,8 @@ export default {
 </script>
 
 <style lang="scss">
+
+
 .el-tabs--left .el-tabs__active-bar.is-left{
 	left: 0 !important;
 	right: auto !important;
@@ -19,6 +21,7 @@ export default {
 }
 .ck-content .table{
 	border-collapse: collapse;
+	margin-bottom: 10px;
 	td{
 		border: 1px solid #e2e5f3;
     padding: 9px 15px 7px;

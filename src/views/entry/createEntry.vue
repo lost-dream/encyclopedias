@@ -364,6 +364,7 @@
     import treemenu from '@/components/treeMenu'
     import templateApi from '@/api/contentTemplate/index.js'
     import _ from 'lodash'
+//  import 'babel-polyfill';
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
         components: {ElForm,treemenu,treeTransfer},

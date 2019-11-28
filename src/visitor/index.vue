@@ -1,7 +1,7 @@
 <template>
 		<el-container class="page-wrapper" >
 			<el-main>
-				<header>
+				<header v-if="showHeader">
 					<vheader></vheader>
 				</header>
 				<!--面包屑导航-->
@@ -23,8 +23,9 @@ export default {
   data() {
 	    return {
 	        levelList: [],
-					showBreadcrumb:false,
-					pageClass: ''
+			showBreadcrumb:false,
+			pageClass: '',
+			showHeader:true,
 	    }
 	},
 	watch: {
@@ -39,19 +40,42 @@ export default {
 					this.pageClass = 'other-page'
 	    	}
 	        this.getBreadcrumb()
+	        this.showHeaderFun()
 	    }
 	},
 	beforeRouteEnter(to, from, next){
 		console.log(to);
 		next(vm => {
-			vm.showBreadcrumb = !(to.path === '/index');
+			vm.showBreadcrumb = !(to.path === '/index'||to.path === '/viewCommonEntry');
 			vm.pageClass = to.path === '/index' ? 'index-page' : 'other-page'
+			vm.authFun()
 		})
 	},
 	created(){
 		this.getBreadcrumb()
+		this.showHeaderFun()
 	},
 	methods:{
+		//权限请求函数
+		authFun() {
+			if(this.$route.path !== '/viewCommonEntry'){
+				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
+				cetc10Auth.init();
+			}
+			
+		},
+		showHeaderFun() {
+			if(this.$route.path === '/viewCommonEntry'){
+	        	this.showHeader = false
+	        	this.showBreadcrumb = false
+	        	document.body.style.background = '#f0f0f0'
+	        }
+	        else{
+	        	this.showHeader = true
+	        	this.showBreadcrumb = true
+	        	document.body.style.background = '#FAFAFA'
+	        }
+		},
 	    getBreadcrumb() {//停留在首页时点击首页会报错
 	        let matched = this.$route.matched.filter(item => item.name)
 	        matched.splice(0,1)
@@ -77,7 +101,9 @@ export default {
 }
 .index-page {
 	background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	background-color: #FAFAFA;
 	background-size: 100% 520px;
+	font-family: '仿宋';
 }
 .el-main{
 	padding-top: 0;
@@ -94,6 +120,7 @@ export default {
 .other-page {
 	margin: 0px auto;
 	width: 1280px;
+	font-family: '仿宋';
 }
 
 </style>

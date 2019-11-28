@@ -4,7 +4,7 @@
 			<el-col :span="4">
 				<el-image src="" style="width: 160px;height: 160px;padding:10px"></el-image>
 			</el-col>
-			<el-col :span="20" style="margin-top: 10px;">
+			<el-col :span="20" style="margin-top: 10px;font-size: 26px;">
 				<el-row style="padding: 20px 40px;font-size: 20px;font-weight: bold;color:rgb(51, 140, 230);border-bottom: 1px solid #eee">Creator</el-row>
 				<el-row>
 					<el-col :span="4" style="border-right: 1px solid #eee;">
@@ -48,13 +48,13 @@
 						{{parseTime(scope.row.AUDIT_TIME)}}
 					</template>
 				</el-table-column>
-				<el-table-column prop="AUDITOR" label="审核人员" width="180"></el-table-column>
+				<el-table-column prop="AUDITOR" label="审核人员" width=""></el-table-column>
 				<el-table-column prop="AUDIT_CONTENT" label="审核意见"></el-table-column>
-				<el-table-column fixed="right" label="操作" width="150">
+				<el-table-column fixed="right" label="操作" width="300">
 					<template slot-scope="scope">
-						<el-button v-if="scope.row.STATE==1" @click="modifyEntry(scope.row)" type="text" size="small">继续修改</el-button>
-						<el-button v-if="scope.row.STATE==1" @click="deleteEntry(scope.row)" type="text" size="small">删除</el-button>
-						<el-button @click="seeEntry(scope.row)" type="text" size="small">查看</el-button>
+						<el-button style="color: #6b9cec;" v-if="scope.row.STATE==1" @click="modifyEntry(scope.row)" type="text" size="small">继续修改</el-button>
+						<el-button style="color: #ec6b6b;" v-if="scope.row.STATE==1" @click="deleteEntry(scope.row)" type="text" size="small">删除</el-button>
+						<el-button style="color: #33e37d;" @click="seeEntry(scope.row)" type="text" size="small">查看</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -67,7 +67,7 @@
 <script>
 import {userEntryList,userStatistics} from '@/api/onlyShowData/index.js'
 import {deleteEntry} from '@/api/entry/index.js'
-import {parseTime} from '@/utils/commonMethod.js'
+import {parseTimeYMD} from '@/utils/commonMethod.js'
 import ElImage from "../../../node_modules/element-ui/packages/image/src/main.vue";
 export default {
 
@@ -156,7 +156,7 @@ export default {
 		},
 		
 		parseTime(str) {
-			return parseTime(str)
+			return parseTimeYMD(str)
 		},
 		handleSizeChange(val) {
 			this.pagination.page = 1
@@ -194,13 +194,71 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-button--danger{
+	font-size: 26px;
+}
+/deep/ .el-button--small{
+	font-size: 26px;
+}
+/deep/ .el-table {
+     thead {
+     	font-size: 28px;
+        .cell {
+           text-align: left;  // table 表头 左对齐
+           
+        }
+        th,tr,td{
+        	background: #f2f2f2;
+        }
+        
+    }
+    .cell{
+    	text-align: left;
+    	
+    }
+     .delete-row {
+         color: #d8d8d8;
+     }
+
+     .el-table__expand-icon { //修改 el-tabel 折叠按钮的位置
+         float:right;
+     }
+
+     // 去掉table的border start----------------------------
+     border: 0;
+     th,
+     tr,
+     td{
+     	font-size: 26px;
+     	background: #fbfbfb;
+         border: 0;
+     }
+     &::before {
+         height: 0px;
+     }
+     &::after {
+         width: 0;
+     }
+     &:hover{
+     	cursor: pointer;
+     	background: #e6e6e6;
+     }
+
+     .el-table__fixed:before {
+         height: 0;
+     }
+        // 去掉table的border end----------------------------
+ }
+
+
+
 .statusList{
 	li{
 		display: inline-block;
 		background: #e6e6e6;
 		color: #adadad;
 		font-weight: bold;
-		font-size: 18px;
+		font-size: 26px;
 		width: 90px;
 		text-align: center;
 		border-right: 1px solid #d0d0d0;
