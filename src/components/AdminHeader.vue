@@ -1,7 +1,7 @@
 <template>
   <div class="admin-header">
   	<span>
-  		<!--<img src="../../public/static/image/icon/logo.png" alt="LOGO.png">-->
+  		<!--<img src="../../public/baike/static/image/icon/logo.png" alt="LOGO.png">-->
 			<span>情报百科</span>
   	</span>
     

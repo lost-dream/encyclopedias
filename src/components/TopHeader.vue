@@ -3,7 +3,7 @@
     <el-col :span="24" >
       <div class="head-wrap">
       	<span>
-      		<!--<img @click="gotoIndex" src="../../public/static/image/logo.png" />-->
+      		<!--<img @click="gotoIndex" src="../../public/baike/static/image/logo.png" />-->
       		<span @click="gotoIndex" class="title" >情报百科</span>
       	</span>
       	

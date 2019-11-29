@@ -59,7 +59,7 @@ export default {
 		//权限请求函数
 		authFun() {
 			if(this.$route.path !== '/viewCommonEntry'){
-				var cetc10Auth = Cetc10Auth('static/cetc10Auth_03.json');
+				var cetc10Auth = Cetc10Auth('baike/static/cetc10Auth_03.json');
 				cetc10Auth.init();
 			}
 			
@@ -136,7 +136,7 @@ export default {
 	}
 }
 .index-page {
-	background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	background: url('/baike/static/image/index-bg.png') 0 0 no-repeat;
 	background-color: #FAFAFA;
 	background-size: 100% 520px;
 	font-family: '仿宋';

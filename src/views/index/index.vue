@@ -17,7 +17,7 @@
 										</div>
 									</el-image>
 <!--									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
-									<!--<img src="/static/image/tank.png"/>-->
+									<!--<img src="/baike/static/image/tank.png"/>-->
 									<div>
 										<p class="entry-title">{{item.ENTRY_NAME}}</p>
 										<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -73,7 +73,7 @@
 							:fit="'cover'"
 							:src="item.specialCoverUrl">
 							<div slot="error" class="image-slot">
-					       		<img src="/static/image/tank.png" alt="" />
+					       		<img src="/baike/static/image/tank.png" alt="" />
 					      	</div>
 						</el-image>
 						
@@ -140,7 +140,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/static/image/tank.png"/>-->
+								<!--<img src="/baike/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -157,7 +157,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/static/image/tank.png"/>-->
+								<!--<img src="/baike/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -174,7 +174,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/static/image/tank.png"/>-->
+								<!--<img src="/baike/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -191,7 +191,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/static/image/tank.png"/>-->
+								<!--<img src="/baike/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -208,7 +208,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/static/image/tank.png"/>-->
+								<!--<img src="/baike/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -225,7 +225,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/static/image/tank.png"/>-->
+								<!--<img src="/baike/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -444,7 +444,7 @@ export default {
 }
 .main-page {
 	padding-top: 30px;
-	// background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	// background: url('/baike/static/image/index-bg.png') 0 0 no-repeat;
 	// background-size: 100% 550px;
 	.w1280 {
 		width: 1280px;
@@ -738,7 +738,7 @@ export default {
 	font-weight: bold;
 	font-size: 28px;
 	line-height: 55px;
-	background: url('/static/image/title.png') no-repeat;
+	background: url('/baike/static/image/title.png') no-repeat;
 }
 #entryStatisticalData{
 	display: flex;

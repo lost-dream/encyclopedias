@@ -120,7 +120,7 @@
             var configUrl;
 
             if (!url) {
-                configUrl = 'cetc10Auth_02.json';
+                configUrl = 'cetc10Auth_03.json';
             } else if (typeof url === 'string') {
                 configUrl = config;
             }

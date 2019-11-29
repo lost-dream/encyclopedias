@@ -35,11 +35,11 @@ module.exports = {
 //  transpileDependencies: ["@ckeditor"],
     pwa: {
         iconPaths: {
-            favicon32: './static/image/titlelogo.png',
-            favicon16: './static/image/titlelogo.png',
-            appleTouchIcon: './static/image/titlelogo.png',
-            maskIcon: './static/image/titlelogo.png',
-            msTileImage: './static/image/titlelogo.png'
+            favicon32: './baike/static/image/titlelogo.png',
+            favicon16: './baike/static/image/titlelogo.png',
+            appleTouchIcon: './baike/static/image/titlelogo.png',
+            maskIcon: './baike/static/image/titlelogo.png',
+            msTileImage: './baike/static/image/titlelogo.png'
         }
     }
 }

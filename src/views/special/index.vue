@@ -13,7 +13,7 @@
 		<ul class="entryList">
 			<li @click="seeEntry(item)" v-for="item in entryList">
 				<img v-if="item.entrySummarys.length&&item.entrySummarys[0].summary&&JSON.parse(item.entrySummarys[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.entrySummarys[0].summary).img" alt="" />
-				<img v-else src="/static/image/tank.png"/>
+				<img v-else src="/baike/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.entryName}}</p>
 					<div v-if="item.entrySummarys.length&&item.entrySummarys[0].summary" v-html="JSON.parse(item.entrySummarys[0].summary).text"></div>

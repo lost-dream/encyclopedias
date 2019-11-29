@@ -235,7 +235,7 @@
                     </el-tree>
                     <div class="template-right">
                         <h4 class="category-title">{{selectedCategory}}
-                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
+                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/baike/static/image/geshishua.png" alt="" title="格式化">
                         </h4>
                         <ul v-if="contentData.length" class="content-menu">
                             <li v-for="item in contentData" v-bind:key="item.id">
@@ -313,7 +313,7 @@
             </el-tree>
             <div id="classifyFormDialog" class="template-right">
                 <h4 class="category-title">{{selectedClassify}}
-                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
+                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/baike/static/image/geshishua.png" alt="" title="格式化">
                 </h4>
                 <ul v-if="classifyTemplateData.length" class="content-menu classifyForm">
                     <!--<li v-for="item in classifyTemplateData" v-bind:key="item.id">{{item.attributeName}}</li>-->
@@ -1245,7 +1245,7 @@ h2,h3{
         color: white;
         padding: 8px 10px 10px;
         margin-bottom: 10px;
-        background: url('/static/image/create-title@2x.png') 0 0 no-repeat;
+        background: url('/baike/static/image/create-title@2x.png') 0 0 no-repeat;
         background-size: 100% 100%;
     }
     .block-container{
