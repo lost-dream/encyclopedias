@@ -65,7 +65,7 @@
 			<div class="title" style="margin-top: 25px">
 				<span>特色专题</span>
 			</div>
-			<el-carousel :interval="5000" type="card" height="400px" id="special-carousel" v-loading="!specialListData.length">
+			<el-carousel :interval="5000000" type="card" height="400px" id="special-carousel" v-loading="!specialListData.length">
 				<el-carousel-item v-for="item in specialListData" :key="item.id">
 					<div @click="routeToSpecial(item.id)" class="specialList">
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
@@ -705,15 +705,26 @@ export default {
 		box-shadow: 0 0 8px 0 #ccc;
 		p{
 			text-align: center;
-			font-size: 16px;
+			font-size: 28px;
+			font-family: "仿宋";
 			font-weight: bold;
 			margin-bottom: 10px;
+			
 		}
 		div{
-			font-size: 14px;
+			font-size: 26px;
+			font-family: "仿宋";
 			padding: 0 30px;
-			line-height: 1.4;
+			line-height: 30px;
 			color: #7d7e7e;
+			overflow:hidden;
+		    text-overflow:ellipsis;
+		    display:-webkit-box;
+		    -webkit-box-orient:vertical;
+		    -webkit-line-clamp:5;
+		    line-clamp:5;
+		    word-wrap: break-word;
+			
 		}
 	}
 }
