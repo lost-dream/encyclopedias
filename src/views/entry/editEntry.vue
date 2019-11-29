@@ -1187,6 +1187,12 @@
     }
 </script>
 <style lang="scss" scoped>
+.classifyForm li .name,.category-title{
+	font-size: 26px;
+}
+h2,h3{
+	font-size: 28px;
+}
 	.addClassifyFrom{
 		display: inline-block;
 		width: 50%;
@@ -1233,11 +1239,14 @@
         margin-right: 10px;
     }
     .block{
-        width: 100px;
+        width: 150px;
+        font-size: 28px;
         text-align: center;
         color: white;
-        padding: 10px;
-        background: #338ce6;
+        padding: 8px 10px 10px;
+        margin-bottom: 10px;
+        background: url('/static/image/create-title@2x.png') 0 0 no-repeat;
+        background-size: 100% 100%;
     }
     .block-container{
         background: #eee;
@@ -1282,6 +1291,7 @@
     .el-tag,.button-new-category {
         min-width: 80px;
         text-align: center;
+        font-size: 26px;
     } 
     .el-tag + .el-tag, .button-new-category {
         margin-left: 10px;

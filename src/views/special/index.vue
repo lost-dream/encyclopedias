@@ -154,6 +154,7 @@ export default {
 .noDataRemindContent{
 	text-align: center;
 	padding: 20px 0;
+	font-size: 26px;
 }
 .specialInfo{
 	background: #6d7377;
@@ -167,8 +168,8 @@ export default {
 	.content{
 		background: #6d7377;
 		color: white;
-		font-size: 14px;
-		line-height: 20px;
+		font-size: 26px;
+		line-height: 30px;
 		padding: 30px 20px 20px 50px;
 		position: absolute;
 		right: 0;
@@ -176,7 +177,7 @@ export default {
 	}
 	.title{
 		text-align: center;
-		font-size: 16px;
+		font-size: 28px;
 	}
 }
 </style>

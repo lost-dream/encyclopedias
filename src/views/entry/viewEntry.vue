@@ -4,7 +4,7 @@
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
                 <h1 style="font-weight: normal;font-size: 35px;">{{wikiContent.entryName}}
-                    <span style="font-size: 14px;color: #338ce6">同义词：
+                    <span style="font-size: 28px;color: #338ce6">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -124,7 +124,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 25px;font-size: 12px;">
+                        <p style="line-height: 35px;font-size: 26px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -479,6 +479,9 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+h2,h3{
+	font-size: 28px;
+}
 	.down-arrow,.down-arrow-active {
 	    display :block;
 	    position: relative;
@@ -539,9 +542,11 @@ import {audit} from '@/api/entry/index.js'
 		color: #909293;
 		padding: 0 15px;
         margin-bottom: 15px;
-		line-height: 30px;
+		line-height: 40px;
+		height: 40px;
 		margin-right: 35px;
 		margin-bottom: 35px;
+		font-size:26px;
 		&:hover{
 			cursor: pointer;
 		}
@@ -551,7 +556,7 @@ import {audit} from '@/api/entry/index.js'
 		color: #fff;
 	}
 	.ck-content,#attribute,#catalogue{
-		font-size: 14px;
+		font-size: 26px;
 		color: #6f727c;
 	}
 	#reference,#tag{
@@ -630,7 +635,7 @@ import {audit} from '@/api/entry/index.js'
     }
     .box-card p{
         margin: 5px 0;
-        font-size: 14px;
+        font-size: 26px;
         line-height: 30px;
     }
     .el-form-item{
@@ -638,7 +643,7 @@ import {audit} from '@/api/entry/index.js'
     }
     .box-card{
         position: fixed !important;
-        width: 250px;
+        width: 350px;
         // margin-top: 50px;
         margin-left: 50px;
     }
@@ -646,15 +651,15 @@ import {audit} from '@/api/entry/index.js'
         background: #f6fafb;
     }
     .p1{
-        font-size: 16px;
+        font-size: 26px;
         font-weight: bolder;
     }
     .p2{
-        font-size: 14px;
+        font-size: 26px;
         padding-left:10px;
     }
     .p3{
-        font-size: 12px;
+        font-size: 26px;
         padding-left:20px;
         font-weight: lighter;
     }
@@ -697,15 +702,15 @@ import {audit} from '@/api/entry/index.js'
    		font-weight: 700;
     	color: #666;
     	padding-left: 10px;
-    	font-size: 14px;
+    	font-size: 26px;
    	}
    	.catalogue2{
-   		font-size: 12px;
+   		font-size: 26px;
 	    padding-left: 20px;
 	    color: #666;
    	}
    	.catalogue3{
-   		font-size: 12px;
+   		font-size: 26px;
 	    padding-left: 40px;
 	    color: #666;
    	}

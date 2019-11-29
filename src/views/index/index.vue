@@ -418,14 +418,14 @@ export default {
 		opacity: 0.6;
 	}
 	.ellipsis3{
-		line-height: 25px;
-		font-size: 14px;
+		line-height: 30px;
+		font-size: 28px;
 		color: #959595;
 		
 	}
 	.entry-title{
-		line-height: 20px;
-		font-size: 18px;
+		line-height: 30px;
+		font-size: 28px;
 		color: #5a5a5a;
 		margin-bottom: 10px;
 	}
@@ -538,9 +538,9 @@ export default {
 	
 
 	p{
-		font-size: 20px;
+		font-size: 28px;
 		/*font-weight: bold;*/
-		line-height: 20px;
+		line-height: 30px;
 		color: white;
 		text-align: center;
 		/*box-shadow: 0 2px 5px 1px #848484;*/
@@ -559,9 +559,9 @@ export default {
 			margin: 0;
 			padding: 0;
 			display: inline-block;
-			width: calc(25% - 1px);
+			width: calc(30% - 1px);
 			line-height: 30px;
-			font-size: 14px;
+			font-size: 26px;
 			color: #7d7e7e;
 			text-align: left;
 			overflow: hidden;
@@ -671,14 +671,14 @@ export default {
 		font-size: 16px;
 		.entry-title{
 			line-height: 36px;
-			font-size: 16px;
+			font-size: 28px;
 			font-weight: bold;
 			padding-left: 10px;
 		}
 	}
 	.ellipsis3{
-		font-size: 14px;
-		line-height: 20px;
+		font-size: 26px;
+		line-height: 30px;
 		color: #7a7a7a;
 		padding: 0 10px 0 10px;
 	}
@@ -736,7 +736,7 @@ export default {
 	padding-left: 90px;
 	color: #338ce6;
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 28px;
 	line-height: 55px;
 	background: url('/static/image/title.png') no-repeat;
 }
@@ -749,7 +749,7 @@ export default {
 	padding: 25px 0 25px 50px;
 	box-sizing: border-box;
 	color: #338ce6;
-	font-size: 15px;
+	font-size: 28px;
 	div{
 		width: 100%;
 		/*text-align: center;*/

@@ -996,6 +996,9 @@
     }
 </script>
 <style lang="scss" scoped>
+.classifyForm li .name,.category-title{
+	font-size: 26px;
+}
     .ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable), .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners{
         border: 1px solid #ccc
     }
@@ -1019,7 +1022,8 @@
         margin-right: 10px;
     }
     .block{
-        width: 100px;
+        width: 150px;
+        font-size: 28px;
         text-align: center;
         color: white;
         padding: 8px 10px 10px;

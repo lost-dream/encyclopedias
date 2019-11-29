@@ -134,8 +134,10 @@ export default {
 		line-height: 25px;
 		margin-right: 30px;
 		margin-bottom: 30px;
-		font-size: 14px;
+		font-size: 26px;
 		color: #666666;
+		
+		
 		&:nth-child(4n+4){
 			margin-right: 0;
 		}
@@ -152,7 +154,7 @@ export default {
 		.entry-title{
 			line-height: 45px;
 			font-weight: bold;
-			font-size: 16px;
+			font-size: 28px;
 			color: black;
 			text-align: center;
 			display: -webkit-box;
@@ -161,6 +163,7 @@ export default {
 			overflow: hidden;
 		}
 		div{
+			font-size: 26px;
 			padding: 0 20px;
 			display: -webkit-box;
 			-webkit-box-orient: vertical;
@@ -183,7 +186,7 @@ export default {
 	padding: 20px 0;
 }
 .categoryList{
-	font-size: 14px;
+	font-size: 26px;
 	color: #7b7d7f;
 	background: #eaf4fe;
 	list-style: none;

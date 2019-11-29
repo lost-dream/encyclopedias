@@ -5,8 +5,9 @@ import { Message } from 'element-ui'
 const service = axios.create({
 //baseURL: 'http://106.12.208.84:8080', // url = base url + request url
 //baseURL: 'http://localhost:8080',
-baseURL: 'http://192.168.0.35:8080',
+//baseURL: 'http://192.168.0.35:8080',
 //baseURL: 'http://10.24.1.21:8080',
+	baseURL: 'http://10.24.1.110:30360',
   withCredentials: false, // send cookies when cross-domain requests
   crossDomain: true,
   timeout: 1000*60*2, // request timeout
