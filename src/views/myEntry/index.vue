@@ -194,10 +194,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-button--danger{
-	font-size: 26px;
-}
-/deep/ .el-button--small{
+/deep/ .el-button{
+	background: none;
+	
 	font-size: 26px;
 }
 /deep/ .el-table {

@@ -3,7 +3,7 @@
     <el-col :span="24" >
       <div class="head-wrap">
       	<span>
-      		<!--<img @click="gotoIndex" src="../../public/static/image/logo.png" />-->
+      		<!--<img @click="gotoIndex" src="../../public/baike/static/image/logo.png" />-->
       		<span @click="gotoIndex" class="title" >情报百科</span>
       	</span>
       	
@@ -102,12 +102,6 @@
 </script>
 	
 <style lang="scss" scoped>
-/deep/ .el-input--prefix .el-input__inner{
-	height: 52px;
-}
-/deep/ .el-button--danger{
-	font-size: 26px;
-}
 .head-wrap{
 	color: #338ce6;
 	text-align: center;
@@ -123,7 +117,7 @@
 	.title{
 		margin-right: 75px;
 		display: inline-block;
-		font-size: 18px;
+		font-size: 28px;
 		font-weight: bold;
 		transform: translateY(4px);
 		padding-top: 5px;

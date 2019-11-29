@@ -59,7 +59,7 @@ export default {
 		//权限请求函数
 		authFun() {
 			if(this.$route.path !== '/viewCommonEntry'){
-				var cetc10Auth = Cetc10Auth('static/cetc10Auth_02.json');
+				var cetc10Auth = Cetc10Auth('baike/static/cetc10Auth_03.json');
 				cetc10Auth.init();
 			}
 			
@@ -92,6 +92,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-tree-node__label{
+	font-size: 26px;
+}
+
+
+/deep/ .entry-title,/deep/ .el-card__body{
+	font-size: 28px;
+}
+/deep/ .el-tabs__item,/deep/ .empty-list,/deep/ .el-tree-node__labe{
+	font-size: 26px;
+}
+/deep/ .el-tree-node__labe{
+	font-size: 26px;
+}
+/deep/ .el-input--prefix .el-input__inner{
+	height: 52px;
+	font-size: 26px;
+}
+/deep/ .el-input__inner{
+	font-size: 26px;
+}
+/deep/ .el-button--danger{
+	background: #F56C6C;
+	border: #F56C6C;
+	outline: #F56C6C;
+	color: white;
+	
+}
+/deep/ .el-button{
+	background: #c8c8c8;
+	border: #c8c8c8;
+	outline: #c8c8c8;
+	color: #e6e6e6;
+	font-size: 26px;
+}
+
 .page-wrapper{
 	// width: 1280px;
 	// margin: 0 auto;
@@ -100,7 +136,7 @@ export default {
 	}
 }
 .index-page {
-	background: url('/static/image/index-bg.png') 0 0 no-repeat;
+	background: url('/baike/static/image/index-bg.png') 0 0 no-repeat;
 	background-color: #FAFAFA;
 	background-size: 100% 520px;
 	font-family: '仿宋';
@@ -115,6 +151,8 @@ export default {
 .breadcrumb-container {
 	width: 1280px;
 	margin: 0 auto;
+	font-size: 26px;
+	font-family: '仿宋';
 }
 
 .other-page {
