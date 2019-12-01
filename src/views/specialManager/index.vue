@@ -191,8 +191,11 @@
         },
         created() {
             let vm = this
-            vm.getSpecialList()
-            this.categoryTree()
+	    	Cetc10Auth().init(function(){
+	    		vm.getSpecialList()
+                vm.categoryTree()
+	    	});
+            
         },
         mounted() {
         },

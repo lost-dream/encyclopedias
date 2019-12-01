@@ -31,7 +31,7 @@
 
 <script>
 import {entryVersionList,entryInfo} from '@/api/entry/index.js'
-import {parseTime} from '@/utils/commonMethod.js'
+import {parseTimeYMD} from '@/utils/commonMethod.js'
 export default {
 	
 	name: 'entryVersionList',
@@ -51,9 +51,13 @@ export default {
 		
 	},
 	created() {
-		this.entryId = this.$route.query.entryId
-		this.entryVersionList()
-		this.entryInfo()
+		let vm = this
+    	Cetc10Auth().init(function(){
+    		vm.entryId = vm.$route.query.entryId
+			vm.entryVersionList()
+			vm.entryInfo()
+    	});
+		
 	},
 	mounted() {
 	},
@@ -99,7 +103,7 @@ export default {
 		},
 		
 		parseTime(str) {
-			return parseTime(str)
+			return parseTimeYMD(str)
 		},
 		handleSizeChange(val) {
 			this.pagination.page = 1
@@ -135,12 +139,63 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-table {
+     thead {
+     	font-size: 28px;
+        .cell {
+           text-align: left;  // table 表头 左对齐
+           
+        }
+        th,tr,td{
+        	background: #f2f2f2;
+        }
+        
+    }
+    .cell{
+    	text-align: left;
+    	
+    }
+     .delete-row {
+         color: #d8d8d8;
+     }
+
+     .el-table__expand-icon { //修改 el-tabel 折叠按钮的位置
+         float:right;
+     }
+
+     // 去掉table的border start----------------------------
+     border: 0;
+     th,
+     tr,
+     td{
+     	font-size: 26px;
+     	background: #fbfbfb;
+         border: 0;
+     }
+     &::before {
+         height: 0px;
+     }
+     &::after {
+         width: 0;
+     }
+     &:hover{
+     	cursor: pointer;
+     	background: #e6e6e6;
+     }
+
+     .el-table__fixed:before {
+         height: 0;
+     }
+        // 去掉table的border end----------------------------
+ }
 .versionHistory{
 	background: #f6fafb;
 	color: black;
 	line-height: 60px;
 	.el-col-6{
 		text-align: center;
+		font-size: 26px;
+		line-height: 1.5;
 	}
 }
 .statusList{
@@ -149,11 +204,11 @@ export default {
 		background: #e6e6e6;
 		color: #adadad;
 		font-weight: bold;
-		font-size: 18px;
+		font-size: 26px;
 		width: 90px;
 		text-align: center;
 		border-right: 1px solid #d0d0d0;
-		line-height: 40px;
+		line-height: 1.5;
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 	}

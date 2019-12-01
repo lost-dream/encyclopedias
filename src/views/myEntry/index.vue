@@ -98,8 +98,12 @@ export default {
 		}
 	},
 	created() {
-		this.userEntryList()
-		this.userStatistics()
+		let vm = this
+    	Cetc10Auth().init(function(){
+    		vm.userEntryList()
+			vm.userStatistics()
+    	});
+		
 	},
 	mounted() {
 	},

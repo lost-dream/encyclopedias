@@ -6,7 +6,7 @@
 			</div>
 			<el-row>
 				<el-col class="w800">
-					<el-carousel :interval="5000" height="360px" id="index-carousel" style="height: 400px;overflow: hidden" v-loading="!entryListData.length">
+					<el-carousel :interval="5000" height="460px" id="index-carousel" style="height: 460px;overflow: hidden" v-loading="!entryListData.length">
 						<el-carousel-item v-for="key in entryListData" style="display: flex">
 							<div v-for="item in key" >
 <!--								{{item}}-->
@@ -17,7 +17,7 @@
 										</div>
 									</el-image>
 <!--									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
-									<!--<img src="/baike/static/image/tank.png"/>-->
+									<!--<img src="/static/image/tank.png"/>-->
 									<div>
 										<p class="entry-title">{{item.ENTRY_NAME}}</p>
 										<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -65,7 +65,7 @@
 			<div class="title" style="margin-top: 25px">
 				<span>特色专题</span>
 			</div>
-			<el-carousel :interval="5000000" type="card" height="400px" id="special-carousel" v-loading="!specialListData.length">
+			<el-carousel :interval="5000000" type="card" height="500px" id="special-carousel" v-loading="!specialListData.length">
 				<el-carousel-item v-for="item in specialListData" :key="item.id">
 					<div @click="routeToSpecial(item.id)" class="specialList">
 						<!--<img :src="item.specialCoverUrl" alt="" />-->
@@ -73,7 +73,7 @@
 							:fit="'cover'"
 							:src="item.specialCoverUrl">
 							<div slot="error" class="image-slot">
-					       		<img src="/baike/static/image/tank.png" alt="" />
+					       		<img src="/static/image/tank.png" alt="" />
 					      	</div>
 						</el-image>
 						
@@ -140,7 +140,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/baike/static/image/tank.png"/>-->
+								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -157,7 +157,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/baike/static/image/tank.png"/>-->
+								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -174,7 +174,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/baike/static/image/tank.png"/>-->
+								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -191,7 +191,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/baike/static/image/tank.png"/>-->
+								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -208,7 +208,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/baike/static/image/tank.png"/>-->
+								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -225,7 +225,7 @@
 										<i class="el-icon-picture-outline"></i>
 									</div>
 								</el-image>
-								<!--<img src="/baike/static/image/tank.png"/>-->
+								<!--<img src="/static/image/tank.png"/>-->
 								<div class="text-desc">
 									<p class="entry-title"><span>{{item.ENTRY_NAME}}</span></p>
 									<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
@@ -265,11 +265,15 @@ export default {
 
 	},
 	created() {
-		this.entryStatistical()
-		this.specialList()
-		this.categoryTree()
-		this.entryList()
-		this.getCategoryList(6)
+		let vm = this
+    	Cetc10Auth().init(function(){
+    		vm.entryStatistical()
+			vm.specialList()
+			vm.categoryTree()
+			vm.entryList()
+			vm.getCategoryList(6)
+    	});
+		
 	},
 	mounted() {
 	},
@@ -418,13 +422,13 @@ export default {
 		opacity: 0.6;
 	}
 	.ellipsis3{
-		line-height: 30px;
+		line-height: 1.5;
 		font-size: 28px;
 		color: #959595;
 		
 	}
 	.entry-title{
-		line-height: 30px;
+		line-height: 1.5;
 		font-size: 28px;
 		color: #5a5a5a;
 		margin-bottom: 10px;
@@ -444,7 +448,7 @@ export default {
 }
 .main-page {
 	padding-top: 30px;
-	// background: url('/baike/static/image/index-bg.png') 0 0 no-repeat;
+	// background: url('/static/image/index-bg.png') 0 0 no-repeat;
 	// background-size: 100% 550px;
 	.w1280 {
 		width: 1280px;
@@ -540,7 +544,7 @@ export default {
 	p{
 		font-size: 28px;
 		/*font-weight: bold;*/
-		line-height: 30px;
+		line-height: 1.5;
 		color: white;
 		text-align: center;
 		/*box-shadow: 0 2px 5px 1px #848484;*/
@@ -560,7 +564,7 @@ export default {
 			padding: 0;
 			display: inline-block;
 			width: calc(30% - 1px);
-			line-height: 30px;
+			line-height: 1.5;
 			font-size: 26px;
 			color: #7d7e7e;
 			text-align: left;
@@ -620,7 +624,7 @@ export default {
 		/*line-height: 25px;*/
 		/*font-size: 16px;*/
 		/*.entry-title{*/
-			/*line-height: 30px;*/
+			/*line-height: 1.5;*/
 			/*font-size: 14px;*/
 			/*font-weight: bold;*/
 		/*}*/
@@ -634,7 +638,7 @@ export default {
 	margin: 0 5px;
 	position: relative;
 	width: 256px;
-	height: 360px;
+	height: 460px;
 	background: #ffffff;
 
 	.carousel-image {
@@ -667,10 +671,10 @@ export default {
 		color: black;
 		width: 100%;
 		/*padding: 0 10px;*/
-		line-height: 25px;
+		line-height: 1.5;
 		font-size: 16px;
 		.entry-title{
-			line-height: 36px;
+			line-height: 1.5;
 			font-size: 28px;
 			font-weight: bold;
 			padding-left: 10px;
@@ -678,7 +682,7 @@ export default {
 	}
 	.ellipsis3{
 		font-size: 26px;
-		line-height: 30px;
+		line-height: 1.5;
 		color: #7a7a7a;
 		padding: 0 10px 0 10px;
 	}
@@ -695,7 +699,7 @@ export default {
 	}
 	>div:not(.el-image){
 		width: 324px;
-		height: 160px;
+		height: 260px;
 		padding: 20px 0 30px 0;
 		background: white;
 		border-radius: 5px;
@@ -715,7 +719,7 @@ export default {
 			font-size: 26px;
 			font-family: "仿宋";
 			padding: 0 30px;
-			line-height: 30px;
+			line-height: 1.5;
 			color: #7d7e7e;
 			overflow:hidden;
 		    text-overflow:ellipsis;
@@ -738,7 +742,7 @@ export default {
 	font-weight: bold;
 	font-size: 28px;
 	line-height: 55px;
-	background: url('/baike/static/image/title.png') no-repeat;
+	background: url('/static/image/title.png') no-repeat;
 }
 #entryStatisticalData{
 	display: flex;
@@ -777,14 +781,14 @@ export default {
 			max-width: 320px;
 			text-overflow: ellipsis;
 			overflow: hidden;
-			line-height: 1;
+			line-height: 1.5;
 			vertical-align: bottom;
 			text-align: right;
 		}
 		span:last-child{
 			margin-left: 0px;
 			color: #666666;
-			line-height: 30px;
+			line-height: 1.5;
 			float: right;
 		}
 	}
@@ -826,7 +830,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		padding: 10px;
-		line-height: 1.2;
+		line-height: 1.5;
 	}
 	body {
 		overflow-x: hidden;
@@ -836,7 +840,7 @@ export default {
 		padding-bottom: 40px;
 		/deep/ .el-tabs__item {
 			height: 58px;
-			line-height: 58px;
+			line-height: 1.5;
 			width: 100px;
 			text-align: center;
 			color: #333333;

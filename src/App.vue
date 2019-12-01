@@ -30,7 +30,7 @@ export default {
     word-break: break-all;
     font-weight: normal;
         font-size: 13px;
-    line-height: 24px;
+    line-height: 1.5;
     b{
     	font-weight: normal;
     }
@@ -179,7 +179,8 @@ ul,li,p{
     max-width: 35% !important;
 }
 .ck-content p{
-    line-height: 25px;
+    line-height: 1.5;
+    font-size: 26px;
     text-indent: 2em;
 }
 .el-collapse-item__header{
@@ -207,7 +208,7 @@ ul,li,p{
     word-wrap: break-word;
 }
     .main-content{
-        line-height: 25px;
+        line-height: 1.5;
     }
     .w800 .el-carousel__item--card.is-active{
         transform: translateX(200px) scale(0.83) !important;

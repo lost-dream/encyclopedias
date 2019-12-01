@@ -3,7 +3,7 @@
         <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 35px;">{{wikiContent.entryName}}
+                <h1 style="font-weight: normal;font-size: 35px;"><span style="font-weight: bold;">{{wikiContent.entryName}}</span>
                     <span style="font-size: 28px;color: #338ce6">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
@@ -49,12 +49,15 @@
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%;display: inline-block;">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                        <strong style="width: 100px;display: inline-block;padding-left: 120px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.attributeKey}}</strong>
-                        <span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
-                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
-                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
-                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
-                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                        <p style="width: 160px;display: inline-block;padding-left: 60px;">{{item.attributeKey}}</p>
+                        <p style="display: inline-block;vertical-align: top;width: 50%;">
+                        	<span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
+	                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
+	                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
+	                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
+	                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                        </p>
+                        
                     </p>
                 </div>
             </div>
@@ -124,7 +127,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 35px;font-size: 26px;">
+                        <p style="line-height: 1.5;font-size: 26px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -240,140 +243,35 @@ import {audit} from '@/api/entry/index.js'
             }
         },
         mounted() {
-        	
-            let vm = this
-            vm.entryId = vm.$route.query.entryId
-            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
-            vm.viewType = vm.$route.query.viewType
-            vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
-            if(vm.viewType == 'preview') {
-                vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiContent = res.data
-                        if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
-                        	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
-                        }
-                        vm.contentList = []
-                        res.data.entrySummarys.map(item => {
-                            if(item.dataType ==1 ){
-                                vm.summaryEditor = JSON.parse(item.summary).text
-                                console.log(vm.summaryEditor,1111111)
-                                vm.imageUrl = JSON.parse(item.summary).img
-                            } else {
-                                let obj = {
-                                    img : JSON.parse(item.summary).img,
-                                    text : JSON.parse(item.summary).text,
-                                    sourceType : item.sourceType,
-                                    sourceValue : item.sourceValue
-                                }
-                                vm.otherSummaries.push(obj)
-                            }
-                        })
-                        res.data.entryContentVos.map((item, index) => {
-                            let obj1 = {
-                                level: 1,
-                                value: item.contentTitle,
-                                id: item.id,
-                                mark: index
-                            }
-                            if(obj1.value !== 'null'&&obj1.value !== null) {
-                                vm.contentList.push(obj1)
-                            }
-                            item.children.map(k => {
-                                let obj2 = {
-                                    level: 2,
-                                    value: k.contentTitle,
-                                    id: k.id,
-                                    mark: index
-                                }
-                                if(obj2.value !== 'null'&&obj2.value !== null) {
-                                    vm.contentList.push(obj2)
-                                }
-                                k.children.map(v => {
-                                    let obj3 = {
-                                        level: 3,
-                                        value: v.contentTitle,
-                                        id: v.id,
-                                        mark: index
-                                    }
-                                    if(obj3.value !== 'null'&&obj3.value !== null) {
-                                        vm.contentList.push(obj3)
-                                    }
-                                })
-                            })
-                        })
-
-                    })
-                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiInfo = res.data
-                    })
-            }else{
-                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiInfo = res.data
-                        vm.versionId = res.data.versionId
-                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:res.data.versionId})
-                            .then(res => {
-                                console.log(res.data)
-                                vm.wikiContent = res.data
-                                if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
-		                        	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
-		                        }
-                                vm.contentList = []
-                                res.data.entrySummarys.map(item => {
-                                    if(item.dataType ==1 ){
-                                        vm.summaryEditor = JSON.parse(item.summary).text
-                                        vm.imageUrl = JSON.parse(item.summary).img
-                                    } else {
-                                        let obj = {
-                                            img : JSON.parse(item.summary).img,
-                                            text : JSON.parse(item.summary).text,
-                                            sourceType : item.sourceType,
-                                            sourceValue : item.sourceValue
-                                        }
-                                        vm.otherSummaries.push(obj)
-                                    }
-                                })
-                                res.data.entryContentVos.map((item, index) => {
-                                    let obj1 = {
-                                        level: 1,
-                                        value: item.contentTitle,
-                                        id: item.id,
-                                        mark: index
-                                    }
-                                    if(obj1.value !== 'null'&&obj1.value !== null) {
-                                        vm.contentList.push(obj1)
-                                    }
-                                    item.children.map(k => {
-                                        let obj2 = {
-                                            level: 2,
-                                            value: k.contentTitle,
-                                            id: k.id,
-                                            mark: index
-                                        }
-                                        if(obj2.value !== 'null'&&obj2.value !== null) {
-                                            vm.contentList.push(obj2)
-                                        }
-                                        k.children.map(v => {
-                                            let obj3 = {
-                                                level: 3,
-                                                value: v.contentTitle,
-                                                id: v.id,
-                                                mark: index
-                                            }
-                                            if(obj3.value !== 'null'&&obj3.value !== null) {
-                                                vm.contentList.push(obj3)
-                                            }
-                                        })
-                                    })
-                                })
-                            })
-                    })
-            }
+        	let vm = this
+        	Cetc10Auth().init(function(){
+				vm.entryId = vm.$route.query.entryId
+	            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
+	            vm.viewType = vm.$route.query.viewType
+	            vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
+	            if(vm.viewType == 'preview') {
+	                vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
+	                    .then(res => {
+	                    	vm.handleEntryDetail(res)
+	                    })
+	                vm.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+	                    .then(res => {
+	                        console.log(res.data)
+	                        vm.wikiInfo = res.data
+	                    })
+	            }else{
+	                vm.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+	                    .then(res => {
+	                        console.log(res.data)
+	                        vm.wikiInfo = res.data
+	                        vm.versionId = res.data.versionId
+	                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:res.data.versionId})
+	                            .then(res => {
+	                            	vm.handleEntryDetail(res)
+	                            })
+	                    })
+	            }
+			});
         },
         updated () {
             this.$nextTick(()=>{
@@ -398,6 +296,110 @@ import {audit} from '@/api/entry/index.js'
             next()
         },
         methods: {
+        	//处理词条详情
+        	handleEntryDetail(res) {
+        		let vm = this
+                console.log(res.data)
+                vm.wikiContent = res.data
+                if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
+                	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
+                }
+                vm.contentList = []
+                res.data.entrySummarys.map(item => {
+                    if(item.dataType ==1 ){
+                        vm.summaryEditor = JSON.parse(item.summary).text
+                        console.log(vm.summaryEditor,1111111)
+                        vm.imageUrl = JSON.parse(item.summary).img
+                    } else {
+                        let obj = {
+                            img : JSON.parse(item.summary).img,
+                            text : JSON.parse(item.summary).text,
+                            sourceType : item.sourceType,
+                            sourceValue : item.sourceValue
+                        }
+//                              vm.otherSummaries.push(obj)
+                    }
+                })
+                res.data.entryContentVos.map((item, index) => {
+                    let obj1 = {
+                        level: 1,
+                        value: item.contentTitle,
+                        id: item.id,
+                        mark: index,
+                        dataType:item.dataType,
+                    }
+                    if(obj1.value !== 'null'&&obj1.value !== null&&obj1.dataType === 1) {
+                        vm.contentList.push(obj1)
+                    }
+                    item.children.map(k => {
+                        let obj2 = {
+                            level: 2,
+                            value: k.contentTitle,
+                            id: k.id,
+                            mark: index,
+                            dataType:k.dataType,
+                        }
+                        if(obj2.value !== 'null'&&obj2.value !== null&&obj2.dataType === 1) {
+                            vm.contentList.push(obj2)
+                        }
+                        k.children.map(v => {
+                            let obj3 = {
+                                level: 3,
+                                value: v.contentTitle,
+                                id: v.id,
+                                mark: index,
+                                dataType:v.dataType,
+                            }
+                            if(obj3.value !== 'null'&&obj3.value !== null&&obj3.dataType === 1) {
+                                vm.contentList.push(obj3)
+                            }
+                        })
+                    })
+                })
+                //只显示dataType为1的内容
+                var entryContentVosList = []
+                res.data.entryContentVos.map(item =>{
+                	if(item.dataType === 1){
+                		let obj1 = JSON.parse(JSON.stringify(item))
+                		obj1.children = []
+	                    item.children.map(k => {
+	                    	if(k.dataType === 1){
+	                    		let obj2 = k
+	                    		obj2.children = []
+		                        obj1.children.push(obj2)
+		                        k.children.map(v => {
+		                        	if(v.dataType === 1){
+		                        		let obj3 = v
+			                            obj2.children.push(obj3)
+		                        	}
+		                        })
+	                    	}
+	                    })
+	                    entryContentVosList.push(obj1)
+                	}
+               })
+                console.log('22233',entryContentVosList)
+				vm.wikiContent.entryContentVos = entryContentVosList
+				//只显示dataType为1的引用
+				var entryReferrencesList = []
+				res.data.entryReferrences.map(item =>{
+					if(item.dataType === 1){
+						entryReferrencesList.push(item)
+					}
+				})
+				vm.wikiContent.entryReferrences = entryReferrencesList
+				//只显示dataType为1的属性
+				var entryAttributesList = []
+				res.data.entryAttributes.map(item =>{
+					if(item.dataType === 1){
+						entryAttributesList.push(item)
+					}
+				})
+				vm.wikiContent.entryAttributes = entryAttributesList
+				
+                    
+        	},
+        	
             routeToEditOthersEntry () {
               let vm = this
               vm.$router.push({
@@ -479,6 +481,22 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+.ck-content /deep/  .table{
+		margin-bottom: 10px;
+	}
+	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
+		border: 1px solid #666;
+	    padding: 9px 15px 7px;
+	    font-size: 26px;
+	    text-align: left;
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+/deep/ .ck-content a{
+	pointer-events:none;
+	color: #6f727c;
+	text-decoration: none;
+}
 h2,h3{
 	font-size: 28px;
 }
@@ -542,7 +560,7 @@ h2,h3{
 		color: #909293;
 		padding: 0 15px;
         margin-bottom: 15px;
-		line-height: 40px;
+		line-height: 1.5;
 		height: 40px;
 		margin-right: 35px;
 		margin-bottom: 35px;
@@ -636,13 +654,14 @@ h2,h3{
     .box-card p{
         margin: 5px 0;
         font-size: 26px;
-        line-height: 30px;
+        line-height: 1.5;
     }
     .el-form-item{
         margin-bottom: 10px;
     }
     .box-card{
         position: fixed !important;
+        top: 60px;
         width: 350px;
         // margin-top: 50px;
         margin-left: 50px;
@@ -696,7 +715,7 @@ h2,h3{
 	    text-overflow: ellipsis;
 	    padding-bottom: 4px;
 	    height: 26px;
-    	line-height: 26px;
+    	line-height: 1.5;
    	}
    	.catalogue1{
    		font-weight: 700;
@@ -750,7 +769,7 @@ h2,h3{
 	  	top: 0; left: 0; bottom: 0; right: 0;
     }
     ul li{
-        line-height: 20px;
+        line-height: 1.5;
     }
 
     .audit-title {

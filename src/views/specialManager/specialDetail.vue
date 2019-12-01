@@ -310,14 +310,17 @@
         },
         created() {
             let vm = this
-            vm.specialId = vm.$route.query.id
-            if(vm.specialId == 'new'){
-                vm.isEdit = false
-            } else {
-                vm.isEdit = true
-            }
-            vm.getSpecialDetail(vm.$route.query.id)
-            vm.getSpecialEntryList()
+	    	Cetc10Auth().init(function(){
+	    		vm.specialId = vm.$route.query.id
+	            if(vm.specialId == 'new'){
+	                vm.isEdit = false
+	            } else {
+	                vm.isEdit = true
+	            }
+	            vm.getSpecialDetail(vm.$route.query.id)
+	            vm.getSpecialEntryList()
+	    	});
+            
         },
         mounted() {
         },

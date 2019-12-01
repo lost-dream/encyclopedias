@@ -59,8 +59,7 @@ export default {
 		//权限请求函数
 		authFun() {
 			if(this.$route.path !== '/viewCommonEntry'){
-				var cetc10Auth = Cetc10Auth('baike/static/cetc10Auth_03.json');
-				cetc10Auth.init();
+//				Cetc10Auth().init();
 			}
 			
 		},
@@ -113,19 +112,18 @@ export default {
 /deep/ .el-input__inner{
 	font-size: 26px;
 }
-/deep/ .el-button--danger{
-	background: #F56C6C;
-	border: #F56C6C;
-	outline: #F56C6C;
-	color: white;
-	
-}
 /deep/ .el-button{
-	background: #c8c8c8;
-	border: #c8c8c8;
-	outline: #c8c8c8;
-	color: #e6e6e6;
+	background: #efefef;
+	border: #D0D0D0;
+	outline: none;
+	color: #968d7e;
 	font-size: 26px;
+	&:hover{
+		cursor: pointer;
+		background: #e6e6e6;
+		border: #c8c8c8;
+		color: #868277;
+	}
 }
 
 .page-wrapper{
@@ -136,7 +134,7 @@ export default {
 	}
 }
 .index-page {
-	background: url('/baike/static/image/index-bg.png') 0 0 no-repeat;
+	background: url('/static/image/index-bg.png') 0 0 no-repeat;
 	background-color: #FAFAFA;
 	background-size: 100% 520px;
 	font-family: '仿宋';
