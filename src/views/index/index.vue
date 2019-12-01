@@ -39,7 +39,8 @@
 						<div>
 							<p>
 								<img src="../../assets/index/02.png"/>
-								<span class="data">{{toThousands(entryStatisticalData.totalEntryEitor)}}</span>
+								<!--<span class="data">{{toThousands(entryStatisticalData.totalEntryEitor)}}</span>-->
+								<span class="data">0</span>
 								<span>次编辑</span>
 							</p>
 						</div>
@@ -574,9 +575,10 @@ export default {
 			font-size: 26px;
 			color: #7d7e7e;
 			text-align: left;
-			overflow: hidden;
+			vertical-align: top;
+			/*overflow: hidden;
 			text-overflow:ellipsis;
-			white-space: nowrap;
+			white-space: nowrap;*/
 			// &:nth-child(2n+1){
 				// border-right: 1px solid white;
 			// }
