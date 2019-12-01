@@ -12,7 +12,7 @@
 		</el-row>
 		<ul class="entryList">
 			<li @click="seeEntry(item)" v-for="item in entryList">
-				<img v-if="item.entrySummarys.length&&item.entrySummarys[0].summary&&JSON.parse(item.entrySummarys[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.entrySummarys[0].summary).img" alt="" />
+				<img v-if="item.entrySummarys.length&&item.entrySummarys[0].summary&&JSON.parse(item.entrySummarys[0].summary).img" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.entrySummarys[0].summary).img" alt="" />
 				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.entryName}}</p>

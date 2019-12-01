@@ -119,37 +119,44 @@
         function loadConfig(url) {
             var promise = createPromise();
             var configUrl;
+            c10Auth.authServerUrl = AuthConfig['auth-server-url'];
+            c10Auth.authLoginUrl = AuthConfig['auth-login-url'];
+			c10Auth.softwareFlag = AuthConfig['software-flag'];
 
-            if (!url) {
-                configUrl = 'static/cetc10Auth_02.json';//更换权限请求参数时需要更改此行
-            } else if (typeof url === 'string') {
-                configUrl = config;
-            }
+            promise.setSuccess();
+            
+            
 
-            if (configUrl) {
-                var req = createAjax();
-                req.open('GET', configUrl, true);
-                req.setRequestHeader('Accept', 'application/json');
-
-                req.onreadystatechange = function () {
-                    if (req.readyState == 4) {
-                        if (req.status == 200 || fileLoaded(req)) {
-                            var config = JSON.parse(req.responseText);
-
-                            c10Auth.authServerUrl = config['auth-server-url'];
-                            c10Auth.authLoginUrl = config['auth-login-url'];
-							c10Auth.softwareFlag = config['software-flag'];
-
-                            promise.setSuccess();
-                        } else {
-                            promise.setError();
-                        }
-                    }
-                };
-                req.send();
-            } else {
-				throw 'config missing';
-			}
+//          if (!url) {
+//              configUrl = 'static/cetc10Auth_02.json';//更换权限请求参数时需要更改此行
+//          } else if (typeof url === 'string') {
+//              configUrl = config;
+//          }
+//
+//          if (configUrl) {
+//              var req = createAjax();
+//              req.open('GET', configUrl, true);
+//              req.setRequestHeader('Accept', 'application/json');
+//
+//              req.onreadystatechange = function () {
+//                  if (req.readyState == 4) {
+//                      if (req.status == 200 || fileLoaded(req)) {
+//                          var config = JSON.parse(req.responseText);
+//
+//                          c10Auth.authServerUrl = config['auth-server-url'];
+//                          c10Auth.authLoginUrl = config['auth-login-url'];
+//							c10Auth.softwareFlag = config['software-flag'];
+//
+//                          promise.setSuccess();
+//                      } else {
+//                          promise.setError();
+//                      }
+//                  }
+//              };
+//              req.send();
+//          } else {
+//				throw 'config missing';
+//			}
 
             return promise.promise;
         }

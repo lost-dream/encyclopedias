@@ -3,9 +3,8 @@
         <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 28px;color: #333;">
-                	<span style="font-weight: bold;">{{wikiContent.entryName}}</span>
-                    <span style="font-size: 16px;color: #5c92ff;margin-left: 10px;">同义词：
+                <h1 style="font-weight: normal;font-size: 35px;"><span style="font-weight: bold;">{{wikiContent.entryName}}</span>
+                    <span style="font-size: 28px;color: #338ce6">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -54,44 +53,47 @@
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%;display: inline-block;">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                        <strong style="width: 100px;display: inline-block;padding-left: 120px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.attributeKey}}</strong>
-                        <span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
-                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
-                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
-                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
-                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                        <p style="width: 160px;display: inline-block;padding-left: 60px;">{{item.attributeKey}}</p>
+                        <p style="display: inline-block;vertical-align: top;width: 50%;">
+                        	<span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
+	                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
+	                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
+	                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
+	                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                        </p>
+                        
                     </p>
                 </div>
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: inherit;text-align: center;position: relative;">
-                	<p style="font-weight: bold;" class="vertical-middle">目录</p>
+                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;text-align: center;position: relative;">
+                	<p class="vertical-middle">目录</p>
                 </div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(0,8)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(8,16)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList.slice(16,24)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
                 <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
                     <li v-for="(item,index) in contentList.slice(24,32)">
-                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #5c92ff;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
+                        <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
@@ -129,7 +131,7 @@
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 30px;font-size: 16px;">
+                        <p style="line-height: 1.5;font-size: 26px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
@@ -382,7 +384,7 @@ import {audit} from '@/api/entry/index.js'
                 setTimeout(()=>{
                     for (let i = 0;i<target.length;i++){
                         if(target[i].hasAttribute('data-original')) {
-                            target[i].src = this.PREFIX.IMG_PREFIX + target[i].getAttribute('data-original')
+                            target[i].src = this.baseUrlConfig.IMG_PREFIX + target[i].getAttribute('data-original')
                         }
                     }
                     // for(let j = 0;j<target_parent.length;j++){
@@ -479,26 +481,34 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
-h2{
-	font-weight: bold;
-}
-h3{
-	font-weight: bold;
-	font-size: 22px;
-}
-*{
-	/*font-family: "仿宋_GB2312";*/
-	font-family: "仿宋";
-}
 .seeMore{
 	text-align: center;
 	/*color: rgb(51, 140, 230);*/
 	color: #5c92ff;
-	font-size: 16px;
+	font-size: 26px;
 	&:hover{
 		cursor: pointer;
 		opacity: 0.8;
 	}
+}
+.ck-content /deep/  .table{
+		margin-bottom: 10px;
+	}
+	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
+		border: 1px solid #666;
+	    padding: 9px 15px 7px;
+	    font-size: 26px;
+	    text-align: left;
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+/deep/ .ck-content a{
+	pointer-events:none;
+	color: #6f727c;
+	text-decoration: none;
+}
+h2,h3{
+	font-size: 28px;
 }
 	.down-arrow,.down-arrow-active {
 	    display :block;
@@ -511,7 +521,7 @@ h3{
 	    &:hover{
 	    	cursor: pointer;
 	    	:after{
-	    		border-color: #5c92ff;
+	    		border-color: #338ce6;
 	    	}
 	    }
 	}
@@ -544,17 +554,12 @@ h3{
 	    transition: transform .3s;
 	}
 	/*修改样式*/
-	.ck-content /deep/  .table{
-		margin-bottom: 10px;
-	}
-	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
-		border: 1px solid #666;
+	.ck-content .table,.ck-content .table thead,.ck-content .table tr,.ck-content .table td{
+		border: 1px solid #e2e5f3;
 	    padding: 9px 15px 7px;
-	    font-size: 16px;
 	    text-align: left;
 	    word-wrap: break-word;
 	    word-break: break-all;
-	    font-size: 16px;
 	}
 	.el-card__body{
 		padding: 15px;
@@ -565,29 +570,25 @@ h3{
 		color: #909293;
 		padding: 0 15px;
         margin-bottom: 15px;
-		line-height: 30px;
+		line-height: 1.5;
+		height: 40px;
 		margin-right: 35px;
 		margin-bottom: 35px;
-		font-size:16px;
+		font-size:26px;
 		&:hover{
 			cursor: pointer;
 		}
 	}
 	.el-tag-active{
-		background: #5c92ff;
+		background: #338ce6;
 		color: #fff;
 	}
 	.ck-content,#attribute,#catalogue{
-		font-size: 16px;
-		/*color: #6f727c;*/
-		color: #666;
-		.innerlink{
-			color: #5c92ff;
-			text-decoration: none;
-		}
+		font-size: 26px;
+		color: #6f727c;
 	}
 	#reference,#tag{
-		/*font-weight: normal;*/
+		font-weight: normal;
 	}
 	
     .card-title{
@@ -625,7 +626,7 @@ h3{
     .block{
         color: white;
         padding: 5px 10px;
-        background: #5c92ff;
+        background: #338ce6;
         position: relative;
     }
     .block::after{
@@ -655,23 +656,23 @@ h3{
         padding: 20px;
     }
     .quote-btn{
-        /*color:  #8a8a8a;*/
-        color: #5c92ff;
+        color:  #8a8a8a;
         font-weight: normal;
         padding-right: 10px;
         cursor: pointer;
     }
     .box-card p{
         margin: 5px 0;
-        font-size: 16px;
-        line-height: 30px;
+        font-size: 26px;
+        line-height: 1.5;
     }
     .el-form-item{
         margin-bottom: 10px;
     }
     .box-card{
         position: fixed !important;
-        width: 250px;
+        top: 60px;
+        width: 350px;
         // margin-top: 50px;
         margin-left: 50px;
     }
@@ -679,15 +680,15 @@ h3{
         background: #f6fafb;
     }
     .p1{
-        font-size: 18px;
+        font-size: 26px;
         font-weight: bolder;
     }
     .p2{
-        font-size: 16px;
+        font-size: 26px;
         padding-left:10px;
     }
     .p3{
-        font-size: 16px;
+        font-size: 26px;
         padding-left:20px;
         font-weight: lighter;
     }
@@ -707,7 +708,7 @@ h3{
         height:0px;
     }
    .rightNav::-webkit-scrollbar-thumb {
-        background-color:#5c92ff;
+        background-color:#338ce6;
         background-clip:padding-box;
         min-height:5px;
         -webkit-border-radius: 1em;
@@ -724,21 +725,21 @@ h3{
 	    text-overflow: ellipsis;
 	    padding-bottom: 4px;
 	    height: 26px;
-    	line-height: 26px;
+    	line-height: 1.5;
    	}
    	.catalogue1{
    		font-weight: 700;
     	color: #666;
     	padding-left: 10px;
-    	font-size: 16px;
+    	font-size: 26px;
    	}
    	.catalogue2{
-   		font-size: 14px;
+   		font-size: 26px;
 	    padding-left: 20px;
 	    color: #666;
    	}
    	.catalogue3{
-   		font-size: 14px;
+   		font-size: 26px;
 	    padding-left: 40px;
 	    color: #666;
    	}
@@ -749,7 +750,7 @@ h3{
    			content: '';
    			width: 5px;
    			height: 20px;
-   			background: #5c92ff;
+   			background: #338ce6;
    			position: absolute;
    			left: 0;
    			top: 5px;
@@ -778,13 +779,13 @@ h3{
 	  	top: 0; left: 0; bottom: 0; right: 0;
     }
     ul li{
-        line-height: 20px;
+        line-height: 1.5;
     }
 
     .audit-title {
         margin: 0;
         padding: 10px 10px 10px 0;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
         span {
             border-left: 5px solid #007fff;
@@ -807,10 +808,5 @@ h3{
            font-weight: normal;
            color: #666666;
        }
-       
-    }
-    #content /deep/ .innerlink{
-    	color: #5c92ff;
-    	text-decoration: none;
     }
 </style>

@@ -1,6 +1,0 @@
-
-{
- "auth-server-url": "http://10.24.1.110:30000/apis/v1/ga/auth/token/validation", 
- "auth-login-url": "http://10.24.1.110:30000/#/login",
- "software-flag": "QBBK" 
-}

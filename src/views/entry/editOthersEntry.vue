@@ -47,7 +47,7 @@
                             <el-upload
                                     class="avatar-uploader"
                                     style="background: white"
-                                    :action="PREFIX.UPLOAD_URL"
+                                    :action="baseUrlConfig.UPLOAD_URL"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess">
                                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -474,8 +474,8 @@
                 let target = document.body.getElementsByTagName('img')
                 setTimeout(()=>{
                     for (let i = 0;i<target.length;i++){
-                        if(target[i].hasAttribute('src')&&(target[i].getAttribute('src').indexOf(this.PREFIX.IMG_PREFIX)===-1)) {
-                            target[i].src = this.PREFIX.IMG_PREFIX + target[i].getAttribute('src')
+                        if(target[i].hasAttribute('src')&&(target[i].getAttribute('src').indexOf(this.baseUrlConfig.IMG_PREFIX)===-1)) {
+                            target[i].src = this.baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
                         }
                     }
                 },1000)
@@ -611,7 +611,7 @@
                 CKEditor.create(document.querySelector('#summaryEditor'), {
                     language: 'zh-cn',
                     ckfinder: {
-                        uploadUrl: this.PREFIX.UPLOAD_URL
+                        uploadUrl: this.baseUrlConfig.UPLOAD_URL
                         //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                     }
                 }).then(editor => {
@@ -780,7 +780,7 @@
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
                         ckfinder: {
-                            uploadUrl: this.PREFIX.UPLOAD_URL
+                            uploadUrl: this.baseUrlConfig.UPLOAD_URL
                             //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                         }
                     }).then(editor => {

@@ -280,7 +280,7 @@ import {audit} from '@/api/entry/index.js'
                 setTimeout(()=>{
                     for (let i = 0;i<target.length;i++){
                         if(target[i].hasAttribute('data-original')) {
-                            target[i].src = this.PREFIX.IMG_PREFIX + target[i].getAttribute('data-original')
+                            target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('data-original')
                         }
                     }
                     // for(let j = 0;j<target_parent.length;j++){

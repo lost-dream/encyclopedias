@@ -8,8 +8,8 @@ import axios from './utils/axios'
 //import '@ckeditor/ckeditor5-build-decoupled-document'
 //import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
 
-import PREFIX from '@/config/const'
-Vue.prototype.PREFIX = PREFIX
+
+Vue.prototype.baseUrlConfig = window.baseUrlConfig
 
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false

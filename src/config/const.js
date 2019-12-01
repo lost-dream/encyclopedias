@@ -2,8 +2,8 @@
 //const IMG_PREFIX = 'http://106.12.208.84:8080'
 
 
-//const IMG_PREFIX = 'http://106.12.208.84:8888'
-const IMG_PREFIX = 'http://192.168.0.35:8888'
+const IMG_PREFIX = 'http://106.12.208.84:8888'
+//const IMG_PREFIX = 'http://192.168.0.35:8888'
 
 //const IMG_PREFIX = 'http://10.24.1.110:30362'
 

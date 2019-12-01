@@ -8,7 +8,7 @@
 		</ul>
 		<ul class="entryList">
 			<li @click="seeEntry(item)" v-for="item in entryListData">
-				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&item.img" :src="PREFIX.IMG_PREFIX + item.img" alt="" />
+				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&item.img" :src="baseUrlConfig.IMG_PREFIX + item.img" alt="" />
 				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.ENTRY_NAME}}</p>
