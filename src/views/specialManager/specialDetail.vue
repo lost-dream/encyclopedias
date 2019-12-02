@@ -25,7 +25,7 @@
                                 <el-upload
                                         style="float: left;max-width: 170px;"
                                         class="avatar-uploader"
-                                        action="http://106.12.208.84:8080/wiki-backend/upload/uploadImg"
+                                        :action="baseUrlConfig.UPLOAD_URL"
                                         :show-file-list="false"
                                         :on-success="handleAvatarSuccess">
                                     <img v-if="form.specialCoverUrl" :src="form.specialCoverUrl" class="avatar">
