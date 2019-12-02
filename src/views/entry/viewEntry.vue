@@ -304,7 +304,7 @@ import {audit} from '@/api/entry/index.js'
                 if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
                 	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
                 }
-                vm.contentList = []
+                
                 res.data.entrySummarys.map(item => {
                     if(item.dataType ==1 ){
                         vm.summaryEditor = JSON.parse(item.summary).text
@@ -320,7 +320,35 @@ import {audit} from '@/api/entry/index.js'
 //                              vm.otherSummaries.push(obj)
                     }
                 })
-                res.data.entryContentVos.map((item, index) => {
+                //只显示dataType为1的内容
+                var entryContentVosList = []
+                res.data.entryContentVos.map(item =>{
+                	if(item.dataType === 1){
+                		let obj1 = JSON.parse(JSON.stringify(item))
+                		obj1.children = []
+	                    item.children.map(k => {
+	                    	if(k.dataType === 1){
+	                    		let obj2 = k
+	                    		obj2.children = []
+		                        obj1.children.push(obj2)
+		                        k.children.map(v => {
+		                        	if(v.dataType === 1){
+		                        		let obj3 = v
+			                            obj2.children.push(obj3)
+		                        	}
+		                        })
+	                    	}
+	                    })
+	                    entryContentVosList.push(obj1)
+                	}
+               })
+                console.log('22233',entryContentVosList)
+				vm.wikiContent.entryContentVos = entryContentVosList
+                
+                
+                //处理目录
+                vm.contentList = []
+                vm.wikiContent.entryContentVos.map((item, index) => {
                     let obj1 = {
                         level: 1,
                         value: item.contentTitle,
@@ -356,30 +384,7 @@ import {audit} from '@/api/entry/index.js'
                         })
                     })
                 })
-                //只显示dataType为1的内容
-                var entryContentVosList = []
-                res.data.entryContentVos.map(item =>{
-                	if(item.dataType === 1){
-                		let obj1 = JSON.parse(JSON.stringify(item))
-                		obj1.children = []
-	                    item.children.map(k => {
-	                    	if(k.dataType === 1){
-	                    		let obj2 = k
-	                    		obj2.children = []
-		                        obj1.children.push(obj2)
-		                        k.children.map(v => {
-		                        	if(v.dataType === 1){
-		                        		let obj3 = v
-			                            obj2.children.push(obj3)
-		                        	}
-		                        })
-	                    	}
-	                    })
-	                    entryContentVosList.push(obj1)
-                	}
-               })
-                console.log('22233',entryContentVosList)
-				vm.wikiContent.entryContentVos = entryContentVosList
+                
 				//只显示dataType为1的引用
 				var entryReferrencesList = []
 				res.data.entryReferrences.map(item =>{
