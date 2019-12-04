@@ -215,16 +215,14 @@
 				
 				var str2 = '';
 				for(var i = 0;i<wikiContent.entryAttributes.length;i++){
-					str2+= '<div style="width: 50%;display: inline-block;">'+
+					str2 += '<div style="width: 50%;display: inline-block;">'+
 					'<p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">'+
 					'<span style="width: 160px;display: inline-block;padding-left: 60px;">'+ wikiContent.entryAttributes[i].attributeKey +'</span>'+
-					(wikiContent.entryAttributes[i].attributeType<4||wikiContent.entryAttributes[i].attributeType>7)?'<span>'+wikiContent.entryAttributes[i].attributeValue+'</span>':''+
-					(wikiContent.entryAttributes[i].attributeType==4)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年</span>':''+
-					(wikiContent.entryAttributes[i].attributeType==5)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMonth()+1 +'月</span>':''+
-					(wikiContent.entryAttributes[i].attributeType==6)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMonth()+1 +'月'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getDate() +'日</span>':''+
-					(wikiContent.entryAttributes[i].attributeType==7)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMonth()+1 +'月'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getDate() +'日&nbsp;'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getHours() +':'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMinutes() +':'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getSeconds() +'</span>':''+
-					
-					
+					((wikiContent.entryAttributes[i].attributeType<4||wikiContent.entryAttributes[i].attributeType>7)?'<span>'+wikiContent.entryAttributes[i].attributeValue+'</span>':'')+
+					((wikiContent.entryAttributes[i].attributeType==4)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年</span>':'')+
+					((wikiContent.entryAttributes[i].attributeType==5)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMonth()+1 +'月</span>':'')+
+					((wikiContent.entryAttributes[i].attributeType==6)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMonth()+1 +'月'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getDate() +'日</span>':'')+
+					((wikiContent.entryAttributes[i].attributeType==7)?'<span>'+new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getFullYear()+'年'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMonth()+1 +'月'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getDate() +'日&nbsp;'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getHours() +':'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getMinutes() +':'+ new Date(Number(wikiContent.entryAttributes[i].attributeValue)).getSeconds() +'</span>':'')+
 					'</p>'+
 					'</div>'
 				}
