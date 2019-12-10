@@ -104,12 +104,12 @@
 							</span>
 							<div v-if="!item.addBySelf">
 								<!--文本-->
-								<span v-if="item.attributeType===1">
+								<span v-if="item.attributeType===0||item.attributeType===1">
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
 								<!--爬虫数据-->
 								<span v-if="item.attributeType===null">
-									<el-input type="text" placeholder="请输入属性内容" v-model="item.attributeValue" clearable></el-input>
+									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
 								<!--数字-->
 								<span style="position: relative;" v-if="item.attributeType===2">
@@ -1208,6 +1208,9 @@
     }
 </script>
 <style lang="scss" scoped>
+/deep/ .address-list-li{
+	font-size: 26px;
+}
 .classifyForm li .name,.category-title{
 	font-size: 26px;
 }

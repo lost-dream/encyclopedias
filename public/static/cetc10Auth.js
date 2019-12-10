@@ -67,7 +67,7 @@
 				tokenValidatePromise.error(function () {
                     initPromise.setError();
 				});
-//				callback&&callback()//外网不需要权限验证时放开此行
+				callback&&callback()//外网不需要权限验证时放开此行
             }
 
             function processToken(result) {

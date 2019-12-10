@@ -67,32 +67,32 @@
             </div>
             <!-- 目录 -->
             <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
-                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;text-align: center;position: relative;">
+                <div class="block-container juedui_middle" style="width: calc(14% - 40px);width: 97px;display: inline-block;background: #fbfbfb;text-align: center;position: relative;">
                 	<p class="vertical-middle">目录</p>
                 </div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
-                    <li v-for="(item,index) in contentList.slice(0,8)">
+                    <li v-for="(item,index) in contentList[0]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
-                    <li v-for="(item,index) in contentList.slice(8,16)">
+                <ul v-if="contentList[1].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList[1]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
-                    <li v-for="(item,index) in contentList.slice(16,24)">
+                <ul v-if="contentList[2].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList[2]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
-                    <li v-for="(item,index) in contentList.slice(24,32)">
+                <ul v-if="contentList[3].length" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
+                    <li v-for="(item,index) in contentList[3]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
@@ -106,16 +106,16 @@
                         <div >
                             <h2 style="font-weight: bold;" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
 <!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #5c92ff;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
-                            <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
+                            <div class="text-indent" v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <!-- <div v-else><p>&nbsp;</p></div> -->
                             <template v-if="item.children.length" v-for="key in item.children">
-                                <div>
+                                <div class="text-indent">
                                     <h3 :id="key.id" v-if="key.contentTitle!==null&&key.contentTitle!=='null'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{key.contentTitle}}</h3>
                                     <div v-html="key.contentBody" v-if="key.contentBody !== '<p>null</p>'&&key.contentBody !== null&&key.contentBody !== 'null'"></div>
                                     <div v-else><p>&nbsp;</p></div>
                                 </div>
                                 <template v-if="key.children.length" v-for="v in key.children">
-                                    <div>
+                                    <div class="text-indent">
                                         <h4 :id="v.id" v-if="v.contentTitle!==null&&v.contentTitle!=='null'">&nbsp;&nbsp;&nbsp;&nbsp;{{v.contentTitle}}</h4>
                                         <div v-html="v.contentBody" v-if="v.contentBody !== '<p>null</p>'&&v.contentBody !== null&&v.contentBody !== 'null'"></div>
                                         <div v-else="v.contentBody == '<p>null</p>'"><p>&nbsp;</p></div>
@@ -127,7 +127,7 @@
                 </div>
             </div>
             <!-- 引用 -->
-            <div class="mg-top-20">
+            <!--<div class="mg-top-20">
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
@@ -136,7 +136,7 @@
                         </p>
                     </template>
                 </div>
-            </div>
+            </div>-->
             <!-- 标签 -->
             <div class="mg-top-20">
                 <h3 id="tag">标签</h3>
@@ -382,7 +382,12 @@ import {audit} from '@/api/entry/index.js'
                         })
                     })
                 })
-                
+                //均分contentList
+                let average = Math.ceil(contentAry.length / 4)
+                for(var i=0,len=contentAry.length;i<len;i+=average){
+		            vm.contentList.push(contentAry.slice(i,i+average));
+		        }
+                console.log(vm.contentList,'vm.contentList')
 				//只显示dataType为1的引用
 				var entryReferrencesList = []
 				res.data.entryReferrences.map(item =>{
@@ -492,6 +497,9 @@ import {audit} from '@/api/entry/index.js'
 		cursor: pointer;
 		opacity: 0.8;
 	}
+}
+.main-content,.text-indent{
+	text-indent: 2em;
 }
 .ck-content /deep/  .table{
 		margin-bottom: 10px;
@@ -686,11 +694,11 @@ h2,h3{
         font-weight: bolder;
     }
     .p2{
-        font-size: 26px;
+        font-size: 24px;
         padding-left:10px;
     }
     .p3{
-        font-size: 26px;
+        font-size: 22px;
         padding-left:20px;
         font-weight: lighter;
     }
@@ -736,12 +744,12 @@ h2,h3{
     	font-size: 26px;
    	}
    	.catalogue2{
-   		font-size: 26px;
+   		font-size: 24px;
 	    padding-left: 20px;
 	    color: #666;
    	}
    	.catalogue3{
-   		font-size: 26px;
+   		font-size: 22px;
 	    padding-left: 40px;
 	    color: #666;
    	}
