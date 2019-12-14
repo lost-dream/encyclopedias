@@ -3,13 +3,13 @@
 		
 		
 		<el-card class="myForm" shadow="hover">
-			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+			<div style="font-weight: bold;font-size: 28px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
 				抽取词条审核列表
 			</div>
 			<el-row style="margin: 0 0 0 20px;">
 				<div class="categoryChoose">
-					<span class="label">分类：</span>
+					<span class="label">分类</span>
 					<span @click="changeTreeShow" class="el-input__inner changeTreeShow">{{checkedCategoryName}}</span>
 					<div v-show="showTree" class="myTree">
 						<el-tree
@@ -32,15 +32,15 @@
 				      </el-tree>
 					</div>
 				</div>
-				<span class="label">词条名称：</span>
+				<span class="label">词条名称</span>
 				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
 				
-				<span class="label">数据源：</span>
-				<el-select style="width: 125px;margin-bottom: 20px;" v-model="dataSourceId" placeholder="请选择数据源">
+				<span class="label">数据源</span>
+				<el-select style="width: 250px;margin-bottom: 20px;" v-model="dataSourceId" placeholder="请选择数据源">
 			      <el-option :label="item.dataSourceName" :value="item.id" v-for="item in sourceList"></el-option>
 			    </el-select>
 			    
-			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
+			    <el-button style="background: #587dda !important;color: white;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
 			    
 			    
 			</el-row>
@@ -97,7 +97,7 @@
 <script>
 import {auditTaskList,audit} from '@/api/entry/index.js'
 import {allList} from '@/api/dataSource/index.js'
-import {parseTime} from '@/utils/commonMethod.js'
+import {parseTimeYMD} from '@/utils/commonMethod.js'
 import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
 	name: 'entryExamine',
@@ -238,7 +238,7 @@ export default {
 		
 		
 		parseTime(str) {
-			return parseTime(str)
+			return parseTimeYMD(str)
 		},
 		handleSizeChange(val) {
 			this.pagination.page = 1
@@ -319,7 +319,7 @@ export default {
 		overflow: hidden;
 		text-overflow:ellipsis;
 		white-space: nowrap;
-		width: 125px;
+		width: 200px;
 		display: inline-block;
 		vertical-align: middle;
 	}

@@ -3,23 +3,23 @@
 		
 		
 		<el-card class="myForm" shadow="hover">
-			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+			<div style="font-weight: bold;font-size: 28px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
 				提取任务列表
 			</div>
 			<el-row style="margin: 0 0 0 20px;">
-				<span class="label">名称：</span>
+				<span class="label">名称</span>
 				<el-input style="width: 125px;" v-model="taskName" type="text" placeholder=""></el-input>
-				<span class="label">类型：</span>
-				<el-select style="width: 100px;margin-bottom: 20px;" v-model="dataSourceType" placeholder="请选择数据源类别">
+				<span class="label">类型</span>
+				<el-select style="width: 150px;margin-bottom: 20px;" v-model="dataSourceType" placeholder="请选择数据源类别">
 			      <el-option label="oracle" value="1"></el-option>
 			      <el-option label="达梦" value="2"></el-option>
 			      <el-option label="ftp" value="3"></el-option>
 			   </el-select>
 			    
-			    <el-button style="background: #587dda;margin-left: 35px;" @click="list" type="primary">查询</el-button>
+			    <el-button style="background: #587dda !important;color: white;margin-left: 35px;" @click="list" type="primary">查询</el-button>
 			    
-			    <el-button style="background: #56bd9d;margin-left: 35px;" @click="add" type="primary">新增</el-button>
+			    <el-button style="background: #ef5d5d !important;color: white;margin-left: 35px;" @click="add" type="primary">新增<i class="el-icon-plus el-icon--right"></i></el-button>
 			</el-row>
 			<el-table
 			class="departTable"
@@ -45,7 +45,7 @@
 		    		<span :style="'color:'+statusColorObj[scope.row.status]">{{statusObj[scope.row.status]}}</span>
 				</template>
 		    </el-table-column>
-			<el-table-column fixed="right" label="操作" width="250">
+			<el-table-column fixed="right" label="操作" width="380">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status!==2&&scope.row.status!==3" style="color: #9aa6e1;" @click="start(scope.row)" type="text" size="small">启动</el-button>
         			<el-button v-if="scope.row.status!==0&&scope.row.status!==3" style="color: #fac2a9;" @click="stop(scope.row)" type="text" size="small">停止</el-button>
@@ -73,7 +73,7 @@
 
 <script>
 import {list,save,info,update,deleteTask,updateStatus} from '@/api/extractTask/index.js'
-import {parseTime} from '@/utils/commonMethod.js'
+import {parseTimeYMD} from '@/utils/commonMethod.js'
 export default {
 	name: 'extractTask',
 	data() {
@@ -241,7 +241,7 @@ export default {
 		
 		
 		parseTime(str) {
-			return parseTime(str)
+			return parseTimeYMD(str)
 		},
 		handleSizeChange(val) {
 			this.pagination.page = 1

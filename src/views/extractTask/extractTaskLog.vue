@@ -57,7 +57,7 @@
 
 <script>
 import {extractTaskLog} from '@/api/extractTask/index.js'
-import {parseTime} from '@/utils/commonMethod.js'
+import {parseTimeYMD} from '@/utils/commonMethod.js'
 export default {
 	name: 'extractTaskLog',
 	data() {
@@ -172,7 +172,7 @@ export default {
 		
 		
 		parseTime(str) {
-			return parseTime(str)
+			return parseTimeYMD(str)
 		},
 		handleSizeChange(val) {
 			this.pagination.page = 1

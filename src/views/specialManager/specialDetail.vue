@@ -8,22 +8,22 @@
                     基础信息
                 </div>
 
-                <div style="display: flex;">
-                    <el-form style="width: 100%">
+                <div style="display: flex;" class="sepcial">
+                    <el-form style="width: 100%" label-width="140px">
                         <div style="display: flex">
-                            <div style="display: flex;flex-direction: column;min-width: 50%">
+                            <div style="">
                                 <el-form-item label="专题名称：" style="display: flex">
-                                    <el-input v-model="form.specialName" style="width: 250px"></el-input>
+                                    <el-input v-model="form.specialName" style="width: 200px"></el-input>
                                 </el-form-item>
                                 <el-form-item label="专题描述：" style="display: flex">
-                                    <el-input v-model="form.specialDesc" resize="none" type="textarea" style="width: 250px" :rows="6"></el-input>
+                                    <el-input v-model="form.specialDesc" resize="none" type="textarea" style="width: 200px" :rows="6"></el-input>
 
                                 </el-form-item>
                             </div>
 
                             <el-form-item label="专题封面：" style="display: flex;">
                                 <el-upload
-                                        style="float: left;max-width: 170px;"
+                                        style="float: left;max-width: 140px;"
                                         class="avatar-uploader"
                                         :action="baseUrlConfig.UPLOAD_URL"
                                         :show-file-list="false"
@@ -43,7 +43,7 @@
                 </div>
                 <div style="display: flex;">
                     <div style="display: flex;flex-direction: column;margin-left: 20px;width: 100%" >
-                        <el-form ref="form" :model="form" label-width="80px">
+                        <el-form ref="form" :model="form" label-width="140px">
 
                             <el-form-item label="专题分类：" >
                                 <span @click="changeTreeShow" class="el-input__inner changeTreeShow" style="padding: 0;color: rgb(192, 196, 204);">
@@ -141,7 +141,7 @@
             <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
                 <span class="leftBorder"></span>
                 词条列表
-                <el-button size="small" type="primary" style="float:right;background: rgb(86, 189, 157)" @click="dialogVisible = true,entrySearchList()">新增</el-button>
+                <el-button size="small" type="primary" style="float:right;background: #ef5d5d !important;color: white;" @click="dialogVisible = true,entrySearchList()">新增<i class="el-icon-plus el-icon--right"></i></el-button>
 
             </div>
             <ul class="statusList">
@@ -241,7 +241,7 @@
 
 <script>
     import {categoryTree} from '@/api/classifyManager/index.js'
-    import {parseTime} from '@/utils/commonMethod.js'
+    import {parseTimeYMD} from '@/utils/commonMethod.js'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
     import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
     import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
@@ -419,7 +419,7 @@
                 console.log(this.entryIds)
             },
             parseTime(str) {
-                return parseTime(str)
+                return parseTimeYMD(str)
             },
             handleSizeChange(val) {
                 this.pagination.page = 1
@@ -625,6 +625,14 @@
 </script>
 
 <style lang="scss" scoped>
+/deep/ .avatar-uploader-icon,/deep/ .avatar{
+	width: 140px !important;
+	height: 140px !important;
+	line-height: 140px !important;
+}
+/deep/ .sepcial .el-form-item__content{
+	margin-left: 0 !important;
+}
     .versionHistory{
         background: #f6fafb;
         color: black;

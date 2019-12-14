@@ -49,7 +49,7 @@
 					<div style="font-weight: bold;font-size: 16px;" slot="header" class="clearfix">
 						<span class="leftBorder"></span>
 						自身属性
-						<el-button style="float: right;margin-top: -10px;background: #56bd9d;" @click="addClassify" type="success">添加</el-button>
+						<el-button style="float: right;margin-top: -10px;background: #ef5d5d !important;color: white;" @click="addClassify" type="success">添加<i class="el-icon-plus el-icon--right"></i></el-button>
 					</div>
 					<el-table 
 						:header-cell-style="{background:'#ecedf2',color:'#67686d'}"
@@ -126,8 +126,8 @@
 						</el-table-column>
 					</el-table>
 					<el-row style="text-align: center;margin-top: 20px;">
-						<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="dialogVisible = true" type="primary">取消</el-button>
-						<el-button style="background: #5b7dd7;" @click="save" type="primary">保存</el-button>
+						<el-button style="background: #cccccc !important;color: black;border: none;margin-right: 60px;" @click="dialogVisible = true" type="primary">取消</el-button>
+						<el-button style="background: #5b7dd7 !important;color: white;" @click="save" type="primary">保存</el-button>
 					</el-row>
 				</el-card>
 			</div>
@@ -458,7 +458,7 @@ export default {
 
   h3 {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 26px;
     margin: 0;
     padding: 20px 0 10px;
     border-bottom: 1px solid #e4e4e4;
@@ -490,7 +490,7 @@ export default {
     margin-left: 300px;
     // border-left: 10px solid #f5f5f5;
     height: 100%;
-    font-size: 14px;
+    font-size: 26px;
 		padding: 0 16px;
   }
 }

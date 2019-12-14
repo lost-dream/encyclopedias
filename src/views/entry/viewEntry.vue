@@ -4,7 +4,7 @@
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
                 <h1 style="font-weight: normal;font-size: 35px;"><span style="font-weight: bold;">{{wikiContent.entryName}}</span>
-                    <span style="font-size: 28px;color: #338ce6">同义词：
+                    <span style="font-size: 28px;color: #338ce6;margin-left: 10px;">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -154,8 +154,8 @@
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
                     <div  class="audit-box">
-                        <el-button type="primary" style="background: #6b9cec" size="small" @click="modalShow = true; code = '3'">审核通过</el-button>
-                        <el-button type="danger" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
+                        <el-button type="primary" style="background: #6b9cec;color: white;" size="small" @click="modalShow = true; code = '3'">审核通过</el-button>
+                        <el-button type="danger" style="background: #6b9cec;color: white;" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
                     </div>
                 </el-card>
                 <el-card style="margin-top: 20px">
@@ -183,10 +183,10 @@
                             <a v-if="item.contentTitle&&item.contentTitle!=='null'" :class="item.choosed?'current':''" class="catalogue1 catalogue" @click="slideToAnchor1(item)"><span style="margin-right: 10px;">{{index+1}}</span>{{item.contentTitle}}</a>
                             <div v-for="(k,index1) in item.children">
                                 <a :class="k.choosed?'current':''" v-if="k.contentTitle&&k.contentTitle!=='null'" class="catalogue2 catalogue" @click="slideToAnchor1(k)">
-                                	<span style="margin-right: 10px;">{{index+1}}.{{index1}}</span>{{k.contentTitle}}
+                                	<span style="margin-right: 10px;">{{index+1}}.{{index1+1}}</span>{{k.contentTitle}}
                                 </a>
                                 <a :class="v.choosed?'current':''" v-if="v.contentTitle&&v.contentTitle!=='null'" class="catalogue3 catalogue" v-for="(v,index2) in k.children" @click="slideToAnchor1(v)">
-                                	<span style="margin-right: 10px;">{{index+1}}.{{index1}}.{{index2}}</span>{{v.contentTitle}}
+                                	<span style="margin-right: 10px;">{{index+1}}.{{index1+1}}.{{index2+1}}</span>{{v.contentTitle}}
                                 </a>
                             </div>
                         </div>
@@ -323,16 +323,16 @@ import {audit} from '@/api/entry/index.js'
                 //只显示dataType为1的内容
                 var entryContentVosList = []
                 res.data.entryContentVos.map(item =>{
-                	if(item.dataType === 1){
+                	if(item.dataType === 1&&(item.contentTitle&&item.contentTitle!=='null')){
                 		let obj1 = JSON.parse(JSON.stringify(item))
                 		obj1.children = []
 	                    item.children.map(k => {
-	                    	if(k.dataType === 1){
+	                    	if(k.dataType === 1&&(k.contentTitle&&k.contentTitle!=='null')){
 	                    		let obj2 = k
 	                    		obj2.children = []
 		                        obj1.children.push(obj2)
 		                        k.children.map(v => {
-		                        	if(v.dataType === 1){
+		                        	if(v.dataType === 1&&(v.contentTitle&&v.contentTitle!=='null')){
 		                        		let obj3 = v
 			                            obj2.children.push(obj3)
 		                        	}
@@ -512,6 +512,12 @@ import {audit} from '@/api/entry/index.js'
 	pointer-events:none;
 	color: #6f727c;
 	text-decoration: none;
+}
+h2{
+	font-weight: bold;
+}
+h3{
+	font-weight: normal;
 }
 h2,h3{
 	font-size: 28px;

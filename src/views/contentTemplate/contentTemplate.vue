@@ -17,11 +17,12 @@
         <h3>目录模板</h3>
         <div class="sub-box"> 
           <p>当前分类： {{currentCategory.name}}</p>
-          <el-button 
+          <el-button
+          	style="background: #ef5d5d !important;color: white;"
               class="add-top"
               type="primary"
               size="small"
-              @click="handleAddTop">添加一级目录</el-button>
+              @click="handleAddTop">添加一级目录<i class="el-icon-plus el-icon--right"></i></el-button>
         </div>
         <!-- tree -->
         <el-tree ref="SlotTree"
@@ -79,7 +80,8 @@
         </el-tree>
 
         <div class="button-box">
-          <el-button 
+          <el-button
+          	style="background: #587dda !important;color: white;"
             type="success"
             :loading="saveLoading" 
             @click="saveContent">保存目录</el-button>
@@ -402,7 +404,7 @@ export default{
 
   h3 {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 26px;
     margin: 0;
     padding: 20px 0 10px;
     border-bottom: 1px solid #e4e4e4;
@@ -431,7 +433,7 @@ export default{
     // border-left: 10px solid #f5f5f5;
     height: 100%;
     padding: 0 16px;
-    font-size: 14px;
+    font-size: 26px;
 
     .el-tree {
       padding: 0 20%;

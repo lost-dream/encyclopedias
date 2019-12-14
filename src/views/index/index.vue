@@ -19,7 +19,7 @@
 <!--									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
 									<!--<img src="/static/image/tank.png"/>-->
 									<div>
-										<p class="entry-title">{{item.ENTRY_NAME}}</p>
+										<p class="entry-title ellipsis1">{{item.ENTRY_NAME}}</p>
 										<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" class="ellipsis3">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
 									</div>
 								</div>
@@ -54,6 +54,7 @@
 						<div>
 							<el-button type="primary" @click="gotoCreate">创建词条</el-button>
 							<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
+							<el-button type="danger" @click="gotoManager">进入管理</el-button>
 						</div>
 
 					</div>
@@ -402,6 +403,11 @@ export default {
 						name: 'myEntry'
 				})
 		},
+		gotoManager(){
+			this.$router.push({
+						name: 'categoryManage'
+				})
+		},
 		// 数字转格式
 		toThousands(num){
 			if(num){
@@ -696,8 +702,10 @@ export default {
 	}
 }
 .specialList{
+	border: 1px solid #ccc;
 	width: 360px;
 	height: 400px;
+	height: 480px;
 	background: #f6fafb;
 	margin: auto;
 	position: relative;

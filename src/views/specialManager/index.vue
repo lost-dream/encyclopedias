@@ -1,17 +1,21 @@
 <template>
     <div>
         <el-card style="min-height: 500px;" class="myForm" shadow="hover">
-            <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+            <div style="font-weight: bold;font-size: 28px;" slot="header" class="clearfix">
                 <span class="leftBorder"></span>
                 专题列表
             </div>
             <el-row style="margin: 0 0 0 20px;">
-                专题名称：
+               	 专题名称
                 <el-input placeholder="请输入内容" v-model="searchKeyword" style="margin-bottom: 10px;width: 200px">
                     <!--<el-button slot="append" @clcik="entrySearchList">搜索</el-button>-->
                 </el-input>
-                <el-button  @click="getSpecialList" style="background: #587dda;color: white;margin-left: 25px">搜索</el-button>
-                <el-button type="primary" style="float:right;background: rgb(86, 189, 157)" @click="routeToSpecial('new')">新增</el-button>
+                <el-button  @click="getSpecialList" style="background: #587dda !important;color: white;margin-left: 25px">搜索</el-button>
+                <el-button type="primary" style="float:right;background: #ef5d5d !important;color: white;" @click="routeToSpecial('new')">
+                	
+                	新增
+                	<i class="el-icon-plus el-icon--right"></i>
+                </el-button>
 
             </el-row>
             <el-table
@@ -19,20 +23,20 @@
                     :data="specialList"
                     border
                     style="width: 100%">
-                <el-table-column label="专题名字" prop="specialName" width="180">
+                <el-table-column label="专题名字" prop="specialName">
                 </el-table-column>
-                <el-table-column label="专题描述" prop="specialDesc" width="180">
+                <el-table-column label="专题描述" prop="specialDesc"  width="300">
                 </el-table-column>
-                <el-table-column prop="labels" label="标签" width="180"></el-table-column>
+                <el-table-column prop="labels" label="标签"></el-table-column>
                 <el-table-column prop="keyWords" label="关键词"></el-table-column>
 
-                <el-table-column label="创建时间" width="180">
+                <el-table-column label="创建时间">
                     <template slot-scope="scope">
                         {{parseTime(scope.row.createTime)}}
                     </template>
                 </el-table-column>
 
-                <el-table-column label="修改时间" width="180">
+                <el-table-column label="修改时间">
                     <template slot-scope="scope">
                         {{parseTime(scope.row.updateTime)}}
                     </template>
@@ -54,14 +58,14 @@
                     :visible.sync="dialogVisible">
             <span slot="footer" class="dialog-footer">
                 <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item label="专题名称：">
+                    <el-form-item label="专题名称">
                         <el-input v-model="form.specialName"></el-input>
                     </el-form-item>
-                    <el-form-item label="专题描述：">
+                    <el-form-item label="专题描述">
                         <el-input v-model="form.specialDesc" type="textarea" :rows="2"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="专题分类：">
+                    <el-form-item label="专题分类">
                         <span @click="changeTreeShow" class="el-input__inner changeTreeShow">{{checkedCategoryName}}</span>
                         <div v-show="showTree" class="myTree">
                             <el-tree
@@ -84,7 +88,7 @@
                           </el-tree>
                         </div>
                     </el-form-item>
-                    <el-form-item label="专题封面：">
+                    <el-form-item label="专题封面">
                         <el-upload
                                 style="float: left"
                                 class="avatar-uploader"
@@ -95,7 +99,7 @@
                           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item label="关键词：">
+                    <el-form-item label="关键词">
                         <el-input placeholder="回车添加关键词" v-model="keyword" class="input-with-select" @keyup.native.13="addKeyword">
                         <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
                         </el-input>
@@ -112,7 +116,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item label="标签：">
+                    <el-form-item label="标签">
                         <el-input placeholder="回车添加标签" v-model="label" class="input-with-select" @keyup.native.13="addLabel">
                         <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
                         </el-input>
@@ -142,7 +146,7 @@
 <script>
     import {entryVersionList,entryInfo} from '@/api/entry/index.js'
     import {categoryTree} from '@/api/classifyManager/index.js'
-    import {parseTime} from '@/utils/commonMethod.js'
+    import {parseTimeYMD} from '@/utils/commonMethod.js'
     import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
     import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
     export default {
@@ -259,7 +263,7 @@
                 }
             },
             parseTime(str) {
-                return parseTime(str)
+                return parseTimeYMD(str)
             },
             handleSizeChange(val) {
                 this.pagination.page = 1

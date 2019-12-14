@@ -78,7 +78,7 @@ export default {
 	    	statusList:[
 	    		{id:'1',name:'草稿',choosed:true},
 	    		{id:'2',name:'待审核'},
-	    		{id:'3',name:'已通过'},
+	    		{id:'5',name:'已通过'},
 	    		{id:'4',name:'未通过'},
 	    	],
 	    	MyEntryList:[],
@@ -211,7 +211,7 @@ export default {
            
         }
         th,tr,td{
-        	background: #f2f2f2;
+        	background: linear-gradient(to bottom,#ededed,#ffffff,#ededed) !important;
         }
         
     }

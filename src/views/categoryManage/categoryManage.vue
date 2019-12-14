@@ -69,7 +69,7 @@
 	  </div>
     
     <div class="right-form">
-      <el-form :disabled="formDisabled" :model="form" :rules="rules" ref="ruleForm" :label-position="labelPos">
+      <el-form :disabled="formDisabled" :model="form" :rules="rules" ref="ruleForm" :label-position="labelPos" label-width="200px">
         <el-form-item label="上级目录" :label-width="formLabelWidth" prop="parentId">
           <el-cascader
             v-model="form.parentId"
@@ -90,8 +90,8 @@
           <el-input v-model.number="form.sort" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item style="text-align: right">
-          <el-button @click="form = {}; formDisabled = true;">取 消</el-button>
-          <el-button type="primary" @click="doSaveAction">保 存</el-button>
+          <el-button style="background: #cccccc !important;color: black;border: none;" @click="form = {}; formDisabled = true;">取 消</el-button>
+          <el-button style="background: #5b7dd7 !important;color: white;" type="primary" @click="doSaveAction">保 存</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -123,7 +123,7 @@ export default{
 			// 	children: []
       // },
       dialogFormVisible: false, // diag可见性
-      formLabelWidth: '80px',
+      formLabelWidth: '150px',
       labelPos: 'right',
       diagTitle: {edit: '编辑分类', add: '添加分类', text: ''},
       form: {
@@ -423,6 +423,11 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+/deep/ .comp-tr-node--name{
+	font-size: 26px !important;
+}
+
+
 	/* common */
 
 	// 显示按钮
@@ -448,7 +453,7 @@ export default{
     width: 85%;
     margin:  0 auto;
   }
-
+	
   .page-title {
     margin: 0;
     padding: 10px 10px 10px 0;
@@ -501,7 +506,7 @@ export default{
   
 		// 顶部按钮
 		.comp-tr-top{
-			width: 100px;
+			width: 200px;
 			margin: 16px ;
 		}
 		// 自定义节点

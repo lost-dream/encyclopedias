@@ -5,7 +5,7 @@
 				<span class="leftBorder"></span>
 				数据源
 			</div>
-			<el-form style="width: 800px;" :disabled="type==='see'" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="100px" class="demo-ruleForm">
+			<el-form style="width: 800px;" :disabled="type==='see'" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="200px" class="demo-ruleForm">
 			  <el-form-item label="数据源名称：" prop="dataSourceName">
 			    <el-input style="width: 300px;" v-model="ruleForm.dataSourceName"></el-input>
 			  </el-form-item>
@@ -35,9 +35,9 @@
 			    <el-input style="width: 700px;" v-model="ruleForm.filePath"></el-input>
 			  </el-form-item>
 			  <el-form-item v-if="type!=='see'" style="text-align: center;margin-top: 20px;margin-left: 0;">
-			  	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;" @click="resetForm('ruleForm')">取消</el-button>
+			  	<el-button style="background: #cccccc !important;color: black;border: none;margin-right: 60px;" @click="resetForm('ruleForm')">取消</el-button>
 			    
-			    <el-button style="background: #5b7dd7;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
+			    <el-button style="background: #5b7dd7 !important;color: white;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
 			    
 			  </el-form-item>
 			</el-form>
