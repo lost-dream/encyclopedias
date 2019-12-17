@@ -47,7 +47,7 @@
                             <el-upload
                                     class="avatar-uploader"
                                     style="background: white"
-                                    :action="PREFIX.UPLOAD_URL"
+                                    :action="baseUrlConfig.UPLOAD_URL"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess">
                                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -104,7 +104,11 @@
 							</span>
 							<div v-if="!item.addBySelf">
 								<!--文本-->
-								<span v-if="item.attributeType===1">
+								<span v-if="item.attributeType===0||item.attributeType===1">
+									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
+								</span>
+								<!--爬虫数据-->
+								<span v-if="item.attributeType===null">
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
 								<!--数字-->
@@ -235,7 +239,7 @@
                     </el-tree>
                     <div class="template-right">
                         <h4 class="category-title">{{selectedCategory}}
-                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/baike/static/image/geshishua.png" alt="" title="格式化">
+                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
                         </h4>
                         <ul v-if="contentData.length" class="content-menu">
                             <li v-for="item in contentData" v-bind:key="item.id">
@@ -313,7 +317,7 @@
             </el-tree>
             <div id="classifyFormDialog" class="template-right">
                 <h4 class="category-title">{{selectedClassify}}
-                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/baike/static/image/geshishua.png" alt="" title="格式化">
+                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
                 </h4>
                 <ul v-if="classifyTemplateData.length" class="content-menu classifyForm">
                     <!--<li v-for="item in classifyTemplateData" v-bind:key="item.id">{{item.attributeName}}</li>-->
@@ -463,137 +467,141 @@
             }
         },
         created(){
-            this.categoryTree()
+        	
         },
         mounted() {
             let vm = this
-            // 获取目录列表
-            vm.entryId = vm.$route.query.entryId
-            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
-            vm.viewType = vm.$route.query.viewType
-            if(vm.viewType == 'preview'){
-                this.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:vm.versionId})
-                    .then(res => {
-                        console.log(res.data)
-                        let data = res.data
-                        vm.entryName = data.entryName
-                        data.entrySynonyms.map(item => {
-                            let obj = {
-                                name:item.name,
-                                sourceType:item.sourceType,
-                                sourceValue:item.sourceValue,
-                            }
-                            vm.synonymList.push(obj)
-                        })
-                        data.entrySummarys.map(item => {
-                            if(item.dataType ==1 ){
-                                // vm.summaryEditor = JSON.parse(item.summary).text
-                                document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
-                                console.log(JSON.parse(item.summary).text,1111)
-                                vm.initSummaryEditor()
-                                vm.imageUrl = JSON.parse(item.summary).img
-                            } else {
-
-                                let obj = {
-                                    img : JSON.parse(item.summary).img,
-                                    text : JSON.parse(item.summary).text,
-                                    sourceType : item.sourceType,
-                                    sourceValue : item.sourceValue
-                                }
-                                vm.otherSummaries.push(obj)
-                            }
-                        })
-                        data.entryContentVos.map(item =>{
-                            let obj1 = {
-                                'title': item.contentTitle=='null'||item.contentTitle==null?'':item.contentTitle,
-                                'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
-                                'children': []
-                            }
-                            item.children.map(k => {
-                                let obj2 = {
-                                    'title': k.contentTitle=='null'||k.contentTitle==null?'':k.contentTitle,
-                                    'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
-                                    'children': []
-                                }
-                                obj1.children.push(obj2)
-                                k.children.map(v => {
-                                    let obj3 = {
-                                        'title': v.contentTitle=='null'||v.contentTitle==null?'':v.contentTitle,
-                                        'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
-                                    }
-                                    obj2.children.push(obj3)
-                                })
-                            })
-                            vm.model.push(obj1)
-                        })
-                        data.entryReferrences.map(item => {
-                            let obj = {}
-                            obj.title = item.referrenceTitle
-                            obj.introduce = item.referrenceDesc
-                            obj.url = item.referrenceUrl
-                            vm.quoteList.push(obj)
-                        })
-                        data.entryLabels.map(item => {
-                            let obj = {
-                                name:item.labelName,
-                                sourceType:item.sourceType,
-                                sourceValue:item.sourceValue,
-                            }
-                            vm.tagList.push(obj)
-                        })
-                        vm.initCKEditor()
-                        vm.setModel()
-                        
-                        data.entryAttributes.map((item,index)=>{
-							item.val = item.attributeValue
-							item.attributeType = item.attributeType
-							item.attributeName = item.attributeKey
-							if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
-								item.val = Number(item.val)
-								this.pickerOptionsList.push({
-									disabledDate(time){
-										return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
-									}
-								})
-							}
-							else{
-								this.pickerOptionsList.push('')
-							}	
-						})
-                        vm.classifyData = data.entryAttributes
-                        console.log(vm.classifyData,'vm.classifyData')
-
-
-                        vm.requestCount ++
-
-                        // if(vm.requestCount == 2){
-                            // 处理已选分类
-                            // console.log('tempData')
-                            // let tempArr = [];
-                            // vm.tempData.categories.forEach(x => {
-                            //     vm.categoryTreeData.forEach(y => {
-                            //         if(y.children.length){
-                            //             y.children.forEach(z => {
-                            //                 if(z.children.length){
-                            //                     z.children.forEach(s => {
-                            //                         s.id == x. && (tempArr.push(s))
-                            //                     })
-                            //                 }else{
-                            //                     z.id == x && (tempArr.push(z))
-                            //                 }
-                            //             })
-                            //         }else{
-                            //             y.id == x && (tempArr.push(y))
-                            //         }
-                            //     })
-                            // })
-                            vm.savedCategories = data.categories
-                            vm.toData = data.categories.map(x => {x.pid = x.parentId; return x})
-                    //     }
-                    })
-            }
-            // vm.initCKEditor()
-            // vm.setModel()
+	    	Cetc10Auth().init(function(){
+	    		vm.categoryTree()
+	    		// 获取目录列表
+	            vm.entryId = vm.$route.query.entryId
+	            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
+	            vm.viewType = vm.$route.query.viewType
+	            if(vm.viewType == 'preview'){
+	                vm.$axios.post('/wiki-backend/api/entry/getByVersionId' ,{entryId:vm.entryId,versionId:vm.versionId})
+	                    .then(res => {
+	                        console.log(res.data)
+	                        let data = res.data
+	                        vm.entryName = data.entryName
+	                        data.entrySynonyms.map(item => {
+	                            let obj = {
+	                                name:item.name,
+	                                sourceType:item.sourceType,
+	                                sourceValue:item.sourceValue,
+	                            }
+	                            vm.synonymList.push(obj)
+	                        })
+	                        data.entrySummarys.map(item => {
+	                            if(item.dataType ==1 ){
+	                                // vm.summaryEditor = JSON.parse(item.summary).text
+	                                document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
+	                                console.log(JSON.parse(item.summary).text,1111)
+	                                vm.initSummaryEditor()
+	                                vm.imageUrl = JSON.parse(item.summary).img
+	                            } else {
+	
+	                                let obj = {
+	                                    img : JSON.parse(item.summary).img,
+	                                    text : JSON.parse(item.summary).text,
+	                                    sourceType : item.sourceType,
+	                                    sourceValue : item.sourceValue
+	                                }
+	                                vm.otherSummaries.push(obj)
+	                            }
+	                        })
+	                        data.entryContentVos.map(item =>{
+	                            let obj1 = {
+	                                'title': item.contentTitle=='null'||item.contentTitle==null?'':item.contentTitle,
+	                                'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
+	                                'children': []
+	                            }
+	                            item.children.map(k => {
+	                                let obj2 = {
+	                                    'title': k.contentTitle=='null'||k.contentTitle==null?'':k.contentTitle,
+	                                    'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
+	                                    'children': []
+	                                }
+	                                obj1.children.push(obj2)
+	                                k.children.map(v => {
+	                                    let obj3 = {
+	                                        'title': v.contentTitle=='null'||v.contentTitle==null?'':v.contentTitle,
+	                                        'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
+	                                    }
+	                                    obj2.children.push(obj3)
+	                                })
+	                            })
+	                            vm.model.push(obj1)
+	                        })
+	                        data.entryReferrences.map(item => {
+	                            let obj = {}
+	                            obj.title = item.referrenceTitle
+	                            obj.introduce = item.referrenceDesc
+	                            obj.url = item.referrenceUrl
+	                            vm.quoteList.push(obj)
+	                        })
+	                        data.entryLabels.map(item => {
+	                            let obj = {
+	                                name:item.labelName,
+	                                sourceType:item.sourceType,
+	                                sourceValue:item.sourceValue,
+	                            }
+	                            vm.tagList.push(obj)
+	                        })
+	                        vm.initCKEditor()
+	                        vm.setModel()
+	                        
+	                        data.entryAttributes.map((item,index)=>{
+								item.val = item.attributeValue
+								item.attributeType = item.attributeType
+								item.attributeName = item.attributeKey
+								if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+									item.val = Number(item.val)
+									vm.pickerOptionsList.push({
+										disabledDate(time){
+											return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+										}
+									})
+								}
+								else{
+									vm.pickerOptionsList.push('')
+								}	
+							})
+	                        vm.classifyData = data.entryAttributes
+	                        console.log(vm.classifyData,'vm.classifyData')
+	
+	
+	                        vm.requestCount ++
+	
+	                        // if(vm.requestCount == 2){
+	                            // 处理已选分类
+	                            // console.log('tempData')
+	                            // let tempArr = [];
+	                            // vm.tempData.categories.forEach(x => {
+	                            //     vm.categoryTreeData.forEach(y => {
+	                            //         if(y.children.length){
+	                            //             y.children.forEach(z => {
+	                            //                 if(z.children.length){
+	                            //                     z.children.forEach(s => {
+	                            //                         s.id == x. && (tempArr.push(s))
+	                            //                     })
+	                            //                 }else{
+	                            //                     z.id == x && (tempArr.push(z))
+	                            //                 }
+	                            //             })
+	                            //         }else{
+	                            //             y.id == x && (tempArr.push(y))
+	                            //         }
+	                            //     })
+	                            // })
+	                            vm.savedCategories = data.categories
+	                            vm.toData = data.categories.map(x => {x.pid = x.parentId; return x})
+	                    //     }
+	                    })
+	            }
+	            // vm.initCKEditor()
+	            // vm.setModel()
+	    	});
+            
         },
         methods: {
             initSummaryEditor() {
@@ -602,7 +610,7 @@
                 CKEditor.create(document.querySelector('#summaryEditor'), {
                     language: 'zh-cn',
                     ckfinder: {
-                        uploadUrl: this.PREFIX.UPLOAD_URL
+                        uploadUrl: this.baseUrlConfig.UPLOAD_URL
                         //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                     }
                 }).then(editor => {
@@ -760,7 +768,7 @@
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
                         ckfinder: {
-                            uploadUrl: this.PREFIX.UPLOAD_URL
+                            uploadUrl: this.baseUrlConfig.UPLOAD_URL
                             //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                         }
                     }).then(editor => {
@@ -1245,7 +1253,7 @@ h2,h3{
         color: white;
         padding: 8px 10px 10px;
         margin-bottom: 10px;
-        background: url('/baike/static/image/create-title@2x.png') 0 0 no-repeat;
+        background: url('/static/image/create-title@2x.png') 0 0 no-repeat;
         background-size: 100% 100%;
     }
     .block-container{
@@ -1414,7 +1422,7 @@ h2,h3{
 			.name{
 				margin-right: 15px;
 				display: inline-block;
-				width: 180px;
+				width: 80px;
 				text-align: right;
 				vertical-align: middle;
 				max-height: 60px;

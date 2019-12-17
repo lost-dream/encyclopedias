@@ -2,8 +2,8 @@
 	<div>
 		<el-row class="specialInfo">
 			<el-col :span="18">
-				<!--<img :src="info.specialCoverUrl" alt="" />-->
-				<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>
+				<img :src="info.specialCoverUrl" alt="" />
+				<!--<img src="https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg"/>-->
 			</el-col>
 			<el-col class="content" :span="6">
 				<p class="title">{{info.specialName}}</p>
@@ -12,8 +12,8 @@
 		</el-row>
 		<ul class="entryList">
 			<li @click="seeEntry(item)" v-for="item in entryList">
-				<img v-if="item.entrySummarys.length&&item.entrySummarys[0].summary&&JSON.parse(item.entrySummarys[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.entrySummarys[0].summary).img" alt="" />
-				<img v-else src="/baike/static/image/tank.png"/>
+				<img v-if="item.entrySummarys.length&&item.entrySummarys[0].summary&&JSON.parse(item.entrySummarys[0].summary).img" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.entrySummarys[0].summary).img" alt="" />
+				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.entryName}}</p>
 					<div v-if="item.entrySummarys.length&&item.entrySummarys[0].summary" v-html="JSON.parse(item.entrySummarys[0].summary).text"></div>
@@ -47,8 +47,12 @@ export default {
 		
 	},
 	created() {
-		this.specialId = sessionStorage.getItem('specialId')
-		this.specialInfo()
+		let vm = this
+    	Cetc10Auth().init(function(){
+    		vm.specialId = sessionStorage.getItem('specialId')
+			vm.specialInfo()
+    	});
+		
 	},
 	mounted() {},
 	destroyed() {
@@ -105,7 +109,7 @@ export default {
 	li{
 		display:inline-block;
 		vertical-align: top;
-		width: 280px;
+		width: 380px;
 		height: 430px;
 		background: #f6fafb;
 		border-top-left-radius: 5px;
@@ -113,9 +117,11 @@ export default {
 		line-height: 25px;
 		margin-right: 30px;
 		margin-bottom: 30px;
-		font-size: 14px;
+		font-size: 26px;
 		color: #666666;
-		&:nth-child(4n+4){
+		
+		
+		&:nth-child(3n+3){
 			margin-right: 0;
 		}
 		&:hover{
@@ -131,7 +137,7 @@ export default {
 		.entry-title{
 			line-height: 45px;
 			font-weight: bold;
-			font-size: 16px;
+			font-size: 28px;
 			color: black;
 			text-align: center;
 			display: -webkit-box;
@@ -140,6 +146,7 @@ export default {
 			overflow: hidden;
 		}
 		div{
+			font-size: 26px;
 			padding: 0 20px;
 			display: -webkit-box;
 			-webkit-box-orient: vertical;

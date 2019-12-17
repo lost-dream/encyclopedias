@@ -3,8 +3,8 @@
         <div style="width: calc(100% - 300px);display: flex;flex-direction: column;margin-bottom: 50px">
             <div>
                 <!--<h3>[ci tiao ming cheng]</h3>-->
-                <h1 style="font-weight: normal;font-size: 35px;">{{wikiContent.entryName}}
-                    <span style="font-size: 28px;color: #338ce6">同义词：
+                <h1 style="font-weight: normal;font-size: 35px;"><span style="font-weight: bold;">{{wikiContent.entryName}}</span>
+                    <span style="font-size: 28px;color: #338ce6;margin-left: 10px;">同义词：
                         <template  v-if="wikiContent.entrySynonyms.length" v-for="item,index in wikiContent.entrySynonyms">{{item.name}}
                             <span v-if="index+1<wikiContent.entrySynonyms.length">，</span>
                         </template>
@@ -49,12 +49,15 @@
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%;display: inline-block;">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                        <strong style="width: 100px;display: inline-block;padding-left: 120px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.attributeKey}}</strong>
-                        <span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
-                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
-                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
-                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
-                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                        <p style="width: 160px;display: inline-block;padding-left: 60px;">{{item.attributeKey}}</p>
+                        <p style="display: inline-block;vertical-align: top;width: 50%;">
+                        	<span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
+	                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
+	                        <span v-else-if="item.attributeType == 5">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月</span>
+	                        <span v-else-if="item.attributeType == 6">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日</span>
+	                        <span v-else-if="item.attributeType == 7">{{new Date(Number(item.attributeValue)).getFullYear()}}年{{new Date(Number(item.attributeValue)).getMonth()+1}}月{{new Date(Number(item.attributeValue)).getDate()}}日&nbsp;{{new Date(Number(item.attributeValue)).getHours()}}:{{new Date(Number(item.attributeValue)).getMinutes()}}:{{new Date(Number(item.attributeValue)).getSeconds()}}</span>
+                        </p>
+                        
                     </p>
                 </div>
             </div>
@@ -64,28 +67,28 @@
                 	<p class="vertical-middle">目录</p>
                 </div>
                 <ul style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
-                    <li v-for="(item,index) in contentList.slice(0,8)">
+                    <li v-for="(item,index) in contentList[0]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length >2" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
-                    <li v-for="(item,index) in contentList.slice(8,16)">
+                <ul v-if="contentList[1].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList[1]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length > 16" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
-                    <li v-for="(item,index) in contentList.slice(16,24)">
+                <ul v-if="contentList[2].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
+                    <li v-for="(item,index) in contentList[2]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList.length > 24" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
-                    <li v-for="(item,index) in contentList.slice(24,32)">
+                <ul v-if="contentList[3].length" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
+                    <li v-for="(item,index) in contentList[3]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
@@ -99,16 +102,16 @@
                         <div >
                             <h2 :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'">{{item.contentTitle}}</h2>
 <!--                            <h2 class="shadow" :id="item.id" v-if="item.contentTitle!==null&&item.contentTitle!=='null'"><span style="color: #338ce6;font-family: fantasy;font-size: 40px;height: 40px;vertical-align: middle;">{{index+1}}</span><span class="block">{{item.contentTitle}}</span></h2>-->
-                            <div v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
+                            <div class="text-indent" v-html="item.contentBody" v-if="item.contentBody !== '<p>null</p>'&&item.contentBody !== null&&item.contentBody !== 'null'"></div>
                             <!-- <div v-else><p>&nbsp;</p></div> -->
                             <template v-if="item.children.length" v-for="key in item.children">
-                                <div>
+                                <div class="text-indent">
                                     <h3 :id="key.id" v-if="key.contentTitle!==null&&key.contentTitle!=='null'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{key.contentTitle}}</h3>
                                     <div v-html="key.contentBody" v-if="key.contentBody !== '<p>null</p>'&&key.contentBody !== null&&key.contentBody !== 'null'"></div>
                                     <div v-else><p>&nbsp;</p></div>
                                 </div>
                                 <template v-if="key.children.length" v-for="v in key.children">
-                                    <div>
+                                    <div class="text-indent">
                                         <h4 :id="v.id" v-if="v.contentTitle!==null&&v.contentTitle!=='null'">&nbsp;&nbsp;&nbsp;&nbsp;{{v.contentTitle}}</h4>
                                         <div v-html="v.contentBody" v-if="v.contentBody !== '<p>null</p>'&&v.contentBody !== null&&v.contentBody !== 'null'"></div>
                                         <div v-else="v.contentBody == '<p>null</p>'"><p>&nbsp;</p></div>
@@ -120,16 +123,16 @@
                 </div>
             </div>
             <!-- 引用 -->
-            <div class="mg-top-20">
+            <!--<div class="mg-top-20">
                 <h3 id="reference">参考资料</h3>
                 <div class="block-container">
                     <template v-for="(item,index) in wikiContent.entryReferrences">
-                        <p style="line-height: 35px;font-size: 26px;">
+                        <p style="line-height: 1.5;font-size: 26px;">
                             {{index+1}}.<a class="quote-btn" @click="goLink(item.referrenceUrl)">{{item.referrenceTitle}}</a>
                         </p>
                     </template>
                 </div>
-            </div>
+            </div>-->
             <!-- 标签 -->
             <div class="mg-top-20">
                 <h3 id="tag">标签</h3>
@@ -151,8 +154,8 @@
                         <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
                     </div>
                     <div  class="audit-box">
-                        <el-button type="primary" style="background: #6b9cec" size="small" @click="modalShow = true; code = '3'">审核通过</el-button>
-                        <el-button type="danger" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
+                        <el-button type="primary" style="background: #6b9cec;color: white;" size="small" @click="modalShow = true; code = '3'">审核通过</el-button>
+                        <el-button type="danger" style="background: #6b9cec;color: white;" size="small" @click="modalShow = true; code = '4'">审核不通过</el-button>
                     </div>
                 </el-card>
                 <el-card style="margin-top: 20px">
@@ -180,10 +183,10 @@
                             <a v-if="item.contentTitle&&item.contentTitle!=='null'" :class="item.choosed?'current':''" class="catalogue1 catalogue" @click="slideToAnchor1(item)"><span style="margin-right: 10px;">{{index+1}}</span>{{item.contentTitle}}</a>
                             <div v-for="(k,index1) in item.children">
                                 <a :class="k.choosed?'current':''" v-if="k.contentTitle&&k.contentTitle!=='null'" class="catalogue2 catalogue" @click="slideToAnchor1(k)">
-                                	<span style="margin-right: 10px;">{{index+1}}.{{index1}}</span>{{k.contentTitle}}
+                                	<span style="margin-right: 10px;">{{index+1}}.{{index1+1}}</span>{{k.contentTitle}}
                                 </a>
                                 <a :class="v.choosed?'current':''" v-if="v.contentTitle&&v.contentTitle!=='null'" class="catalogue3 catalogue" v-for="(v,index2) in k.children" @click="slideToAnchor1(v)">
-                                	<span style="margin-right: 10px;">{{index+1}}.{{index1}}.{{index2}}</span>{{v.contentTitle}}
+                                	<span style="margin-right: 10px;">{{index+1}}.{{index1+1}}.{{index2+1}}</span>{{v.contentTitle}}
                                 </a>
                             </div>
                         </div>
@@ -240,140 +243,35 @@ import {audit} from '@/api/entry/index.js'
             }
         },
         mounted() {
-        	
-            let vm = this
-            vm.entryId = vm.$route.query.entryId
-            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
-            vm.viewType = vm.$route.query.viewType
-            vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
-            if(vm.viewType == 'preview') {
-                vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiContent = res.data
-                        if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
-                        	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
-                        }
-                        vm.contentList = []
-                        res.data.entrySummarys.map(item => {
-                            if(item.dataType ==1 ){
-                                vm.summaryEditor = JSON.parse(item.summary).text
-                                console.log(vm.summaryEditor,1111111)
-                                vm.imageUrl = JSON.parse(item.summary).img
-                            } else {
-                                let obj = {
-                                    img : JSON.parse(item.summary).img,
-                                    text : JSON.parse(item.summary).text,
-                                    sourceType : item.sourceType,
-                                    sourceValue : item.sourceValue
-                                }
-                                vm.otherSummaries.push(obj)
-                            }
-                        })
-                        res.data.entryContentVos.map((item, index) => {
-                            let obj1 = {
-                                level: 1,
-                                value: item.contentTitle,
-                                id: item.id,
-                                mark: index
-                            }
-                            if(obj1.value !== 'null'&&obj1.value !== null) {
-                                vm.contentList.push(obj1)
-                            }
-                            item.children.map(k => {
-                                let obj2 = {
-                                    level: 2,
-                                    value: k.contentTitle,
-                                    id: k.id,
-                                    mark: index
-                                }
-                                if(obj2.value !== 'null'&&obj2.value !== null) {
-                                    vm.contentList.push(obj2)
-                                }
-                                k.children.map(v => {
-                                    let obj3 = {
-                                        level: 3,
-                                        value: v.contentTitle,
-                                        id: v.id,
-                                        mark: index
-                                    }
-                                    if(obj3.value !== 'null'&&obj3.value !== null) {
-                                        vm.contentList.push(obj3)
-                                    }
-                                })
-                            })
-                        })
-
-                    })
-                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiInfo = res.data
-                    })
-            }else{
-                this.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
-                    .then(res => {
-                        console.log(res.data)
-                        vm.wikiInfo = res.data
-                        vm.versionId = res.data.versionId
-                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:res.data.versionId})
-                            .then(res => {
-                                console.log(res.data)
-                                vm.wikiContent = res.data
-                                if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
-		                        	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
-		                        }
-                                vm.contentList = []
-                                res.data.entrySummarys.map(item => {
-                                    if(item.dataType ==1 ){
-                                        vm.summaryEditor = JSON.parse(item.summary).text
-                                        vm.imageUrl = JSON.parse(item.summary).img
-                                    } else {
-                                        let obj = {
-                                            img : JSON.parse(item.summary).img,
-                                            text : JSON.parse(item.summary).text,
-                                            sourceType : item.sourceType,
-                                            sourceValue : item.sourceValue
-                                        }
-                                        vm.otherSummaries.push(obj)
-                                    }
-                                })
-                                res.data.entryContentVos.map((item, index) => {
-                                    let obj1 = {
-                                        level: 1,
-                                        value: item.contentTitle,
-                                        id: item.id,
-                                        mark: index
-                                    }
-                                    if(obj1.value !== 'null'&&obj1.value !== null) {
-                                        vm.contentList.push(obj1)
-                                    }
-                                    item.children.map(k => {
-                                        let obj2 = {
-                                            level: 2,
-                                            value: k.contentTitle,
-                                            id: k.id,
-                                            mark: index
-                                        }
-                                        if(obj2.value !== 'null'&&obj2.value !== null) {
-                                            vm.contentList.push(obj2)
-                                        }
-                                        k.children.map(v => {
-                                            let obj3 = {
-                                                level: 3,
-                                                value: v.contentTitle,
-                                                id: v.id,
-                                                mark: index
-                                            }
-                                            if(obj3.value !== 'null'&&obj3.value !== null) {
-                                                vm.contentList.push(obj3)
-                                            }
-                                        })
-                                    })
-                                })
-                            })
-                    })
-            }
+        	let vm = this
+        	Cetc10Auth().init(function(){
+				vm.entryId = vm.$route.query.entryId
+	            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
+	            vm.viewType = vm.$route.query.viewType
+	            vm.auditShow = sessionStorage.getItem('auditShow') === 'true'
+	            if(vm.viewType == 'preview') {
+	                vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
+	                    .then(res => {
+	                    	vm.handleEntryDetail(res)
+	                    })
+	                vm.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+	                    .then(res => {
+	                        console.log(res.data)
+	                        vm.wikiInfo = res.data
+	                    })
+	            }else{
+	                vm.$axios.post('/wiki-backend/api/entry/info',{id: vm.entryId})
+	                    .then(res => {
+	                        console.log(res.data)
+	                        vm.wikiInfo = res.data
+	                        vm.versionId = res.data.versionId
+	                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:res.data.versionId})
+	                            .then(res => {
+	                            	vm.handleEntryDetail(res)
+	                            })
+	                    })
+	            }
+			});
         },
         updated () {
             this.$nextTick(()=>{
@@ -382,7 +280,7 @@ import {audit} from '@/api/entry/index.js'
                 setTimeout(()=>{
                     for (let i = 0;i<target.length;i++){
                         if(target[i].hasAttribute('data-original')) {
-                            target[i].src = this.PREFIX.IMG_PREFIX + target[i].getAttribute('data-original')
+                            target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('data-original')
                         }
                     }
                     // for(let j = 0;j<target_parent.length;j++){
@@ -398,6 +296,123 @@ import {audit} from '@/api/entry/index.js'
             next()
         },
         methods: {
+        	//处理词条详情
+        	handleEntryDetail(res) {
+        		let vm = this
+                console.log(res.data)
+                vm.wikiContent = res.data
+                if(vm.wikiContent.entryLabels&&vm.wikiContent.entryLabels.length){
+                	vm.$set(vm.wikiContent.entryLabels[0],'choosed',true)
+                }
+                
+                res.data.entrySummarys.map(item => {
+                    if(item.dataType ==1 ){
+                        vm.summaryEditor = JSON.parse(item.summary).text
+                        console.log(vm.summaryEditor,1111111)
+                        vm.imageUrl = JSON.parse(item.summary).img
+                    } else {
+                        let obj = {
+                            img : JSON.parse(item.summary).img,
+                            text : JSON.parse(item.summary).text,
+                            sourceType : item.sourceType,
+                            sourceValue : item.sourceValue
+                        }
+//                              vm.otherSummaries.push(obj)
+                    }
+                })
+                //只显示dataType为1的内容
+                var entryContentVosList = []
+                res.data.entryContentVos.map(item =>{
+                	if(item.dataType === 1&&(item.contentTitle&&item.contentTitle!=='null')){
+                		let obj1 = JSON.parse(JSON.stringify(item))
+                		obj1.children = []
+	                    item.children.map(k => {
+	                    	if(k.dataType === 1&&(k.contentTitle&&k.contentTitle!=='null')){
+	                    		let obj2 = k
+	                    		obj2.children = []
+		                        obj1.children.push(obj2)
+		                        k.children.map(v => {
+		                        	if(v.dataType === 1&&(v.contentTitle&&v.contentTitle!=='null')){
+		                        		let obj3 = v
+			                            obj2.children.push(obj3)
+		                        	}
+		                        })
+	                    	}
+	                    })
+	                    entryContentVosList.push(obj1)
+                	}
+               })
+                console.log('22233',entryContentVosList)
+				vm.wikiContent.entryContentVos = entryContentVosList
+                
+                
+                //处理目录
+                vm.contentList = []
+                let contentAry = []
+                vm.wikiContent.entryContentVos.map((item, index) => {
+                    let obj1 = {
+                        level: 1,
+                        value: item.contentTitle,
+                        id: item.id,
+                        mark: index,
+                        dataType:item.dataType,
+                    }
+                    if(obj1.value !== 'null'&&obj1.value !== null&&obj1.dataType === 1) {
+                        contentAry.push(obj1)
+                    }
+                    item.children.map(k => {
+                        let obj2 = {
+                            level: 2,
+                            value: k.contentTitle,
+                            id: k.id,
+                            mark: index,
+                            dataType:k.dataType,
+                        }
+                        if(obj2.value !== 'null'&&obj2.value !== null&&obj2.dataType === 1) {
+                            contentAry.push(obj2)
+                        }
+                        k.children.map(v => {
+                            let obj3 = {
+                                level: 3,
+                                value: v.contentTitle,
+                                id: v.id,
+                                mark: index,
+                                dataType:v.dataType,
+                            }
+                            if(obj3.value !== 'null'&&obj3.value !== null&&obj3.dataType === 1) {
+                                contentAry.push(obj3)
+                            }
+                        })
+                    })
+                    
+                })
+                //均分contentList
+                let average = Math.ceil(contentAry.length / 4)
+                for(var i=0,len=contentAry.length;i<len;i+=average){
+		            vm.contentList.push(contentAry.slice(i,i+average));
+		        }
+                console.log(vm.contentList,'vm.contentList')
+                
+				//只显示dataType为1的引用
+				var entryReferrencesList = []
+				res.data.entryReferrences.map(item =>{
+					if(item.dataType === 1){
+						entryReferrencesList.push(item)
+					}
+				})
+				vm.wikiContent.entryReferrences = entryReferrencesList
+				//只显示dataType为1的属性
+				var entryAttributesList = []
+				res.data.entryAttributes.map(item =>{
+					if(item.dataType === 1){
+						entryAttributesList.push(item)
+					}
+				})
+				vm.wikiContent.entryAttributes = entryAttributesList
+				
+                    
+        	},
+        	
             routeToEditOthersEntry () {
               let vm = this
               vm.$router.push({
@@ -479,6 +494,31 @@ import {audit} from '@/api/entry/index.js'
     }
 </script>
 <style lang="scss" scoped>
+.main-content,.text-indent{
+	text-indent: 2em;
+}
+.ck-content /deep/  .table{
+		margin-bottom: 10px;
+	}
+	.ck-content /deep/  .table,.ck-content /deep/  .table thead,.ck-content /deep/  .table tr,.ck-content /deep/  .table td{
+		border: 1px solid #666;
+	    padding: 9px 15px 7px;
+	    font-size: 26px;
+	    text-align: left;
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+/deep/ .ck-content a{
+	pointer-events:none;
+	color: #6f727c;
+	text-decoration: none;
+}
+h2{
+	font-weight: bold;
+}
+h3{
+	font-weight: normal;
+}
 h2,h3{
 	font-size: 28px;
 }
@@ -542,7 +582,7 @@ h2,h3{
 		color: #909293;
 		padding: 0 15px;
         margin-bottom: 15px;
-		line-height: 40px;
+		line-height: 1.5;
 		height: 40px;
 		margin-right: 35px;
 		margin-bottom: 35px;
@@ -636,13 +676,14 @@ h2,h3{
     .box-card p{
         margin: 5px 0;
         font-size: 26px;
-        line-height: 30px;
+        line-height: 1.5;
     }
     .el-form-item{
         margin-bottom: 10px;
     }
     .box-card{
         position: fixed !important;
+        top: 60px;
         width: 350px;
         // margin-top: 50px;
         margin-left: 50px;
@@ -655,11 +696,11 @@ h2,h3{
         font-weight: bolder;
     }
     .p2{
-        font-size: 26px;
+        font-size: 24px;
         padding-left:10px;
     }
     .p3{
-        font-size: 26px;
+        font-size: 22px;
         padding-left:20px;
         font-weight: lighter;
     }
@@ -696,7 +737,7 @@ h2,h3{
 	    text-overflow: ellipsis;
 	    padding-bottom: 4px;
 	    height: 26px;
-    	line-height: 26px;
+    	line-height: 1.5;
    	}
    	.catalogue1{
    		font-weight: 700;
@@ -705,12 +746,12 @@ h2,h3{
     	font-size: 26px;
    	}
    	.catalogue2{
-   		font-size: 26px;
+   		font-size: 24px;
 	    padding-left: 20px;
 	    color: #666;
    	}
    	.catalogue3{
-   		font-size: 26px;
+   		font-size: 22px;
 	    padding-left: 40px;
 	    color: #666;
    	}
@@ -750,7 +791,7 @@ h2,h3{
 	  	top: 0; left: 0; bottom: 0; right: 0;
     }
     ul li{
-        line-height: 20px;
+        line-height: 1.5;
     }
 
     .audit-title {

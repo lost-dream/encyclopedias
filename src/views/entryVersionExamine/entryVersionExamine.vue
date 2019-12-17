@@ -3,13 +3,13 @@
 		
 		
 		<el-card class="myForm" shadow="hover">
-			<div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
+			<div style="font-weight: bold;font-size: 28px;" slot="header" class="clearfix">
 				<span class="leftBorder"></span>
 				词条版本审核列表
 			</div>
 			<el-row style="margin: 0 0 0 20px;">
 				<div class="categoryChoose">
-					<span class="label">分类：</span>
+					<span class="label">分类</span>
 					<span @click="changeTreeShow" class="el-input__inner changeTreeShow">{{checkedCategoryName}}</span>
 					<div v-show="showTree" class="myTree">
 						<el-tree
@@ -32,12 +32,12 @@
 				      </el-tree>
 					</div>
 				</div>
-				<span class="label">词条名称：</span>
+				<span class="label">词条名称</span>
 				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
-				<span class="label">标签：</span>
-				<el-input style="width: 125px;" v-model="label" type="text" placeholder=""></el-input>
-				<span class="label">状态：</span>
-				<el-select style="width: 125px;margin-bottom: 20px;" v-model="auditState" placeholder="请选择词条状态">
+				<!--<span class="label">标签</span>
+				<el-input style="width: 125px;" v-model="label" type="text" placeholder=""></el-input>-->
+				<span class="label">状态</span>
+				<el-select style="width: 200px;margin-bottom: 20px;" v-model="auditState" placeholder="请选择词条状态">
 			      <el-option label="待审核" value="2"></el-option>
 			      <el-option label="审核通过" value="3"></el-option>
 			      <el-option label="审核不通过" value="4"></el-option>
@@ -45,7 +45,7 @@
 			      <el-option label="取消发布" value="6"></el-option>
 			    </el-select>
 			    
-			    <el-button style="background: #587dda;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
+			    <el-button style="background: #587dda !important;color: white;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
 			    
 			    
 			</el-row>
@@ -57,7 +57,7 @@
 		    style="width: 100%"
 				@row-click="auditView">
 		    <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
-		    <el-table-column prop="SUMMARY" label="描述">
+		    <el-table-column prop="SUMMARY" label="描述" width="300">
 		    	<template v-if="scope.row.SUMMARY" slot-scope="scope">
 						<span :title="JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g,'')" class="summary" v-html="JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g,'')"></span>
 					</template>
@@ -74,7 +74,7 @@
 				</template>
 		    </el-table-column>
 		    <el-table-column prop="RN" label="版本"></el-table-column>
-			<el-table-column fixed="right" label="操作" width="150">
+			<el-table-column fixed="right" label="操作" width="200">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.STATE===2" style="color: #7291e1;" @click.stop="openDialog(scope.row,'3')" type="text" size="small">通过</el-button>
         			<el-button v-if="scope.row.STATE===2" style="color: #e36d72;" @click.stop="openDialog(scope.row,'4')" type="text" size="small">不通过</el-button>
@@ -101,7 +101,7 @@
 
 <script>
 import {auditList,audit} from '@/api/entry/index.js'
-import {parseTime} from '@/utils/commonMethod.js'
+import {parseTimeYMD} from '@/utils/commonMethod.js'
 import {categoryTree} from '@/api/classifyManager/index.js'
 export default {
 	name: 'entryVersionExamine',
@@ -220,7 +220,7 @@ export default {
 		
 		
 		parseTime(str) {
-			return parseTime(str)
+			return parseTimeYMD(str)
 		},
 		handleSizeChange(val) {
 			this.pagination.page = 1

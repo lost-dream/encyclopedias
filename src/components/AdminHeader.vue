@@ -1,11 +1,12 @@
 <template>
   <div class="admin-header">
   	<span>
-  		<!--<img src="../../public/baike/static/image/icon/logo.png" alt="LOGO.png">-->
-			<span>情报百科</span>
+  		<!--<img src="../../public/static/image/icon/logo.png" alt="LOGO.png">-->
+			<span>信息百科</span>
   	</span>
     
     <div class="action-box">
+    	<a><img style="margin-right: 5px;width: 20px;vertical-align: top;margin-top: 22px;" src="/static/image/icon/admin.png" alt="" />管理员，你好</a>
       <a href=""><i class="el-icon-s-home"></i>首页</a>
       <a @click="exit"><i class="el-icon-switch-button"></i>退出</a>
     </div>
@@ -43,31 +44,36 @@
 // color 33,47,84
 .admin-header {
   background: rgb(33,47,84);
-  height: 40px;
+  background: #5b7dd8;
+  height: 64px;
   color: #fff;
   margin: 0 -20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 22px;
   img{
   	margin-right: 10px;
   	vertical-align: middle;
   }
   span{
   	font-weight: bold;
-  	font-size: 20px;
+  	font-size: 28px;
   	vertical-align: sub;
+  	display: inline-block;
+  	width: 210px;
+  	text-align: center;
   }
   .action-box {
-    height: 40px;
-    line-height: 40px;
+    height: 64px;
+    line-height: 64px;
     a {
     	color: white;
     	text-decoration: none;
       text-align: center;
       cursor: pointer;
       display: inline-block;
-      width: 60px;
+      /*width: 60px;*/
       padding: 0 15px;
       i {
         margin-right: 5px;

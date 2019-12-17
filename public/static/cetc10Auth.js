@@ -4,10 +4,9 @@
         if (!(this instanceof Cetc10Auth)) {
             return new Cetc10Auth(config);
         }
-
         var c10Auth = this;
-
-        c10Auth.init = function() {
+        
+        c10Auth.init = function(callback) {
             c10Auth.authenticated = false;
             //生成最终传递出闭包方法的异步对象
             var promise = createPromise();
@@ -68,11 +67,13 @@
 				tokenValidatePromise.error(function () {
                     initPromise.setError();
 				});
+				callback&&callback()//外网不需要权限验证时放开此行
             }
 
             function processToken(result) {
                 if(result.status === 0){
                     sessionStorage.setItem("token", result.data.newToken);
+                    callback&&callback()//内网需要权限验证时放开此行
                     c10Auth.authenticated = true;
                     initPromise.setSuccess();
                 }else{
@@ -118,37 +119,44 @@
         function loadConfig(url) {
             var promise = createPromise();
             var configUrl;
+            c10Auth.authServerUrl = AuthConfig['auth-server-url'];
+            c10Auth.authLoginUrl = AuthConfig['auth-login-url'];
+			c10Auth.softwareFlag = AuthConfig['software-flag'];
 
-            if (!url) {
-                configUrl = 'cetc10Auth_03.json';
-            } else if (typeof url === 'string') {
-                configUrl = config;
-            }
+            promise.setSuccess();
+            
+            
 
-            if (configUrl) {
-                var req = createAjax();
-                req.open('GET', configUrl, true);
-                req.setRequestHeader('Accept', 'application/json');
-
-                req.onreadystatechange = function () {
-                    if (req.readyState == 4) {
-                        if (req.status == 200 || fileLoaded(req)) {
-                            var config = JSON.parse(req.responseText);
-
-                            c10Auth.authServerUrl = config['auth-server-url'];
-                            c10Auth.authLoginUrl = config['auth-login-url'];
-							c10Auth.softwareFlag = config['software-flag'];
-
-                            promise.setSuccess();
-                        } else {
-                            promise.setError();
-                        }
-                    }
-                };
-                req.send();
-            } else {
-				throw 'config missing';
-			}
+//          if (!url) {
+//              configUrl = 'static/cetc10Auth_02.json';//更换权限请求参数时需要更改此行
+//          } else if (typeof url === 'string') {
+//              configUrl = config;
+//          }
+//
+//          if (configUrl) {
+//              var req = createAjax();
+//              req.open('GET', configUrl, true);
+//              req.setRequestHeader('Accept', 'application/json');
+//
+//              req.onreadystatechange = function () {
+//                  if (req.readyState == 4) {
+//                      if (req.status == 200 || fileLoaded(req)) {
+//                          var config = JSON.parse(req.responseText);
+//
+//                          c10Auth.authServerUrl = config['auth-server-url'];
+//                          c10Auth.authLoginUrl = config['auth-login-url'];
+//							c10Auth.softwareFlag = config['software-flag'];
+//
+//                          promise.setSuccess();
+//                      } else {
+//                          promise.setError();
+//                      }
+//                  }
+//              };
+//              req.send();
+//          } else {
+//				throw 'config missing';
+//			}
 
             return promise.promise;
         }

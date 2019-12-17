@@ -1,15 +1,18 @@
 <template>
 	<div style="margin-bottom: 20px">
 		<ul class="categoryList">
-			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList"><p>{{item.name}}</p></li>
+			<li :class="item.choosed?'highlight':''" @click="choose(item)" v-for="item in categoryList">
+				<p>{{item.name}}<span style="font-size: 26px;vertical-align: top;" v-if="hasFinishAjax&&item.choosed">({{pagination.count}})</span>
+				</p>
+			</li>
 		</ul>
 		<ul class="entryList">
 			<li @click="seeEntry(item)" v-for="item in entryListData">
-				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&JSON.parse(item.SUMMARY[0].summary).img" :src="PREFIX.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />
-				<img v-else src="/baike/static/image/tank.png"/>
+				<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary&&item.img" :src="baseUrlConfig.IMG_PREFIX + item.img" alt="" />
+				<img v-else src="/static/image/tank.png"/>
 				<div>
 					<p class="entry-title">{{item.ENTRY_NAME}}</p>
-					<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary">{{JSON.parse(item.SUMMARY[0].summary).text}}</div>
+					<div v-if="item.SUMMARY.length&&item.SUMMARY[0].summary">{{item.text}}</div>
 				</div>
 			</li>
 		</ul>
@@ -33,6 +36,7 @@ export default {
 		      count: 0
 		    },
 		    categoryId:'',
+		    hasFinishAjax:false,
 		    
 	    }
 	},
@@ -43,7 +47,11 @@ export default {
 		}
 	},
 	created() {
-		this.getChoosedCategoryInfo()
+		let vm = this
+    	Cetc10Auth().init(function(){
+    		vm.getChoosedCategoryInfo()
+    	});
+		
 	},
 	mounted() {
 	},
@@ -86,12 +94,22 @@ export default {
 		},
 		//根据分类id获取词条列表
 		list(item) {
+			this.hasFinishAjax = false
 			entryList({
 				"pageNumber": this.pagination.page,
 				"pageSize": this.pagination.limit,
 				"categoryIds": this.categoryId,
 				"keyword": ""
 			}).then((res)=>{
+				this.hasFinishAjax = true
+				res.data.records.map((item)=>{
+					try{
+						item.text = JSON.parse(item.SUMMARY[0].summary).text
+						item.img = JSON.parse(item.SUMMARY[0].summary).img
+					}catch(e){
+						//TODO handle the exception
+					}
+				})
 				this.entryListData = res.data.records
 				this.pagination.count = res.data.total
 			})
@@ -126,7 +144,7 @@ export default {
 	li{
 		display:inline-block;
 		vertical-align: top;
-		width: 280px;
+		width: 380px;
 		height: 430px;
 		background: #f6fafb;
 		border-top-left-radius: 5px;
@@ -138,7 +156,7 @@ export default {
 		color: #666666;
 		
 		
-		&:nth-child(4n+4){
+		&:nth-child(3n+3){
 			margin-right: 0;
 		}
 		&:hover{

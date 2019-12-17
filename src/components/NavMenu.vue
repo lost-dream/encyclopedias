@@ -6,7 +6,7 @@
       unique-opened
       @open="handleOpen"
       @close="handleClose"
-      background-color="#212f54"
+      background-color="#5b7dd8"
       text-color="white"
       active-text-color="#ffffff"
       :default-active="currentIndex">
@@ -41,11 +41,18 @@
     margin-top: 15px;
     .el-menu-item {
       border-left: 5px solid rgba(0,0,0,0); 
+      font-size: 24px;
     }
     .el-menu-item.is-active {
-      background: rgba(0,0,0,.25) !important;
+      background: #2a4da9 !important;
       border-left: 5px solid #337ab7 !important; 
     }
+    .el-submenu__title:hover{
+		  background-color: #2a4da9 !important;
+		}
+		.el-menu-item:hover{
+		  background-color: #2a4da9 !important;
+		}
   }
   
 </style>

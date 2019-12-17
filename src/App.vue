@@ -12,7 +12,24 @@ export default {
 </script>
 
 <style lang="scss">
-
+.address-list-li,/deep/ .transfer-title{
+	font-size: 26px !important;
+}
+.el-cascader-panel{
+		.el-cascader-node__label{
+			font-size: 26px !important;
+		}
+		
+	}
+.el-select-dropdown{
+	.el-select-dropdown__item{
+		font-size: 26px !important;
+		line-height: 50px !important;
+		height: 50px !important;
+	}
+	
+	
+}
 
 .el-tabs--left .el-tabs__active-bar.is-left{
 	left: 0 !important;
@@ -30,7 +47,7 @@ export default {
     word-break: break-all;
     font-weight: normal;
         font-size: 13px;
-    line-height: 24px;
+    line-height: 1.5;
     b{
     	font-weight: normal;
     }
@@ -155,7 +172,9 @@ export default {
 }
 html,body,#app{
 	height: 100vh;
-  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+	font-family: '仿宋';
+  /*font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;*/
+  
 }
 h2 {
   font-weight: 400;
@@ -179,7 +198,8 @@ ul,li,p{
     max-width: 35% !important;
 }
 .ck-content p{
-    line-height: 25px;
+    line-height: 1.5;
+    font-size: 26px;
     text-indent: 2em;
 }
 .el-collapse-item__header{
@@ -197,6 +217,15 @@ ul,li,p{
     line-clamp:2;
     word-wrap: break-word;
 }
+.ellipsis1 {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:1;
+    line-clamp:1;
+    word-wrap: break-word;
+}
 .ellipsis3 {
     overflow:hidden;
     text-overflow:ellipsis;
@@ -207,7 +236,7 @@ ul,li,p{
     word-wrap: break-word;
 }
     .main-content{
-        line-height: 25px;
+        line-height: 1.5;
     }
     .w800 .el-carousel__item--card.is-active{
         transform: translateX(200px) scale(0.83) !important;

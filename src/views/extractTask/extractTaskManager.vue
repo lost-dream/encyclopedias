@@ -5,7 +5,7 @@
 				<span class="leftBorder"></span>
 				提取任务
 			</div>
-			<el-form :disabled="type==='see'" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="110px" class="demo-ruleForm">
+			<el-form :disabled="type==='see'" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="200px" class="demo-ruleForm">
 			  <el-form-item label="任务名称：" prop="taskName">
 			    <el-input style="width: 300px;" v-model="ruleForm.taskName"></el-input>
 			  </el-form-item>
@@ -29,9 +29,9 @@
 			  </el-form-item>
 			  
 			  <el-form-item v-if="type!=='see'" style="margin-left: -110px;display: inline-block;width: 50%;vertical-align: top;">
-			  	<el-button style="background: #cccccc;color: black;border: none;margin-right: 60px;margin-left: 0;" @click="resetForm('ruleForm')">取消</el-button>
+			  	<el-button style="background: #cccccc !important;color: black;border: none;margin-right: 60px;margin-left: 0;" @click="resetForm('ruleForm')">取消</el-button>
 			    
-			    <el-button style="background: #5b7dd7;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
+			    <el-button style="background: #5b7dd7 !important;color: white;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
 			    
 			  </el-form-item>
 			  

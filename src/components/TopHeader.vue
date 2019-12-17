@@ -2,20 +2,24 @@
   <el-row>
     <el-col :span="24" >
       <div class="head-wrap">
-      	<span>
-      		<!--<img @click="gotoIndex" src="../../public/baike/static/image/logo.png" />-->
+      	<span style="float: left;margin-left: 0px;">
+      		<!--<img @click="gotoIndex" src="../../public/static/image/logo.png" />-->
       		<span @click="gotoIndex" class="title" >情报百科</span>
       	</span>
+      	<div style="width: 700px;position: absolute;left: 50%;top: 50%;transform: translateX(-50%) translateY(-50%);">
+      		<el-input
+	      		style='width: 500px;'
+				    placeholder="请输入内容"
+				    prefix-icon="el-icon-search"
+				    clearable
+				    @keyup.enter.native="searchTotalStation"
+				    v-model="content">
+				  </el-input>
+	      	<!--<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>-->
+	      	<el-button style='margin-left: 20px;vertical-align: top;' @click="searchTotalStation" type="danger">全站搜索</el-button>
+      	</div>
       	
-      	<el-input
-      		style='width: 500px;'
-			    placeholder="请输入内容"
-			    prefix-icon="el-icon-search"
-			    clearable
-			    v-model="content">
-			  </el-input>
-      	<!--<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>-->
-      	<el-button style='margin: 0 20px;vertical-align: top;' @click="searchTotalStation" type="danger">全站搜索</el-button>
+      	<span style="position: absolute;top: 0;right: 0;font-size: 26px;">xxx，你好</span>
       </div>
     </el-col>
   </el-row>
@@ -103,9 +107,12 @@
 	
 <style lang="scss" scoped>
 .head-wrap{
+	position: relative;
 	color: #338ce6;
 	text-align: center;
-	margin: 15px 0;
+	margin: 15px auto;
+	width: 1280px;
+	height: 52px;
 	>span:hover{
 		cursor: pointer;
 		opacity: 0.8;
@@ -115,9 +122,9 @@
 		margin-right: 5px;
 	}
 	.title{
-		margin-right: 75px;
+		/*margin-right: 75px;*/
 		display: inline-block;
-		font-size: 28px;
+		font-size: 30px;
 		font-weight: bold;
 		transform: translateY(4px);
 		padding-top: 5px;

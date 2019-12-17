@@ -47,7 +47,7 @@
                             <el-upload
                                     class="avatar-uploader"
                                     style="background: white"
-                                    :action="PREFIX.UPLOAD_URL"
+                                    :action="baseUrlConfig.UPLOAD_URL"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess">
                                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -104,12 +104,12 @@
 							</span>
 							<div v-if="!item.addBySelf">
 								<!--文本-->
-								<span v-if="item.attributeType===1">
+								<span v-if="item.attributeType===0||item.attributeType===1">
 									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
 								<!--爬虫数据-->
 								<span v-if="item.attributeType===null">
-									<el-input type="text" placeholder="请输入属性内容" v-model="item.attributeValue" clearable></el-input>
+									<el-input type="text" placeholder="请输入属性内容" v-model="item.val" clearable></el-input>
 								</span>
 								<!--数字-->
 								<span style="position: relative;" v-if="item.attributeType===2">
@@ -239,7 +239,7 @@
                     </el-tree>
                     <div class="template-right">
                         <h4 class="category-title">{{selectedCategory}}
-                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/baike/static/image/geshishua.png" alt="" title="格式化">
+                            <img v-show="showFormat" @click="setTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
                         </h4>
                         <ul v-if="contentData.length" class="content-menu">
                             <li v-for="item in contentData" v-bind:key="item.id">
@@ -317,7 +317,7 @@
             </el-tree>
             <div id="classifyFormDialog" class="template-right">
                 <h4 class="category-title">{{selectedClassify}}
-                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/baike/static/image/geshishua.png" alt="" title="格式化">
+                    <img v-show="classifyTemplateData.length" @click="setClassifyTemplate" class="formatting" src="/static/image/geshishua.png" alt="" title="格式化">
                 </h4>
                 <ul v-if="classifyTemplateData.length" class="content-menu classifyForm">
                     <!--<li v-for="item in classifyTemplateData" v-bind:key="item.id">{{item.attributeName}}</li>-->
@@ -387,7 +387,7 @@
    	import treemenu from '@/components/treeMenu'
     import categoryApi from '@/api/categoryManager/index.js'
     import templateApi from '@/api/contentTemplate/index.js'
-    import 'babel-polyfill';
+//  import 'babel-polyfill';
     //    import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
     export default {
         components: {ElForm,treemenu,treeTransfer},
@@ -467,15 +467,15 @@
             }
         },
         created(){
-            this.categoryTree()
+        	
         },
         updated () {
             this.$nextTick(()=>{
                 let target = document.body.getElementsByTagName('img')
                 setTimeout(()=>{
                     for (let i = 0;i<target.length;i++){
-                        if(target[i].hasAttribute('src')&&(target[i].getAttribute('src').indexOf(this.PREFIX.IMG_PREFIX)===-1)) {
-                            target[i].src = this.PREFIX.IMG_PREFIX + target[i].getAttribute('src')
+                        if(target[i].hasAttribute('src')&&(target[i].getAttribute('src').indexOf(this.baseUrlConfig.IMG_PREFIX)===-1)) {
+                            target[i].src = this.baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
                         }
                     }
                 },1000)
@@ -483,122 +483,125 @@
         },
         mounted() {
             let vm = this
-            // 获取目录列表
-            vm.entryId = vm.$route.query.entryId
-            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
-            vm.viewType = 'preview'
-            console.log(vm.entryId,'vm.entryId')
-            
-                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
-                    .then(res => {
-                        console.log(res.data)
-                        let data = res.data
-                        vm.entryName = data.entryName
-                    	data.entrySynonyms&&data.entrySynonyms.map(item => {
-                            let obj = {
-                                name:item.name,
-                                sourceType:item.sourceType,
-                                sourceValue:item.sourceValue,
-                            }
-                            vm.synonymList.push(obj)
-                        })
-                        try{
-                        	data.entrySummarys&&data.entrySummarys.map(item => {
-                                console.log(JSON.parse(item.summary).text,'try')
-	                            if(item.dataType ==1 ){
-                                    document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
-                                    console.log(JSON.parse(item.summary).text,1111)
-                                    vm.initSummaryEditor()
-                                    vm.imageUrl = JSON.parse(item.summary).img
-	                            } else {
-	
-	                                let obj = {
-	                                    img : JSON.parse(item.summary).img,
-	                                    text : JSON.parse(item.summary).text,
-	                                    sourceType : item.sourceType,
-	                                    sourceValue : item.sourceValue
-	                                }
-	                                vm.otherSummaries.push(obj)
+            Cetc10Auth().init(function(){
+	    		vm.categoryTree()
+	    		// 获取目录列表
+	            vm.entryId = vm.$route.query.entryId
+	            vm.versionId = vm.$route.query.versionId?vm.$route.query.versionId:''
+	            vm.viewType = 'preview'
+	            console.log(vm.entryId,'vm.entryId')
+	            
+	                        vm.$axios.post('/wiki-backend/api/entry/getByVersionId', {entryId:vm.entryId,versionId:vm.versionId})
+	                    .then(res => {
+	                        console.log(res.data)
+	                        let data = res.data
+	                        vm.entryName = data.entryName
+	                    	data.entrySynonyms&&data.entrySynonyms.map(item => {
+	                            let obj = {
+	                                name:item.name,
+	                                sourceType:item.sourceType,
+	                                sourceValue:item.sourceValue,
 	                            }
+	                            vm.synonymList.push(obj)
 	                        })
-                        }catch(e){
-                        	//TODO handle the exception
-                            document.getElementById('summaryEditor').innerHTML =  ''
-                            vm.initSummaryEditor()
-                            vm.imageUrl = ''
-                        }
-                        
-                        data.entryContentVos&&data.entryContentVos.map(item =>{
-                            let obj1 = {
-                                'title': item.contentTitle=='null'||item.contentTitle==null?'':item.contentTitle,
-                                'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
-                                'children': []
-                            }
-                            item.children.map(k => {
-                                let obj2 = {
-                                    'title': k.contentTitle=='null'||k.contentTitle==null?'':k.contentTitle,
-                                    'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
-                                    'children': []
-                                }
-                                obj1.children.push(obj2)
-                                k.children.map(v => {
-                                    let obj3 = {
-                                        'title': v.contentTitle=='null'||v.contentTitle==null?'':v.contentTitle,
-                                        'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
-                                    }
-                                    obj2.children.push(obj3)
-                                })
-                            })
-                            vm.model.push(obj1)
-                        })
-                        data.entryReferrences&&data.entryReferrences.map(item => {
-                            let obj = {}
-                            obj.title = item.referrenceTitle
-                            obj.introduce = item.referrenceDesc
-                            obj.url = item.referrenceUrl
-                            vm.quoteList.push(obj)
-                        })
-                        data.entryLabels&&data.entryLabels.map(item => {
-                            let obj = {
-                                name:item.labelName,
-                                sourceType:item.sourceType,
-                                sourceValue:item.sourceValue,
-                            }
-                            vm.tagList.push(obj)
-                        })
-                        vm.initCKEditor()
-                        vm.setModel()
-                        
-                        data.entryAttributes&&data.entryAttributes.map((item,index)=>{
-							item.val = item.attributeValue
-							item.attributeType = item.attributeType
-							item.attributeName = item.attributeKey
-							if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
-								item.val = Number(item.val)
-								this.pickerOptionsList.push({
-									disabledDate(time){
-										return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
-									}
-								})
-							}
-							else{
-								this.pickerOptionsList.push('')
-							}	
-						})
-                        vm.classifyData = data.entryAttributes
-                        console.log(vm.classifyData,'vm.classifyData')
-
-
-                        vm.requestCount ++
-                        if(!(data.categories.length === 1 && data.categories[0] === null)){
-                        	vm.savedCategories = data.categories
-                        }
-
-                        vm.toData = data.categories&&data.categories.map(x => {x&&x.pid?x.pid = x.parentId:''; return x})
-                    })
-                    
-            // vm.initCKEditor()
-            // vm.setModel()
+	                        try{
+	                        	data.entrySummarys&&data.entrySummarys.map(item => {
+	                                console.log(JSON.parse(item.summary).text,'try')
+		                            if(item.dataType ==1 ){
+	                                    document.getElementById('summaryEditor').innerHTML =  JSON.parse(item.summary).text
+	                                    console.log(JSON.parse(item.summary).text,1111)
+	                                    vm.initSummaryEditor()
+	                                    vm.imageUrl = JSON.parse(item.summary).img
+		                            } else {
+		
+		                                let obj = {
+		                                    img : JSON.parse(item.summary).img,
+		                                    text : JSON.parse(item.summary).text,
+		                                    sourceType : item.sourceType,
+		                                    sourceValue : item.sourceValue
+		                                }
+		                                vm.otherSummaries.push(obj)
+		                            }
+		                        })
+	                        }catch(e){
+	                        	//TODO handle the exception
+	                            document.getElementById('summaryEditor').innerHTML =  ''
+	                            vm.initSummaryEditor()
+	                            vm.imageUrl = ''
+	                        }
+	                        
+	                        data.entryContentVos&&data.entryContentVos.map(item =>{
+	                            let obj1 = {
+	                                'title': item.contentTitle=='null'||item.contentTitle==null?'':item.contentTitle,
+	                                'content': item.contentBody=='<p>null</p>'?'<p>&nbsp</p>':item.contentBody,
+	                                'children': []
+	                            }
+	                            item.children.map(k => {
+	                                let obj2 = {
+	                                    'title': k.contentTitle=='null'||k.contentTitle==null?'':k.contentTitle,
+	                                    'content': k.contentBody=='<p>null</p>'?'<p>&nbsp</p>':k.contentBody,
+	                                    'children': []
+	                                }
+	                                obj1.children.push(obj2)
+	                                k.children.map(v => {
+	                                    let obj3 = {
+	                                        'title': v.contentTitle=='null'||v.contentTitle==null?'':v.contentTitle,
+	                                        'content': v.contentBody=='<p>null</p>'?'<p>&nbsp</p>':v.contentBody,
+	                                    }
+	                                    obj2.children.push(obj3)
+	                                })
+	                            })
+	                            vm.model.push(obj1)
+	                        })
+	                        data.entryReferrences&&data.entryReferrences.map(item => {
+	                            let obj = {}
+	                            obj.title = item.referrenceTitle
+	                            obj.introduce = item.referrenceDesc
+	                            obj.url = item.referrenceUrl
+	                            vm.quoteList.push(obj)
+	                        })
+	                        data.entryLabels&&data.entryLabels.map(item => {
+	                            let obj = {
+	                                name:item.labelName,
+	                                sourceType:item.sourceType,
+	                                sourceValue:item.sourceValue,
+	                            }
+	                            vm.tagList.push(obj)
+	                        })
+	                        vm.initCKEditor()
+	                        vm.setModel()
+	                        
+	                        data.entryAttributes&&data.entryAttributes.map((item,index)=>{
+								item.val = item.attributeValue
+								item.attributeType = item.attributeType
+								item.attributeName = item.attributeKey
+								if(item.attributeType===4||item.attributeType===5||item.attributeType===6||item.attributeType===7){
+									item.val = Number(item.val)
+									vm.pickerOptionsList.push({
+										disabledDate(time){
+											return (time.getTime() <= item.attributeRangeBegin || time.getTime() >= item.attributeRangeEnd)
+										}
+									})
+								}
+								else{
+									vm.pickerOptionsList.push('')
+								}	
+							})
+	                        vm.classifyData = data.entryAttributes
+	                        console.log(vm.classifyData,'vm.classifyData')
+	
+	
+	                        vm.requestCount ++
+	                        if(!(data.categories.length === 1 && data.categories[0] === null)){
+	                        	vm.savedCategories = data.categories
+	                        }
+	
+	                        vm.toData = data.categories&&data.categories.map(x => {x&&x.pid?x.pid = x.parentId:''; return x})
+	                    })
+	                    
+	            // vm.initCKEditor()
+	            // vm.setModel()
+	    	});
         },
         methods: {
             initSummaryEditor() {
@@ -608,7 +611,7 @@
                 CKEditor.create(document.querySelector('#summaryEditor'), {
                     language: 'zh-cn',
                     ckfinder: {
-                        uploadUrl: this.PREFIX.UPLOAD_URL
+                        uploadUrl: this.baseUrlConfig.UPLOAD_URL
                         //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                     }
                 }).then(editor => {
@@ -777,7 +780,7 @@
                     CKEditor.create(document.querySelector('#editor'), {
                         language: 'zh-cn',
                         ckfinder: {
-                            uploadUrl: this.PREFIX.UPLOAD_URL
+                            uploadUrl: this.baseUrlConfig.UPLOAD_URL
                             //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
                         }
                     }).then(editor => {
@@ -1205,6 +1208,15 @@
     }
 </script>
 <style lang="scss" scoped>
+/deep/ .address-list-li{
+	font-size: 26px;
+}
+.classifyForm li .name,.category-title{
+	font-size: 26px;
+}
+h2,h3{
+	font-size: 28px;
+}
 	.addClassifyFrom{
 		display: inline-block;
 		width: 50%;
@@ -1251,11 +1263,14 @@
         margin-right: 10px;
     }
     .block{
-        width: 100px;
+        width: 150px;
+        font-size: 28px;
         text-align: center;
         color: white;
-        padding: 10px;
-        background: #338ce6;
+        padding: 8px 10px 10px;
+        margin-bottom: 10px;
+        background: url('/static/image/create-title@2x.png') 0 0 no-repeat;
+        background-size: 100% 100%;
     }
     .block-container{
         background: #eee;
@@ -1300,6 +1315,7 @@
     .el-tag,.button-new-category {
         min-width: 80px;
         text-align: center;
+        font-size: 26px;
     } 
     .el-tag + .el-tag, .button-new-category {
         margin-left: 10px;
@@ -1422,7 +1438,7 @@
 			.name{
 				margin-right: 15px;
 				display: inline-block;
-				width: 180px;
+				width: 80px;
 				text-align: right;
 				vertical-align: middle;
 				max-height: 60px;
