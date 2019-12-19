@@ -54,7 +54,7 @@
 						<div>
 							<el-button type="primary" @click="gotoCreate">创建词条</el-button>
 							<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
-							<el-button type="danger" @click="gotoManager">进入管理</el-button>
+							<!--<el-button type="danger" @click="gotoManager">进入管理</el-button>-->
 						</div>
 
 					</div>

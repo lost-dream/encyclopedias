@@ -111,6 +111,7 @@ export default {
 }
 /deep/ .el-button:not(.is-circle){
 	font-size: 26px !important;
+	border: none;
 }
 /deep/ .el-button:not(.el-button--default,.el-button--primary){
 	background: #efefef;

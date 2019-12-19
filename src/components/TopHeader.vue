@@ -19,7 +19,7 @@
 	      	<el-button style='margin-left: 20px;vertical-align: top;' @click="searchTotalStation" type="danger">全站搜索</el-button>
       	</div>
       	
-      	<span style="position: absolute;top: 0;right: 0;font-size: 26px;">xxx，你好</span>
+      	<!--<span style="position: absolute;top: 0;right: 0;font-size: 26px;">xxx，你好</span>-->
       </div>
     </el-col>
   </el-row>
