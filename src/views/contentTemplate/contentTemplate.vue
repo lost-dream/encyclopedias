@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-console */
 <template>
   <div class="pos-rltv  bg-fff">
     <h2 class="page-title">
@@ -31,7 +33,8 @@
 	          :props="defaultProps"
 	          :expand-on-click-node="false"
 	          highlight-current
-	          :node-key="NODE_KEY">
+	          :node-key="NODE_KEY"
+						@node-click="selectTreeNode">
 	          <div class="comp-tr-node" slot-scope="{ node, data }">
 	            <!-- 编辑状态 -->
 	            <template v-if="node.isEdit">
@@ -73,7 +76,7 @@
 	                  @click="handleDelete(node, data)"></el-button>
 	              </span>-->
 	              <!--换成弹窗形式-->
-	              <span class="comp-tr-node--btns">
+	              <span class="comp-tr-node--btns" v-show="currentNode == data.id">
 	              	<i class="el-icon-caret-left el-icon--left"></i>
 	              	<span class="btn" @click="handleAdd(node, data)">添加子类</span>
 	              	<span class="btn" @click="handleEdit(node, data)">修改分类</span>
@@ -141,7 +144,8 @@ export default{
 			},
       showContent: false,
       saveLoading: false,
-      currentCategory: {},
+			currentCategory: {},
+			currentNode: '',
 		}
 	},
 	created(){
@@ -304,7 +308,12 @@ export default{
       .catch(e => {
         this.$message.error("请求出错，错误原因： " + e.msg ? e.msg : JSON.stringify(e));
       })
-    },
+		},
+		selectTreeNode(obj,node,vue_comp){
+			// console.log('test',obj,node,vue_comp);
+
+			this.currentNode = (this.currentNode == obj.id) ? '' : obj.id
+		}
   }
     
 
@@ -386,7 +395,7 @@ export default{
 				background: #5B7DD7;
 				padding: 0 20px;
 				margin-left: 20px;
-				opacity: 0;
+				// opacity: 0;
 				transition: opacity .1s;
 				.el-button{
 					transform: scale(0.8);// 缩小按钮
@@ -409,13 +418,13 @@ export default{
 			}
 		}
 		// 高亮显示按钮
-		.is-current{
-			&>.el-tree-node__content{
-				.comp-tr-node--btns{
-					@extend .show-btns;
-				}
-			}
-		}
+		// .is-selected{
+		// 	&>.el-tree-node__content{
+		// 		.comp-tr-node--btns{
+		// 			@extend .show-btns;
+		// 		}
+		// 	}
+		// }
 		// 悬浮显示按钮
 		/*.el-tree-node__content{
 			&:hover{
@@ -428,7 +437,7 @@ export default{
 
 .flex-box {
   display: flex;
-  height: calc(100% - 50px);
+  height: calc(100% - 80px);
 
   .el-tree-node__content {
     height: 28px;
@@ -442,7 +451,7 @@ export default{
     box-sizing: border-box;
     border-right: 10px solid #F6FAFB;
     .el-tree {
-      height: calc(100% - 50px);
+      height: calc(100% - 80px);
       overflow: auto;
     }
   }
@@ -508,6 +517,16 @@ export default{
   height: 28px !important;
 }
 
+.el-tree /deep/ .el-tree-node__children {
+	overflow: visible !important;
+}
+
+.el-tree /deep/ .el-input--mini .el-input__inner{
+	padding-left: 4px 15px !important;
+	height: 32px !important;
+	line-height: 32px !important;
+}
+
 .el-tree::-webkit-scrollbar {
   width: 3px;
   height: 5px;
@@ -517,5 +536,6 @@ export default{
 .el-tree::-webkit-scrollbar-track{
   background-color: #fff;
 }
+
 
 </style>

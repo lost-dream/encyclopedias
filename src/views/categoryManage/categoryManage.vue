@@ -525,6 +525,8 @@ export default{
 			}
 			// button
 			.comp-tr-node--btns{
+        position: relative;
+        top: -5px;
 				margin-left: 10px;
 				opacity: 0;
 				transition: opacity .1s;
