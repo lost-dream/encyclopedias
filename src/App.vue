@@ -46,10 +46,10 @@ export default {
     word-wrap: break-word;
     word-break: break-all;
     font-weight: normal;
-        font-size: 13px;
+      font-size: 13px;
     line-height: 1.5;
     b{
-    	font-weight: normal;
+      font-weight: normal;
     }
 	}
 	th{
