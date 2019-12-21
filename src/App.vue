@@ -12,6 +12,27 @@ export default {
 </script>
 
 <style lang="scss">
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content{
+	background: none !important;
+}
+.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap > .el-form-item__label:before{
+	display: none;
+}
+
+
+.el-pagination{
+	.el-input__inner{
+		height: 28px !important;
+		line-height: 28px !important;
+	}
+}
+.el-input__inner{
+	height: 50px !important;
+	line-height: 50px !important;
+}
+.el-table{
+	font-size: 26px !important;
+}
 .address-list-li,/deep/ .transfer-title{
 	font-size: 26px !important;
 }

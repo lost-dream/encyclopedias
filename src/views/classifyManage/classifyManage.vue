@@ -1,7 +1,7 @@
 <template>
 	<div class="pos-rltv height-100 bg-fff">
 		<h2 class="page-title">
-      <span>词条分类维护</span>
+      <span>属性模板管理</span>
     </h2>
 		<div class="flex-box">
 			<div class="left myTree" v-loading="isLoading">
@@ -426,7 +426,7 @@ export default {
 .page-title {
 	margin: 0;
 	padding: 10px 10px 10px 0;
-	border-bottom: 10px solid #f5f5f5;
+	border-bottom: 10px solid #F6FAFB;
 	font-size: 20px;
 	font-weight: bold;
 	span {
@@ -449,7 +449,7 @@ export default {
     padding: 0 16px;
     position: absolute;
     box-sizing: border-box;
-    border-right: 10px solid #f5f5f5;
+    border-right: 10px solid #F6FAFB;
     .el-tree {
       height: calc(100% - 50px);
       overflow: auto;
@@ -488,7 +488,7 @@ export default {
     max-width: unset;
     max-height: unset;
     margin-left: 300px;
-    // border-left: 10px solid #f5f5f5;
+    // border-left: 10px solid #F6FAFB;
     height: 100%;
     font-size: 26px;
 		padding: 0 16px;

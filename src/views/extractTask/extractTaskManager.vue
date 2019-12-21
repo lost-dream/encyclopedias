@@ -28,20 +28,20 @@
 				</el-time-select>
 			  </el-form-item>
 			  
-			  <el-form-item v-if="type!=='see'" style="margin-left: -110px;display: inline-block;width: 50%;vertical-align: top;">
+			  <!--<el-form-item v-if="type!=='see'" style="margin-left: -110px;display: inline-block;width: 50%;vertical-align: top;">
 			  	<el-button style="background: #cccccc !important;color: black;border: none;margin-right: 60px;margin-left: 0;" @click="resetForm('ruleForm')">取消</el-button>
 			    
 			    <el-button style="background: #5b7dd7 !important;color: white;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
 			    
-			  </el-form-item>
+			  </el-form-item>-->
 			  
 			  
+			  <el-form-item></el-form-item>
 			  
-			  
-			  <el-form-item v-show="rules.tableName[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="表：" prop="tableName">
+			  <el-form-item label-width="80px" v-show="rules.tableName[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="表：" prop="tableName">
 			  	<el-radio style="display: block;margin: 0;" v-for="item in tableNameList" v-model="ruleForm.tableName" :label="item" border>{{item}}</el-radio>
 			  </el-form-item>
-			  <el-form-item v-show="rules.columns[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="列：" prop="columns">
+			  <el-form-item label-width="50px" v-show="rules.columns[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="列：" prop="columns">
 			    <el-radio style="display: block;margin: 0;" v-for="item in columnNameList" v-model="ruleForm.columns" :label="item" border>{{item}}</el-radio>
 			  </el-form-item>
 			  
@@ -51,6 +51,14 @@
 			    <el-button style="background: #5b7dd7;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
 			    
 			  </el-form-item>-->
+			  
+			  
+			  <el-form-item v-if="type!=='see'" style="text-align: center;">
+			  	<el-button style="background: #cccccc !important;color: black;border: none;margin-right: 60px;margin-left: 0;" @click="resetForm('ruleForm')">取消</el-button>
+			    
+			    <el-button style="background: #5b7dd7 !important;color: white;" type="primary" @click="submitForm('ruleForm')">保存</el-button>
+			    
+			  </el-form-item>
 			</el-form>
 		</el-card>
 	</div>

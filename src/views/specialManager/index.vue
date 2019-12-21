@@ -7,14 +7,14 @@
             </div>
             <el-row style="margin: 0 0 0 20px;">
                	 专题名称
-                <el-input placeholder="请输入内容" v-model="searchKeyword" style="margin-bottom: 10px;width: 200px">
+                <el-input placeholder="请输入内容" v-model="searchKeyword" style="margin-bottom: 10px;width: 44%">
                     <!--<el-button slot="append" @clcik="entrySearchList">搜索</el-button>-->
                 </el-input>
                 <el-button  @click="getSpecialList" style="background: #587dda !important;color: white;margin-left: 25px">搜索</el-button>
                 <el-button type="primary" style="float:right;background: #ef5d5d !important;color: white;" @click="routeToSpecial('new')">
                 	
                 	新增
-                	<i class="el-icon-plus el-icon--right"></i>
+                	<i style="margin-left: -10px;" class="el-icon-plus el-icon--right"></i>
                 </el-button>
 
             </el-row>

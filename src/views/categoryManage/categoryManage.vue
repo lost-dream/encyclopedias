@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-rltv height-100 bg-fff">
+  <div class="pos-rltv  bg-fff">
     <h2 class="page-title">
       <span>词条分类维护</span>
     </h2>
@@ -84,14 +84,14 @@
           <el-input v-model="form.code" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" :label-width="formLabelWidth">
-          <el-input v-model="form.descM" autocomplete="off"></el-input>
+          <el-input resize='none' rows=4 type='textarea' v-model="form.descM" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-          <el-input v-model.number="form.sort" autocomplete="off"></el-input>
+          <el-input style="width: 200px;" v-model.number="form.sort" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item style="text-align: right">
+        <el-form-item style="text-align: center;padding-bottom: 100px;">
           <el-button style="background: #cccccc !important;color: black;border: none;" @click="form = {}; formDisabled = true;">取 消</el-button>
-          <el-button style="background: #5b7dd7 !important;color: white;" type="primary" @click="doSaveAction">保 存</el-button>
+          <el-button style="background: #5b7dd7 !important;color: white;margin-left: 50px;" type="primary" @click="doSaveAction">保 存</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -457,7 +457,7 @@ export default{
   .page-title {
     margin: 0;
     padding: 10px 10px 10px 0;
-    border-bottom: 10px solid #f5f5f5;
+    border-bottom: 10px solid #F6FAFB;
     font-size: 20px;
     font-weight: bold;
     span {
@@ -469,7 +469,7 @@ export default{
   .right-form {
     margin-left: 300px;
     padding-top: 40px;
-    border-left: 10px solid #f5f5f5;
+    border-left: 10px solid #F6FAFB;
     height: calc(100% - 90px);
   }
 
