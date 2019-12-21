@@ -11,7 +11,7 @@
 			
 			<el-row>
 				<span>名称</span>
-				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
+				<el-input style="width: 260px;" v-model="keyword" type="text" placeholder=""></el-input>
 				<span class="label">类型</span>
 				<el-select style="width: 150px;margin-bottom: 20px;" v-model="dataSourceType" placeholder="请选择数据源类别">
 			      <el-option label="oracle" value="1"></el-option>
@@ -19,8 +19,8 @@
 			      <el-option label="ftp" value="3"></el-option>
 			    </el-select>
 			    
-			    <el-button style="background: #587dda !important;color: white;margin-left: 35px;" @click="list" type="primary">查询</el-button>
-			    <el-button style="background: #ef5d5d !important;color: white;margin-left: 35px;" @click="add" type="primary">新增<i class="el-icon-plus el-icon--right"></i></el-button>
+			    <el-button style="background: #587dda !important;color: white;margin-left: 130px;" @click="list" type="primary">查询</el-button>
+			    <el-button style="background: #55BA9A !important;color: white;margin-left: 35px;" @click="add" type="primary">新增</el-button>
 			</el-row>
 			
 			<el-table

@@ -33,10 +33,10 @@
 					</div>
 				</div>
 				<span class="label">词条名称</span>
-				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
+				<el-input style="width: 400px;" v-model="keyword" type="text" placeholder=""></el-input>
 				
 				<span class="label">数据源</span>
-				<el-select style="width: 250px;margin-bottom: 20px;" v-model="dataSourceId" placeholder="请选择数据源">
+				<el-select style="width: 220px;margin-bottom: 20px;" v-model="dataSourceId" placeholder="请选择数据源">
 			      <el-option :label="item.dataSourceName" :value="item.id" v-for="item in sourceList"></el-option>
 			    </el-select>
 			    

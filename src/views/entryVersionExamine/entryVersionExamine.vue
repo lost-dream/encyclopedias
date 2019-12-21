@@ -33,11 +33,11 @@
 					</div>
 				</div>
 				<span class="label">词条名称</span>
-				<el-input style="width: 125px;" v-model="keyword" type="text" placeholder=""></el-input>
+				<el-input style="width: 165px;" v-model="keyword" type="text" placeholder=""></el-input>
 				<!--<span class="label">标签</span>
 				<el-input style="width: 125px;" v-model="label" type="text" placeholder=""></el-input>-->
 				<span class="label">状态</span>
-				<el-select style="width: 200px;margin-bottom: 20px;" v-model="auditState" placeholder="请选择词条状态">
+				<el-select style="width: 180px;margin-bottom: 20px;" v-model="auditState" placeholder="请选择词条状态">
 			      <el-option label="待审核" value="2"></el-option>
 			      <el-option label="审核通过" value="3"></el-option>
 			      <el-option label="审核不通过" value="4"></el-option>
@@ -45,7 +45,7 @@
 			      <el-option label="取消发布" value="6"></el-option>
 			    </el-select>
 			    
-			    <el-button style="background: #587dda !important;color: white;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
+			    <el-button style="background: #587dda !important;color: white;margin-left: 55px;" @click="auditList" type="primary">查询</el-button>
 			    
 			    
 			</el-row>

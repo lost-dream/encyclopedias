@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-rltv height-100 bg-fff">
+  <div class="pos-rltv  bg-fff">
     <h2 class="page-title">
       <span>目录模板管理</span>
     </h2>
@@ -25,69 +25,86 @@
               @click="handleAddTop">添加一级目录<i class="el-icon-plus el-icon--right"></i></el-button>
         </div>
         <!-- tree -->
-        <el-tree ref="SlotTree"
-          :data="setTree"
-          :props="defaultProps"
-          :expand-on-click-node="false"
-          highlight-current
-          :node-key="NODE_KEY">
-          <div class="comp-tr-node" slot-scope="{ node, data }">
-            <!-- 编辑状态 -->
-            <template v-if="node.isEdit">
-              <el-input v-model="data.contentName" 
-                autofocus
-                size="mini"
-                :ref="'slotTreeInput'+data[NODE_KEY]"
-                @blur.stop="handleInput(node, data)"
-                @keyup.enter.native="handleInput(node, data)"></el-input>
-            </template>
-
-            <!-- 非编辑状态 -->
-            <template v-else>
-              <!-- 名称： 新增节点增加class（is-new） -->
-              <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']">
-                {{ node.label }}
-              </span>
-              
-              <!-- 按钮 -->
-              <span class="comp-tr-node--btns">
-                <!-- 新增 -->
-                <el-button icon="el-icon-plus" 
-                  size="mini"
-                  circle 
-                  type="primary" 
-                  title="新增"
-                  @click="handleAdd(node, data)"></el-button>
-
-                <!-- 编辑 -->
-                <el-button icon="el-icon-edit" 
-                  size="mini"
-                  circle 
-                  type="info" 
-                  title="修改"
-                  @click="handleEdit(node, data)"></el-button>
-
-                <!-- 删除 -->
-                <el-button icon="el-icon-delete" 
-                  size="mini"
-                  circle 
-                  type="danger" 
-                  title="删除"
-                  @click="handleDelete(node, data)"></el-button>
-              </span>
-            </template>
-          </div>
-        </el-tree>
-
-        <div class="button-box">
+        <div class="myTree">
+	        <el-tree ref="SlotTree"
+	          :data="setTree"
+	          :props="defaultProps"
+	          :expand-on-click-node="false"
+	          highlight-current
+	          :node-key="NODE_KEY">
+	          <div class="comp-tr-node" slot-scope="{ node, data }">
+	            <!-- 编辑状态 -->
+	            <template v-if="node.isEdit">
+	              <el-input v-model="data.contentName" 
+	                autofocus
+	                size="mini"
+	                :ref="'slotTreeInput'+data[NODE_KEY]"
+	                @blur.stop="handleInput(node, data)"
+	                @keyup.enter.native="handleInput(node, data)"></el-input>
+	            </template>
+	
+	            <!-- 非编辑状态 -->
+	            <template v-else>
+	              <!-- 名称： 新增节点增加class（is-new） -->
+	              <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']">
+	                <i class="el-icon-folder el-icon--left"></i>
+	                {{ node.label }}
+	              </span>
+	              
+	              <!-- 按钮 -->
+	              <!--<span class="comp-tr-node--btns">
+	                <el-button icon="el-icon-plus" 
+	                  size="mini"
+	                  circle 
+	                  type="primary" 
+	                  title="新增"
+	                  @click="handleAdd(node, data)"></el-button>
+	                <el-button icon="el-icon-edit" 
+	                  size="mini"
+	                  circle 
+	                  type="info" 
+	                  title="修改"
+	                  @click="handleEdit(node, data)"></el-button>
+	                <el-button icon="el-icon-delete" 
+	                  size="mini"
+	                  circle 
+	                  type="danger" 
+	                  title="删除"
+	                  @click="handleDelete(node, data)"></el-button>
+	              </span>-->
+	              <!--换成弹窗形式-->
+	              <span class="comp-tr-node--btns">
+	              	<i class="el-icon-caret-left el-icon--left"></i>
+	              	<span class="btn" @click="handleAdd(node, data)">添加子类</span>
+	              	<span class="btn" @click="handleEdit(node, data)">修改分类</span>
+	              	<span class="btn" @click="handleDelete(node, data)">删除分类</span>
+	              </span>
+	            </template>
+	          </div>
+	        </el-tree>
+				</div>
+        <div style="text-align: center;padding-bottom: 100px;" class="button-box">
+        	<el-button style="background: #cccccc !important;color: black;border: none;margin-right: 40px;" @click="dialogVisible = true" type="primary">取消</el-button>
           <el-button
           	style="background: #587dda !important;color: white;"
             type="success"
             :loading="saveLoading" 
-            @click="saveContent">保存目录</el-button>
+            @click="saveContent">保存</el-button>
         </div>
       </div>
     </div>
+    <!--是否取消修改弹窗-->
+	    <el-dialog
+		  title="提示"
+		  :visible.sync="dialogVisible"
+		  width="30%"
+		  >
+		  <span>确定取消修改？</span>
+		  <span slot="footer" class="dialog-footer">
+		    <el-button @click="dialogVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="cancelModify">确 定</el-button>
+		  </span>
+		</el-dialog>
   </div>
 </template>
 
@@ -100,6 +117,7 @@ export default{
 	name: 'contentTemplate',
 	data(){
 		return {
+			dialogVisible:false,
       isLoading: false,// 是否加载
       rightLoading: false,
       setTree: [], // 目录树
@@ -132,6 +150,11 @@ export default{
     this.getCategoryTreeData()
 	},
 	methods: {
+		//撤销修改(重新请求数据，不清空已保存数据)
+		cancelModify() {
+			this.dialogVisible = false
+			this.checkTemplateTreeData(this.currentCategory.id)
+		},
     handleDelete(_node, _data){// 删除节点
 			console.log(_node, _data)
 			// 判断是否存在子节点
@@ -290,6 +313,11 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-icon-folder{
+	font-size: 16px;margin-right: -10px;margin-left: 5px;
+	vertical-align: top;
+	margin-top: 12px;
+}
 	/* common */
 	// 显示按钮
 	.show-btns{
@@ -314,7 +342,7 @@ export default{
   .page-title {
     margin: 0;
     padding: 10px 10px 10px 0;
-    border-bottom: 10px solid #f5f5f5;
+    border-bottom: 10px solid #F6FAFB;
     font-size: 20px;
     font-weight: bold;
     span {
@@ -322,7 +350,6 @@ export default{
       padding-left: 15px;
     }
   }
-
 	/* common end */
   
 	.comp-tree{
@@ -331,7 +358,7 @@ export default{
     vertical-align: top;
 		width: 100%;
 		max-width: 300px;
-		max-height: 80vh;
+		/*max-height: 80vh;*/
     overflow: visible;
   
 		// 顶部按钮
@@ -352,7 +379,13 @@ export default{
 			}
 			// button
 			.comp-tr-node--btns{
-				margin-left: 10px;
+				position: absolute;
+				/*right: 0;*/
+				top: 0;
+				z-index: 999;
+				background: #5B7DD7;
+				padding: 0 20px;
+				margin-left: 20px;
 				opacity: 0;
 				transition: opacity .1s;
 				.el-button{
@@ -361,6 +394,18 @@ export default{
 						margin-left: -1px;
 					}
 				}
+				/deep/ .el-icon-caret-left{
+					color: #5B7DD7;
+					position: absolute;
+					left: -16px;
+					top: 5px;
+				}
+				.btn{
+					display: block;
+					color: white;
+					line-height: 50px;
+				}
+				
 			}
 		}
 		// 高亮显示按钮
@@ -372,13 +417,13 @@ export default{
 			}
 		}
 		// 悬浮显示按钮
-		.el-tree-node__content{
+		/*.el-tree-node__content{
 			&:hover{
 				.comp-tr-node--btns{
 					@extend .show-btns;
 				}
 			}
-		}
+		}*/
   }
 
 .flex-box {
@@ -395,7 +440,7 @@ export default{
     padding: 0 16px;
     position: absolute;
     box-sizing: border-box;
-    border-right: 10px solid #f5f5f5;
+    border-right: 10px solid #F6FAFB;
     .el-tree {
       height: calc(100% - 50px);
       overflow: auto;
@@ -430,7 +475,7 @@ export default{
     max-width: unset;
     max-height: unset;
     margin-left: 310px;
-    // border-left: 10px solid #f5f5f5;
+    // border-left: 10px solid #F6FAFB;
     height: 100%;
     padding: 0 16px;
     font-size: 26px;
@@ -450,6 +495,14 @@ export default{
     }
   }
 }
+/deep/ .comp-tr-node{
+	position: relative;
+}
+.myTree .el-tree {
+      min-height: 200px !important;
+      max-height: 600px !important;
+      overflow: auto;
+    }
 
 .el-tree /deep/ .el-tree-node__content {
   height: 28px !important;

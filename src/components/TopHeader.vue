@@ -2,11 +2,12 @@
   <el-row>
     <el-col :span="24" >
       <div class="head-wrap">
-      	<span style="float: left;margin-left: 0px;">
-      		<!--<img @click="gotoIndex" src="../../public/static/image/logo.png" />-->
-      		<span @click="gotoIndex" class="title" >情报百科</span>
-      	</span>
-      	<div style="width: 700px;position: absolute;left: 50%;top: 50%;transform: translateX(-50%) translateY(-50%);">
+      	
+      	<div>
+      		<span style="float:left">
+	      		<!--<img @click="gotoIndex" src="../../public/static/image/logo.png" />-->
+	      		<span @click="gotoIndex" class="title" >情报百科</span>
+	      	</span>
       		<el-input
 	      		style='width: 500px;'
 				    placeholder="请输入内容"
@@ -17,9 +18,10 @@
 				  </el-input>
 	      	<!--<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>-->
 	      	<el-button style='margin-left: 20px;vertical-align: top;' @click="searchTotalStation" type="danger">全站搜索</el-button>
+	      	<span v-show="userName" style="margin-left: 100px;font-size: 26px;color: #5B5B5B;">{{userName}}同志,你好</span>
       	</div>
       	
-      	<span style="position: absolute;top: 0;right: 0;font-size: 26px;">xxx，你好</span>
+      	
       </div>
     </el-col>
   </el-row>
@@ -29,7 +31,8 @@
 	export default {
     data () {
       return {
-        content: ''
+        content: '',
+        userName:'',
       }
     },
     watch: {
@@ -48,6 +51,11 @@
 		},
     created() {
     	this.content = sessionStorage.getItem('searchContent')
+    	try{
+    		this.userName = sessionStorage.getItem('userName')
+    	}catch(e){
+    		//TODO handle the exception
+    	}
     },
     
     methods: {

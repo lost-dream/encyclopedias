@@ -49,7 +49,7 @@
             <div class="mg-top-20" id="attribute" style="display: flex;flex-wrap: wrap;padding: 20px 0;margin-top: 50px;" v-if="wikiContent.entryAttributes.length">
                 <div v-for="item in wikiContent.entryAttributes" style="width: 50%;display: inline-block;">
                     <p style="padding: 10px 30px 10px 0px;border-bottom: 1px dotted #ccc;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                        <p style="width: 160px;display: inline-block;padding-left: 60px;">{{item.attributeKey}}</p>
+                        <p style="width: 160px;display: inline-block;padding-left: 60px;text-align: center;">{{item.attributeKey}}</p>
                         <p style="display: inline-block;vertical-align: top;width: 50%;">
                         	<span v-if="item.attributeType < 4||item.attributeType > 7">{{item.attributeValue}}</span>
 	                        <span v-else-if="item.attributeType == 4">{{new Date(Number(item.attributeValue)).getFullYear()}}年</span>
@@ -737,7 +737,7 @@ h2,h3{
 	    text-overflow: ellipsis;
 	    padding-bottom: 4px;
 	    height: 26px;
-    	line-height: 1.5;
+    	line-height: 1;
    	}
    	.catalogue1{
    		font-weight: 700;

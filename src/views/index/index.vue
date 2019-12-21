@@ -29,7 +29,8 @@
 				</el-col>
 				<el-col class="w480" >
 					<div id="entryStatisticalData">
-						<div>
+						<div class="left">
+							<div>
 							<p>
 								<img src="../../assets/index/01.png"/>
 								<span class="data">{{toThousands(entryStatisticalData.totalEntry)}}</span>
@@ -39,19 +40,21 @@
 						<div>
 							<p>
 								<img src="../../assets/index/02.png"/>
-								<!--<span class="data">{{toThousands(entryStatisticalData.totalEntryEitor)}}</span>-->
-								<span class="data">0</span>
-								<span>次编辑</span>
+								<span class="data">{{toThousands(entryStatisticalData.totalEntryEitor)}}</span>
+								<!--<span class="data">0</span>-->
+								<span>被编辑</span>
 							</p>
 						</div>
 						<div>
 							<p>
 								<img src="../../assets/index/03.png"/>
 								<span class="data">{{toThousands(entryStatisticalData.totalEditor)}}</span>
-								<span>人编写</span>
+								<span>编辑/次</span>
 							</p>
 						</div>
-						<div>
+						</div>
+						
+						<div class="rightBtnArea">
 							<el-button type="primary" @click="gotoCreate">创建词条</el-button>
 							<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
 							<el-button type="danger" @click="gotoManager">进入管理</el-button>
@@ -92,7 +95,7 @@
 					</div>
 				</el-carousel-item>
 			</el-carousel>
-			<div class="bgf6fafb" style="margin-top: 30px;min-height: 560px">
+			<div class="bgf6fafb" style="background: #EBF3F6;margin-top: 30px;min-height: 560px">
 				<div class="title" >
 					<span>精选分类</span>
 				</div>
@@ -484,6 +487,7 @@ export default {
 	flex-wrap: nowrap;
 	flex-direction: row;*/
 	margin-bottom: 50px;
+	background: #EBF3F6;
 	/*overflow-x: auto;*/
 	/*// justify-content: center;*/
 }
@@ -518,7 +522,7 @@ export default {
  border-radius:2em;
 }
 .category-item {
-	padding: 10px 0 10px 15px;
+	/*padding: 10px 0 10px 15px;*/
 	border-bottom: 1px solid #ccc;
 	&:nth-child(5){
 		border-bottom: none;
@@ -531,6 +535,7 @@ export default {
 	}
 	.categoryTreeList{
 		border-right: 1px solid #ccc;
+		padding: 10px 0 10px 15px;
 	}
 	&:nth-child(3n+1){
 		.categoryTreeList{
@@ -568,7 +573,8 @@ export default {
 		margin: 0;
 		padding: 0;
 		display: inline-block;
-		height: 165px;
+		/*height: 165px;*/
+		height: 140px;
 		width: 400px;
 		/*border-right: 1px solid #ccc;*/
 		li{
@@ -582,6 +588,7 @@ export default {
 			color: #7d7e7e;
 			text-align: left;
 			vertical-align: top;
+			border-right: 1px solid #E3E8EB;
 			/*overflow: hidden;
 			text-overflow:ellipsis;
 			white-space: nowrap;*/
@@ -702,11 +709,12 @@ export default {
 	}
 }
 .specialList{
-	border: 1px solid #ccc;
+	/*border: 1px solid #ccc;*/
+	background: #EBF1F1;
 	width: 360px;
 	height: 400px;
 	height: 480px;
-	background: #f6fafb;
+	/*background: #f6fafb;*/
 	margin: auto;
 	position: relative;
 	&/deep/ img{
@@ -761,19 +769,25 @@ export default {
 	background: url('/static/image/title.png') no-repeat;
 }
 #entryStatisticalData{
-	display: flex;
+	/*display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	height: 330px;
-	padding: 25px 0 25px 50px;
+	height: 330px;*/
+	padding: 0 0 0 50px;
 	box-sizing: border-box;
 	color: #338ce6;
 	font-size: 28px;
-	div{
-		width: 100%;
-		/*text-align: center;*/
+	.left{
+		display: inline-block;
+		div{
+			width: 100%;
+			padding: 15px 0;
+			/*text-align: center;*/
+		}
 	}
+	
+	
 	img{
 		vertical-align: baseline;
 	}
@@ -806,6 +820,16 @@ export default {
 			color: #666666;
 			line-height: 1.5;
 			float: right;
+		}
+	}
+	.rightBtnArea{
+		display: inline-block;
+		margin-top: 10px;
+		margin-left: 15px;
+		vertical-align: top;
+		.el-button{
+			display: block;
+			margin: 10px 0;
 		}
 	}
 }

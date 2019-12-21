@@ -111,6 +111,7 @@ export default {
 }
 /deep/ .el-button:not(.is-circle){
 	font-size: 26px !important;
+	border: none;
 }
 /deep/ .el-button:not(.el-button--default,.el-button--primary){
 	background: #efefef;
@@ -144,10 +145,11 @@ export default {
 	width: calc(100vw - 200px);
 	height: calc(100vh - 64px);
 	// border-left: 1px solid #e6e6e6;
-	background: #f5f5f5;
+	border: 20px solid #F0F0F0;
+	background: #F6FAFB;
 	
 	&::-webkit-scrollbar {
-	  width: 5px;
+	  width: 1px;
 	  height: 4px;
 	  background-color: #F5F5F5;
 	}
