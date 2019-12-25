@@ -7,8 +7,8 @@
 			<el-row>
 				<el-col class="w800">
 					<el-carousel :interval="5000" height="460px" id="index-carousel" style="height: 460px;overflow: hidden" v-loading="!entryListData.length">
-						<el-carousel-item v-for="key in entryListData" style="display: flex">
-							<div v-for="item in key" >
+						<el-carousel-item v-for="(key, i) in entryListData" :key="i" style="display: flex">
+							<div v-for="(item, k) in key" :key="k">
 <!--								{{item}}-->
 								<div @click="seeEntry(item)" class="entryList ">
 									<el-image class="carousel-image" v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" >
@@ -53,7 +53,7 @@
 							</p>
 						</div>
 						</div>
-						
+
 						<div class="rightBtnArea">
 							<el-button type="primary" @click="gotoCreate">创建词条</el-button>
 							<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
@@ -78,12 +78,12 @@
 							:fit="'cover'"
 							:src="item.specialCoverUrl">
 							<div slot="error" class="image-slot">
-					       		<img src="/static/image/tank.png" alt="" />
-					      	</div>
+								<img src="/static/image/tank.png" alt="" />
+							</div>
 						</el-image>
-						
-						
-						
+
+
+
 						<!--<el-image
 							:fit="'cover'"
 							:src="'https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg'">
@@ -118,7 +118,12 @@
 						<div class="categoryTreeList">
 							<p style="color: #333333;text-align: left">{{item.name}}</p>
 							<ul>
-								<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
+								<li
+										v-for="(item1,index1) in item.children"
+										:key="index1"
+										@click="routeToEntryList(item1.id,index1,item.children)"
+										class="secondCategory"
+								>
 									{{item1.name}}
 									<!--<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
                                         <li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
@@ -139,7 +144,13 @@
 				<el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick" v-loading="panelLoading">
 					<el-tab-pane label="科技" name="6">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div
+									v-for="(item, i) in categoryList"
+									:key="i"
+									class="categoryListItem"
+									style="width: 45%;display: flex;padding: 10px;"
+									@click="seeEntry(item)"
+							>
 								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" >
 										<i class="el-icon-picture-outline"></i>
@@ -156,7 +167,13 @@
 					</el-tab-pane>
 					<el-tab-pane label="经济" name="5">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div
+									v-for="(item, i) in categoryList"
+									:key="i"
+									class="categoryListItem"
+									style="width: 45%;display: flex;padding: 10px;"
+									@click="seeEntry(item)"
+							>
 								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" >
 										<i class="el-icon-picture-outline"></i>
@@ -173,7 +190,13 @@
 					</el-tab-pane>
 					<el-tab-pane label="安全" name="4">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div
+									v-for="(item, i) in categoryList"
+									:key="i"
+									class="categoryListItem"
+									style="width: 45%;display: flex;padding: 10px;"
+									@click="seeEntry(item)"
+							>
 								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" >
 										<i class="el-icon-picture-outline"></i>
@@ -190,7 +213,13 @@
 					</el-tab-pane>
 					<el-tab-pane label="外交" name="3">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div
+									v-for="(item, i) in categoryList"
+									:key="i"
+									class="categoryListItem"
+									style="width: 45%;display: flex;padding: 10px;"
+									@click="seeEntry(item)"
+							>
 								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" >
 										<i class="el-icon-picture-outline"></i>
@@ -207,7 +236,13 @@
 					</el-tab-pane>
 					<el-tab-pane label="军事" name="2">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div
+									v-for="(item, i) in categoryList"
+									:key="i"
+									class="categoryListItem"
+									@click="seeEntry(item)"
+									style="width: 45%;display: flex;padding: 10px;"
+							>
 								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" >
 										<i class="el-icon-picture-outline"></i>
@@ -224,7 +259,13 @@
 					</el-tab-pane>
 					<el-tab-pane label="政治" name="1">
 						<div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
-							<div class="categoryListItem" @click="seeEntry(item)" style="width: 45%;display: flex;padding: 10px;" v-for="item in categoryList" >
+							<div
+									v-for="(item, i) in categoryList"
+									:key="i"
+									class="categoryListItem"
+									style="width: 45%;display: flex;padding: 10px;"
+									@click="seeEntry(item)"
+							>
 								<el-image class="cat-img"  v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img">
 									<div slot="error" class="image-slot" >
 										<i class="el-icon-picture-outline"></i>
@@ -253,18 +294,18 @@ export default {
 
 	name: 'index',
 	data() {
-	    return {
-	    	loading: true,
+		return {
+			loading: true,
 			panelLoading: true,
             activeName: '6',
-	    	entryStatisticalData:{},
-	    	specialListData:[],
-	    	categoryTreeList:[],
-	    	entryListData:[],
-            categoryList: [],
-	    	categoryTitleColor:['e9b937','6d56fb','079ea9','ec6b6b','199df2'],
-	    	categoryBgColor:['f3ebd1','d9d4f5','c1dfe2','f7dee0','c6e3f5'],
-	    }
+			entryStatisticalData:{},
+			specialListData:[],
+			categoryTreeList:[],
+			entryListData:[],
+			categoryList: [],
+			categoryTitleColor:['e9b937','6d56fb','079ea9','ec6b6b','199df2'],
+			categoryBgColor:['f3ebd1','d9d4f5','c1dfe2','f7dee0','c6e3f5'],
+		}
 	},
 	watch: {
 
@@ -278,7 +319,7 @@ export default {
 			vm.entryList()
 			vm.getCategoryList(6)
     	});
-		
+
 	},
 	mounted() {
 	},
@@ -419,7 +460,7 @@ export default {
 			else{
 				return 0
 			}
-			
+
 		}
 	}
 
@@ -441,7 +482,7 @@ export default {
 		line-height: 1.5;
 		font-size: 28px;
 		color: #959595;
-		
+
 	}
 	.entry-title{
 		line-height: 1.5;
@@ -454,13 +495,13 @@ export default {
 		padding-left: 10px;
 	}
 	.cat-img{
-		
+
 		.image-slot{
 			width: 120px;
 			height: 90px;
 		}
 	}
-	
+
 }
 .main-page {
 	padding-top: 30px;
@@ -504,7 +545,7 @@ export default {
 		overflow-y: scroll;
 		height: 195px;
 	}
-	
+
 }
 .category-item ul::-webkit-scrollbar {
  width: 0px;
@@ -547,7 +588,7 @@ export default {
 	/*}*/
 }
 .category-item{
-	
+
 	&:nth-child(3n+3){
 		border-right: none;
 	}
@@ -556,8 +597,8 @@ export default {
 	/*padding-bottom: 10px;*/
 	font-size: 14px;
 	color: #99acae;
-	
-	
+
+
 
 	p{
 		font-size: 28px;
@@ -600,7 +641,7 @@ export default {
 				cursor: pointer;
 			}
 		}
-		
+
 	}
 	.secondCategory{
 		position: relative;
@@ -712,7 +753,6 @@ export default {
 	/*border: 1px solid #ccc;*/
 	background: #EBF1F1;
 	width: 360px;
-	height: 400px;
 	height: 480px;
 	/*background: #f6fafb;*/
 	margin: auto;
@@ -737,7 +777,7 @@ export default {
 			font-family: "仿宋";
 			font-weight: bold;
 			margin-bottom: 10px;
-			
+
 		}
 		div{
 			font-size: 26px;
@@ -752,7 +792,7 @@ export default {
 		    -webkit-line-clamp:5;
 		    line-clamp:5;
 		    word-wrap: break-word;
-			
+
 		}
 	}
 }
@@ -786,8 +826,8 @@ export default {
 			/*text-align: center;*/
 		}
 	}
-	
-	
+
+
 	img{
 		vertical-align: baseline;
 	}
@@ -839,7 +879,7 @@ export default {
 // }
 
 .page-index {
-	width: 1280px; 
+	width: 1280px;
 	margin: 0 auto;
 }
 	.bgf6fafb::after{
