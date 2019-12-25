@@ -158,7 +158,7 @@ export default {
 .index-page {
 	background: url('/static/image/index-bg.png') 0 0 no-repeat;
 	background-color: #FAFAFA;
-	background-size: 100% 520px;
+	background-size: 100% 590px;
 	font-family: '仿宋';
 }
 .el-main{

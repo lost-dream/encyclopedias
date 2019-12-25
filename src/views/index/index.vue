@@ -1,6 +1,6 @@
 <template>
 	<div class="main-page">
-		<div class="w1280">
+		<div class="w1340">
 			<div class="title">
 				<span>最新词条</span>
 			</div>
@@ -42,31 +42,29 @@
 								<img src="../../assets/index/02.png"/>
 								<span class="data">{{toThousands(entryStatisticalData.totalEntryEitor)}}</span>
 								<!--<span class="data">0</span>-->
-								<span>被编辑</span>
+								<span>个词条被编辑</span>
 							</p>
 						</div>
-						<div>
+						<!--<div>
 							<p>
 								<img src="../../assets/index/03.png"/>
 								<span class="data">{{toThousands(entryStatisticalData.totalEditor)}}</span>
 								<span>编辑/次</span>
 							</p>
-						</div>
+						</div>-->
 						</div>
 						
 						<div class="rightBtnArea">
 							<el-button type="primary" @click="gotoCreate">创建词条</el-button>
 							<el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
-							<el-button type="danger" @click="gotoManager">进入管理</el-button>
+							<el-button type="danger" @click="gotoManager">后台管理</el-button>
 						</div>
 
 					</div>
 				</el-col>
 			</el-row>
-
-
-
-
+		</div>
+		<div class="w1280">
 			<div class="title" style="margin-top: 25px">
 				<span>特色专题</span>
 			</div>
@@ -81,13 +79,6 @@
 					       		<img src="/static/image/tank.png" alt="" />
 					      	</div>
 						</el-image>
-						
-						
-						
-						<!--<el-image
-							:fit="'cover'"
-							:src="'https://img3.qianzhan.com/news/201909/21/20190921-68d01e93279b5b65_680x5000.jpg'">
-						</el-image>-->
 						<div>
 							<p>{{item.specialName}}</p>
 							<div>{{item.specialDesc}}</div>
@@ -95,42 +86,72 @@
 					</div>
 				</el-carousel-item>
 			</el-carousel>
-			<div class="bgf6fafb" style="background: #EBF3F6;margin-top: 30px;min-height: 560px">
-				<div class="title" >
-					<span>精选分类</span>
-				</div>
-				<div class="category-container" style="margin: 0;min-height: 441px" v-loading="loading">
-					<!--<div :style="'background:#'+categoryBgColor[index % 5]" class="category-item" v-for="(item,index) in categoryTreeList" :key="index">-->
-					<!--<div class="categoryTreeList">-->
-					<!--<p :style="'background:#'+categoryTitleColor[index % 5]">{{item.name}}</p>-->
-					<!--<ul>-->
-					<!--<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">-->
-					<!--{{item1.name}}-->
-					<!--&lt;!&ndash;<ul v-show="item1.showThirdCategory" v-if="item1.children.length">-->
-					<!--<li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>-->
-					<!--</ul>&ndash;&gt;-->
-					<!--</li>-->
-					<!--</ul>-->
-
-					<!--</div>-->
-					<!--</div>-->
-					<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index" >
-						<div class="categoryTreeList">
-							<p style="color: #333333;text-align: left">{{item.name}}</p>
-							<ul>
-								<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
-									{{item1.name}}
-									<!--<ul v-show="item1.showThirdCategory" v-if="item1.children.length">
-                                        <li @click="routeToEntryList(item2.id,index2,item1.children)" v-for="(item2,index2) in item1.children">{{item2.name}}</li>
-                                    </ul>-->
-								</li>
-							</ul>
-
+		</div>
+		<div style="background: #EBF3F6;margin-top: 30px;min-height: 560px">
+			<div class="w1280">
+				<div class="bgf6fafb">
+					<div class="title" >
+						<span>词条分类</span>
+					</div>
+					<div class="category-container" style="margin: 0;min-height: 441px" v-loading="loading">
+						<p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>外部词条</p>
+						<br />
+						<div style="padding-bottom: 25px;">
+							<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index" >
+								<div class="categoryTreeList">
+									<p style="color: #333333;text-align: left">{{item.name}}</p>
+									<!--现在的渲染方式，均分为三个ul-->
+									<div class="ul">
+										<ul v-for="item0 in item.child">
+											<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item0">
+												{{item1.name}}
+											</li>
+										</ul>
+									</div>
+									<!--原来的渲染方式，全部分类放在一起-->
+									<!--<ul class="ul">
+										<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
+											{{item1.name}}
+										</li>
+									</ul>-->
+		
+								</div>
+							</div>
 						</div>
+						
+						
+						
+						<p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>内部词条</p>
+						<br />
+						<div style="padding-bottom: 25px;">
+							<div class="category-item" v-for="(item,index) in categoryTreeList" :key="index" >
+								<div class="categoryTreeList">
+									<p style="color: #333333;text-align: left">{{item.name}}</p>
+									<!--现在的渲染方式，均分为三个ul-->
+									<div class="ul">
+										<ul v-for="item0 in item.child">
+											<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item0">
+												{{item1.name}}
+											</li>
+										</ul>
+									</div>
+									<!--原来的渲染方式，全部分类放在一起-->
+									<!--<ul class="ul">
+										<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
+											{{item1.name}}
+										</li>
+									</ul>-->
+		
+								</div>
+							</div>
+						</div>
+						
+						
 					</div>
 				</div>
 			</div>
-
+		</div>
+		<div class="w1280">
 			<div class="title">
 				<span>分类推荐</span>
 			</div>
@@ -242,6 +263,7 @@
 				</el-tabs>
 			</template>
 		</div>
+		
 	</div>
 </template>
 
@@ -327,6 +349,17 @@ export default {
 						}
 					})
 				})
+				//均分categoryTreeList里面的item的children
+				res.data.children.map((item)=>{
+					item.child = []
+					let average = Math.ceil(item.children.length / 3)
+	                for(var i=0,len=item.children.length;i<len;i+=average){
+	                	item.child.push(item.children.slice(i,i+average))
+			        }
+				})
+				console.info(res.data.children,'res.data.children')
+				
+				
 				this.categoryTreeList = res.data.children
 				this.loading = false
             })
@@ -427,7 +460,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.categoryOrigin{
+	font-size: 26px;
+	color: white;
+	background: #338DE6;
+	position: relative;
+	display: inline-block;
+	line-height: 40px;
+	padding: 0 20px;
+	margin-bottom: 20px;
+	i{
+		color: #338DE6;
+		font-size: 40px;
+		position: absolute;
+		bottom: -25px;
+		left: calc(50% - 25px);
+	}
+}
 .noData{
 	text-align: center;
 	line-height: 354px;
@@ -470,11 +519,15 @@ export default {
 		width: 1280px;
 		margin: 0 auto;
 	}
+	.w1340{
+		width: 1340px;
+		margin: 0 auto;
+	}
 	.w800 {
 		width: 800px;
 	}
 	.w480 {
-		width: 480px;
+		width: 540px;
 		/*padding: 0 30px;*/
 		/*margin: 0 -150px;*/
 	}
@@ -496,7 +549,7 @@ export default {
 	display: inline-block;
 	vertical-align: top;
 	/*margin-bottom: 20px;*/
-	height: 200px;
+	height: 260px;
 	.categoryTreeList {
 		height: 100%;
 	}
@@ -523,23 +576,23 @@ export default {
 }
 .category-item {
 	/*padding: 10px 0 10px 15px;*/
-	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #9CC6EC;
 	&:nth-child(5){
-		border-bottom: none;
+		/*border-bottom: none;*/
 	}
 	&:nth-child(6){
-		border-bottom: none;
+		/*border-bottom: none;*/
 	}
 	&:nth-child(7){
-		border-bottom: none;
+		/*border-bottom: none;*/
 	}
 	.categoryTreeList{
-		border-right: 1px solid #ccc;
-		padding: 10px 0 10px 15px;
+		border-right: 1px solid #9CC6EC;
+		padding: 0px 0 0px 15px;
 	}
 	&:nth-child(3n+1){
 		.categoryTreeList{
-			border-right: 0;
+			/*border-right: 0;*/
 		}
 	}
 	/*&:nth-child(5n+1){*/
@@ -568,27 +621,38 @@ export default {
 		/*box-shadow: 0 2px 5px 1px #848484;*/
 		margin-bottom: 5px;
 	}
-	ul{
+	.ul{
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: inline-block;
 		/*height: 165px;*/
-		height: 140px;
+		height: 200px;
 		width: 400px;
 		/*border-right: 1px solid #ccc;*/
+		
+		ul{
+			height: 200px;
+			display: inline-block;
+			width: calc(33% - 1px);
+			border-right: 1px solid #C9CDCE;
+			&:nth-child(2n+3){
+				border-right: none;
+			}
+		}
+		
 		li{
 			color: #666666;
 			margin: 0;
-			padding: 0;
-			display: inline-block;
-			width: calc(30% - 1px);
+			padding: 0 12px;
+			/*display: inline-block;
+			width: calc(33% - 1px);*/
 			line-height: 1.5;
 			font-size: 26px;
 			color: #7d7e7e;
 			text-align: left;
 			vertical-align: top;
-			border-right: 1px solid #E3E8EB;
+			/*border-right: 1px solid #C9CDCE;*/
 			/*overflow: hidden;
 			text-overflow:ellipsis;
 			white-space: nowrap;*/
