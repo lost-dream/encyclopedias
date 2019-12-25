@@ -13,34 +13,24 @@
             style="height: 460px;overflow: hidden"
             v-loading="!entryListData.length"
           >
-            <el-carousel-item
-              v-for="(key, i) in entryListData"
-              :key="i"
-              style="display: flex"
-            >
+            <el-carousel-item v-for="(key, i) in entryListData" :key="i" style="display: flex">
               <div v-for="(item, k) in key" :key="k">
-                <!--								{{item}}-->
+                <!--{{ item }}-->
                 <div @click="seeEntry(item)" class="entryList ">
                   <el-image
                     class="carousel-image"
                     v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    :src="
-                      baseUrlConfig.IMG_PREFIX +
-                        JSON.parse(item.SUMMARY[0].summary).img
-                    "
+                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                   >
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
                     </div>
                   </el-image>
-                  <!--									<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
+                  <!--<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
                   <!--<img src="/static/image/tank.png"/>-->
                   <div>
                     <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
-                    <div
-                      v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                      class="ellipsis3"
-                    >
+                    <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                       {{ JSON.parse(item.SUMMARY[0].summary).text }}
                     </div>
                   </div>
@@ -54,30 +44,26 @@
             <div class="left">
               <div>
                 <p>
-                  <img src="../../assets/index/01.png" />
-                  <span class="data">{{
-                    toThousands(entryStatisticalData.totalEntry)
-                  }}</span>
+                  <img src="../../assets/index/01.png" alt="" />
+                  <span class="data">{{ toThousands(entryStatisticalData.totalEntry) }}</span>
                   <span>个词条</span>
                 </p>
               </div>
               <div>
                 <p>
                   <img src="../../assets/index/02.png" alt="" />
-                  <span class="data">{{
-                    toThousands(entryStatisticalData.totalEntryEitor)
-                  }}</span>
+                  <span class="data">{{ toThousands(entryStatisticalData.totalEntryEitor) }}</span>
                   <!--<span class="data">0</span>-->
                   <span>个词条被编辑</span>
                 </p>
               </div>
               <!--<div>
-							<p>
-								<img src="../../assets/index/03.png"/>
-								<span class="data">{{toThousands(entryStatisticalData.totalEditor)}}</span>
-								<span>编辑/次</span>
-							</p>
-						</div>-->
+                <p>
+                  <img src="../../assets/index/03.png" alt="" />
+                  <span class="data">{{ toThousands(entryStatisticalData.totalEditor) }}</span>
+                  <span>编辑/次</span>
+                </p>
+              </div>-->
             </div>
 
             <div class="rightBtnArea">
@@ -105,7 +91,7 @@
             <!--<img :src="item.specialCoverUrl" alt="" />-->
             <el-image :fit="'cover'" :src="item.specialCoverUrl">
               <div slot="error" class="image-slot">
-                <img src="/static/image/tank.png" alt="" />
+                <img src="./tank.png" alt="" />
               </div>
             </el-image>
             <div>
@@ -122,21 +108,11 @@
           <div class="title">
             <span>词条分类</span>
           </div>
-          <div
-            class="category-container"
-            style="margin: 0;min-height: 441px"
-            v-loading="loading"
-          >
-            <p class="categoryOrigin">
-              <i class="el-icon-caret-bottom el-icon--left"></i>外部词条
-            </p>
+          <div class="category-container" style="margin: 0;min-height: 441px" v-loading="loading">
+            <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>外部词条</p>
             <br />
             <div style="padding-bottom: 25px;">
-              <div
-                class="category-item"
-                v-for="(item, index) in categoryTreeList"
-                :key="index"
-              >
+              <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
                 <div class="categoryTreeList">
                   <p style="color: #333333;text-align: left">{{ item.name }}</p>
                   <!--现在的渲染方式，均分为三个ul-->
@@ -146,9 +122,7 @@
                         v-for="(item1, index1) in item0"
                         class="secondCategory"
                         :key="index1"
-                        @click="
-                          routeToEntryList(item1.id, index1, item.children)
-                        "
+                        @click="routeToEntryList(item1.id, index1, item.children)"
                       >
                         {{ item1.name }}
                       </li>
@@ -156,24 +130,23 @@
                   </div>
                   <!--原来的渲染方式，全部分类放在一起-->
                   <!--<ul class="ul">
-										<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
-											{{item1.name}}
-										</li>
-									</ul>-->
+                    <li
+                      v-for="(item1, index1) in item.children"
+                      :key="index1"
+                      @click="routeToEntryList(item1.id, index1, item.children)"
+                      class="secondCategory"
+                    >
+                      {{ item1.name }}
+                    </li>
+                  </ul>-->
                 </div>
               </div>
             </div>
 
-            <p class="categoryOrigin">
-              <i class="el-icon-caret-bottom el-icon--left"></i>内部词条
-            </p>
+            <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>内部词条</p>
             <br />
             <div style="padding-bottom: 25px;">
-              <div
-                class="category-item"
-                v-for="(item, index) in categoryTreeList"
-                :key="index"
-              >
+              <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
                 <div class="categoryTreeList">
                   <p style="color: #333333;text-align: left">{{ item.name }}</p>
                   <!--现在的渲染方式，均分为三个ul-->
@@ -183,9 +156,7 @@
                         v-for="(item1, index1) in item0"
                         :key="index1"
                         class="secondCategory"
-                        @click="
-                          routeToEntryList(item1.id, index1, item.children)
-                        "
+                        @click="routeToEntryList(item1.id, index1, item.children)"
                       >
                         {{ item1.name }}
                       </li>
@@ -193,10 +164,15 @@
                   </div>
                   <!--原来的渲染方式，全部分类放在一起-->
                   <!--<ul class="ul">
-										<li @click="routeToEntryList(item1.id,index1,item.children)" class="secondCategory" v-for="(item1,index1) in item.children">
-											{{item1.name}}
-										</li>
-									</ul>-->
+                    <li
+                      v-for="(item1, index1) in item.children"
+                      :key="index1"
+                      @click="routeToEntryList(item1.id, index1, item.children)"
+                      class="secondCategory"
+                    >
+                      {{ item1.name }}
+                    </li>
+                  </ul>-->
                 </div>
               </div>
             </div>
@@ -216,10 +192,7 @@
           v-loading="panelLoading"
         >
           <el-tab-pane label="科技" name="6">
-            <div
-              style="display: flex;flex-wrap: wrap"
-              v-if="categoryList.length"
-            >
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -230,10 +203,7 @@
                 <el-image
                   class="cat-img"
                   v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="
-                    baseUrlConfig.IMG_PREFIX +
-                      JSON.parse(item.SUMMARY[0].summary).img
-                  "
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -244,10 +214,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis3"
-                  >
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -256,10 +223,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="经济" name="5">
-            <div
-              style="display: flex;flex-wrap: wrap"
-              v-if="categoryList.length"
-            >
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -270,10 +234,7 @@
                 <el-image
                   class="cat-img"
                   v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="
-                    baseUrlConfig.IMG_PREFIX +
-                      JSON.parse(item.SUMMARY[0].summary).img
-                  "
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -284,10 +245,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis3"
-                  >
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -296,10 +254,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="安全" name="4">
-            <div
-              style="display: flex;flex-wrap: wrap"
-              v-if="categoryList.length"
-            >
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -310,10 +265,7 @@
                 <el-image
                   class="cat-img"
                   v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="
-                    baseUrlConfig.IMG_PREFIX +
-                      JSON.parse(item.SUMMARY[0].summary).img
-                  "
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -324,10 +276,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis3"
-                  >
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -336,10 +285,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="外交" name="3">
-            <div
-              style="display: flex;flex-wrap: wrap"
-              v-if="categoryList.length"
-            >
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -350,10 +296,7 @@
                 <el-image
                   class="cat-img"
                   v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="
-                    baseUrlConfig.IMG_PREFIX +
-                      JSON.parse(item.SUMMARY[0].summary).img
-                  "
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -364,10 +307,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis3"
-                  >
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -376,10 +316,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="军事" name="2">
-            <div
-              style="display: flex;flex-wrap: wrap"
-              v-if="categoryList.length"
-            >
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -390,10 +327,7 @@
                 <el-image
                   class="cat-img"
                   v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="
-                    baseUrlConfig.IMG_PREFIX +
-                      JSON.parse(item.SUMMARY[0].summary).img
-                  "
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -404,10 +338,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis3"
-                  >
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -416,10 +347,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="政治" name="1">
-            <div
-              style="display: flex;flex-wrap: wrap"
-              v-if="categoryList.length"
-            >
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -430,10 +358,7 @@
                 <el-image
                   class="cat-img"
                   v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="
-                    baseUrlConfig.IMG_PREFIX +
-                      JSON.parse(item.SUMMARY[0].summary).img
-                  "
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -444,10 +369,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis3"
-                  >
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -462,188 +384,174 @@
 </template>
 
 <script>
-import { entryStatistical, entryList } from "@/api/onlyShowData/index.js";
-import { specialList } from "@/api/special/index.js";
-import { categoryTree } from "@/api/classifyManager/index.js";
+import { entryStatistical, entryList } from '@/api/onlyShowData/index.js'
+import { specialList } from '@/api/special/index.js'
+import { categoryTree } from '@/api/classifyManager/index.js'
 export default {
-  name: "index",
+  name: 'index',
   data() {
     return {
       loading: true,
       panelLoading: true,
-      activeName: "6",
+      activeName: '6',
       entryStatisticalData: {},
       specialListData: [],
       categoryTreeList: [],
       entryListData: [],
       categoryList: [],
-      categoryTitleColor: ["e9b937", "6d56fb", "079ea9", "ec6b6b", "199df2"],
-      categoryBgColor: ["f3ebd1", "d9d4f5", "c1dfe2", "f7dee0", "c6e3f5"]
-    };
+      categoryTitleColor: ['e9b937', '6d56fb', '079ea9', 'ec6b6b', '199df2'],
+      categoryBgColor: ['f3ebd1', 'd9d4f5', 'c1dfe2', 'f7dee0', 'c6e3f5']
+    }
   },
-  watch: {},
-  created() {
-    let vm = this;
-    Cetc10Auth().init(function() {
-      vm.entryStatistical();
-      vm.specialList();
-      vm.categoryTree();
-      vm.entryList();
-      vm.getCategoryList(6);
-    });
-  },
-  mounted() {},
-  destroyed() {},
   methods: {
     entryList() {
       entryList({
-        pageNumber: "1",
-        pageSize: "9",
-        categoryId: "",
-        keyword: ""
+        pageNumber: '1',
+        pageSize: '9',
+        categoryId: '',
+        keyword: ''
       }).then(res => {
         for (let i = 0; i < res.data.records.length; i += 3) {
-          this.entryListData.push(res.data.records.slice(i, i + 3));
+          this.entryListData.push(res.data.records.slice(i, i + 3))
         }
-        console.log(this.entryListData);
-      });
+        console.log(this.entryListData)
+      })
     },
 
     routeToEntryList(id2, index2, thirdAry) {
-      var choosedCategoryInfo = {
+      let choosedCategoryInfo = {
         id2: id2,
         index2: index2,
         thirdAry: thirdAry
-      };
-      sessionStorage.setItem(
-        "choosedCategoryInfo",
-        JSON.stringify(choosedCategoryInfo)
-      );
-      this.$router.push("entryListByCategory");
+      }
+      sessionStorage.setItem('choosedCategoryInfo', JSON.stringify(choosedCategoryInfo))
+      this.$router.push('entryListByCategory')
     },
     showThirdCategory(index1, index) {
       this.categoryTreeList[index].children.map(item => {
-        item.showThirdCategory = false;
-      });
-      this.categoryTreeList[index].children[index1].showThirdCategory = true;
+        item.showThirdCategory = false
+      })
+      this.categoryTreeList[index].children[index1].showThirdCategory = true
     },
     categoryTree() {
       categoryTree({})
         .then(res => {
           res.data.children.map(item => {
             item.children.map((item1, index) => {
-              if (index === 0) {
-                item1.showThirdCategory = true;
-              } else {
-                item1.showThirdCategory = false;
-              }
-            });
-          });
+              item1.showThirdCategory = index === 0
+            })
+          })
           //均分categoryTreeList里面的item的children
           res.data.children.map(item => {
-            item.child = [];
-            let average = Math.ceil(item.children.length / 3);
-            for (var i = 0, len = item.children.length; i < len; i += average) {
-              item.child.push(item.children.slice(i, i + average));
+            item.child = []
+            let average = Math.ceil(item.children.length / 3)
+            for (let i = 0, len = item.children.length; i < len; i += average) {
+              item.child.push(item.children.slice(i, i + average))
             }
-          });
-          console.info(res.data.children, "res.data.children");
-
-          this.categoryTreeList = res.data.children;
-          this.loading = false;
+          })
+          console.info(res.data.children, 'res.data.children')
+          this.categoryTreeList = res.data.children
+          this.loading = false
         })
-        .catch(res => {
-          console.log(res);
-        });
+        .catch(e => {
+          console.log(e)
+        })
     },
     routeToSpecial(id) {
-      sessionStorage.setItem("specialId", id);
-      this.$router.push("special");
+      sessionStorage.setItem('specialId', id)
+      this.$router.push('special')
     },
 
     specialList() {
       specialList({
         pageNumber: 1,
         pageSize: 10,
-        keyword: ""
+        keyword: ''
       }).then(res => {
-        this.specialListData = res.data.records;
-      });
+        this.specialListData = res.data.records
+      })
     },
     entryStatistical() {
       entryStatistical({}).then(res => {
-        this.entryStatisticalData = res.data;
+        this.entryStatisticalData = res.data
         this.$nextTick(() => {
-          var list = document.querySelectorAll(".data");
-          var ary = [];
+          let list = document.querySelectorAll('.data')
+          let ary = []
           for (let i = 0; i < list.length; i++) {
-            ary.push(list[i].offsetWidth);
+            ary.push(list[i].offsetWidth)
           }
           ary.sort(function(a, b) {
-            return a - b;
-          });
+            return a - b
+          })
 
           for (let i = 0; i < list.length; i++) {
-            list[i].style.width = ary[ary.length - 1] + 1 + "px";
+            list[i].style.width = ary[ary.length - 1] + 1 + 'px'
           }
-        });
-      });
+        })
+      })
     },
     getCategoryList(id) {
-      let vm = this;
-      vm.$axios
-        .post("/wiki-backend/api/entry/list", {
+      this.$axios
+        .post('/wiki-backend/api/entry/list', {
           pageNumber: 1,
           pageSize: 6,
           categoryIds: id
         })
         .then(res => {
-          console.log(res);
-          vm.categoryList = res.data.records;
-          vm.panelLoading = false;
-        });
+          console.log(res)
+          this.categoryList = res.data.records
+          this.panelLoading = false
+        })
     },
     handleClick() {
-      this.panelLoading = true;
-      console.log(this.activeName);
-      this.getCategoryList(this.activeName);
+      this.panelLoading = true
+      console.log(this.activeName)
+      this.getCategoryList(this.activeName)
     },
     seeEntry(hash) {
-      console.log(hash);
       this.$router.push({
-        name: "viewEntry",
+        name: 'viewEntry',
         query: {
           entryId: hash.ENTRY_ID,
-          //                    versionId: hash.ID,
-          viewType: "view"
+          // versionId: hash.ID,
+          viewType: 'view'
         }
-      });
+      })
     },
     gotoCreate() {
       this.$router.push({
-        name: "createEntry"
-      });
+        name: 'createEntry'
+      })
     },
     gotoMyEntry() {
       this.$router.push({
-        name: "myEntry"
-      });
+        name: 'myEntry'
+      })
     },
     gotoManager() {
       this.$router.push({
-        name: "categoryManage"
-      });
+        name: 'categoryManage'
+      })
     },
     // 数字转格式
     toThousands(num) {
       if (num) {
-        return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, "$1,");
+        return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       } else {
-        return 0;
+        return 0
       }
     }
+  },
+  created() {
+    Cetc10Auth().init(() => {
+      this.entryStatistical()
+      this.specialList()
+      this.categoryTree()
+      this.entryList()
+      this.getCategoryList(6)
+    })
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -685,8 +593,7 @@ export default {
     margin-bottom: 10px;
   }
   .text-desc {
-    padding: 0;
-    padding-left: 10px;
+    padding: 0 0 0 10px;
   }
   .cat-img {
     .image-slot {
@@ -743,7 +650,7 @@ export default {
   }
 }
 .category-item ul::-webkit-scrollbar {
-  width: 0px;
+  width: 0;
 }
 .category-item ul::-webkit-scrollbar-track {
   background-color: transparent;
@@ -771,7 +678,7 @@ export default {
   }
   .categoryTreeList {
     border-right: 1px solid #9cc6ec;
-    padding: 0px 0 0px 15px;
+    padding: 0 0 0 15px;
   }
   &:nth-child(3n + 1) {
     .categoryTreeList {
@@ -1005,7 +912,7 @@ export default {
   font-weight: bold;
   font-size: 28px;
   line-height: 55px;
-  background: url("./title.png") no-repeat;
+  background: url('./title.png') no-repeat;
 }
 #entryStatisticalData {
   /*display: flex;
@@ -1051,10 +958,9 @@ export default {
       overflow: hidden;
       line-height: 1.5;
       vertical-align: bottom;
-      text-align: right;
     }
     span:last-child {
-      margin-left: 0px;
+      margin-left: 0;
       color: #666666;
       line-height: 1.5;
       float: right;
@@ -1081,7 +987,7 @@ export default {
   margin: 0 auto;
 }
 .bgf6fafb::after {
-  content: "";
+  content: '';
   width: calc(100vw - 5px);
   left: 0;
   transform: translateY(-100%);
