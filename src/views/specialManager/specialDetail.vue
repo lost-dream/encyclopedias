@@ -444,9 +444,9 @@
                 vm.$axios.post('/wiki-backend/api/entry/list',{
                     pageNumber: vm.paginationEntry.page,
                     pageSize: vm.paginationEntry.limit,
-                    "categoryId": vm.categoryIds.join(','),
-                    "keyword": vm.keywords.join(','),
-                    "label": vm.labels.join(',')
+                    "categoryIds": vm.categoryIds.join(','),
+                    "keywords": vm.keywords.join(','),
+                    "labels": vm.labels.join(',')
                 }).then((res)=>{
                     vm.conditionList = res.data.records
                     vm.conditionPagination.count = res.data.total

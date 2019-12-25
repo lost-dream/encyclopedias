@@ -73,21 +73,21 @@
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList[1].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
+                <ul v-if="contentList[1]&&contentList[1].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList[1]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList[2].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
+                <ul v-if="contentList[2]&&contentList[2].length" style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc">
                     <li v-for="(item,index) in contentList[2]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p3 pd-top-5 text-center" v-else-if="item.level == 3">{{item.value}}</a>
                     </li>
                 </ul>
-                <ul v-if="contentList[3].length" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
+                <ul v-if="contentList[3]&&contentList[3].length" style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;">
                     <li v-for="(item,index) in contentList[3]">
                         <a @click="slideToAnchor1(item)" class="catalogue p1 pd-top-5 text-center" style="color: #338ce6;" v-if="item.level == 1">{{item.mark+1}}  {{item.value}}</a>
                         <a @click="slideToAnchor1(item)" class="catalogue p2 pd-top-5 text-center" v-else-if="item.level == 2">&nbsp;{{item.value}}</a>
@@ -136,10 +136,10 @@
             <!-- 标签 -->
             <div class="mg-top-20">
                 <h3 id="tag">标签</h3>
-                <div v-if="wikiContent.entryLabels.length" >
+                <div v-if="wikiContent.entryLabels&&wikiContent.entryLabels.length" >
                     <template v-for="(item) in wikiContent.entryLabels">
                         <el-tag @click="chooseTag(item)" :class="item.choosed?'el-tag-active':''">{{item.labelName}}</el-tag>
-                    </template>'
+                    </template>
                 </div>
                 <template v-else>
                     <span style="color: #999;">该词条暂时还没有添加标签哦~</span>
@@ -275,19 +275,24 @@ import {audit} from '@/api/entry/index.js'
         },
         updated () {
             this.$nextTick(()=>{
-                let target = document.getElementById('content').getElementsByTagName('img')
-                let target_parent = document.getElementById('content').getElementsByClassName('img_r')
-                setTimeout(()=>{
-                    for (let i = 0;i<target.length;i++){
-                        if(target[i].hasAttribute('data-original')) {
-                            target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('data-original')
-                        }
-                    }
-                    // for(let j = 0;j<target_parent.length;j++){
-                    //     target_parent[j].setAttribute('style', 'float: right;text-align: center;display:flex;flex-direction:column')
-
-                    // }
-                },1000)
+            	try{
+            		let target = document.getElementById('content').getElementsByTagName('img')
+	                let target_parent = document.getElementById('content').getElementsByClassName('img_r')
+	                setTimeout(()=>{
+	                    for (let i = 0;i<target.length;i++){
+	                        if(target[i].hasAttribute('data-original')) {
+	                            target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('data-original')
+	                        }
+	                    }
+	                    // for(let j = 0;j<target_parent.length;j++){
+	                    //     target_parent[j].setAttribute('style', 'float: right;text-align: center;display:flex;flex-direction:column')
+	
+	                    // }
+	                },1000)
+            	}catch(e){
+            		//TODO handle the exception
+            	}
+                
             })
         },
         beforeRouteEnter(to, from, next){

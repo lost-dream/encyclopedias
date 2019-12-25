@@ -57,7 +57,7 @@ export default {
 	right: auto !important;
 	width: 4px !important;
 }
-.ck-content .table{
+.ck-content .table table{
 	border-collapse: collapse;
 	margin-bottom: 10px;
 	td{
