@@ -39,5 +39,3 @@ export function specialEntryList(data) {
     data
   })
 }
-
-

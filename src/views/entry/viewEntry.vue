@@ -519,8 +519,13 @@ export default {
         let target = wrapper.getElementsByTagName('img')
         // let target_parent = document.getElementById('content').getElementsByClassName('img_r')
         // setTimeout(() => {
+
+        // 匹配完整的网络地址
+        const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i
         for (let i = 0; i < target.length; i++) {
-          target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
+          if (!reg.test(target[i].src)) {
+            target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
+          }
         }
         // }, 1000)
       } catch (e) {
@@ -1113,21 +1118,25 @@ ul li {
 }
 
 // 所有详情页外部来的图片的 wrapper className 统一处理
+$classNameList: img_r, lemma-picture, lemma-album;
+
 #content {
   color: #1a2237;
-  /deep/ .img_r,
-  /deep/ .lemma-picture {
-    float: right;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    margin: 3px 20px;
-    box-shadow: 0 0 1px 0 #b5b5b5;
-    border: 1px solid rgba(181, 181, 181, 0.4);
-    strong {
-      padding: 5px;
-      font-weight: normal;
-      color: #666666;
+  @each $value in $classNameList {
+    /deep/ .#{$value} {
+      float: right;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      margin: 3px 20px;
+      text-indent: 0;
+      box-shadow: 0 0 1px 0 #b5b5b5;
+      border: 1px solid rgba(181, 181, 181, 0.4);
+      strong {
+        padding: 5px;
+        font-weight: normal;
+        color: #666666;
+      }
     }
   }
 }
