@@ -24,6 +24,17 @@ export function entryList(data) {
   })
 }
 
+//获取首页最新词条
+export function getCarouselList(data) {
+  return request({
+    // TODO will be del
+    // url: '/wiki-backend/api/entry/list3',
+    url: '/wiki-backend/api/entry/list',
+    method: 'post',
+    data
+  })
+}
+
 //词条列表（搜索、词条分类）--全站搜索
 export function searchTotalStationEntryList(data) {
   return request({
@@ -32,7 +43,6 @@ export function searchTotalStationEntryList(data) {
     data
   })
 }
-
 
 //通过ID查询分类模板详细---
 export function info111(data) {

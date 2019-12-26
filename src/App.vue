@@ -223,11 +223,24 @@ p {
 .ck-summary .image-style-side:not(.image_resized) {
   max-width: 35% !important;
 }
+
+// 词条详情里正文的样式
 .ck-content p {
+  line-height: 1.6;
+  font-size: 26px;
+  text-indent: 2em;
+  margin-bottom: 0.5em;
+}
+
+.ck-content .para {
   line-height: 1.5;
   font-size: 26px;
   text-indent: 2em;
+  margin-bottom: 0.5em;
 }
+
+// 词条详情里正文的样式结束
+
 .el-collapse-item__header {
   /*background: #eeeeee !important;*/
   display: block !important;

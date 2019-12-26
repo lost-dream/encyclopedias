@@ -7,6 +7,16 @@ export function categoryTree(data) {
     data
   })
 }
+
+// 获取内部词条
+export function getInternalEntryList(data) {
+  return request({
+    url: '/wiki-backend/api/category/loadTreeInner',
+    method: 'post',
+    data
+  })
+}
+
 //获取模板数据列表
 export function list(data) {
   return request({
@@ -55,4 +65,3 @@ export function getAllAttributesByCategoryId(data) {
     data
   })
 }
-

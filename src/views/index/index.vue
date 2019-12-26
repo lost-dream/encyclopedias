@@ -15,7 +15,6 @@
           >
             <el-carousel-item v-for="(key, i) in entryListData" :key="i" style="display: flex">
               <div v-for="(item, k) in key" :key="k">
-                <!--{{ item }}-->
                 <div @click="seeEntry(item)" class="entryList ">
                   <el-image
                     class="carousel-image"
@@ -26,8 +25,6 @@
                       <i class="el-icon-picture-outline"></i>
                     </div>
                   </el-image>
-                  <!--<img v-if="item.SUMMARY.length&&item.SUMMARY[0].summary" :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img" alt="" />-->
-                  <!--<img src="/static/image/tank.png"/>-->
                   <div>
                     <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
                     <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
@@ -192,7 +189,7 @@
           v-loading="panelLoading"
         >
           <el-tab-pane label="科技" name="6">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -223,7 +220,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="经济" name="5">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -254,7 +251,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="安全" name="4">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -285,7 +282,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="外交" name="3">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -316,7 +313,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="军事" name="2">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -347,7 +344,7 @@
             <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
           <el-tab-pane label="政治" name="1">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList.length">
+            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
                 v-for="(item, i) in categoryList"
                 :key="i"
@@ -384,9 +381,9 @@
 </template>
 
 <script>
-import { entryStatistical, entryList } from '@/api/onlyShowData/index.js'
+import { entryStatistical, getCarouselList } from '@/api/onlyShowData/index.js'
 import { specialList } from '@/api/special/index.js'
-import { categoryTree } from '@/api/classifyManager/index.js'
+import { categoryTree, getInternalEntryList } from '@/api/classifyManager/index.js'
 export default {
   name: 'index',
   data() {
@@ -404,8 +401,8 @@ export default {
     }
   },
   methods: {
-    entryList() {
-      entryList({
+    getEntryList() {
+      getCarouselList({
         pageNumber: '1',
         pageSize: '9',
         categoryId: '',
@@ -456,6 +453,11 @@ export default {
         .catch(e => {
           console.log(e)
         })
+    },
+    getInternalEntryListData() {
+      getInternalEntryList().then(({ data }) => {
+        console.log(data)
+      })
     },
     routeToSpecial(id) {
       sessionStorage.setItem('specialId', id)
@@ -547,7 +549,8 @@ export default {
       this.entryStatistical()
       this.specialList()
       this.categoryTree()
-      this.entryList()
+      this.getInternalEntryListData()
+      this.getEntryList()
       this.getCategoryList(6)
     })
   }

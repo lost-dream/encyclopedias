@@ -19,14 +19,14 @@ var AuthConfig = {
 //基础地址（接口：serviceBaseUrl、图片下载地址：IMG_PREFIX、上传地址：UPLOAD_URL）
 var baseUrlConfig = {
   //外网
-  serviceBaseUrl: 'http://106.12.208.84:8080',
-  IMG_PREFIX: 'http://106.12.208.84:8888',
-  UPLOAD_URL: 'http://106.12.208.84:8888/wiki-backend/upload/uploadImg'
+  // serviceBaseUrl: 'http://106.12.208.84:8080',
+  // IMG_PREFIX: 'http://106.12.208.84:8888',
+  // UPLOAD_URL: 'http://106.12.208.84:8888/wiki-backend/upload/uploadImg'
 
   //192
-  // serviceBaseUrl: 'http://192.168.1.82:8080',
-  // IMG_PREFIX: 'http://192.168.1.106:22122',
-  // UPLOAD_URL: 'http://192.168.1.106:22122/wiki-backend/upload/uploadImg'
+  serviceBaseUrl: 'http://192.168.1.82:8080',
+  IMG_PREFIX: 'http://192.168.1.106:8888',
+  UPLOAD_URL: 'http://192.168.1.106:22122/wiki-backend/upload/uploadImg'
 
   //10.24.1.21:8080
   //	serviceBaseUrl:'http://10.24.1.21:8080',
