@@ -92,10 +92,10 @@
         </ul>
         <ul
           class="entry-attr"
-          v-for="i in Math.floor(wikiContent.entryAttributes.length / 2)"
+          v-for="i in Math.ceil(wikiContent.entryAttributes.length / 2) - 1"
           :key="i"
         >
-          <li>
+          <li v-if="i * 2 < wikiContent.entryAttributes.length">
             <div class="key">{{ wikiContent.entryAttributes[i * 2].key }}</div>
             <div class="value">{{ wikiContent.entryAttributes[i * 2].value }}</div>
           </li>
