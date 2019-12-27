@@ -48,22 +48,22 @@
                 <img :src="item.img" class="avatar" style="width: 25%" alt="" />
                 <p class="main-content" style="margin-left: 10px">
                   {{ item.text }}
-                  [<span v-if="item.sourceType == 1" style="color: rgb(51, 140, 230)">
+                  [<span v-if="item.sourceType - 0 === 1" style="color: rgb(51, 140, 230)">
                     词条来源：百度百科
                   </span>
-                  <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)">
+                  <span v-if="item.sourceType - 0 === 2" style="color: rgb(51, 140, 230)">
                     词条来源：搜狗百科
                   </span>
-                  <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)">
+                  <span v-if="item.sourceType - 0 === 3" style="color: rgb(51, 140, 230)">
                     词条来源：互动百科
                   </span>
-                  <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)">
+                  <span v-if="item.sourceType - 0 === 4" style="color: rgb(51, 140, 230)">
                     词条来源：维基百科
                   </span>
-                  <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)">
+                  <span v-if="item.sourceType - 0 === 5" style="color: rgb(51, 140, 230)">
                     词条来源：数据库抽取
                   </span>
-                  <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)">
+                  <span v-if="item.sourceType - 0 === 6" style="color: rgb(51, 140, 230)">
                     词条来源：文件夹抽取
                   </span>
                   ]
@@ -492,12 +492,10 @@ export default {
             vm.handleEntryDetail(res)
           })
         vm.$axios.post('/wiki-backend/api/entry/info', { id: vm.entryId }).then(res => {
-          console.log(res.data)
           vm.wikiInfo = res.data
         })
       } else {
         vm.$axios.post('/wiki-backend/api/entry/info', { id: vm.entryId }).then(res => {
-          console.log(res.data)
           vm.wikiInfo = res.data
           vm.versionId = res.data.versionId
           vm.$axios
@@ -514,27 +512,16 @@ export default {
   },
   updated() {
     this.$nextTick(() => {
-      try {
-        const wrapper = this.$refs.content
-        let target = wrapper.getElementsByTagName('img')
-        // let target_parent = document.getElementById('content').getElementsByClassName('img_r')
-        // setTimeout(() => {
-
-        // 匹配完整的网络地址
-        const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i
-        for (let i = 0; i < target.length; i++) {
-          if (!reg.test(target[i].src)) {
-            target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
-          }
+      let target = document.getElementById('content').getElementsByTagName('img')
+      // let target_parent = document.getElementById('content').getElementsByClassName('img_r')
+      setTimeout(() => {
+        for (var i = 0; i < target.length; i++) {
+          target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
         }
-        // }, 1000)
-      } catch (e) {
-        throw e
-      }
+      }, 1000)
     })
   },
   beforeRouteEnter(to, from, next) {
-    console.log(from)
     sessionStorage.setItem('auditShow', from.path === '/entryVersionExamine')
     next()
   },
@@ -542,7 +529,6 @@ export default {
     //处理词条详情
     handleEntryDetail(res) {
       let vm = this
-      console.log(res.data)
       vm.wikiContent = res.data
       if (vm.wikiContent.entryLabels && vm.wikiContent.entryLabels.length) {
         vm.$set(vm.wikiContent.entryLabels[0], 'choosed', true)
@@ -551,7 +537,6 @@ export default {
       res.data.entrySummarys.map(item => {
         if (item.dataType == 1) {
           vm.summaryEditor = JSON.parse(item.summary).text
-          console.log(vm.summaryEditor, 1111111)
           vm.imageUrl = JSON.parse(item.summary).img
         } else {
           let obj = {
@@ -560,7 +545,6 @@ export default {
             sourceType: item.sourceType,
             sourceValue: item.sourceValue
           }
-          //                              vm.otherSummaries.push(obj)
         }
       })
       //只显示dataType为1的内容
@@ -585,7 +569,6 @@ export default {
           entryContentVosList.push(obj1)
         }
       })
-      console.log('22233', entryContentVosList)
       vm.wikiContent.entryContentVos = entryContentVosList
 
       //处理目录
@@ -632,7 +615,6 @@ export default {
       for (var i = 0, len = contentAry.length; i < len; i += average) {
         vm.contentList.push(contentAry.slice(i, i + average))
       }
-      console.log(vm.contentList, 'vm.contentList')
 
       //只显示dataType为1的引用
       var entryReferrencesList = []
@@ -693,7 +675,6 @@ export default {
         return next
       }, [])
 
-      console.log(entryAttributes)
 
       vm.wikiContent.entryAttributes = entryAttributes
     },
@@ -722,7 +703,6 @@ export default {
       }
     },
     slideToAnchor(target) {
-      console.log(target)
       document.getElementById(target).scrollIntoView({ behavior: 'smooth' })
     },
     scrollRightNav(type) {
@@ -737,7 +717,6 @@ export default {
       }
     },
     slideToAnchor1(target) {
-      console.log(target)
       this.wikiContent.entryContentVos.map(item => {
         this.$set(item, 'choosed', false)
         item.children.map(item1 => {

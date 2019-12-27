@@ -143,7 +143,7 @@
             <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>内部词条</p>
             <br />
             <div style="padding-bottom: 25px;">
-              <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
+              <div class="category-item" v-for="(item, index) in innerTreeList" :key="index">
                 <div class="categoryTreeList">
                   <p style="color: #333333;text-align: left">{{ item.name }}</p>
                   <!--现在的渲染方式，均分为三个ul-->
@@ -393,7 +393,8 @@ export default {
       activeName: '6',
       entryStatisticalData: {},
       specialListData: [],
-      categoryTreeList: [],
+      categoryTreeList: [], // 外部词条
+      innerTreeList: [], // 内部词条
       entryListData: [],
       categoryList: [],
       categoryTitleColor: ['e9b937', '6d56fb', '079ea9', 'ec6b6b', '199df2'],
@@ -891,7 +892,7 @@ export default {
     }
     div {
       font-size: 26px;
-      font-family: "仿宋";
+      font-family: '仿宋';
       padding: 0 30px;
       line-height: 1.5;
       color: #7d7e7e;
