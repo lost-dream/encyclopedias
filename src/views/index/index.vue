@@ -457,7 +457,25 @@ export default {
     },
     getInternalEntryListData() {
       getInternalEntryList().then(({ data }) => {
-        console.log(data)
+        console.log('内部词条=====', data)
+        if (data.children) {
+          data.children.map(item => {
+            item.children.map((item1, index) => {
+              item1.showThirdCategory = index === 0
+            })
+          })
+          //均分categoryTreeList里面的item的children
+          data.children.map(item => {
+            item.child = []
+            let average = Math.ceil(item.children.length / 3)
+            for (let i = 0, len = item.children.length; i < len; i += average) {
+              item.child.push(item.children.slice(i, i + average))
+            }
+          })
+          console.info('res.data.children======', data.children)
+          this.innerTreeList = data.children
+          this.loading = false
+        }
       })
     },
     routeToSpecial(id) {

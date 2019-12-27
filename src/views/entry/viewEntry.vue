@@ -109,13 +109,17 @@
       <div class="mg-top-20" style="display: flex;flex-direction: row" id="catalogue">
         <div
           class="block-container juedui_middle"
-          style="width: calc(14% - 40px);width: 97px;display: inline-block;background: #fbfbfb;text-align: center;position: relative;"
+          :style="{
+            width: '97px',
+            display: 'inline-block',
+            background: '#fbfbfb',
+            textAlign: 'center',
+            position: 'relative'
+          }"
         >
           <p class="vertical-middle">目录</p>
         </div>
-        <ul
-          style="padding: 15px;width: calc(21.5% - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc"
-        >
+        <ul style="padding: 15px;width: 180px;display: inline-block;border-right: 1px dotted #ccc">
           <li v-for="(item, index) in contentList[0]" :key="index">
             <a
               @click="slideToAnchor1(item)"
@@ -512,13 +516,17 @@ export default {
   },
   updated() {
     this.$nextTick(() => {
-      let target = document.getElementById('content').getElementsByTagName('img')
+      const wrapper = this.$refs.content
+      let target = wrapper.getElementsByTagName('img')
       // let target_parent = document.getElementById('content').getElementsByClassName('img_r')
-      setTimeout(() => {
-        for (var i = 0; i < target.length; i++) {
+      const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i
+      // setTimeout(() => {
+      for (let i = 0; i < target.length; i++) {
+        if (!reg.test(target[i].getAttribute('src'))) {
           target[i].src = baseUrlConfig.IMG_PREFIX + target[i].getAttribute('src')
         }
-      }, 1000)
+      }
+      // }, 1000)
     })
   },
   beforeRouteEnter(to, from, next) {

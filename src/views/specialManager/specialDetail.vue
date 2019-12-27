@@ -156,7 +156,7 @@
           size="small"
           type="primary"
           style="float:right;background: #ef5d5d !important;color: white;"
-          @click="dialogVisible = true,entrySearchList()"
+          @click="dialogVisible = true"
           >新增<i class="el-icon-plus el-icon--right"></i
         ></el-button>
       </div>
@@ -240,7 +240,7 @@
         >
       </div>
       <!-- 弹窗 -->
-      <el-dialog title="添加固有词条" :visible.sync="dialogVisible">
+      <el-dialog :title="'添加' + statusList[parseInt(activeTab - 1)].name" :visible.sync="dialogVisible">
         <el-input placeholder="请输入内容" v-model="entrySearch" style="margin-bottom: 10px">
           <!--<el-button slot="append" @clcik="entrySearchList">搜索</el-button>-->
           <el-button slot="append" @click="entrySearchList">搜索词条</el-button>
@@ -299,7 +299,7 @@ export default {
   data() {
     return {
       entrySearch: '',
-      dialogVisible: false,
+      dialogVisible: false, // 弹窗显隐
       entryList: [],
       conditionList: [],
       keyword: '',
@@ -578,15 +578,6 @@ export default {
     entrySearchList() {
       //换成全站搜索的接口，内网环境才能调通
       let vm = this
-      //              vm.$axios.post('/wiki-backend/api/entry/list',{
-      //                  pageNumber: vm.paginationEntry.page,
-      //                  pageSize: vm.paginationEntry.limit,
-      //                  "categoryId": "",
-      //                  "keyword": vm.entrySearch,
-      //              }).then((res)=>{
-      //                  vm.entryListData = res.data.records
-      //                  vm.paginationEntry.count = res.data.total
-      //              })
       vm.$axios
         .post('/wiki-backend/encyclopedia/search/query', {
           pageNumber: vm.paginationEntry.page,
@@ -599,7 +590,6 @@ export default {
               item.img = JSON.parse(item.text).img
               item.desc = JSON.parse(item.text).text
             } catch (e) {
-              //TODO handle the exception
               item.img = ''
               item.desc = ''
             }
