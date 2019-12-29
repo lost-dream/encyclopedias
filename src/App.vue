@@ -5,8 +5,27 @@
 </template>
 
 <script>
+import { userLogin } from '@/api/user'
+
 export default {
-  name: 'app'
+  name: 'app',
+  methods: {
+    isLogin() {
+      // todo 授权登录部分
+      const DURATION_TIME = 2500
+      if (!sessionStorage.getItem('token')) {
+        this.$message.error('你还没有登录')
+        setTimeout(() => {
+          window.location.href = 'http://www.baidu.com'
+        }, DURATION_TIME)
+      }
+    }
+  },
+  mounted() {
+    Cetc10Auth().init(() => {
+      // this.isLogin()
+    })
+  }
 }
 </script>
 

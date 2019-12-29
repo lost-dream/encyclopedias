@@ -41,7 +41,8 @@
           </el-form>
         </div>
       </el-card>
-      <el-card class="myForm" shadow="hover">
+
+      <!-- <el-card class="myForm" shadow="hover">
         <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
           <span class="leftBorder"></span>
           聚合规则
@@ -78,19 +79,19 @@
                     :expand-on-click-node="false"
                     highlight-current
                   >
-                    <!--<div class="custom-tree-node" slot-scope="{ node, data}">
+                    &lt;!&ndash;<div class="custom-tree-node" slot-scope="{ node, data}">
                                           <div>
                                             <span @click.stop="chooseItem(data)">{{ data.name }}</span>
                                           </div>
                                           <span class="el-ic"></span>
-                                        </div>-->
+                                        </div>&ndash;&gt;
                   </el-tree>
                 </div>
               </el-form-item>
               <el-form-item label="关键词：">
-                <!--                                <el-input placeholder="回车添加关键词" v-model="keyword" class="input-with-select" @keyup.native.13="addKeyword">-->
-                <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
-                <!--                                </el-input>-->
+                &lt;!&ndash;                                <el-input placeholder="回车添加关键词" v-model="keyword" class="input-with-select" @keyup.native.13="addKeyword">&ndash;&gt;
+                &lt;!&ndash;<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>&ndash;&gt;
+                &lt;!&ndash;                                </el-input>&ndash;&gt;
                 <div class="mg-top-20" style="border-radius: 4px;border: 1px solid #DCDFE6;">
                   <el-tag
                     style="float: left"
@@ -116,9 +117,9 @@
               </el-form-item>
 
               <el-form-item label="标签：">
-                <!--                                <el-input placeholder="回车添加标签" v-model="label" class="input-with-select" @keyup.native.13="addLabel">-->
-                <!--                                    &lt;!&ndash;<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>&ndash;&gt;-->
-                <!--                                </el-input>-->
+                &lt;!&ndash;                                <el-input placeholder="回车添加标签" v-model="label" class="input-with-select" @keyup.native.13="addLabel">&ndash;&gt;
+                &lt;!&ndash;                                    &lt;!&ndash;<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>&ndash;&gt;&ndash;&gt;
+                &lt;!&ndash;                                </el-input>&ndash;&gt;
                 <div class="mg-top-20" style="border-radius: 4px;border: 1px solid #DCDFE6;">
                   <el-tag
                     style="float: left"
@@ -146,7 +147,7 @@
             </el-form>
           </div>
         </div>
-      </el-card>
+      </el-card>-->
     </div>
     <el-card style="min-height: 500px;margin: 10px">
       <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
@@ -833,7 +834,10 @@ export default {
     display: flex;
   }
   .myForm {
-    width: 50%;
+    // TODO 右边删掉一个框，所以把这个拉伸，如果代码回滚，打开 838 行，删除 839 行
+    /*width: 50%;*/
+    width: 100%;
+
     margin: 10px;
     overflow: unset;
   }

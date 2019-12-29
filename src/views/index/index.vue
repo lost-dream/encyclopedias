@@ -64,9 +64,12 @@
             </div>
 
             <div class="rightBtnArea">
-              <el-button type="primary" @click="gotoCreate">创建词条</el-button>
-              <el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
-              <el-button type="danger" @click="gotoManager">后台管理</el-button>
+              <el-button @click="gotoCreate">创建词条</el-button>
+              <el-button @click="gotoMyEntry">我的词条</el-button>
+              <!-- TODO 用户数据中代表权限的字段名是什么 && 字段值是什么代表有权限 -->
+              <el-button v-if="userData && userData.userName === 'admin'" @click="gotoManager">
+                后台管理
+              </el-button>
             </div>
           </div>
         </el-col>
@@ -99,77 +102,85 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="background: #EBF3F6;margin-top: 30px;min-height: 560px">
+    <div style="background: #EBF3F6;margin-top: 30px;">
       <div class="w1280">
         <div class="bgf6fafb">
           <div class="title">
             <span>词条分类</span>
           </div>
-          <div class="category-container" style="margin: 0;min-height: 441px" v-loading="loading">
-            <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>外部词条</p>
-            <br />
-            <div style="padding-bottom: 25px;">
-              <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
-                <div class="categoryTreeList">
-                  <p style="color: #333333;text-align: left">{{ item.name }}</p>
-                  <!--现在的渲染方式，均分为三个ul-->
-                  <div class="ul">
-                    <ul v-for="(item0, i) in item.child" :key="i">
+          <div class="category-container" style="margin: 0;" v-loading="loading">
+            <!-- 外部词条 -->
+            <div v-if="categoryTreeList && categoryTreeList.length > 0">
+              <p class="categoryOrigin">
+                <i class="el-icon-caret-bottom el-icon--left"></i>外部词条
+              </p>
+              <div style="padding-bottom: 25px;">
+                <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
+                  <div class="categoryTreeList">
+                    <p style="color: #333333;text-align: left">{{ item.name }}</p>
+                    <!--现在的渲染方式，均分为三个ul-->
+                    <div class="ul">
+                      <ul v-for="(item0, i) in item.child" :key="i">
+                        <li
+                          v-for="(item1, index1) in item0"
+                          class="secondCategory"
+                          :key="index1"
+                          @click="routeToEntryList(item1.id, index1, item.children)"
+                        >
+                          {{ item1.name }}
+                        </li>
+                      </ul>
+                    </div>
+                    <!--原来的渲染方式，全部分类放在一起-->
+                    <!--<ul class="ul">
                       <li
-                        v-for="(item1, index1) in item0"
-                        class="secondCategory"
+                        v-for="(item1, index1) in item.children"
                         :key="index1"
                         @click="routeToEntryList(item1.id, index1, item.children)"
+                        class="secondCategory"
                       >
                         {{ item1.name }}
                       </li>
-                    </ul>
+                    </ul>-->
                   </div>
-                  <!--原来的渲染方式，全部分类放在一起-->
-                  <!--<ul class="ul">
-                    <li
-                      v-for="(item1, index1) in item.children"
-                      :key="index1"
-                      @click="routeToEntryList(item1.id, index1, item.children)"
-                      class="secondCategory"
-                    >
-                      {{ item1.name }}
-                    </li>
-                  </ul>-->
                 </div>
               </div>
             </div>
 
-            <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>内部词条</p>
-            <br />
-            <div style="padding-bottom: 25px;">
-              <div class="category-item" v-for="(item, index) in innerTreeList" :key="index">
-                <div class="categoryTreeList">
-                  <p style="color: #333333;text-align: left">{{ item.name }}</p>
-                  <!--现在的渲染方式，均分为三个ul-->
-                  <div class="ul">
-                    <ul v-for="(item0, i) in item.child" :key="i">
+            <!-- 内部词条 -->
+            <div v-if="innerTreeList && innerTreeList.length > 0">
+              <p class="categoryOrigin">
+                <i class="el-icon-caret-bottom el-icon--left"></i>内部词条
+              </p>
+              <div style="padding-bottom: 25px;">
+                <div class="category-item" v-for="(item, index) in innerTreeList" :key="index">
+                  <div class="categoryTreeList">
+                    <p style="color: #333333;text-align: left">{{ item.name }}</p>
+                    <!--现在的渲染方式，均分为三个ul-->
+                    <div class="ul">
+                      <ul v-for="(item0, i) in item.child" :key="i">
+                        <li
+                          v-for="(item1, index1) in item0"
+                          :key="index1"
+                          class="secondCategory"
+                          @click="routeToEntryList(item1.id, index1, item.children)"
+                        >
+                          {{ item1.name }}
+                        </li>
+                      </ul>
+                    </div>
+                    <!--原来的渲染方式，全部分类放在一起-->
+                    <!--<ul class="ul">
                       <li
-                        v-for="(item1, index1) in item0"
+                        v-for="(item1, index1) in item.children"
                         :key="index1"
-                        class="secondCategory"
                         @click="routeToEntryList(item1.id, index1, item.children)"
+                        class="secondCategory"
                       >
                         {{ item1.name }}
                       </li>
-                    </ul>
+                    </ul>-->
                   </div>
-                  <!--原来的渲染方式，全部分类放在一起-->
-                  <!--<ul class="ul">
-                    <li
-                      v-for="(item1, index1) in item.children"
-                      :key="index1"
-                      @click="routeToEntryList(item1.id, index1, item.children)"
-                      class="secondCategory"
-                    >
-                      {{ item1.name }}
-                    </li>
-                  </ul>-->
                 </div>
               </div>
             </div>
@@ -384,12 +395,15 @@
 import { entryStatistical, getCarouselList } from '@/api/onlyShowData/index.js'
 import { specialList } from '@/api/special/index.js'
 import { categoryTree, getInternalEntryList } from '@/api/classifyManager/index.js'
+import { userLogin } from '@/api/user'
+
 export default {
   name: 'index',
   data() {
     return {
       loading: true,
       panelLoading: true,
+      userData: {},
       activeName: '6',
       entryStatisticalData: {},
       specialListData: [],
@@ -412,7 +426,6 @@ export default {
         for (let i = 0; i < res.data.records.length; i += 3) {
           this.entryListData.push(res.data.records.slice(i, i + 3))
         }
-        console.log(this.entryListData)
       })
     },
 
@@ -447,17 +460,15 @@ export default {
               item.child.push(item.children.slice(i, i + average))
             }
           })
-          console.info(res.data.children, 'res.data.children')
           this.categoryTreeList = res.data.children
           this.loading = false
         })
         .catch(e => {
-          console.log(e)
+          throw e
         })
     },
     getInternalEntryListData() {
       getInternalEntryList().then(({ data }) => {
-        console.log('内部词条=====', data)
         if (data.children) {
           data.children.map(item => {
             item.children.map((item1, index) => {
@@ -472,7 +483,6 @@ export default {
               item.child.push(item.children.slice(i, i + average))
             }
           })
-          console.info('res.data.children======', data.children)
           this.innerTreeList = data.children
           this.loading = false
         }
@@ -519,14 +529,12 @@ export default {
           categoryIds: id
         })
         .then(res => {
-          console.log(res)
           this.categoryList = res.data.records
           this.panelLoading = false
         })
     },
     handleClick() {
       this.panelLoading = true
-      console.log(this.activeName)
       this.getCategoryList(this.activeName)
     },
     seeEntry(hash) {
@@ -565,6 +573,13 @@ export default {
   },
   created() {
     Cetc10Auth().init(() => {
+      userLogin({
+        Authorization: sessionStorage.getItem('token')
+      }).then(res => {
+        if (res.status === 'success') {
+          this.userData = res.data
+        }
+      })
       this.entryStatistical()
       this.specialList()
       this.categoryTree()

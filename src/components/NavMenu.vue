@@ -39,6 +39,7 @@
 
 <script>
 import menu from '@/config/menu-config'
+import { getMenuTree } from '@/api/user'
 
 export default {
   data() {
@@ -49,6 +50,15 @@ export default {
   },
   created() {
     this.currentIndex = this.$route.name
+    getMenuTree({
+      Authorization: sessionStorage.getItem('token')
+    }).then(res => {
+      if (res.status === 0) {
+        console.log(res.data)
+      } else {
+        this.$message.error(res.msg)
+      }
+    })
   },
   methods: {
     handleOpen(key, keyPath) {

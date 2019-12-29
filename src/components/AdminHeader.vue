@@ -6,18 +6,20 @@
     </span>
 
     <div class="action-box">
-      <a
-        ><img
+      <a>
+        <img
           style="margin-right: 5px;width: 20px;vertical-align: top;margin-top: 22px;"
-          src="/static/image/icon/admin.png"
+          src="./admin.png"
           alt=""
-        />管理员，你好</a
-      >
+        />
+        管理员，你好
+      </a>
       <a href=""><i class="el-icon-s-home"></i>首页</a>
       <a @click="exit"><i class="el-icon-switch-button"></i>退出</a>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -32,18 +34,14 @@ export default {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('source')
       window.opener = null
-      window.open('', '_self')
       window.close()
-      // window.location.href = 'default.aspx'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-// color 33,47,84
 .admin-header {
-  background: rgb(33, 47, 84);
   background: #5b7dd8;
   height: 64px;
   color: #fff;
