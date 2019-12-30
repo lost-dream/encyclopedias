@@ -107,7 +107,7 @@ export default {
 						item.text = JSON.parse(item.SUMMARY[0].summary).text
 						item.img = JSON.parse(item.SUMMARY[0].summary).img
 					}catch(e){
-						//TODO handle the exception
+						throw e
 					}
 				})
 				this.entryListData = res.data.records
@@ -126,7 +126,7 @@ export default {
 				this.categoryId = this.categoryList[obj.index2].id
 				this.categoryList[obj.index2].choosed = true
 			}catch(e){
-				//TODO handle the exception
+				throw e
 			}
 		},
 		

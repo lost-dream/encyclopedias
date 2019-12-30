@@ -7,23 +7,31 @@
 <script>
 import { userLogin } from '@/api/user'
 
+const LOGIN_URL = 'http://192.168.1.186:8081/text/aa'
 export default {
   name: 'app',
   methods: {
     isLogin() {
-      // todo 授权登录部分
       const DURATION_TIME = 2500
       if (!sessionStorage.getItem('token')) {
         this.$message.error('你还没有登录')
         setTimeout(() => {
-          window.location.href = 'http://www.baidu.com'
+          window.location.href = LOGIN_URL
         }, DURATION_TIME)
+      } else {
+        userLogin({
+          Authorization: sessionStorage.getItem('token')
+        }).then(res => {
+          if (res.status === 'success') {
+            sessionStorage.setItem('user', res.data)
+          }
+        })
       }
     }
   },
   mounted() {
     Cetc10Auth().init(() => {
-      // this.isLogin()
+      this.isLogin()
     })
   }
 }

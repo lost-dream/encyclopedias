@@ -94,7 +94,7 @@ export default {
 							item.img = JSON.parse(item.text).img
 							item.desc = JSON.parse(item.text).text
 						}catch(e){
-							//TODO handle the exception
+							throw e
 							item.img = ''
 							item.desc = ''
 						}

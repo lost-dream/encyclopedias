@@ -395,7 +395,6 @@
 import { entryStatistical, getCarouselList } from '@/api/onlyShowData/index.js'
 import { specialList } from '@/api/special/index.js'
 import { categoryTree, getInternalEntryList } from '@/api/classifyManager/index.js'
-import { userLogin } from '@/api/user'
 
 export default {
   name: 'index',
@@ -573,13 +572,6 @@ export default {
   },
   created() {
     Cetc10Auth().init(() => {
-      userLogin({
-        Authorization: sessionStorage.getItem('token')
-      }).then(res => {
-        if (res.status === 'success') {
-          this.userData = res.data
-        }
-      })
       this.entryStatistical()
       this.specialList()
       this.categoryTree()

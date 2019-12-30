@@ -12,7 +12,7 @@
           src="./admin.png"
           alt=""
         />
-        管理员，你好
+        你好，{{ user.username }}同志
       </a>
       <a href=""><i class="el-icon-s-home"></i>首页</a>
       <a @click="exit"><i class="el-icon-switch-button"></i>退出</a>
@@ -21,10 +21,13 @@
 </template>
 
 <script>
+const LOGIN_URL = 'http://192.168.1.186:8081/text/aa'
+
 export default {
   data() {
     return {
-      content: ''
+      content: '',
+      user: sessionStorage.getItem('user')
     }
   },
   watch: {},
@@ -33,8 +36,10 @@ export default {
     exit() {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('source')
-      window.opener = null
-      window.close()
+      sessionStorage.removeItem('user')
+      window.location.href = LOGIN_URL
+      // window.opener = null
+      // window.close()
     }
   }
 }

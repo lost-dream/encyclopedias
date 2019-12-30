@@ -665,7 +665,6 @@ export default {
                 }
               })
           } catch (e) {
-            //TODO handle the exception
             document.getElementById('summaryEditor').innerHTML = ''
             vm.initSummaryEditor()
             vm.imageUrl = ''
