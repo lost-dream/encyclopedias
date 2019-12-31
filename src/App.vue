@@ -23,7 +23,7 @@ export default {
           Authorization: sessionStorage.getItem('token')
         }).then(res => {
           if (res.status === 'success') {
-            sessionStorage.setItem('user', res.data)
+            sessionStorage.setItem('user', JSON.stringify(res.data))
           }
         })
       }

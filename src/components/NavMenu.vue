@@ -47,57 +47,55 @@ import { getMenuTree } from '@/api/user'
 export default {
   data() {
     return {
-      // todo 如果 require 能用，就把所有的图片都换成 require
       menu: [
         {
-          title: '词条分类维护',
-          value: 'citiaofenleiweifu',
-          componentName: 'categoryManage',
-          // icon: '/static/image/icon/yingyongguanli.png'
-          icon: require('./yingyongguanli.png')
-        },
-        {
           title: '属性模板管理',
-          value: 'shuxingmobanguanli',
-          componentName: 'classifyManager',
-          icon: '/static/image/icon/Management.png'
-        },
-        {
-          title: '目录模板管理',
-          value: 'mulumobanguanli',
-          componentName: 'contentTemplate',
-          icon: '/static/image/icon/caidanguanli.png'
+          icon: require('./Management.png'),
+          value: 'shuxingmubanguanli',
+          componentName: 'classifyManager'
         },
         {
           title: '词条版本审核',
-          value: 'citiaobanbenshenghei',
-          componentName: 'entryVersionExamine',
-          icon: '/static/image/icon/bianji.png'
-        },
-        {
-          title: '特色专题管理',
-          value: 'teisezhuantiguanli',
-          componentName: 'specialManager',
-          icon: '/static/image/icon/dangan.png'
-        },
-
-        {
-          title: '提取任务管理',
-          value: 'tiqurenwuguanli',
-          componentName: 'extractTask',
-          icon: '/static/image/icon/tiqurenwu.png'
-        },
-        {
-          title: '抽取词条审核',
-          value: 'chouqucitiaoshenhei',
-          componentName: 'entryExamine',
-          icon: '/static/image/icon/wangluo(2).png'
+          icon: require('./bianji.png'),
+          value: 'citiaobanbenshenhe',
+          componentName: 'entryVersionExamine'
         },
         {
           title: '数据源管理',
+          icon: require('./jigouguanli.png'),
           value: 'shujuyuanguanli',
-          componentName: 'dataSourceList',
-          icon: '/static/image/icon/jigouguanli.png'
+          componentName: 'dataSourceList'
+        },
+        {
+          title: '抽取词条审核',
+          icon: require('./wangluo.png'),
+          value: 'chouqucitiaoshenhe',
+          componentName: 'entryExamine'
+        },
+        {
+          title: '特色专题管理',
+          icon: require('./dangan.png'),
+          value: 'tesezhuantiguanli',
+          componentName: 'specialManager'
+        },
+        {
+          title: '提取任务管理',
+          icon: require('./tiqurenwu.png'),
+          value: 'tiqurenwuguanli',
+          componentName: 'extractTask'
+        },
+
+        {
+          title: '目录模板管理',
+          icon: require('./caidanguanli.png'),
+          value: 'mulumubanguanli',
+          componentName: 'contentTemplate'
+        },
+        {
+          title: '词条分类维护',
+          icon: require('./yingyongguanli.png'),
+          value: 'citiaofenleiweihu',
+          componentName: 'categoryManage'
         }
       ],
       menuMap: [], // 用来存储有权限展示的 menuList
@@ -120,20 +118,25 @@ export default {
       if (res.status === 0) {
         const data = res.data
         if (!(data.authTree && data.authTree.menu)) {
+          // empty data
           this.$message({
             message: '目录列表暂无数据',
             type: 'warning'
           })
         } else {
           // 获取后台返回数据，只取用来判断权限的字段值（example:value）插入 map 中，用来判断本地 menu 是否有权限显示出来
-          const backendMenu = data.authTree.menu[1].childrenMenu
+          const backendData = data.authTree.menu
+          let backendMenu
+          backendData.map(value => {
+            if (value.name === '后台') {
+              backendMenu = value.childrenMenu
+            }
+          })
 
-          const menuMap = backendMenu.reduce((arr, menuItem) => {
+          this.menuMap = backendMenu.reduce((arr, menuItem) => {
             arr.push(menuItem.value)
             return arr
           }, [])
-
-          this.menuMap = menuMap
         }
       } else {
         this.$message.error(res.msg)

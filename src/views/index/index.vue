@@ -402,7 +402,7 @@ export default {
     return {
       loading: true,
       panelLoading: true,
-      userData: {},
+      userData: JSON.parse(sessionStorage.getItem('user')),
       activeName: '6',
       entryStatisticalData: {},
       specialListData: [],
@@ -911,7 +911,7 @@ export default {
     p {
       text-align: center;
       font-size: 28px;
-      font-family: "仿宋";
+      font-family: '仿宋';
       font-weight: bold;
       margin-bottom: 10px;
     }

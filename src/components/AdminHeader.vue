@@ -12,7 +12,8 @@
           src="./admin.png"
           alt=""
         />
-        你好，{{ user.username }}同志
+        <!-- todo 姓名取那个字段-->
+        你好，{{ user.userChineseName }}同志
       </a>
       <a href=""><i class="el-icon-s-home"></i>首页</a>
       <a @click="exit"><i class="el-icon-switch-button"></i>退出</a>
@@ -27,7 +28,7 @@ export default {
   data() {
     return {
       content: '',
-      user: sessionStorage.getItem('user')
+      user: JSON.parse(sessionStorage.getItem('user'))
     }
   },
   watch: {},
@@ -38,8 +39,6 @@ export default {
       sessionStorage.removeItem('source')
       sessionStorage.removeItem('user')
       window.location.href = LOGIN_URL
-      // window.opener = null
-      // window.close()
     }
   }
 }

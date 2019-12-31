@@ -33,6 +33,15 @@ export function getCarouselList(data) {
   })
 }
 
+//获取词条详情
+export function getEntryDetail(data) {
+  return request({
+    url: '/wiki-backend/api/entry/list2',
+    method: 'post',
+    data
+  })
+}
+
 //词条列表（搜索、词条分类）--全站搜索
 export function searchTotalStationEntryList(data) {
   return request({
