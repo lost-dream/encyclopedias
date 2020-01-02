@@ -565,6 +565,7 @@ export default {
       display: inline-block;
       line-height: 40px;
       min-height: 40px;
+      vertical-align: middle;
       padding-left: 4px;
       font-size: 14px;
       // 新增
@@ -575,7 +576,6 @@ export default {
     // button
     .comp-tr-node--btns {
       position: relative;
-      top: -16px;
       margin-left: 10px;
       opacity: 0;
       transition: opacity 0.1s;
