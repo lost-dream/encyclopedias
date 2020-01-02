@@ -520,7 +520,6 @@ export default {
     this.$nextTick(() => {
       const wrapper = this.$refs.content
       let target = wrapper.getElementsByTagName('img')
-      // let target_parent = document.getElementById('content').getElementsByClassName('img_r')
       const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i
       // setTimeout(() => {
       for (let i = 0; i < target.length; i++) {
@@ -529,6 +528,21 @@ export default {
         }
       }
       // }, 1000)
+      // 爬取的数据中的表格做 css 初始化
+      const table = wrapper.querySelectorAll('table')
+      for (let i = 0; i < table.length; i++) {
+        table[i].setAttribute('cellspacing', 0)
+        table[i].setAttribute('cellpadding', 0)
+      }
+
+      // 图片容器中的图片描述“xxx(15张)”，把 15张的字样删掉
+
+      // 爬取的数据源不同，图片容器的类名也不同，需要按类名查找然后删除
+      const sourceClassName = ['.a', '.b', '.c']
+      for (let i = 0; i < sourceClassName.length; i++) {
+        wrapper.querySelector(sourceClassName[i])
+      }
+      wrapper.querySelector()
     })
   },
   beforeRouteEnter(to, from, next) {
@@ -764,6 +778,25 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+// 爬取回来的网页样式的初始化 css
+table {
+  width: 100% !important;
+  border: 1px solid #eee !important;
+  border-bottom: none !important;
+  th {
+    font-weight: bold !important;
+  }
+  th,
+  td {
+    padding: 0.8em !important;
+    border-bottom: 1px solid #eee !important;
+    border-right: 1px solid #eee !important;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .main-content,
 .text-indent {

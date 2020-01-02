@@ -33,8 +33,6 @@ module.exports = [
     componentName: 'dataSourceList',
     icon: '/static/image/icon/jigouguanli.png'
   }
-  //	{name: '词条创建',componentName: 'createEntry'},
-  //	{name: '我的词条',componentName: 'myEntry'},
 
   //二级路由
   //	{

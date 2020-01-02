@@ -4,6 +4,7 @@
     <div v-if="!searchTotalStation" class="entryListData">
       <div
         v-for="(item, index) in entryListData"
+        :key="index"
         @click="routeToEntry(item.ENTRY_ID)"
         class="entry-cell"
         :class="index == entryListData.length - 1 ? '' : 'bd-bottom'"
@@ -36,6 +37,7 @@
     <div v-else class="entryListData">
       <div
         v-for="(item, index) in entryListData"
+        :key="index"
         @click="routeToEntry(item.itemid)"
         class="entry-cell"
         :class="index == entryListData.length - 1 ? '' : 'bd-bottom'"
@@ -131,6 +133,7 @@ export default {
                 item.desc = JSON.parse(item.text).text
               } catch (e) {
                 //TODO handle the exception
+                // FIXME 
                 item.img = ''
                 item.desc = ''
               }

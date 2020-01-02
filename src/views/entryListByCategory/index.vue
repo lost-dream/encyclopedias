@@ -2,33 +2,34 @@
   <div style="margin-bottom: 20px">
     <ul class="categoryList">
       <li
+        v-for="(item, index) in categoryList"
+        :key="index"
         :class="item.choosed ? 'highlight' : ''"
         @click="choose(item)"
-        v-for="item in categoryList"
       >
         <p>
-          {{ item.name
-          }}<span style="font-size: 26px;vertical-align: top;" v-if="hasFinishAjax && item.choosed"
-            >({{ pagination.count }})</span
-          >
+          {{ item.name }}
+          <span style="font-size: 26px;vertical-align: top;" v-if="hasFinishAjax && item.choosed">
+            ({{ pagination.count }})
+          </span>
         </p>
       </li>
     </ul>
     <ul class="entryList">
-      <li @click="seeEntry(item)" v-for="item in entryListData">
+      <li v-for="(item, index) in entryListData" :key="index" @click="seeEntry(item)">
         <img
           v-if="item.SUMMARY.length && item.SUMMARY[0].summary && item.img"
           :src="baseUrlConfig.IMG_PREFIX + item.img"
           alt=""
         />
-        <img v-else src="/static/image/tank.png" />
+        <img v-else src="./tank.png" />
         <div>
           <p class="entry-title">{{ item.ENTRY_NAME }}</p>
           <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary">{{ item.text }}</div>
         </div>
       </li>
     </ul>
-    <div class="noDataRemindContent" v-if="entryListData.length === 0">当前分类暂无词条</div>
+    <div class="noDataRemindContent" v-if="!entryListData.length">当前分类暂无词条</div>
     <el-pagination
       background
       @size-change="handleSizeChange"
@@ -44,6 +45,7 @@
 <script>
 import { entryList } from '@/api/onlyShowData/index.js'
 import { categoryTree } from '@/api/classifyManager/index.js'
+import { getEntryDetail } from '@/api/onlyShowData/index.js'
 export default {
   name: 'entryListByCategory',
   data() {
@@ -53,7 +55,7 @@ export default {
       categoryTreeList: [],
       pagination: {
         page: 1,
-        limit: 10,
+        limit: 12,
         count: 0
       },
       categoryId: '',
@@ -82,18 +84,18 @@ export default {
         name: 'viewEntry',
         query: {
           entryId: hash.ENTRY_ID,
-          //                    versionId: hash.ID,
+					// versionId: hash.ID,
           viewType: 'view'
         }
       })
     },
     choose(item) {
-      console.log(item.id)
       this.categoryList.map(item => {
         item.choosed = false
       })
       item.choosed = true
       this.categoryId = item.id
+			this.list()
     },
     routeToEntry(id) {
       this.$router.push({
@@ -111,46 +113,22 @@ export default {
       this.list()
     },
     //根据分类id获取词条列表
-    list(item) {
+    list() {
       this.hasFinishAjax = false
-      entryList({
+      getEntryDetail({
         pageNumber: this.pagination.page,
         pageSize: this.pagination.limit,
         categoryIds: this.categoryId,
         keyword: ''
       }).then(res => {
         this.hasFinishAjax = true
-        console.log(res.data)
-        if (res.data.records) {
-          res.data.records.map(item => {
-            try {
-              item.text = JSON.parse(item.SUMMARY[0].summary).text
-              item.img = JSON.parse(item.SUMMARY[0].summary).img
-            } catch (e) {
-              //TODO handle the exception
-            }
-          })
-          this.entryListData = res.data.records
-        } else {
-          this.entryListData = []
-        }
+        res.data.records.map(item => {
+					item.text = JSON.parse(item.SUMMARY[0].summary).text
+					item.img = JSON.parse(item.SUMMARY[0].summary).img
+        })
+        this.entryListData = res.data.records
         this.pagination.count = res.data.total
       })
-    },
-    categoryTree() {
-      categoryTree({})
-        .then(res => {
-          res.data.children.map(item => {
-            item.children.map((item1, index) => {
-              item1.showThirdCategory = index === 0
-            })
-          })
-          this.categoryTreeList = res.data.children
-          this.getChoosedCategoryInfo()
-        })
-        .catch(e => {
-          console.log(e)
-        })
     },
     //根据本地存储的首页传参高亮显示首页选中的分类
     getChoosedCategoryInfo() {
@@ -165,8 +143,15 @@ export default {
           item.choosed = item.id === obj.id2
           this.categoryId = obj.id2
         })
+
+        obj.thirdAry.map(item => {
+          item.choosed = false
+        })
+        this.categoryList = obj.thirdAry
+        this.categoryId = this.categoryList[obj.index2].id
+        this.categoryList[obj.index2].choosed = true
       } catch (e) {
-        //TODO handle the exception
+        throw e
       }
     }
   }
