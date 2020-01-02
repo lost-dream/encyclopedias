@@ -27,9 +27,7 @@
                   </el-image>
                   <div>
                     <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
-                    <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                      {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                    </div>
+                    <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3" v-html="JSON.parse(item.SUMMARY[0].summary).text"></div>
                   </div>
                 </div>
               </div>
@@ -64,9 +62,25 @@
             </div>
 
             <div class="rightBtnArea">
-              <el-button type="primary" @click="gotoCreate">创建词条</el-button>
-              <el-button type="danger" @click="gotoMyEntry">我的词条</el-button>
-              <el-button type="danger" @click="gotoManager">后台管理</el-button>
+              <el-button
+                type="primary"
+                style="font-weight: border;color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
+                @click="gotoCreate"
+              >
+                创建词条
+              </el-button>
+              <el-button
+                type="danger"
+                style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
+                @click="gotoMyEntry"
+                >我的词条</el-button
+              >
+              <el-button
+                type="danger"
+                style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
+                @click="gotoManager"
+                >后台管理</el-button
+              >
             </div>
           </div>
         </el-col>
@@ -85,7 +99,6 @@
       >
         <el-carousel-item v-for="item in specialListData" :key="item.id">
           <div @click="routeToSpecial(item.id)" class="specialList">
-            <!--<img :src="item.specialCoverUrl" alt="" />-->
             <el-image :fit="'cover'" :src="item.specialCoverUrl">
               <div slot="error" class="image-slot">
                 <img src="./tank.png" alt="" />
@@ -99,77 +112,85 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="background: #EBF3F6;margin-top: 30px;min-height: 560px">
+    <div style="background: #EBF3F6;margin-top: 30px;min-height: 560px;padding-top: 4px;">
       <div class="w1280">
         <div class="bgf6fafb">
           <div class="title">
             <span>词条分类</span>
           </div>
-          <div class="category-container" style="margin: 0;min-height: 441px" v-loading="loading">
-            <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>外部词条</p>
-            <br />
-            <div style="padding-bottom: 25px;">
-              <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
-                <div class="categoryTreeList">
-                  <p style="color: #333333;text-align: left">{{ item.name }}</p>
-                  <!--现在的渲染方式，均分为三个ul-->
-                  <div class="ul">
-                    <ul v-for="(item0, i) in item.child" :key="i">
+          <div class="category-container" style="margin: 0;" v-loading="loading">
+            <!-- 外部词条 -->
+            <div v-if="categoryTreeList && categoryTreeList.length > 0">
+              <p class="categoryOrigin">
+                <i class="el-icon-caret-bottom el-icon--left"></i>外部词条
+              </p>
+              <div style="padding-bottom: 25px;">
+                <div class="category-item" v-for="(item, index) in categoryTreeList" :key="index">
+                  <div class="categoryTreeList">
+                    <p style="color: #333333;text-align: left">{{ item.name }}</p>
+                    <!--现在的渲染方式，均分为三个ul-->
+                    <div class="ul">
+                      <ul v-for="(item0, i) in item.child" :key="i">
+                        <li
+                          v-for="(item1, index1) in item0"
+                          class="secondCategory"
+                          :key="index1"
+                          @click="routeToEntryList(item1.id, index1, item.children)"
+                        >
+                          {{ item1.name }}
+                        </li>
+                      </ul>
+                    </div>
+                    <!--原来的渲染方式，全部分类放在一起-->
+                    <!--<ul class="ul">
                       <li
-                        v-for="(item1, index1) in item0"
-                        class="secondCategory"
+                        v-for="(item1, index1) in item.children"
                         :key="index1"
                         @click="routeToEntryList(item1.id, index1, item.children)"
+                        class="secondCategory"
                       >
                         {{ item1.name }}
                       </li>
-                    </ul>
+                    </ul>-->
                   </div>
-                  <!--原来的渲染方式，全部分类放在一起-->
-                  <!--<ul class="ul">
-                    <li
-                      v-for="(item1, index1) in item.children"
-                      :key="index1"
-                      @click="routeToEntryList(item1.id, index1, item.children)"
-                      class="secondCategory"
-                    >
-                      {{ item1.name }}
-                    </li>
-                  </ul>-->
                 </div>
               </div>
             </div>
 
-            <p class="categoryOrigin"><i class="el-icon-caret-bottom el-icon--left"></i>内部词条</p>
-            <br />
-            <div style="padding-bottom: 25px;">
-              <div class="category-item" v-for="(item, index) in innerTreeList" :key="index">
-                <div class="categoryTreeList">
-                  <p style="color: #333333;text-align: left">{{ item.name }}</p>
-                  <!--现在的渲染方式，均分为三个ul-->
-                  <div class="ul">
-                    <ul v-for="(item0, i) in item.child" :key="i">
+            <!-- 内部词条 -->
+            <div v-if="innerTreeList && innerTreeList.length > 0">
+              <p class="categoryOrigin">
+                <i class="el-icon-caret-bottom el-icon--left"></i>内部词条
+              </p>
+              <div style="padding-bottom: 25px;">
+                <div class="category-item" v-for="(item, index) in innerTreeList" :key="index">
+                  <div class="categoryTreeList">
+                    <p style="color: #333333;text-align: left">{{ item.name }}</p>
+                    <!--现在的渲染方式，均分为三个ul-->
+                    <div class="ul">
+                      <ul v-for="(item0, i) in item.child" :key="i">
+                        <li
+                          v-for="(item1, index1) in item0"
+                          :key="index1"
+                          class="secondCategory"
+                          @click="routeToEntryList(item1.id, index1, item.children)"
+                        >
+                          {{ item1.name }}
+                        </li>
+                      </ul>
+                    </div>
+                    <!--原来的渲染方式，全部分类放在一起-->
+                    <!--<ul class="ul">
                       <li
-                        v-for="(item1, index1) in item0"
+                        v-for="(item1, index1) in item.children"
                         :key="index1"
-                        class="secondCategory"
                         @click="routeToEntryList(item1.id, index1, item.children)"
+                        class="secondCategory"
                       >
                         {{ item1.name }}
                       </li>
-                    </ul>
+                    </ul>-->
                   </div>
-                  <!--原来的渲染方式，全部分类放在一起-->
-                  <!--<ul class="ul">
-                    <li
-                      v-for="(item1, index1) in item.children"
-                      :key="index1"
-                      @click="routeToEntryList(item1.id, index1, item.children)"
-                      class="secondCategory"
-                    >
-                      {{ item1.name }}
-                    </li>
-                  </ul>-->
                 </div>
               </div>
             </div>
@@ -188,191 +209,39 @@
           @tab-click="handleClick"
           v-loading="panelLoading"
         >
-          <el-tab-pane label="科技" name="6">
+          <el-tab-pane
+            v-for="(value, i) in recommendList"
+            :key="i"
+            :label="value.name"
+            :name="i + 1 + ''"
+          >
             <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
+                  v-for="(item, i) in categoryList"
+                  :key="i"
+                  class="categoryListItem"
+                  style="width: 45%;display: flex;padding: 10px;"
+                  @click="seeEntry(item)"
               >
                 <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
+                    class="cat-img"
+                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
+                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
                 </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
                 <div class="text-desc">
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
               </div>
             </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="经济" name="5">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="安全" name="4">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="外交" name="3">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="军事" name="2">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                @click="seeEntry(item)"
-                style="width: 45%;display: flex;padding: 10px;"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="政治" name="1">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -381,20 +250,23 @@
 </template>
 
 <script>
-import { entryStatistical, getCarouselList } from '@/api/onlyShowData/index.js'
-import { specialList } from '@/api/special/index.js'
-import { categoryTree, getInternalEntryList } from '@/api/classifyManager/index.js'
+import { entryStatistical, getCarouselList, getEntryDetail, getRecommendClass } from '@/api/onlyShowData'
+import { specialList } from '@/api/special'
+import { categoryTree, getInternalEntryList } from '@/api/classifyManager'
+
 export default {
   name: 'index',
   data() {
     return {
       loading: true,
       panelLoading: true,
-      activeName: '6',
+      userData: JSON.parse(sessionStorage.getItem('user')),
+      activeName: '',
       entryStatisticalData: {},
       specialListData: [],
       categoryTreeList: [], // 外部词条
       innerTreeList: [], // 内部词条
+      recommendList: [], // 分类推荐列表
       entryListData: [],
       categoryList: [],
       categoryTitleColor: ['e9b937', '6d56fb', '079ea9', 'ec6b6b', '199df2'],
@@ -407,12 +279,12 @@ export default {
         pageNumber: '1',
         pageSize: '9',
         categoryId: '',
-        keyword: ''
+        keyword: '',
+        nbct: sessionStorage.getItem('nbct')
       }).then(res => {
         for (let i = 0; i < res.data.records.length; i += 3) {
           this.entryListData.push(res.data.records.slice(i, i + 3))
         }
-        console.log(this.entryListData)
       })
     },
 
@@ -447,17 +319,15 @@ export default {
               item.child.push(item.children.slice(i, i + average))
             }
           })
-          console.info(res.data.children, 'res.data.children')
           this.categoryTreeList = res.data.children
           this.loading = false
         })
         .catch(e => {
-          console.log(e)
+          throw e
         })
     },
     getInternalEntryListData() {
       getInternalEntryList().then(({ data }) => {
-        console.log('内部词条=====', data)
         if (data.children) {
           data.children.map(item => {
             item.children.map((item1, index) => {
@@ -472,7 +342,6 @@ export default {
               item.child.push(item.children.slice(i, i + average))
             }
           })
-          console.info('res.data.children======', data.children)
           this.innerTreeList = data.children
           this.loading = false
         }
@@ -487,13 +356,16 @@ export default {
       specialList({
         pageNumber: 1,
         pageSize: 10,
-        keyword: ''
+        keyword: '',
+        nbct: sessionStorage.getItem('nbct')
       }).then(res => {
         this.specialListData = res.data.records
       })
     },
     entryStatistical() {
-      entryStatistical({}).then(res => {
+      entryStatistical({
+        nbct: sessionStorage.getItem('nbct')
+      }).then(res => {
         this.entryStatisticalData = res.data
         this.$nextTick(() => {
           let list = document.querySelectorAll('.data')
@@ -512,21 +384,17 @@ export default {
       })
     },
     getCategoryList(id) {
-      this.$axios
-        .post('/wiki-backend/api/entry/list', {
-          pageNumber: 1,
-          pageSize: 6,
-          categoryIds: id
-        })
-        .then(res => {
-          console.log(res)
-          this.categoryList = res.data.records
-          this.panelLoading = false
-        })
+      getEntryDetail({
+        pageNumber: 1,
+        pageSize: 6,
+        categoryIds: id
+      }).then(res => {
+        this.categoryList = res.data.records
+        this.panelLoading = false
+      })
     },
     handleClick() {
       this.panelLoading = true
-      console.log(this.activeName)
       this.getCategoryList(this.activeName)
     },
     seeEntry(hash) {
@@ -561,6 +429,31 @@ export default {
       } else {
         return 0
       }
+    },
+    // 获取分类推荐列表 && 加载第一组数据
+    getRecommendList() {
+      // api().then(res => { .....
+      getRecommendClass({
+        nbct: sessionStorage.getItem('nbct')
+      }).then(res => {
+        console.log(res)
+        if (res.status === 'success') {
+          this.recommendList = res.data.reduce((arr, item) => {
+            arr.push({
+              name: item.name,
+              id: item.id
+            })
+            return arr
+          }, [])
+
+          this.getCategoryList(this.recommendList[0].id)
+          this.activeName = this.recommendList[0].id
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+
+
     }
   },
   created() {
@@ -570,8 +463,12 @@ export default {
       this.categoryTree()
       this.getInternalEntryListData()
       this.getEntryList()
-      this.getCategoryList(6)
+      this.getRecommendList()
     })
+  },
+  mounted() {
+    let categoryOrigin = document.getElementsByClassName('categoryOrigin')
+    console.log(3123, categoryOrigin, categoryOrigin[0].innerHTML)
   }
 }
 </script>
@@ -599,23 +496,31 @@ export default {
   line-height: 354px;
 }
 .categoryListItem {
+  border-bottom: 1px solid #ccc;
+  margin-right: 36px;
   &:hover {
     cursor: pointer;
     opacity: 0.6;
   }
   .ellipsis3 {
-    line-height: 1.5;
-    font-size: 28px;
+    line-height: 30px;
+    font-size: 24px;
     color: #959595;
   }
+  .ellipsis {
+    line-height: 1;
+    font-size: 24px;
+    color: #333;
+  }
   .entry-title {
-    line-height: 1.5;
-    font-size: 28px;
+    line-height: 30px;
+    font-size: 26px;
     color: #5a5a5a;
     margin-bottom: 10px;
   }
   .text-desc {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 40px;
+    height: 116px;
   }
   .cat-img {
     .image-slot {
@@ -625,7 +530,7 @@ export default {
   }
 }
 .main-page {
-  padding-top: 30px;
+  padding-top: 20px;
   // background: url('/static/image/index-bg.png') 0 0 no-repeat;
   // background-size: 100% 550px;
   .w1280 {
@@ -662,7 +567,7 @@ export default {
   display: inline-block;
   vertical-align: top;
   /*margin-bottom: 20px;*/
-  height: 260px;
+  height: 210px;
   .categoryTreeList {
     height: 100%;
   }
@@ -688,14 +593,18 @@ export default {
 }
 .category-item {
   /*padding: 10px 0 10px 15px;*/
+  padding: 17px 0 10px 0px;
   border-top: 1px solid #9cc6ec;
   &:nth-child(5) {
     /*border-bottom: none;*/
+    padding-top: 0px;
   }
   &:nth-child(6) {
+    padding-top: 0px;
     /*border-bottom: none;*/
   }
-  &:nth-child(7) {
+  &:nth-child(4) {
+    padding-top: 0px;
     /*border-bottom: none;*/
   }
   .categoryTreeList {
@@ -705,6 +614,11 @@ export default {
   &:nth-child(3n + 1) {
     .categoryTreeList {
       /*border-right: 0;*/
+    }
+  }
+  &:nth-child(3n) {
+    .categoryTreeList {
+      border-right: 0;
     }
   }
   /*&:nth-child(5n+1){*/
@@ -722,26 +636,28 @@ export default {
   color: #99acae;
 
   p {
-    font-size: 28px;
-    /*font-weight: bold;*/
+    font-size: 26px;
+    font-weight: bold;
     line-height: 1.5;
     color: white;
     text-align: center;
     /*box-shadow: 0 2px 5px 1px #848484;*/
+    margin-left: 10px;
     margin-bottom: 5px;
+    margin-top: 10px;
   }
   .ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: inline-block;
-    /*height: 165px;*/
-    height: 200px;
+    height: 165px;
+    // height: 200px;
     width: 400px;
     /*border-right: 1px solid #ccc;*/
 
     ul {
-      height: 200px;
+      height: 165px;
       display: inline-block;
       width: calc(33% - 1px);
       border-right: 1px solid #c9cdce;
@@ -751,13 +667,14 @@ export default {
     }
 
     li {
+      font-size: 24px;
       margin: 0;
       padding: 0 12px;
       /*display: inline-block;
 			width: calc(33% - 1px);*/
-      line-height: 1.5;
+      line-height: 30px;
       font-size: 26px;
-      color: #7d7e7e;
+      color: #333;
       text-align: left;
       vertical-align: top;
       /*border-right: 1px solid #C9CDCE;*/
@@ -829,8 +746,10 @@ export default {
   }
   margin: 0 5px;
   position: relative;
-  width: 256px;
-  height: 460px;
+  // width: 256px;
+  // height: 460px;
+  width: 250px;
+  height: 380px;
   background: #ffffff;
 
   .carousel-image {
@@ -867,15 +786,17 @@ export default {
     font-size: 16px;
     .entry-title {
       line-height: 1.5;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: bold;
       padding-left: 10px;
     }
   }
   .ellipsis3 {
-    font-size: 26px;
-    line-height: 1.5;
-    color: #7a7a7a;
+    font-size: 24px;
+    line-height: 30px;
+    color: #333;
+    // line-height: 1.5;
+    // color: #7a7a7a;
     padding: 0 10px 0 10px;
   }
 }
@@ -883,7 +804,7 @@ export default {
   /*border: 1px solid #ccc;*/
   background: #ebf1f1;
   width: 360px;
-  height: 480px;
+  height: 400px;
   /*background: #f6fafb;*/
   margin: auto;
   position: relative;
@@ -892,28 +813,29 @@ export default {
     height: 200px;
   }
   > div:not(.el-image) {
-    width: 324px;
-    height: 260px;
-    padding: 20px 0 30px 0;
+    width: 320px;
+    height: 170px;
+    padding: 20px 0 20px 0;
     background: white;
     border-radius: 5px;
     position: absolute;
-    top: 160px;
+    top: 170px;
     left: calc(50% - 162px);
     box-shadow: 0 0 8px 0 #ccc;
     p {
       text-align: center;
-      font-size: 28px;
-      font-family: "仿宋";
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    div {
       font-size: 26px;
       font-family: '仿宋';
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    div {
+      font-size: 24px;
+      font-family: '仿宋';
       padding: 0 30px;
-      line-height: 1.5;
-      color: #7d7e7e;
+      line-height: 30px;
+      color: #333;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -928,8 +850,8 @@ export default {
   // background: white;
 }
 .title {
-  margin: 15px 0;
-  padding-left: 90px;
+  margin: 25px 0;
+  padding-left: 74px;
   color: #338ce6;
   font-weight: bold;
   font-size: 28px;
@@ -946,8 +868,10 @@ export default {
   box-sizing: border-box;
   color: #338ce6;
   font-size: 28px;
+  margin-top: 60px;
   .left {
     display: inline-block;
+    margin-top: 40px;
     div {
       width: 100%;
       padding: 15px 0;
@@ -1019,8 +943,8 @@ export default {
   background: #f6fafb;
 }
 .cat-img {
-  width: 150px;
-  height: 96px;
+  width: 120px;
+  height: 92px;
   overflow: visible;
   background: #eee;
   /deep/ .image-slot {
@@ -1045,8 +969,10 @@ body {
   height: 354px;
   padding-bottom: 40px;
   /deep/ .el-tabs__item {
-    height: 58px;
-    line-height: 1.5;
+    // margin-top: 15px;
+    font-weight: bold;
+    height: 55px;
+    line-height: 2;
     width: 100px;
     text-align: center;
     color: #333333;

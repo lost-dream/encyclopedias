@@ -174,7 +174,8 @@
                     keyWords: '',
                     labels: '',
                     specialCoverUrl: '',
-                    id: ''
+                    id: '',
+                    nbct: sessionStorage.getItem('nbct')
                 },
                 keywords: [],
                 keyword: '',

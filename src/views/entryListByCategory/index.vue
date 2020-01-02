@@ -43,14 +43,16 @@
 </template>
 
 <script>
-import { getEntryDetail } from '@/api/onlyShowData/index.js'
-import {categoryTree} from '@/api/classifyManager/index.js'
+import { entryList } from '@/api/onlyShowData'
+import { categoryTree } from '@/api/classifyManager'
+import { getEntryDetail } from '@/api/onlyShowData'
 export default {
   name: 'entryListByCategory',
   data() {
     return {
       entryListData: [],
       categoryList: [],
+      categoryTreeList: [],
       pagination: {
         page: 1,
         limit: 10,
@@ -161,13 +163,13 @@ export default {
       }
     }*/
   },
-	created() {
-		let vm = this
-		Cetc10Auth().init(function() {
-			// vm.getChoosedCategoryInfo()
-			vm.categoryTree();
-		})
-	},
+  created() {
+    let vm = this
+    Cetc10Auth().init(function() {
+      // vm.getChoosedCategoryInfo()
+      vm.categoryTree()
+    })
+  },
 }
 </script>
 

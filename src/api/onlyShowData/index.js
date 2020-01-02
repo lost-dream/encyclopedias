@@ -27,9 +27,26 @@ export function entryList(data) {
 //获取首页最新词条
 export function getCarouselList(data) {
   return request({
-    // TODO will be del
-    // url: '/wiki-backend/api/entry/list3',
-    url: '/wiki-backend/api/entry/list',
+    url: '/wiki-backend/api/entry/list3',
+    method: 'post',
+    data
+  })
+}
+
+// 获取首页分类推荐
+
+export function getRecommendClass(data) {
+  return request({
+    url: '/wiki-backend/api/category/flTuijian',
+    method: 'post',
+    data
+  })
+}
+
+//获取词条详情
+export function getEntryDetail(data) {
+  return request({
+    url: '/wiki-backend/api/entry/list2',
     method: 'post',
     data
   })

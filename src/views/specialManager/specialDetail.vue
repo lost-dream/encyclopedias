@@ -6,42 +6,57 @@
           <span class="leftBorder"></span>
           基础信息
         </div>
-
         <div style="display: flex;" class="sepcial">
           <el-form style="width: 100%" label-width="140px">
-            <div style="display: flex">
-              <div style="">
-                <el-form-item label="专题名称：" style="display: flex">
-                  <el-input v-model="form.specialName" style="width: 200px"></el-input>
-                </el-form-item>
-                <el-form-item label="专题描述：" style="display: flex">
-                  <el-input
-                    v-model="form.specialDesc"
-                    resize="none"
-                    type="textarea"
-                    style="width: 200px"
-                    :rows="6"
-                  ></el-input>
-                </el-form-item>
-              </div>
+            <div style="display: flex;">
+              <el-form-item label="专题名称：" style="display: flex">
+                <el-input v-model="form.specialName" style="width: 200px"></el-input>
+              </el-form-item>
 
+              <el-form-item label="词条类别：" style="display: flex">
+                <el-select size="small" v-model="form.region" placeholder="请选择活动区域">
+                  <el-option label="外部词条" value="outer"></el-option>
+                  <el-option label="内部词条" value="inner"></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+
+            <div style="display: flex;">
               <el-form-item label="专题封面：" style="display: flex;">
                 <el-upload
-                  style="float: left;max-width: 140px;"
-                  class="avatar-uploader"
-                  :action="baseUrlConfig.UPLOAD_URL"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
+                    style="float: left;max-width: 140px;"
+                    class="avatar-uploader"
+                    :action="baseUrlConfig.UPLOAD_URL"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
                 >
-                  <img v-if="form.specialCoverUrl" :src="form.specialCoverUrl" class="avatar" />
+                  <img v-if="form.specialCoverUrl" :src="form.specialCoverUrl" class="avatar" alt="" />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
+
+              <el-form-item label="专题描述：" style="display: flex; flex: 1">
+                <el-input
+                    v-model="form.specialDesc"
+                    resize="none"
+                    type="textarea"
+                    style="width: 100%"
+                    :rows="6"
+                ></el-input>
+              </el-form-item>
             </div>
+
+
+
+
+
+
+
           </el-form>
         </div>
       </el-card>
-      <el-card class="myForm" shadow="hover">
+
+      <!-- <el-card class="myForm" shadow="hover">
         <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
           <span class="leftBorder"></span>
           聚合规则
@@ -78,19 +93,19 @@
                     :expand-on-click-node="false"
                     highlight-current
                   >
-                    <!--<div class="custom-tree-node" slot-scope="{ node, data}">
+                    &lt;!&ndash;<div class="custom-tree-node" slot-scope="{ node, data}">
                                           <div>
                                             <span @click.stop="chooseItem(data)">{{ data.name }}</span>
                                           </div>
                                           <span class="el-ic"></span>
-                                        </div>-->
+                                        </div>&ndash;&gt;
                   </el-tree>
                 </div>
               </el-form-item>
               <el-form-item label="关键词：">
-                <!--                                <el-input placeholder="回车添加关键词" v-model="keyword" class="input-with-select" @keyup.native.13="addKeyword">-->
-                <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
-                <!--                                </el-input>-->
+                &lt;!&ndash;                                <el-input placeholder="回车添加关键词" v-model="keyword" class="input-with-select" @keyup.native.13="addKeyword">&ndash;&gt;
+                &lt;!&ndash;<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>&ndash;&gt;
+                &lt;!&ndash;                                </el-input>&ndash;&gt;
                 <div class="mg-top-20" style="border-radius: 4px;border: 1px solid #DCDFE6;">
                   <el-tag
                     style="float: left"
@@ -116,9 +131,9 @@
               </el-form-item>
 
               <el-form-item label="标签：">
-                <!--                                <el-input placeholder="回车添加标签" v-model="label" class="input-with-select" @keyup.native.13="addLabel">-->
-                <!--                                    &lt;!&ndash;<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>&ndash;&gt;-->
-                <!--                                </el-input>-->
+                &lt;!&ndash;                                <el-input placeholder="回车添加标签" v-model="label" class="input-with-select" @keyup.native.13="addLabel">&ndash;&gt;
+                &lt;!&ndash;                                    &lt;!&ndash;<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>&ndash;&gt;&ndash;&gt;
+                &lt;!&ndash;                                </el-input>&ndash;&gt;
                 <div class="mg-top-20" style="border-radius: 4px;border: 1px solid #DCDFE6;">
                   <el-tag
                     style="float: left"
@@ -146,7 +161,7 @@
             </el-form>
           </div>
         </div>
-      </el-card>
+      </el-card>-->
     </div>
     <el-card style="min-height: 500px;margin: 10px">
       <div style="font-weight: bold;font-size: 20px;" slot="header" class="clearfix">
@@ -240,7 +255,10 @@
         >
       </div>
       <!-- 弹窗 -->
-      <el-dialog :title="'添加' + statusList[parseInt(activeTab - 1)].name" :visible.sync="dialogVisible">
+      <el-dialog
+        :title="'添加' + statusList[parseInt(activeTab - 1)].name"
+        :visible.sync="dialogVisible"
+      >
         <el-input placeholder="请输入内容" v-model="entrySearch" style="margin-bottom: 10px">
           <!--<el-button slot="append" @clcik="entrySearchList">搜索</el-button>-->
           <el-button slot="append" @click="entrySearchList">搜索词条</el-button>
@@ -310,7 +328,8 @@ export default {
         categoryIds: '',
         keyWords: '',
         labels: '',
-        specialCoverUrl: ''
+        specialCoverUrl: '',
+        nbct: sessionStorage.getItem('nbct')
       },
       pagination: {
         page: 1,
@@ -585,15 +604,17 @@ export default {
           query: vm.entrySearch
         })
         .then(res => {
-          res.data.records.map(item => {
-            try {
-              item.img = JSON.parse(item.text).img
-              item.desc = JSON.parse(item.text).text
-            } catch (e) {
-              item.img = ''
-              item.desc = ''
-            }
-          })
+          if (res.data.records) {
+            res.data.records.map(item => {
+              try {
+                item.img = JSON.parse(item.text).img
+                item.desc = JSON.parse(item.text).text
+              } catch (e) {
+                item.img = ''
+                item.desc = ''
+              }
+            })
+          }
           vm.entryListData = res.data.records
           vm.paginationEntry.count = res.data.total
         })
@@ -676,6 +697,7 @@ export default {
 }
 /deep/ .sepcial .el-form-item__content {
   margin-left: 0 !important;
+  flex: 1;
 }
 .versionHistory {
   background: #f6fafb;
@@ -833,7 +855,10 @@ export default {
     display: flex;
   }
   .myForm {
-    width: 50%;
+    // TODO 右边删掉一个框，所以把这个拉伸，如果代码回滚，打开 838 行，删除 839 行
+    /*width: 50%;*/
+    width: 100%;
+
     margin: 10px;
     overflow: unset;
   }

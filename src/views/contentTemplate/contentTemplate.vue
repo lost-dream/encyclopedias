@@ -80,9 +80,9 @@
                 <!--换成弹窗形式-->
                 <span class="comp-tr-node--btns" v-show="currentNode == data.id">
                   <i class="el-icon-caret-left el-icon--left"></i>
-                  <span class="btn" @click="handleAdd(node, data)">添加子类</span>
-                  <span class="btn" @click="handleEdit(node, data)">修改分类</span>
-                  <span class="btn" @click="handleDelete(node, data)">删除分类</span>
+                  <span class="btn" @click="handleAdd(node, data)">添加子目录</span>
+                  <span class="btn" @click="handleEdit(node, data)">修改目录</span>
+                  <span class="btn" @click="handleDelete(node, data)">删除目录</span>
                 </span>
               </template>
             </div>

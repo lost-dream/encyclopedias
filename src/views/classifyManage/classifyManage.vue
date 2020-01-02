@@ -282,23 +282,25 @@ export default {
         pageSize: 100
       })
         .then(res => {
-          res.data.records.map(item => {
-            this.attributeTypeAry.map(item1 => {
-              if (item1.id === item.attributeType) {
-                item.attributeTypeName = item1.name
-              }
+          if (res.data.records) {
+            res.data.records.map(item => {
+              this.attributeTypeAry.map(item1 => {
+                if (item1.id === item.attributeType) {
+                  item.attributeTypeName = item1.name
+                }
+              })
+              this.editTypeAry.map(item1 => {
+                if (item1.id === item.editType) {
+                  item.editType = item1.name
+                }
+              })
+              this.editSourceAry.map(item1 => {
+                if (item1.id === item.editSource) {
+                  item.editSource = item1.name
+                }
+              })
             })
-            this.editTypeAry.map(item1 => {
-              if (item1.id === item.editType) {
-                item.editType = item1.name
-              }
-            })
-            this.editSourceAry.map(item1 => {
-              if (item1.id === item.editSource) {
-                item.editSource = item1.name
-              }
-            })
-          })
+          }
           this.parentClassifyData = res.data.records
         })
         .catch(res => {

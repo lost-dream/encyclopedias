@@ -72,7 +72,7 @@
           <template slot-scope="scope">
             <el-button
               style="color: #6b9cec;"
-              v-if="scope.row.STATE - 0 === 1"
+              v-if="scope.row.STATE - 0 === 1 || scope.row.STATE - 0 === 4"
               @click="modifyEntry(scope.row)"
               type="text"
               size="small"
@@ -216,7 +216,8 @@ export default {
       userEntryList({
         pageNumber: this.pagination.page,
         pageSize: this.pagination.limit,
-        auditState: this.status
+        auditState: this.status,
+        userId: JSON.parse(sessionStorage.getItem('user')).userId
       })
         .then(res => {
           this.MyEntryList = res.data.records
