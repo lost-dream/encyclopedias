@@ -513,6 +513,8 @@ export default {
         })
       }
     })
+    let lemma = document.getElementsByClassName('lemma-map')
+    console.log(9898, lemma)
   },
   updated() {
     this.$nextTick(() => {
@@ -555,7 +557,6 @@ export default {
       if (vm.wikiContent.entryLabels && vm.wikiContent.entryLabels.length) {
         vm.$set(vm.wikiContent.entryLabels[0], 'choosed', true)
       }
-
       res.data.entrySummarys.map(item => {
         if (item.dataType == 1) {
           vm.summaryEditor = JSON.parse(item.summary).text
@@ -697,10 +698,8 @@ export default {
         return next
       }, [])
 
-
       vm.wikiContent.entryAttributes = entryAttributes
     },
-
     routeToEditOthersEntry() {
       let vm = this
       vm.$router.push({

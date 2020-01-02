@@ -13,11 +13,13 @@
       >
         <!--一级路由-->
         <template v-for="(item, index) in menu">
-          <el-menu-item
+          <el-menu-item :key="index" :index="item.componentName">
+            <!-- <el-menu-item
             :key="index"
             v-if="menuMap.includes(item.value)"
             :index="item.componentName"
-          >
+          > -->
+            <!-- TODO 后台管理侧边栏 -->
             <template slot="title">
               <img style="margin-right: 10px;" :src="item.icon" alt="" />
               <span v-text="item.title"></span>

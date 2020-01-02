@@ -4,6 +4,7 @@
     <div v-if="!searchTotalStation" class="entryListData">
       <div
         v-for="(item, index) in entryListData"
+        :key="index"
         @click="routeToEntry(item.ENTRY_ID)"
         class="entry-cell"
         :class="index == entryListData.length - 1 ? '' : 'bd-bottom'"
@@ -38,6 +39,7 @@
     <div v-else class="entryListData">
       <div
         v-for="(item, index) in entryListData"
+        :key="index"
         @click="routeToEntry(item.itemid)"
         class="entry-cell"
         :class="index == entryListData.length - 1 ? '' : 'bd-bottom'"

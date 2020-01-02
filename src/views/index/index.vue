@@ -64,12 +64,24 @@
             </div>
 
             <div class="rightBtnArea">
-              <el-button @click="gotoCreate">创建词条</el-button>
-              <el-button @click="gotoMyEntry">我的词条</el-button>
-              <!-- TODO 用户数据中代表权限的字段名是什么 && 字段值是什么代表有权限 -->
-              <el-button v-if="userData && userData.userName === 'admin'" @click="gotoManager">
-                后台管理
-              </el-button>
+              <el-button
+                type="primary"
+                style="font-weight: border;color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
+                @click="gotoCreate"
+                >创建词条</el-button
+              >
+              <el-button
+                type="danger"
+                style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
+                @click="gotoMyEntry"
+                >我的词条</el-button
+              >
+              <el-button
+                type="danger"
+                style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
+                @click="gotoManager"
+                >后台管理</el-button
+              >
             </div>
           </div>
         </el-col>
@@ -101,7 +113,7 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="background: #EBF3F6;margin-top: 30px;">
+    <div style="background: #EBF3F6;margin-top: 30px;min-height: 560px;padding-top: 4px;">
       <div class="w1280">
         <div class="bgf6fafb">
           <div class="title">
@@ -225,7 +237,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -454,6 +466,10 @@ export default {
       this.getEntryList()
       this.getRecommendList()
     })
+  },
+  mounted() {
+    let categoryOrigin = document.getElementsByClassName('categoryOrigin')
+    console.log(3123, categoryOrigin, categoryOrigin[0].innerHTML)
   }
 }
 </script>
@@ -481,23 +497,31 @@ export default {
   line-height: 354px;
 }
 .categoryListItem {
+  border-bottom: 1px solid #ccc;
+  margin-right: 36px;
   &:hover {
     cursor: pointer;
     opacity: 0.6;
   }
   .ellipsis3 {
-    line-height: 1.5;
-    font-size: 28px;
+    line-height: 30px;
+    font-size: 24px;
     color: #959595;
   }
+  .ellipsis {
+    line-height: 1;
+    font-size: 24px;
+    color: #333;
+  }
   .entry-title {
-    line-height: 1.5;
-    font-size: 28px;
+    line-height: 30px;
+    font-size: 26px;
     color: #5a5a5a;
     margin-bottom: 10px;
   }
   .text-desc {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 40px;
+    height: 116px;
   }
   .cat-img {
     .image-slot {
@@ -507,7 +531,7 @@ export default {
   }
 }
 .main-page {
-  padding-top: 30px;
+  padding-top: 20px;
   // background: url('/static/image/index-bg.png') 0 0 no-repeat;
   // background-size: 100% 550px;
   .w1280 {
@@ -544,7 +568,7 @@ export default {
   display: inline-block;
   vertical-align: top;
   /*margin-bottom: 20px;*/
-  height: 260px;
+  height: 210px;
   .categoryTreeList {
     height: 100%;
   }
@@ -570,14 +594,18 @@ export default {
 }
 .category-item {
   /*padding: 10px 0 10px 15px;*/
+  padding: 17px 0 10px 0px;
   border-top: 1px solid #9cc6ec;
   &:nth-child(5) {
     /*border-bottom: none;*/
+    padding-top: 0px;
   }
   &:nth-child(6) {
+    padding-top: 0px;
     /*border-bottom: none;*/
   }
-  &:nth-child(7) {
+  &:nth-child(4) {
+    padding-top: 0px;
     /*border-bottom: none;*/
   }
   .categoryTreeList {
@@ -587,6 +615,11 @@ export default {
   &:nth-child(3n + 1) {
     .categoryTreeList {
       /*border-right: 0;*/
+    }
+  }
+  &:nth-child(3n) {
+    .categoryTreeList {
+      border-right: 0;
     }
   }
   /*&:nth-child(5n+1){*/
@@ -604,26 +637,28 @@ export default {
   color: #99acae;
 
   p {
-    font-size: 28px;
-    /*font-weight: bold;*/
+    font-size: 26px;
+    font-weight: bold;
     line-height: 1.5;
     color: white;
     text-align: center;
     /*box-shadow: 0 2px 5px 1px #848484;*/
+    margin-left: 10px;
     margin-bottom: 5px;
+    margin-top: 10px;
   }
   .ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: inline-block;
-    /*height: 165px;*/
-    height: 200px;
+    height: 165px;
+    // height: 200px;
     width: 400px;
     /*border-right: 1px solid #ccc;*/
 
     ul {
-      height: 200px;
+      height: 165px;
       display: inline-block;
       width: calc(33% - 1px);
       border-right: 1px solid #c9cdce;
@@ -633,13 +668,14 @@ export default {
     }
 
     li {
+      font-size: 24px;
       margin: 0;
       padding: 0 12px;
       /*display: inline-block;
 			width: calc(33% - 1px);*/
-      line-height: 1.5;
+      line-height: 30px;
       font-size: 26px;
-      color: #7d7e7e;
+      color: #333;
       text-align: left;
       vertical-align: top;
       /*border-right: 1px solid #C9CDCE;*/
@@ -711,8 +747,10 @@ export default {
   }
   margin: 0 5px;
   position: relative;
-  width: 256px;
-  height: 460px;
+  // width: 256px;
+  // height: 460px;
+  width: 250px;
+  height: 380px;
   background: #ffffff;
 
   .carousel-image {
@@ -749,15 +787,17 @@ export default {
     font-size: 16px;
     .entry-title {
       line-height: 1.5;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: bold;
       padding-left: 10px;
     }
   }
   .ellipsis3 {
-    font-size: 26px;
-    line-height: 1.5;
-    color: #7a7a7a;
+    font-size: 24px;
+    line-height: 30px;
+    color: #333;
+    // line-height: 1.5;
+    // color: #7a7a7a;
     padding: 0 10px 0 10px;
   }
 }
@@ -765,7 +805,7 @@ export default {
   /*border: 1px solid #ccc;*/
   background: #ebf1f1;
   width: 360px;
-  height: 480px;
+  height: 400px;
   /*background: #f6fafb;*/
   margin: auto;
   position: relative;
@@ -774,28 +814,29 @@ export default {
     height: 200px;
   }
   > div:not(.el-image) {
-    width: 324px;
-    height: 260px;
-    padding: 20px 0 30px 0;
+    width: 320px;
+    height: 170px;
+    padding: 20px 0 20px 0;
     background: white;
     border-radius: 5px;
     position: absolute;
-    top: 160px;
+    top: 170px;
     left: calc(50% - 162px);
     box-shadow: 0 0 8px 0 #ccc;
     p {
       text-align: center;
-      font-size: 28px;
+      font-size: 26px;
       font-family: '仿宋';
       font-weight: bold;
       margin-bottom: 10px;
+      color: #333;
     }
     div {
-      font-size: 26px;
+      font-size: 24px;
       font-family: '仿宋';
       padding: 0 30px;
-      line-height: 1.5;
-      color: #7d7e7e;
+      line-height: 30px;
+      color: #333;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -810,8 +851,8 @@ export default {
   // background: white;
 }
 .title {
-  margin: 15px 0;
-  padding-left: 90px;
+  margin: 25px 0;
+  padding-left: 74px;
   color: #338ce6;
   font-weight: bold;
   font-size: 28px;
@@ -828,8 +869,10 @@ export default {
   box-sizing: border-box;
   color: #338ce6;
   font-size: 28px;
+  margin-top: 60px;
   .left {
     display: inline-block;
+    margin-top: 40px;
     div {
       width: 100%;
       padding: 15px 0;
@@ -901,8 +944,8 @@ export default {
   background: #f6fafb;
 }
 .cat-img {
-  width: 150px;
-  height: 96px;
+  width: 120px;
+  height: 92px;
   overflow: visible;
   background: #eee;
   /deep/ .image-slot {
@@ -927,8 +970,10 @@ body {
   height: 354px;
   padding-bottom: 40px;
   /deep/ .el-tabs__item {
-    height: 58px;
-    line-height: 1.5;
+    // margin-top: 15px;
+    font-weight: bold;
+    height: 55px;
+    line-height: 2;
     width: 100px;
     text-align: center;
     color: #333333;

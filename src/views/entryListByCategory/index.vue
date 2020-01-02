@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import { entryList } from '@/api/onlyShowData/index.js'
+import { categoryTree } from '@/api/classifyManager/index.js'
 import { getEntryDetail } from '@/api/onlyShowData/index.js'
 export default {
   name: 'entryListByCategory',
@@ -50,6 +52,7 @@ export default {
     return {
       entryListData: [],
       categoryList: [],
+      categoryTreeList: [],
       pagination: {
         page: 1,
         limit: 12,
@@ -65,8 +68,18 @@ export default {
       this.list()
     }
   },
+  created() {
+    let vm = this
+    Cetc10Auth().init(function() {
+      // vm.getChoosedCategoryInfo()
+      vm.categoryTree()
+    })
+  },
+  mounted() {},
+  destroyed() {},
   methods: {
     seeEntry(hash) {
+      console.log(hash)
       this.$router.push({
         name: 'viewEntry',
         query: {
@@ -121,6 +134,16 @@ export default {
     getChoosedCategoryInfo() {
       try {
         var obj = JSON.parse(sessionStorage.getItem('choosedCategoryInfo'))
+        this.categoryTreeList.forEach(item => {
+          if (item.id === obj.thirdAry[obj.index2].parentId) {
+            this.categoryList = item.children
+          }
+        })
+        this.categoryList.map(item => {
+          item.choosed = item.id === obj.id2
+          this.categoryId = obj.id2
+        })
+
         obj.thirdAry.map(item => {
           item.choosed = false
         })
@@ -131,13 +154,7 @@ export default {
         throw e
       }
     }
-  },
-	created() {
-		let vm = this
-		Cetc10Auth().init(function() {
-			vm.getChoosedCategoryInfo()
-		})
-	},
+  }
 }
 </script>
 

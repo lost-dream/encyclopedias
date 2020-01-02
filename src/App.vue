@@ -88,6 +88,7 @@ export default {
     }
   },
   mounted() {
+    // TODO 登陆
     Cetc10Auth().init(() => {
       this.isLogin()
     })

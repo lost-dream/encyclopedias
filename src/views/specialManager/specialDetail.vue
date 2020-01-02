@@ -255,7 +255,10 @@
         >
       </div>
       <!-- 弹窗 -->
-      <el-dialog :title="'添加' + statusList[parseInt(activeTab - 1)].name" :visible.sync="dialogVisible">
+      <el-dialog
+        :title="'添加' + statusList[parseInt(activeTab - 1)].name"
+        :visible.sync="dialogVisible"
+      >
         <el-input placeholder="请输入内容" v-model="entrySearch" style="margin-bottom: 10px">
           <!--<el-button slot="append" @clcik="entrySearchList">搜索</el-button>-->
           <el-button slot="append" @click="entrySearchList">搜索词条</el-button>
@@ -600,15 +603,17 @@ export default {
           query: vm.entrySearch
         })
         .then(res => {
-          res.data.records.map(item => {
-            try {
-              item.img = JSON.parse(item.text).img
-              item.desc = JSON.parse(item.text).text
-            } catch (e) {
-              item.img = ''
-              item.desc = ''
-            }
-          })
+          if (res.data.records) {
+            res.data.records.map(item => {
+              try {
+                item.img = JSON.parse(item.text).img
+                item.desc = JSON.parse(item.text).text
+              } catch (e) {
+                item.img = ''
+                item.desc = ''
+              }
+            })
+          }
           vm.entryListData = res.data.records
           vm.paginationEntry.count = res.data.total
         })

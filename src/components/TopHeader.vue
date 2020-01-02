@@ -18,7 +18,7 @@
           </el-input>
           <!--<el-button @click="search" style='margin: 0 20px;' type="primary">进入词条</el-button>-->
           <el-button
-            style="margin-left: 20px;vertical-align: top;"
+            style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
             @click="searchTotalStation"
             type="danger"
             >全站搜索</el-button
@@ -57,7 +57,7 @@ export default {
     try {
       this.userName = sessionStorage.getItem('userName')
     } catch (e) {
-      throw e
+      //TODO handle the exception
     }
   },
 
