@@ -216,7 +216,8 @@ export default {
       userEntryList({
         pageNumber: this.pagination.page,
         pageSize: this.pagination.limit,
-        auditState: this.status
+        auditState: this.status,
+        userId: JSON.parse(sessionStorage.getItem('user')).userId
       })
         .then(res => {
           this.MyEntryList = res.data.records

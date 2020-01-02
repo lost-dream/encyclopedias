@@ -27,9 +27,7 @@
                   </el-image>
                   <div>
                     <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
-                    <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                      {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                    </div>
+                    <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3" v-html="JSON.parse(item.SUMMARY[0].summary).text"></div>
                   </div>
                 </div>
               </div>
@@ -68,8 +66,9 @@
                 type="primary"
                 style="font-weight: border;color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
                 @click="gotoCreate"
-                >创建词条</el-button
               >
+                创建词条
+              </el-button>
               <el-button
                 type="danger"
                 style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"

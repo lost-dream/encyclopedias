@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { getMenuTree } from '@/api/user'
 
 export default {
   data() {

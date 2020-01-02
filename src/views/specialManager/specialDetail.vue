@@ -328,7 +328,8 @@ export default {
         categoryIds: '',
         keyWords: '',
         labels: '',
-        specialCoverUrl: ''
+        specialCoverUrl: '',
+        nbct: sessionStorage.getItem('nbct')
       },
       pagination: {
         page: 1,
