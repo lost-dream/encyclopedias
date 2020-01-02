@@ -8,9 +8,11 @@
       <el-row style="margin: 0 0 0 20px;">
         <div class="categoryChoose">
           <span class="label">分类</span>
-          <span @click="changeTreeShow" class="el-input__inner changeTreeShow"
-            >{{ checkedCategoryName }}<i class="clearTree el-icon-close" @click="clearTree"></i
-          ></span>
+          <el-input @focus="changeTreeShow" clearable class="changeTreeShow" v-model="checkedCategoryName"
+          ></el-input>
+<!--          <span @click="changeTreeShow" class="el-input__inner changeTreeShow"-->
+<!--            >{{ checkedCategoryName }}<i class="clearTree el-icon-close" @click="clearTree"></i-->
+<!--          ></span>-->
           <div v-show="showTree" class="myTree">
             <el-tree
               ref="tree"
