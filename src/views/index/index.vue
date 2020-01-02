@@ -226,7 +226,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -257,7 +257,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -288,7 +288,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -319,7 +319,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -350,7 +350,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -381,7 +381,7 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
+                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
                     {{ JSON.parse(item.SUMMARY[0].summary).text }}
                   </div>
                 </div>
@@ -587,6 +587,10 @@ export default {
       this.getEntryList()
       this.getCategoryList(6)
     })
+  },
+  mounted() {
+    let categoryOrigin = document.getElementsByClassName('categoryOrigin')
+    console.log(3123, categoryOrigin, categoryOrigin[0].innerHTML)
   }
 }
 </script>
@@ -614,23 +618,31 @@ export default {
   line-height: 354px;
 }
 .categoryListItem {
+  border-bottom: 1px solid #ccc;
+  margin-right: 36px;
   &:hover {
     cursor: pointer;
     opacity: 0.6;
   }
   .ellipsis3 {
-    line-height: 1.5;
-    font-size: 28px;
+    line-height: 30px;
+    font-size: 24px;
     color: #959595;
   }
+  .ellipsis{
+    line-height: 1;
+    font-size: 24px;
+    color: #333;
+  }
   .entry-title {
-    line-height: 1.5;
-    font-size: 28px;
+    line-height: 30px;
+    font-size: 26px;
     color: #5a5a5a;
     margin-bottom: 10px;
   }
   .text-desc {
-    padding: 0 0 0 10px;
+    padding: 0 0 0 40px;
+    height: 116px;
   }
   .cat-img {
     .image-slot {
@@ -1053,8 +1065,8 @@ export default {
   background: #f6fafb;
 }
 .cat-img {
-  width: 150px;
-  height: 96px;
+  width: 120px;
+  height: 92px;
   overflow: visible;
   background: #eee;
   /deep/ .image-slot {

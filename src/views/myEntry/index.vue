@@ -72,7 +72,7 @@
           <template slot-scope="scope">
             <el-button
               style="color: #6b9cec;"
-              v-if="scope.row.STATE - 0 === 1"
+              v-if="scope.row.STATE - 0 === 1 || scope.row.STATE - 0 === 4"
               @click="modifyEntry(scope.row)"
               type="text"
               size="small"

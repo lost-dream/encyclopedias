@@ -22,7 +22,7 @@
             <div class="mg-top-20">
                 <h4 class="block">同义词</h4>
                 <div class="block-container">
-                    <el-input placeholder="回车添加同义词" v-model="synonym" class="input-with-select" @keyup.native.13="addSymonyn">
+                    <el-input placeholder="回车添加同义词" v-model.trim="synonym" class="input-with-select" @keyup.native.13="addSymonyn">
                         <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
                     </el-input>
                     <div class="mg-top-20" v-show="synonymList.length">
@@ -151,22 +151,22 @@
                 <div class="block-container">
                     <template v-for="(item, index) in quoteList">
                         <el-card class="box-card" style="margin-bottom: 10px">
-                            <p>{{item.title}}
+                            <p>原始标题:{{item.title}}
                                 <span style="float: right;">
                                 <a @click="editQuote(index)" class="quote-btn">编辑</a>
                                 <a @click="deleteQuote(index)" class="quote-btn">删除</a>
                             </span>
                             </p>
-                            <p>{{item.inntroduce}}</p>
-                            <a  target="_blank" class="quote-btn" @click="goLink(item.url)">{{item.url}}</a>
-                        </el-card >
+                            <p>说明:{{item.inntroduce}}</p>
+                            <p>网址:<a  target="_blank" class="quote-btn" @click="goLink(item.url)">{{item.url}}</a></p>
+                        </el-card>
                     </template>
-                    <el-form label-width="80px">
-                        <el-form-item label="说明">
-                            <el-input v-model="quote.inntroduce"></el-input>
-                        </el-form-item>
+                    <el-form label-width="80px" :model="quote" ref="quote">
                         <el-form-item label="原始标题">
                             <el-input v-model="quote.title"></el-input>
+                        </el-form-item>
+                        <el-form-item label="说明">
+                            <el-input v-model="quote.inntroduce"></el-input>
                         </el-form-item>
                         <el-form-item label="网址">
                             <el-input v-model="quote.url"></el-input>
@@ -183,7 +183,7 @@
             <div class="mg-top-20">
                 <h4 class="block">标签</h4>
                 <div class="block-container">
-                    <el-input placeholder="回车添加标签" v-model="tag" class="input-with-select" @keyup.native.13="addTag">
+                    <el-input placeholder="回车添加标签" v-model.trim="tag" class="input-with-select" @keyup.native.13="addTag">
                         <!--<el-button slot="append" icon="el-icon-circle-plus-outline" @clcik.native="addSymonyn"></el-button>-->
                     </el-input>
                     <div class="mg-top-20" v-show="tagList.length">
@@ -497,7 +497,7 @@
                     });
                     this.showChooseClassify = false
                     this.classifyData = JSON.parse(JSON.stringify(this.classifyTemplateData))
-                    console.log(this.classifyData)
+                    // console.log(this.classifyData)
                     this.pickerOptionsList = this.pickerOptionsTemplateList
                 }).catch(() => {
                 });
@@ -550,7 +550,7 @@
 
             handleAvatarSuccess(res, file) {
                 this.imageUrl = res.url
-                console.log(this.imageUrl)
+                // console.log(this.imageUrl)
             },
         	
             setModel () {
@@ -657,8 +657,8 @@
                         }
                     }
                 })
-                console.log(arr_sub)
-                console.log(arr_main)
+                // console.log(arr_sub)
+                // console.log(arr_main)
                 // 构建二级目录结构
                 arr_sub.map((item,index)=>{
                     if(item.length%2==1){
@@ -733,8 +733,8 @@
                         }
                     })
                 })
-                console.log('提交格式为')
-                console.log(arr_main)
+                // console.log('提交格式为')
+                // console.log(arr_main)
                 vm.submitList = arr_main
                 let arr = []
                 arr_main.map(item => {
@@ -763,11 +763,13 @@
                     arr.push(lvl1)
                 })
                 vm.menuList = arr
-                console.log(arr)
+                // console.log(arr)
             },
             addSymonyn () {
                 let vm = this;
-                if(vm.synonymList.includes(vm.synonym)){
+                if (!vm.synonym || vm.synonym === "") {
+                    this.$message.error('不能为空');
+                } else if (vm.synonymList.includes(vm.synonym)){
                     this.$message.error('该同义词已存在');
                 } else {
                     let obj = {
@@ -782,15 +784,17 @@
             handleClose(tag, index) {
                 if(index == 1){
                     this.synonymList.splice(this.synonymList.indexOf(tag), 1);
-                    console.log(this.synonymList)
+                    // console.log(this.synonymList)
                 } else {
                     this.tagList.splice(this.tagList.indexOf(tag), 1);
-                    console.log(this.tagList)
+                    // console.log(this.tagList)
                 }
             },
             addTag () {
                 let vm = this;
-                if(vm.tagList.includes(vm.tag)){
+                if (!vm.tag || vm.tag === "") {
+                    this.$message.error('不能为空');
+                } else if (vm.tagList.includes(vm.tag)){
                     this.$message.error('该标签已存在');
                 } else {
                     let obj = {name: vm.tag,sourceType:7,sourceValue:null}
@@ -799,16 +803,20 @@
                 }
             },
             resetQuote () {
+                this.editIndex = -1
                 this.quote = {title:'',url: '',inntroduce:''}
             },
             addQuoteToList () {
-                console.log(this.editIndex)
+                // console.log(this.editIndex)
                 let vm = this
-                if(vm.quote.name == ''||vm.quote.inntroduce == ''||vm.quote.url == '') {
+                if(vm.quote.title == ''||vm.quote.inntroduce == ''||vm.quote.url == '') {
                     vm.$message.error('请填写所有数据！');
                     return false
                 }
                 if(vm.editIndex>=0){
+                    this.quoteList[vm.editIndex].inntroduce = this.quote.inntroduce
+                    this.quoteList[vm.editIndex].title = this.quote.title
+                    this.quoteList[vm.editIndex].url = this.quote.url
                     vm.$set(vm.quoteList[vm.editIndex], vm.quote)
                     vm.quote = {title:'',url: '',inntroduce:''}
                     vm.editIndex = -1
@@ -825,7 +833,9 @@
             },
             editQuote (index) {
                 this.editIndex = index
-                this.quote = this.quoteList[index]
+                this.quote.inntroduce = this.quoteList[index].inntroduce
+                this.quote.title = this.quoteList[index].title
+                this.quote.url = this.quoteList[index].url
             },
             deleteQuote(index){
                 this.quoteList.splice(index,1)
@@ -838,7 +848,7 @@
                 }
             },
             handleClick(tab, event) {
-                console.log(tab, event);
+                // console.log(tab, event);
             },
             setTemplate () {
                 let vm = this, content = ''
@@ -871,7 +881,7 @@
                 let vm = this
                 let attributesAry = []
                 let noValid = false
-                console.log(vm.summaryEditor.getData())
+                // console.log(vm.summaryEditor.getData())
                 this.classifyData.map((item)=>{
                 	if(item.noValid){
                 		noValid = true
@@ -909,14 +919,14 @@
                     referrences: vm.quoteList,
                     synonym: vm.synonymList
                 }
-                console.log(data)
+                // console.log(data)
                 vm.$axios.post('/wiki-backend/api/entry/save', data)
                     .then(res =>{
                         if(res.status == 'success'){
                             vm.$router.push('/myEntry')
                         }
                     })
-                console.log(data)
+                // console.log(data)
 
             },
             // 获取分类树
@@ -924,7 +934,7 @@
                 let vm = this
                 categoryApi.getTreeData()
                 .then(res => {
-                    console.log('success:', res);
+                    // console.log('success:', res);
                     // return;
                     if(res.status == 'success'){
                         let data = res.data && (_.cloneDeep(res.data.children) || [])
@@ -972,11 +982,16 @@
             // 保存词条分类
             saveCategory(){
                 // 处理一下savedCategories数组, 提出来id，重新弄个数组就ok
-                this.savedCategories = this.savedMiddleCategories//将临时分类数组赋值给页面
-                this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
-                this.savedCategoriesKeysAry = this.savedCategories.map(x => {return x.id})
-                this.dialogVisible = false;
-                   console.log(this.savedCategoriesArr,this.savedMiddleCategories,this.savedCategoriesKeysAry)
+                console.log(this.savedMiddleCategories.length)
+                if (this.savedMiddleCategories.length <= 5) { 
+                    this.savedCategories = this.savedMiddleCategories//将临时分类数组赋值给页面
+                    this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
+                    this.savedCategoriesKeysAry = this.savedCategories.map(x => {return x.id})
+                    this.dialogVisible = false;
+                } else {
+                    this.$message.error("词条最多5个。无法保存")
+                }
+                // console.log(this.savedCategoriesArr,this.savedMiddleCategories,this.savedCategoriesKeysAry)
             },
             // 获取目录数据
             loadContent(data, node, component){
