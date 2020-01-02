@@ -88,7 +88,6 @@
       >
         <el-carousel-item v-for="item in specialListData" :key="item.id">
           <div @click="routeToSpecial(item.id)" class="specialList">
-            <!--<img :src="item.specialCoverUrl" alt="" />-->
             <el-image :fit="'cover'" :src="item.specialCoverUrl">
               <div slot="error" class="image-slot">
                 <img src="./tank.png" alt="" />
@@ -199,25 +198,29 @@
           @tab-click="handleClick"
           v-loading="panelLoading"
         >
-          <el-tab-pane label="科技" name="6">
+          <el-tab-pane
+            v-for="(value, i) in recommendList"
+            :key="i"
+            :label="value.name"
+            :name="i + 1 + ''"
+          >
             <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
+                  v-for="(item, i) in categoryList"
+                  :key="i"
+                  class="categoryListItem"
+                  style="width: 45%;display: flex;padding: 10px;"
+                  @click="seeEntry(item)"
               >
                 <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
+                    class="cat-img"
+                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
+                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
                 </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
                 <div class="text-desc">
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
@@ -228,162 +231,6 @@
                 </div>
               </div>
             </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="经济" name="5">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="安全" name="4">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="外交" name="3">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="军事" name="2">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                @click="seeEntry(item)"
-                style="width: 45%;display: flex;padding: 10px;"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
-          </el-tab-pane>
-          <el-tab-pane label="政治" name="1">
-            <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
-              <div
-                v-for="(item, i) in categoryList"
-                :key="i"
-                class="categoryListItem"
-                style="width: 45%;display: flex;padding: 10px;"
-                @click="seeEntry(item)"
-              >
-                <el-image
-                  class="cat-img"
-                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <!--<img src="/static/image/tank.png"/>-->
-                <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="noData" v-else>当前分类暂无词条</p>
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -392,9 +239,9 @@
 </template>
 
 <script>
-import { entryStatistical, getCarouselList } from '@/api/onlyShowData/index.js'
-import { specialList } from '@/api/special/index.js'
-import { categoryTree, getInternalEntryList } from '@/api/classifyManager/index.js'
+import { entryStatistical, getCarouselList, getEntryDetail, getRecommendClass } from '@/api/onlyShowData'
+import { specialList } from '@/api/special'
+import { categoryTree, getInternalEntryList } from '@/api/classifyManager'
 
 export default {
   name: 'index',
@@ -403,11 +250,12 @@ export default {
       loading: true,
       panelLoading: true,
       userData: JSON.parse(sessionStorage.getItem('user')),
-      activeName: '6',
+      activeName: '',
       entryStatisticalData: {},
       specialListData: [],
       categoryTreeList: [], // 外部词条
       innerTreeList: [], // 内部词条
+      recommendList: [], // 分类推荐列表
       entryListData: [],
       categoryList: [],
       categoryTitleColor: ['e9b937', '6d56fb', '079ea9', 'ec6b6b', '199df2'],
@@ -420,7 +268,8 @@ export default {
         pageNumber: '1',
         pageSize: '9',
         categoryId: '',
-        keyword: ''
+        keyword: '',
+        nbct: sessionStorage.getItem('nbct')
       }).then(res => {
         for (let i = 0; i < res.data.records.length; i += 3) {
           this.entryListData.push(res.data.records.slice(i, i + 3))
@@ -496,13 +345,16 @@ export default {
       specialList({
         pageNumber: 1,
         pageSize: 10,
-        keyword: ''
+        keyword: '',
+        nbct: sessionStorage.getItem('nbct')
       }).then(res => {
         this.specialListData = res.data.records
       })
     },
     entryStatistical() {
-      entryStatistical({}).then(res => {
+      entryStatistical({
+        nbct: sessionStorage.getItem('nbct')
+      }).then(res => {
         this.entryStatisticalData = res.data
         this.$nextTick(() => {
           let list = document.querySelectorAll('.data')
@@ -521,16 +373,14 @@ export default {
       })
     },
     getCategoryList(id) {
-      this.$axios
-        .post('/wiki-backend/api/entry/list', {
-          pageNumber: 1,
-          pageSize: 6,
-          categoryIds: id
-        })
-        .then(res => {
-          this.categoryList = res.data.records
-          this.panelLoading = false
-        })
+      getEntryDetail({
+        pageNumber: 1,
+        pageSize: 6,
+        categoryIds: id
+      }).then(res => {
+        this.categoryList = res.data.records
+        this.panelLoading = false
+      })
     },
     handleClick() {
       this.panelLoading = true
@@ -568,6 +418,31 @@ export default {
       } else {
         return 0
       }
+    },
+    // 获取分类推荐列表 && 加载第一组数据
+    getRecommendList() {
+      // api().then(res => { .....
+      getRecommendClass({
+        nbct: sessionStorage.getItem('nbct')
+      }).then(res => {
+        console.log(res)
+        if (res.status === 'success') {
+          this.recommendList = res.data.reduce((arr, item) => {
+            arr.push({
+              name: item.name,
+              id: item.id
+            })
+            return arr
+          }, [])
+
+          this.getCategoryList(this.recommendList[0].id)
+          this.activeName = this.recommendList[0].id
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+
+
     }
   },
   created() {
@@ -577,7 +452,7 @@ export default {
       this.categoryTree()
       this.getInternalEntryListData()
       this.getEntryList()
-      this.getCategoryList(6)
+      this.getRecommendList()
     })
   }
 }

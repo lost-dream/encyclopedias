@@ -33,6 +33,16 @@ export function getCarouselList(data) {
   })
 }
 
+// 获取首页分类推荐
+
+export function getRecommendClass(data) {
+  return request({
+    url: '/wiki-backend/api/category/flTuijian',
+    method: 'post',
+    data
+  })
+}
+
 //获取词条详情
 export function getEntryDetail(data) {
   return request({

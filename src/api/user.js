@@ -9,6 +9,7 @@ export function userLogin(data) {
   })
 }
 
+// 获取后台首页目录树
 export function getMenuTree(data) {
   return request({
     url: '/wiki-backend/api/getTheMenuTree',

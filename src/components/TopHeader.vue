@@ -87,7 +87,7 @@ export default {
     },
     searchTotalStation() {
       this.content = this.content.trim()
-      if (this.content != '') {
+      if (this.content !== '') {
         sessionStorage.setItem('searchContent', this.content)
         if (this.$route.path === '/searchResultList') {
           var url =

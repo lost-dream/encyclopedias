@@ -6,38 +6,52 @@
           <span class="leftBorder"></span>
           基础信息
         </div>
-
         <div style="display: flex;" class="sepcial">
           <el-form style="width: 100%" label-width="140px">
-            <div style="display: flex">
-              <div style="">
-                <el-form-item label="专题名称：" style="display: flex">
-                  <el-input v-model="form.specialName" style="width: 200px"></el-input>
-                </el-form-item>
-                <el-form-item label="专题描述：" style="display: flex">
-                  <el-input
-                    v-model="form.specialDesc"
-                    resize="none"
-                    type="textarea"
-                    style="width: 200px"
-                    :rows="6"
-                  ></el-input>
-                </el-form-item>
-              </div>
+            <div style="display: flex;">
+              <el-form-item label="专题名称：" style="display: flex">
+                <el-input v-model="form.specialName" style="width: 200px"></el-input>
+              </el-form-item>
 
+              <el-form-item label="词条类别：" style="display: flex">
+                <el-select size="small" v-model="form.region" placeholder="请选择活动区域">
+                  <el-option label="外部词条" value="outer"></el-option>
+                  <el-option label="内部词条" value="inner"></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+
+            <div style="display: flex;">
               <el-form-item label="专题封面：" style="display: flex;">
                 <el-upload
-                  style="float: left;max-width: 140px;"
-                  class="avatar-uploader"
-                  :action="baseUrlConfig.UPLOAD_URL"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
+                    style="float: left;max-width: 140px;"
+                    class="avatar-uploader"
+                    :action="baseUrlConfig.UPLOAD_URL"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
                 >
-                  <img v-if="form.specialCoverUrl" :src="form.specialCoverUrl" class="avatar" />
+                  <img v-if="form.specialCoverUrl" :src="form.specialCoverUrl" class="avatar" alt="" />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
+
+              <el-form-item label="专题描述：" style="display: flex; flex: 1">
+                <el-input
+                    v-model="form.specialDesc"
+                    resize="none"
+                    type="textarea"
+                    style="width: 100%"
+                    :rows="6"
+                ></el-input>
+              </el-form-item>
             </div>
+
+
+
+
+
+
+
           </el-form>
         </div>
       </el-card>
@@ -677,6 +691,7 @@ export default {
 }
 /deep/ .sepcial .el-form-item__content {
   margin-left: 0 !important;
+  flex: 1;
 }
 .versionHistory {
   background: #f6fafb;

@@ -49,28 +49,28 @@ export default {
     return {
       menu: [
         {
+          title: '词条分类维护',
+          icon: require('./yingyongguanli.png'),
+          value: 'citiaofenleiweihu',
+          componentName: 'categoryManage'
+        },
+        {
           title: '属性模板管理',
           icon: require('./Management.png'),
           value: 'shuxingmubanguanli',
           componentName: 'classifyManager'
         },
         {
+          title: '目录模板管理',
+          icon: require('./caidanguanli.png'),
+          value: 'mulumubanguanli',
+          componentName: 'contentTemplate'
+        },
+        {
           title: '词条版本审核',
           icon: require('./bianji.png'),
           value: 'citiaobanbenshenhe',
           componentName: 'entryVersionExamine'
-        },
-        {
-          title: '数据源管理',
-          icon: require('./jigouguanli.png'),
-          value: 'shujuyuanguanli',
-          componentName: 'dataSourceList'
-        },
-        {
-          title: '抽取词条审核',
-          icon: require('./wangluo.png'),
-          value: 'chouqucitiaoshenhe',
-          componentName: 'entryExamine'
         },
         {
           title: '特色专题管理',
@@ -84,21 +84,20 @@ export default {
           value: 'tiqurenwuguanli',
           componentName: 'extractTask'
         },
-
         {
-          title: '目录模板管理',
-          icon: require('./caidanguanli.png'),
-          value: 'mulumubanguanli',
-          componentName: 'contentTemplate'
+          title: '抽取词条审核',
+          icon: require('./wangluo.png'),
+          value: 'chouqucitiaoshenhe',
+          componentName: 'entryExamine'
         },
         {
-          title: '词条分类维护',
-          icon: require('./yingyongguanli.png'),
-          value: 'citiaofenleiweihu',
-          componentName: 'categoryManage'
+          title: '数据源管理',
+          icon: require('./jigouguanli.png'),
+          value: 'shujuyuanguanli',
+          componentName: 'dataSourceList'
         }
       ],
-      menuMap: [], // 用来存储有权限展示的 menuList
+      menuMap: JSON.parse(sessionStorage.getItem('user-menu')), // 用来存储有权限展示的 menuList
       currentIndex: ''
     }
   },
@@ -112,36 +111,6 @@ export default {
   },
   created() {
     this.currentIndex = this.$route.name
-    getMenuTree({
-      Authorization: sessionStorage.getItem('token')
-    }).then(res => {
-      if (res.status === 0) {
-        const data = res.data
-        if (!(data.authTree && data.authTree.menu)) {
-          // empty data
-          this.$message({
-            message: '目录列表暂无数据',
-            type: 'warning'
-          })
-        } else {
-          // 获取后台返回数据，只取用来判断权限的字段值（example:value）插入 map 中，用来判断本地 menu 是否有权限显示出来
-          const backendData = data.authTree.menu
-          let backendMenu
-          backendData.map(value => {
-            if (value.name === '后台') {
-              backendMenu = value.childrenMenu
-            }
-          })
-
-          this.menuMap = backendMenu.reduce((arr, menuItem) => {
-            arr.push(menuItem.value)
-            return arr
-          }, [])
-        }
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
   }
 }
 </script>
