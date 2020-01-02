@@ -54,11 +54,7 @@ export default {
   },
   created() {
     this.content = sessionStorage.getItem('searchContent')
-    try {
-      this.userName = sessionStorage.getItem('userName')
-    } catch (e) {
-      //TODO handle the exception
-    }
+    this.userName = sessionStorage.getItem('userName')
   },
 
   methods: {
