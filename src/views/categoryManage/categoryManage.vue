@@ -35,7 +35,7 @@
           <!-- 非编辑状态 -->
           <template v-else>
             <!-- 名称： 新增节点增加class（is-new） -->
-            <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']">
+            <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
               {{ node.label }}
             </span>
 
@@ -555,6 +555,12 @@ export default {
   // 自定义节点
   .comp-tr-node {
     // label
+    .nodelabel {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 110px;
+    }
     .comp-tr-node--name {
       display: inline-block;
       line-height: 40px;
@@ -569,7 +575,7 @@ export default {
     // button
     .comp-tr-node--btns {
       position: relative;
-      top: -5px;
+      top: -16px;
       margin-left: 10px;
       opacity: 0;
       transition: opacity 0.1s;
