@@ -110,7 +110,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .reptileData{
         .leftBorder {
             display: inline-block;
