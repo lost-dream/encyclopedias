@@ -300,8 +300,11 @@ export default {
                 }
               })
             })
+            this.parentClassifyData = res.data.records
+          } else {
+            this.parentClassifyData = [];
           }
-          this.parentClassifyData = res.data.records
+
         })
         .catch(res => {
           console.log(res)

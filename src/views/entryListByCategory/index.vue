@@ -139,11 +139,16 @@ export default {
         keyword: ''
       }).then(res => {
         this.hasFinishAjax = true
-        res.data.records.map(item => {
-					item.text = JSON.parse(item.SUMMARY[0].summary).text
-					item.img = JSON.parse(item.SUMMARY[0].summary).img
-        })
-        this.entryListData = res.data.records
+        if (res.data.records && res.data.records.length !== 0) {
+          res.data.records.map(item => {
+            item.text = JSON.parse(item.SUMMARY[0].summary).text
+            item.img = JSON.parse(item.SUMMARY[0].summary).img
+          })
+          this.entryListData = res.data.records
+        } else {
+          this.entryListData = [];
+        }
+
         this.pagination.count = res.data.total
       })
     }
