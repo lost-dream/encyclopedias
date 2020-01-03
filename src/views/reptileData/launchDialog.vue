@@ -1,5 +1,5 @@
 <template>
-    <div class="associationDialog">
+    <div class="launchDialog">
         <el-table
                 class="departTable"
                 :data="entryListData"
@@ -16,12 +16,11 @@
             <el-button type="primary" @click="modify">确 定</el-button>
         </div>
     </div>
-
 </template>
 
 <script>
   export default {
-    name: 'associationDialog'
+    name: 'launchDialog'
   }
 </script>
 
