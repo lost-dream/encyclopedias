@@ -34,7 +34,7 @@ module.exports = [
     icon: '/static/image/icon/jigouguanli.png'
   },
   {
-    name: '爬虫数据管理',
+    name: '爬虫任务管理',
     componentName: 'reptileData',
     icon: '/static/image/icon/jigouguanli.png'
   }

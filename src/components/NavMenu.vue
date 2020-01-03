@@ -98,7 +98,7 @@ export default {
           componentName: 'dataSourceList'
         },
         {
-          title: '爬虫数据管理',
+          title: '爬虫任务管理',
           icon: require('./jigouguanli.png'),
           value: 'pachongguanli',
           componentName: 'reptileData'

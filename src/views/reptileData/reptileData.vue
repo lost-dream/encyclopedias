@@ -3,7 +3,7 @@
         <el-card class="myForm" shadow="hover">
             <div style="font-weight: bold;font-size: 28px;" slot="header" class="clearfix">
                 <span class="leftBorder"></span>
-                爬虫数据管理
+                爬虫任务管理
             </div>
 
             <el-table
@@ -28,10 +28,10 @@
 
         <!--弹框-->
         <el-dialog title="关联词列表" :visible.sync="associationDialog" width="60%" :before-close="CloseAssociationDialog">
-            <associationDialog ：associationDialog="associationDialog"></associationDialog>
+            <associationDialog :associationDialog="associationDialog"></associationDialog>
         </el-dialog>
         <el-dialog title="启动词列表" :visible.sync="launchDialog" width="60%" :before-close="CloseLaunchDialog">
-            <launchDialog ：launchDialog="launchDialog"></launchDialog>
+            <launchDialog :launchDialog="launchDialog"></launchDialog>
         </el-dialog>
     </div>
 </template>
