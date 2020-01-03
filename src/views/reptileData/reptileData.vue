@@ -27,10 +27,10 @@
         </el-card>
 
         <!--弹框-->
-        <el-dialog title="关联词列表" :visible.sync="associationDialog" width="60%">
+        <el-dialog title="关联词列表" :visible.sync="associationDialog" width="60%" :before-close="CloseAssociationDialog">
             <associationDialog ：associationDialog="associationDialog"></associationDialog>
         </el-dialog>
-        <el-dialog title="启动词列表" :visible.sync="launchDialog" width="60%">
+        <el-dialog title="启动词列表" :visible.sync="launchDialog" width="60%" :before-close="CloseLaunchDialog">
             <launchDialog ：launchDialog="launchDialog"></launchDialog>
         </el-dialog>
     </div>
@@ -59,12 +59,21 @@
       }
     },
     methods: {
+      // 打开弹窗
       checkLaunch() {
         this.launchDialog = true
       },
       associationLaunch() {
         this.associationDialog = true
+      },
+      // 关闭弹窗
+      CloseAssociationDialog() {
+        this.associationDialog = false
+      },
+      CloseLaunchDialog() {
+        this.launchDialog = false
       }
+
     }
 
   }
