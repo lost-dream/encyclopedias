@@ -99,7 +99,7 @@ export default {
         },
         {
           title: '爬虫任务管理',
-          icon: require('./jigouguanli.png'),
+          icon: require('./entity.png'),
           value: 'pachongguanli',
           componentName: 'reptileData'
         }
