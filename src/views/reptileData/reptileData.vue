@@ -19,8 +19,8 @@
                 <el-table-column label="操作">
                     <template>
                         <el-button type="text" style="color: #f49b9b">重新抓取</el-button>
-                        <el-button type="text" style="color: #5b7dd8" @click="checkLaunch" ：launchDialog="launchDialog">查看启动词条</el-button>
-                        <el-button type="text" style="color: #53bb9a" @click="associationLaunch" ：associationDialog="associationDialog">查看关联词条</el-button>
+                        <el-button type="text" style="color: #5b7dd8" @click="checkLaunch">查看启动词条</el-button>
+                        <el-button type="text" style="color: #53bb9a" @click="associationLaunch">查看关联词条</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -28,10 +28,10 @@
 
         <!--弹框-->
         <el-dialog title="关联词列表" :visible.sync="associationDialog" width="60%">
-            <associationDialog></associationDialog>
+            <associationDialog ：associationDialog="associationDialog"></associationDialog>
         </el-dialog>
         <el-dialog title="启动词列表" :visible.sync="launchDialog" width="60%">
-            <launchDialog></launchDialog>
+            <launchDialog ：launchDialog="launchDialog"></launchDialog>
         </el-dialog>
     </div>
 </template>
