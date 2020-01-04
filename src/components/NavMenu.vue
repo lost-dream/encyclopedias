@@ -96,6 +96,12 @@ export default {
           icon: require('./jigouguanli.png'),
           value: 'shujuyuanguanli',
           componentName: 'dataSourceList'
+        },
+        {
+          title: '爬虫任务管理',
+          icon: require('./entity.png'),
+          value: 'pachongguanli',
+          componentName: 'reptileData'
         }
       ],
       menuMap: JSON.parse(sessionStorage.getItem('user-menu')), // 用来存储有权限展示的 menuList

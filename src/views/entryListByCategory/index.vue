@@ -22,7 +22,7 @@
           :src="baseUrlConfig.IMG_PREFIX + item.img"
           alt=""
         />
-        <img v-else src="./tank.png" />
+        <img v-else src="/static/image/tank.png" />
         <div>
           <p class="entry-title">{{ item.ENTRY_NAME }}</p>
           <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary">{{ item.text }}</div>
@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import { entryList } from '@/api/onlyShowData/index.js'
-import { categoryTree } from '@/api/classifyManager/index.js'
-import { getEntryDetail } from '@/api/onlyShowData/index.js'
+import { entryList } from '@/api/onlyShowData'
+import { categoryTree } from '@/api/classifyManager'
+import { getEntryDetail } from '@/api/onlyShowData'
 export default {
   name: 'entryListByCategory',
   data() {
@@ -55,7 +55,7 @@ export default {
       categoryTreeList: [],
       pagination: {
         page: 1,
-        limit: 12,
+        limit: 10,
         count: 0
       },
       categoryId: '',
@@ -68,18 +68,8 @@ export default {
       this.list()
     }
   },
-  created() {
-    let vm = this
-    Cetc10Auth().init(function() {
-      // vm.getChoosedCategoryInfo()
-      vm.categoryTree()
-    })
-  },
-  mounted() {},
-  destroyed() {},
   methods: {
     seeEntry(hash) {
-      console.log(hash)
       this.$router.push({
         name: 'viewEntry',
         query: {
@@ -112,6 +102,33 @@ export default {
       this.pagination.page = val
       this.list()
     },
+
+    /*
+    * 重新刷新
+    * */
+    categoryTree() {
+      categoryTree({}).then(res =>{
+        var obj = JSON.parse(sessionStorage.getItem('choosedCategoryInfo'))
+        if (res.data.children) {
+          res.data.children.map((item)=>{
+            if (item.id === obj.thirdAry[0].parentId) {
+              this.categoryList = item.children;
+              this.categoryList.forEach((child) => {
+                child.choosed = false;
+                if (child.id === obj.id2) {
+                  child.choosed = true;
+                }
+              });
+            }
+          });
+          this.categoryId = obj.id2;
+        }
+      })
+              .catch(res=>{
+                console.log(res)
+              })
+    },
+
     //根据分类id获取词条列表
     list() {
       this.hasFinishAjax = false
@@ -122,28 +139,24 @@ export default {
         keyword: ''
       }).then(res => {
         this.hasFinishAjax = true
-        res.data.records.map(item => {
-					item.text = JSON.parse(item.SUMMARY[0].summary).text
-					item.img = JSON.parse(item.SUMMARY[0].summary).img
-        })
-        this.entryListData = res.data.records
+        if (res.data.records && res.data.records.length !== 0) {
+          res.data.records.map(item => {
+            item.text = JSON.parse(item.SUMMARY[0].summary).text
+            item.img = JSON.parse(item.SUMMARY[0].summary).img
+          })
+          this.entryListData = res.data.records
+        } else {
+          this.entryListData = [];
+        }
+
         this.pagination.count = res.data.total
       })
-    },
+    }
     //根据本地存储的首页传参高亮显示首页选中的分类
-    getChoosedCategoryInfo() {
+    /*getChoosedCategoryInfo() {
       try {
         var obj = JSON.parse(sessionStorage.getItem('choosedCategoryInfo'))
-        this.categoryTreeList.forEach(item => {
-          if (item.id === obj.thirdAry[obj.index2].parentId) {
-            this.categoryList = item.children
-          }
-        })
-        this.categoryList.map(item => {
-          item.choosed = item.id === obj.id2
-          this.categoryId = obj.id2
-        })
-
+        console.log(56, obj);
         obj.thirdAry.map(item => {
           item.choosed = false
         })
@@ -153,8 +166,15 @@ export default {
       } catch (e) {
         throw e
       }
-    }
-  }
+    }*/
+  },
+  created() {
+    let vm = this
+    Cetc10Auth().init(function() {
+      // vm.getChoosedCategoryInfo()
+      vm.categoryTree()
+    })
+  },
 }
 </script>
 

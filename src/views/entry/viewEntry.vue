@@ -81,13 +81,9 @@
         v-if="wikiContent.entryAttributes.length"
       >
         <ul class="entry-attr">
-          <li>
-            <div class="key">{{ wikiContent.entryAttributes[0].key }}</div>
-            <div class="value">{{ wikiContent.entryAttributes[0].value }}</div>
-          </li>
-          <li>
-            <div class="key">{{ wikiContent.entryAttributes[1].key }}</div>
-            <div class="value">{{ wikiContent.entryAttributes[1].value }}</div>
+          <li v-for="(item, i) in wikiContent.entryAttributes" :key="i">
+            <div class="key">{{ item.key }}</div>
+            <div class="value">{{ item.value }}</div>
           </li>
         </ul>
         <ul
@@ -542,7 +538,7 @@ export default {
       for (let i = 0; i < sourceClassName.length; i++) {
         wrapper.querySelector(sourceClassName[i])
       }
-      wrapper.querySelector()
+      // wrapper.querySelector()
     })
   },
   beforeRouteEnter(to, from, next) {
@@ -557,41 +553,45 @@ export default {
       if (vm.wikiContent.entryLabels && vm.wikiContent.entryLabels.length) {
         vm.$set(vm.wikiContent.entryLabels[0], 'choosed', true)
       }
-      res.data.entrySummarys.map(item => {
-        if (item.dataType == 1) {
-          vm.summaryEditor = JSON.parse(item.summary).text
-          vm.imageUrl = JSON.parse(item.summary).img
-        } else {
-          let obj = {
-            img: JSON.parse(item.summary).img,
-            text: JSON.parse(item.summary).text,
-            sourceType: item.sourceType,
-            sourceValue: item.sourceValue
+      if (res.data.entrySummarys.length > 0) {
+        res.data.entrySummarys.map(item => {
+          if (item.dataType == 1) {
+            vm.summaryEditor = JSON.parse(item.summary).text
+            vm.imageUrl = JSON.parse(item.summary).img
+          } else {
+            let obj = {
+              img: JSON.parse(item.summary).img,
+              text: JSON.parse(item.summary).text,
+              sourceType: item.sourceType,
+              sourceValue: item.sourceValue
+            }
           }
-        }
-      })
+        })
+      }
       //只显示dataType为1的内容
       var entryContentVosList = []
-      res.data.entryContentVos.map(item => {
-        if (item.dataType === 1 && item.contentTitle && item.contentTitle !== 'null') {
-          let obj1 = JSON.parse(JSON.stringify(item))
-          obj1.children = []
-          item.children.map(k => {
-            if (k.dataType === 1 && k.contentTitle && k.contentTitle !== 'null') {
-              let obj2 = k
-              obj2.children = []
-              obj1.children.push(obj2)
-              k.children.map(v => {
-                if (v.dataType === 1 && v.contentTitle && v.contentTitle !== 'null') {
-                  let obj3 = v
-                  obj2.children.push(obj3)
-                }
-              })
-            }
-          })
-          entryContentVosList.push(obj1)
-        }
-      })
+      if (res.data.entryContentVos.length > 0) {
+        res.data.entryContentVos.map(item => {
+          if (item.dataType === 1 && item.contentTitle && item.contentTitle !== 'null') {
+            let obj1 = JSON.parse(JSON.stringify(item))
+            obj1.children = []
+            item.children.map(k => {
+              if (k.dataType === 1 && k.contentTitle && k.contentTitle !== 'null') {
+                let obj2 = k
+                obj2.children = []
+                obj1.children.push(obj2)
+                k.children.map(v => {
+                  if (v.dataType === 1 && v.contentTitle && v.contentTitle !== 'null') {
+                    let obj3 = v
+                    obj2.children.push(obj3)
+                  }
+                })
+              }
+            })
+            entryContentVosList.push(obj1)
+          }
+        })
+      }
       vm.wikiContent.entryContentVos = entryContentVosList
 
       //处理目录
@@ -641,11 +641,14 @@ export default {
 
       //只显示dataType为1的引用
       var entryReferrencesList = []
-      res.data.entryReferrences.map(item => {
-        if (item.dataType === 1) {
-          entryReferrencesList.push(item)
-        }
-      })
+      if (res.data.entryReferrences.length > 0) {
+        res.data.entryReferrences.map(item => {
+          if (item.dataType === 1) {
+            entryReferrencesList.push(item)
+          }
+        })
+      }
+
       vm.wikiContent.entryReferrences = entryReferrencesList
       //只显示dataType为1的属性
       var entryAttributesList = []

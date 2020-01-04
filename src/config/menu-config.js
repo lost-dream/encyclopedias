@@ -32,6 +32,11 @@ module.exports = [
     name: '数据源管理',
     componentName: 'dataSourceList',
     icon: '/static/image/icon/jigouguanli.png'
+  },
+  {
+    name: '爬虫任务管理',
+    componentName: 'reptileData',
+    icon: '/static/image/icon/entity.png'
   }
 
   //二级路由

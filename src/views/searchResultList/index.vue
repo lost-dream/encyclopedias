@@ -127,17 +127,22 @@ export default {
           query: this.keyword,
           nbct: this.nbct
         }).then(res => {
-          res.data.records.map(item => {
-            try {
-              item.img = JSON.parse(item.text).img
-              item.desc = JSON.parse(item.text).text
-            } catch (e) {
-              throw e
-              item.img = ''
-              item.desc = ''
-            }
-          })
-          this.entryListData = res.data.records
+          if (res.data.records) {
+            res.data.records.map(item => {
+              try {
+                item.img = JSON.parse(item.text).img
+                item.desc = JSON.parse(item.text).text
+              } catch (e) {
+                throw e
+                item.img = ''
+                item.desc = ''
+              }
+            })
+            this.entryListData = res.data.records
+          }  else {
+            this.entryListData = [];
+          }
+
           this.pagination.count = res.data.total
           this.hasLoad = true
         })

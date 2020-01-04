@@ -35,7 +35,7 @@
           <!-- 非编辑状态 -->
           <template v-else>
             <!-- 名称： 新增节点增加class（is-new） -->
-            <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']">
+            <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
               {{ node.label }}
             </span>
 
@@ -123,6 +123,7 @@
           <el-button
             style="background: #5b7dd7 !important;color: white;margin-left: 50px;"
             type="primary"
+            :loading="loading"
             @click="doSaveAction"
             >保 存</el-button
           >
@@ -140,6 +141,7 @@ export default {
   name: 'categoryManager',
   data() {
     return {
+      loading: false, // 保存点击后的加载效果
       isLoading: false, // 是否加载
       setTree: [],
       NODE_KEY: 'id', // id对应字段
@@ -404,6 +406,7 @@ export default {
       let apiFunc = this.diagTitle.text === '编辑分类' ? api.updateCategory : api.createCategory,
         vm = this,
         expanded = ''
+        vm.loading = true
       this.$refs['ruleForm'].validate(valid => {
         if (valid) {
           typeof vm.form.parentId == 'object' &&
@@ -416,8 +419,10 @@ export default {
                 this.form = {}
                 this.expanded = expanded
                 this.getTreeData()
+                vm.loading = false
                 this.$message.success('保存成功！')
               } else {
+                vm.loading = false
                 this.$message.error('保存失败，请稍后重试！')
               }
             })
@@ -555,10 +560,17 @@ export default {
   // 自定义节点
   .comp-tr-node {
     // label
+    .nodelabel {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 110px;
+    }
     .comp-tr-node--name {
       display: inline-block;
       line-height: 40px;
       min-height: 40px;
+      vertical-align: middle;
       padding-left: 4px;
       font-size: 14px;
       // 新增
@@ -569,7 +581,6 @@ export default {
     // button
     .comp-tr-node--btns {
       position: relative;
-      top: -5px;
       margin-left: 10px;
       opacity: 0;
       transition: opacity 0.1s;

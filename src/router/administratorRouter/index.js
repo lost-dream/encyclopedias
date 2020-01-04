@@ -49,6 +49,14 @@ const administratorRouter = [
 			},
 		},
 		{
+			path: '/reptileData',
+			component: () => import('@/views/reptileData/reptileData'),
+			name: 'reptileData',
+			meta: {
+				title: '信息百科 - 爬虫任务管理',
+			},
+		},
+		{
 			path: '/entryVersionExamine',
 			component: () => import('@/views/entryVersionExamine/entryVersionExamine'),
 			name: 'entryVersionExamine',

@@ -597,8 +597,11 @@ export default {
                 item.desc = ''
               }
             })
+            vm.entryListData = res.data.records
+          } else {
+            vm.entryListData = [];
           }
-          vm.entryListData = res.data.records
+
           vm.paginationEntry.count = res.data.total
         })
     },
