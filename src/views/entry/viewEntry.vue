@@ -73,19 +73,21 @@
           </el-collapse>
         </div>
       </div>
-      <!-- 词条属性 -->
+      <!-- 词条属性: 重新分割属性模块，取前两个固定，后面的通过循环得到 -->
       <div
         class="mg-top-20"
         id="attribute"
         style="padding: 50px 0 20px;"
         v-if="wikiContent.entryAttributes.length"
       >
+        <!-- 词条属性的前两个，写死-->
         <ul class="entry-attr">
-          <li v-for="(item, i) in wikiContent.entryAttributes" :key="i">
-            <div class="key">{{ item.key }}</div>
-            <div class="value">{{ item.value }}</div>
+          <li v-for="i in 2" :key="i">
+            <div class="key">{{ wikiContent.entryAttributes[i-1].key }}</div>
+            <div class="value">{{ wikiContent.entryAttributes[i-1].value }}</div>
           </li>
         </ul>
+        <!-- 循环剩下的属性 -->
         <ul
           class="entry-attr"
           v-for="i in Math.ceil(wikiContent.entryAttributes.length / 2) - 1"
@@ -121,99 +123,111 @@
               @click="slideToAnchor1(item)"
               class="catalogue p1 pd-top-5 text-center"
               style="color: #338ce6;"
-              v-if="item.level == 1"
-              >{{ item.mark + 1 }} {{ item.value }}</a
+              v-if="parseInt(item.level) === 1"
             >
+              {{ item.mark + 1 }} {{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p2 pd-top-5 text-center"
-              v-else-if="item.level == 2"
-              >&nbsp;{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 2"
             >
+              &nbsp;{{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p3 pd-top-5 text-center"
-              v-else-if="item.level == 3"
-              >{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 3"
             >
+              {{ item.value }}
+            </a>
           </li>
         </ul>
         <ul
           v-if="contentList[1] && contentList[1].length"
-          style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc"
+          style="padding: 15px;width: 180px;display: inline-block;border-right: 1px dotted #ccc"
         >
           <li v-for="(item, index) in contentList[1]" :key="index">
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p1 pd-top-5 text-center"
               style="color: #338ce6;"
-              v-if="item.level == 1"
-              >{{ item.mark + 1 }} {{ item.value }}</a
+              v-if="parseInt(item.level) === 1"
             >
+              {{ item.mark + 1 }} {{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p2 pd-top-5 text-center"
-              v-else-if="item.level == 2"
-              >&nbsp;{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 2"
             >
+              {{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p3 pd-top-5 text-center"
-              v-else-if="item.level == 3"
-              >{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 3"
             >
+              {{ item.value }}
+            </a>
           </li>
         </ul>
         <ul
           v-if="contentList[2] && contentList[2].length"
-          style="padding: 15px;width: calc(21.5%  - 31px);width: 180px;display: inline-block;border-right: 1px dotted #ccc"
+          style="padding: 15px;width: 180px;display: inline-block;border-right: 1px dotted #ccc"
         >
           <li v-for="(item, index) in contentList[2]" :key="index">
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p1 pd-top-5 text-center"
               style="color: #338ce6;"
-              v-if="item.level == 1"
-              >{{ item.mark + 1 }} {{ item.value }}</a
+              v-if="parseInt(item.level) === 1"
             >
+              {{ item.mark + 1 }} {{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p2 pd-top-5 text-center"
-              v-else-if="item.level == 2"
-              >&nbsp;{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 2"
             >
+              &nbsp;{{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p3 pd-top-5 text-center"
-              v-else-if="item.level == 3"
-              >{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 3"
             >
+              {{ item.value }}
+            </a>
           </li>
         </ul>
         <ul
           v-if="contentList[3] && contentList[3].length"
-          style="padding: 15px;width: calc(21.5%  - 30px);width: 180px;display: inline-block;"
+          style="padding: 15px;width: 180px;display: inline-block;"
         >
           <li v-for="(item, index) in contentList[3]" :key="index">
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p1 pd-top-5 text-center"
               style="color: #338ce6;"
-              v-if="item.level == 1"
-              >{{ item.mark + 1 }} {{ item.value }}</a
+              v-if="parseInt(item.level) === 1"
             >
+              {{ item.mark + 1 }} {{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p2 pd-top-5 text-center"
-              v-else-if="item.level == 2"
-              >&nbsp;{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 2"
             >
+              &nbsp;{{ item.value }}
+            </a>
             <a
               @click="slideToAnchor1(item)"
               class="catalogue p3 pd-top-5 text-center"
-              v-else-if="item.level == 3"
-              >{{ item.value }}</a
+              v-else-if="parseInt(item.level) === 3"
             >
+              {{ item.value }}
+            </a>
           </li>
         </ul>
       </div>
@@ -322,8 +336,9 @@
                 modalShow = true
                 code = '3'
               "
-              >审核通过</el-button
             >
+              审核通过
+            </el-button>
             <el-button
               type="danger"
               style="background: #6b9cec;color: white;"
@@ -332,8 +347,9 @@
                 modalShow = true
                 code = '4'
               "
-              >审核不通过</el-button
             >
+              审核不通过
+            </el-button>
           </div>
         </el-card>
         <el-card style="margin-top: 20px">
@@ -374,9 +390,10 @@
             <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
           </div>
           <div id="rightNav" class="rightNav" style="max-height: 310px;overflow-y: scroll">
+
             <!--<a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
-                        <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
-                        <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>-->
+            <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
+            <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>-->
 
             <div
               v-for="(item, index) in wikiContent.entryContentVos"
@@ -446,7 +463,7 @@
   </div>
 </template>
 <script>
-import { audit } from '@/api/entry/index.js'
+import { audit } from '@/api/entry'
 export default {
   name: 'editor',
   data() {
@@ -549,15 +566,15 @@ export default {
     //处理词条详情
     handleEntryDetail(res) {
       let vm = this
-      vm.wikiContent = res.data
-      if (vm.wikiContent.entryLabels && vm.wikiContent.entryLabels.length) {
-        vm.$set(vm.wikiContent.entryLabels[0], 'choosed', true)
+      this.wikiContent = res.data
+      if (this.wikiContent.entryLabels && this.wikiContent.entryLabels.length) {
+        this.$set(this.wikiContent.entryLabels[0], 'choosed', true)
       }
       if (res.data.entrySummarys.length > 0) {
         res.data.entrySummarys.map(item => {
           if (item.dataType == 1) {
-            vm.summaryEditor = JSON.parse(item.summary).text
-            vm.imageUrl = JSON.parse(item.summary).img
+            this.summaryEditor = JSON.parse(item.summary).text
+            this.imageUrl = JSON.parse(item.summary).img
           } else {
             let obj = {
               img: JSON.parse(item.summary).img,
@@ -569,7 +586,7 @@ export default {
         })
       }
       //只显示dataType为1的内容
-      var entryContentVosList = []
+      const entryContentVosList = []
       if (res.data.entryContentVos.length > 0) {
         res.data.entryContentVos.map(item => {
           if (item.dataType === 1 && item.contentTitle && item.contentTitle !== 'null') {
@@ -582,8 +599,7 @@ export default {
                 obj1.children.push(obj2)
                 k.children.map(v => {
                   if (v.dataType === 1 && v.contentTitle && v.contentTitle !== 'null') {
-                    let obj3 = v
-                    obj2.children.push(obj3)
+                    obj2.children.push(v)
                   }
                 })
               }
@@ -592,12 +608,12 @@ export default {
           }
         })
       }
-      vm.wikiContent.entryContentVos = entryContentVosList
+      this.wikiContent.entryContentVos = entryContentVosList
 
       //处理目录
-      vm.contentList = []
+      this.contentList = []
       let contentAry = []
-      vm.wikiContent.entryContentVos.map((item, index) => {
+      this.wikiContent.entryContentVos.map((item, index) => {
         let obj1 = {
           level: 1,
           value: item.contentTitle,
@@ -635,8 +651,8 @@ export default {
       })
       //均分contentList
       let average = Math.ceil(contentAry.length / 4)
-      for (var i = 0, len = contentAry.length; i < len; i += average) {
-        vm.contentList.push(contentAry.slice(i, i + average))
+      for (let i = 0, len = contentAry.length; i < len; i += average) {
+        this.contentList.push(contentAry.slice(i, i + average))
       }
 
       //只显示dataType为1的引用
@@ -649,59 +665,62 @@ export default {
         })
       }
 
-      vm.wikiContent.entryReferrences = entryReferrencesList
+      this.wikiContent.entryReferrences = entryReferrencesList
       //只显示dataType为1的属性
-      var entryAttributesList = []
+      const entryAttributesList = []
       res.data.entryAttributes.map(item => {
         if (item.dataType === 1) {
           entryAttributesList.push(item)
         }
       })
 
-      let entryAttributes = entryAttributesList.reduce((next, current) => {
-        if (current.attributeType < 4 || current.attributeType > 7) {
-          current.attributeValue = current.attributeValue
-        } else if (current.attributeType == 4) {
-          current.attributeValue = new Date(Number(current.attributeValue)).getFullYear()
-        } else if (current.attributeType == 5) {
-          current.attributeValue =
-            new Date(Number(current.attributeValue)).getFullYear() +
-            '年' +
-            new Date(Number(current.attributeValue)).getMonth() +
-            1 +
-            '月'
-        } else if (current.attributeType == 6) {
-          current.attributeValue =
-            new Date(Number(item.attributeValue)).getFullYear() +
-            '年' +
-            new Date(Number(item.attributeValue)).getMonth() +
-            1 +
-            '月' +
-            new Date(Number(item.attributeValue)).getDate() +
-            '日'
-        } else if (current.attributeType == 7) {
-          current.attributeValue =
-            new Date(Number(item.attributeValue)).getFullYear() +
-            '年' +
-            new Date(Number(item.attributeValue)).getMonth() +
-            1 +
-            '月' +
-            new Date(Number(item.attributeValue)).getDate() +
-            '日 ' +
-            new Date(Number(item.attributeValue)).getHours() +
-            ':' +
-            new Date(Number(item.attributeValue)).getMinutes() +
-            ':' +
-            new Date(Number(item.attributeValue)).getSeconds()
+      this.wikiContent.entryAttributes = entryAttributesList.reduce((next, current) => {
+        const type = parseInt(current.attributeType)
+        switch (type) {
+          case 4:
+            current.attributeValue = new Date(Number(current.attributeValue)).getFullYear()
+            break
+          case 5:
+            current.attributeValue =
+              new Date(Number(current.attributeValue)).getFullYear() +
+              '年' +
+              new Date(Number(current.attributeValue)).getMonth() +
+              1 +
+              '月'
+            break
+          case 6:
+            current.attributeValue =
+              new Date(Number(item.attributeValue)).getFullYear() +
+              '年' +
+              new Date(Number(item.attributeValue)).getMonth() +
+              1 +
+              '月' +
+              new Date(Number(item.attributeValue)).getDate() +
+              '日'
+            break
+          case 7:
+            current.attributeValue =
+              new Date(Number(item.attributeValue)).getFullYear() +
+              '年' +
+              new Date(Number(item.attributeValue)).getMonth() +
+              1 +
+              '月' +
+              new Date(Number(item.attributeValue)).getDate() +
+              '日 ' +
+              new Date(Number(item.attributeValue)).getHours() +
+              ':' +
+              new Date(Number(item.attributeValue)).getMinutes() +
+              ':' +
+              new Date(Number(item.attributeValue)).getSeconds()
+            break
         }
+
         next.push({
           key: current.attributeKey,
           value: current.attributeValue
         })
         return next
       }, [])
-
-      vm.wikiContent.entryAttributes = entryAttributes
     },
     routeToEditOthersEntry() {
       let vm = this

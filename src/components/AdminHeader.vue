@@ -22,8 +22,6 @@
 </template>
 
 <script>
-const LOGIN_URL = 'http://192.168.1.186:8081/text/aa'
-
 export default {
   data() {
     return {
@@ -38,7 +36,7 @@ export default {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('source')
       sessionStorage.removeItem('user')
-      window.location.href = LOGIN_URL
+      window.location.href = baseUrlConfig.LOGIN_URL
     }
   }
 }
@@ -75,7 +73,6 @@ export default {
       text-align: center;
       cursor: pointer;
       display: inline-block;
-      /*width: 60px;*/
       padding: 0 15px;
       i {
         margin-right: 5px;

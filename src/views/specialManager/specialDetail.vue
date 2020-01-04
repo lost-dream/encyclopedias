@@ -13,10 +13,16 @@
                 <el-input v-model="form.specialName" style="width: 200px"></el-input>
               </el-form-item>
 
-              <el-form-item label="词条类别：" style="display: flex">
+              <el-form-item v-if="permission === '1'" label="词条类别：" style="display: flex">
                 <el-select size="small" v-model="form.region" placeholder="请选择活动区域">
                   <el-option label="外部词条" value="outer"></el-option>
                   <el-option label="内部词条" value="inner"></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item v-else-if="permission === '0'" label="词条类别：" style="display: flex">
+                <el-select size="small" v-model="form.region">
+                  <el-option label="外部词条" value="outer"></el-option>
                 </el-select>
               </el-form-item>
             </div>
@@ -45,13 +51,6 @@
                 ></el-input>
               </el-form-item>
             </div>
-
-
-
-
-
-
-
           </el-form>
         </div>
       </el-card>
@@ -307,11 +306,11 @@
 import { categoryTree } from '@/api/classifyManager'
 import { parseTimeYMD } from '@/utils/commonMethod'
 import { entryList } from '@/api/onlyShowData'
-
 export default {
   name: 'specialManager',
   data() {
     return {
+      permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
       entrySearch: '',
       dialogVisible: false, // 弹窗显隐
       entryList: [],
@@ -479,7 +478,6 @@ export default {
       this.getConditionEntryList()
     },
     getConditionEntryList() {
-      // todo 换成 api 里的函数
       entryList({
         pageNumber: this.paginationEntry.page,
         pageSize: this.paginationEntry.limit,

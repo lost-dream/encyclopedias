@@ -106,6 +106,8 @@
             type="textarea"
             v-model="form.descM"
             autocomplete="off"
+            maxlength="255"
+            show-word-limit
           ></el-input>
         </el-form-item>
         <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
@@ -118,8 +120,9 @@
               form = {}
               formDisabled = true
             "
-            >取 消</el-button
-          >
+            >
+            取 消
+          </el-button>
           <el-button
             style="background: #5b7dd7 !important;color: white;margin-left: 50px;"
             type="primary"

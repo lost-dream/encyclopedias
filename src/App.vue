@@ -7,8 +7,6 @@
 <script>
 import { userLogin, getMenuTree } from '@/api/user'
 
-const LOGIN_URL = 'http://192.168.1.186:8081/text/aa'
-
 export default {
   name: 'app',
   methods: {
@@ -18,7 +16,7 @@ export default {
       if (!sessionStorage.getItem('token')) {
         this.$message.error('你还没有登录')
         setTimeout(() => {
-          window.location.href = LOGIN_URL
+          window.location.href = baseUrlConfig.LOGIN_URL
         }, DURATION_TIME)
       } else {
         const token = sessionStorage.getItem('token')
@@ -312,15 +310,12 @@ export default {
 .header {
   line-height: 60px;
   height: auto !important;
-  // margin-bottom: 15px;
   box-shadow: 0 0 5px 0 #8e8e8e;
 }
 html,
 body,
 #app {
-  height: 100vh;
-  font-family: '仿宋';
-  /*font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;*/
+  font-family: '仿宋',"Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 h2 {
   font-weight: 400;
@@ -424,22 +419,4 @@ p {
 .category-container .el-loading-mask {
   background: none !important;
 }
-/*#index-carousel ul li:nth-child(1){*/
-/*    display: none !important;*/
-/*}*/
-/*#index-carousel ul li:nth-child(3){*/
-/*    display: none;*/
-/*}*/
-/*#index-carousel ul li:nth-child(4){*/
-/*    display: none;*/
-/*}*/
-/*#index-carousel ul li:nth-child(6){*/
-/*    display: none;*/
-/*}*/
-/*#index-carousel ul li:nth-child(7){*/
-/*    display: none;*/
-/*}*/
-/*#index-carousel ul li:nth-child(9){*/
-/*    display: none;*/
-/*}*/
 </style>

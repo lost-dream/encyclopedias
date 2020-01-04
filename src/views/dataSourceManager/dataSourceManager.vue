@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import {save,update,info} from '@/api/dataSource/index.js'
+import {save,update,info} from '@/api/dataSource'
+
 export default {
 	name: 'dataSourceManager',
 	data() {
@@ -145,22 +146,22 @@ export default {
       update() {
       	var obj = this.ruleForm
       	obj.id = this.id
-      	update(obj).then((res)=>{
+      	update(obj).then(()=>{
       		this.$message({
 	          message: '数据源修改成功！',
 	          type: 'success'
-	       	});
+	       	})
 	        this.$router.push({
-				name:'dataSourceList'
-			})
+						name:'dataSourceList'
+					})
       	})
       },
       save() {
-      	save(this.ruleForm).then((res)=>{
+      	save(this.ruleForm).then(()=>{
       		this.$message({
 	          message: '数据源保存成功！',
 	          type: 'success'
-	       	});
+	       	})
 	        this.resetForm('ruleForm')
       	})
       },

@@ -7,16 +7,14 @@
   >
     <div style="width: calc(100% - 0px);display: flex;flex-direction: column;margin-bottom: 50px">
       <div>
-        <!--<h3>[ci tiao ming cheng]</h3>-->
         <h1 style="font-weight: normal;font-size: 35px;">
           <span style="font-weight: bold;">{{ wikiContent.entryName }}</span>
-          <span style="font-size: 28px;color: #338ce6;margin-left: 10px;"
-            >同义词：
+          <span style="font-size: 28px;color: #338ce6;margin-left: 10px;">
+            同义词：
             <template v-if="wikiContent.entrySynonyms.length">
-              <span v-for="(item, index) in wikiContent.entrySynonyms" :key="index">{{
-                item.name
-              }}</span>
-
+              <span v-for="(item, index) in wikiContent.entrySynonyms" :key="index">
+                {{item.name}}
+              </span>
               <span v-if="index + 1 < wikiContent.entrySynonyms.length">，</span>
             </template>
             <template v-if="!wikiContent.entrySynonyms.length">暂无同义词 </template>
@@ -26,13 +24,13 @@
       <!-- summary -->
       <div class="mg-top-20" id="summary">
         <div class="block-container" style="display: flex;flex-direction: column">
-          <!--                    <div>-->
-          <!--                        <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">-->
-          <!--                            <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">-->
-          <!--                                <i class="el-icon-picture-outline" style="margin-top: 42px"></i>-->
-          <!--                            </div>-->
-          <!--                        </el-image>-->
-          <!--                    </div>-->
+          <!--<div>
+            <el-image :src="JSON.parse(item.summary).img" style="width: 250px;min-height: 100px;height: auto">
+              <div slot="error" class="image-slot" style="height: 100px;text-align: center;background: #f6fafb">
+                <i class="el-icon-picture-outline" style="margin-top: 42px"></i>
+              </div>
+            </el-image>
+          </div>-->
           <div class="ck-content ck-summary" style="width: 100%;padding: 20px 0">
             <div v-if="summaryEditor !== ''" v-html="summaryEditor" class="main-content"></div>
             <span v-else>当前词条暂无描述</span>
@@ -55,26 +53,27 @@
               >
                 <img :src="item.img" class="avatar" style="width: 25%" alt="" />
                 <p class="main-content" style="margin-left: 10px">
-                  {{ item.text }} [<span
-                    v-if="item.sourceType == 1"
-                    style="color: rgb(51, 140, 230)"
-                    >词条来源：百度百科</span
-                  >
-                  <span v-if="item.sourceType == 2" style="color: rgb(51, 140, 230)"
-                    >词条来源：搜狗百科</span
-                  >
-                  <span v-if="item.sourceType == 3" style="color: rgb(51, 140, 230)"
-                    >词条来源：互动百科</span
-                  >
-                  <span v-if="item.sourceType == 4" style="color: rgb(51, 140, 230)"
-                    >词条来源：维基百科</span
-                  >
-                  <span v-if="item.sourceType == 5" style="color: rgb(51, 140, 230)"
-                    >词条来源：数据库抽取</span
-                  >
-                  <span v-if="item.sourceType == 6" style="color: rgb(51, 140, 230)"
-                    >词条来源：文件夹抽取</span
-                  >]
+                  {{ item.text }}
+                  [
+                  <span v-if="item.sourceType - 0 === 1" style="color: rgb(51, 140, 230)">
+                    词条来源：百度百科
+                  </span>
+                  <span v-if="item.sourceType - 0 === 2" style="color: rgb(51, 140, 230)">
+                    词条来源：搜狗百科
+                  </span>
+                  <span v-if="item.sourceType - 0 === 3" style="color: rgb(51, 140, 230)">
+                    词条来源：互动百科
+                  </span>
+                  <span v-if="item.sourceType - 0 === 4" style="color: rgb(51, 140, 230)">
+                    词条来源：维基百科
+                  </span>
+                  <span v-if="item.sourceType - 0 === 5" style="color: rgb(51, 140, 230)">
+                    词条来源：数据库抽取
+                  </span>
+                  <span v-if="item.sourceType - 0 === 6" style="color: rgb(51, 140, 230)">
+                    词条来源：文件夹抽取
+                  </span>
+                  ]
                 </p>
               </div>
             </el-collapse-item>

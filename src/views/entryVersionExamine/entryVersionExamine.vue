@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="entry-version-wrapper">
     <el-card class="myForm" shadow="hover">
       <div style="font-weight: bold;font-size: 28px;" slot="header" class="clearfix">
         <span class="leftBorder"></span>
@@ -8,11 +8,19 @@
       <el-row style="margin: 0 0 0 20px;">
         <div class="categoryChoose">
           <span class="label">分类</span>
-          <el-input @focus="changeTreeShow" clearable class="changeTreeShow" v-model="checkedCategoryName"
+          <el-input
+            @focus="changeTreeShow"
+            @blur="hideTree"
+            clearable
+            class="changeTreeShow"
+            v-model="checkedCategoryName"
           ></el-input>
-<!--          <span @click="changeTreeShow" class="el-input__inner changeTreeShow"-->
-<!--            >{{ checkedCategoryName }}<i class="clearTree el-icon-close" @click="clearTree"></i-->
-<!--          ></span>-->
+
+          <!--<span @click="changeTreeShow" class="el-input__inner changeTreeShow">
+            {{ checkedCategoryName }}
+            <i class="clearTree el-icon-close" @click="clearTree"></i>
+          </span>-->
+
           <div v-show="showTree" class="myTree">
             <el-tree
               ref="tree"
@@ -65,7 +73,9 @@
         :header-cell-style="{ background: '#ecedf2', color: '#67686d' }"
         style="width: 100%"
         @row-click="auditView"
+        @selection-change="getSelectedRow"
       >
+        <el-table-column type="selection"></el-table-column>
         <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
         <el-table-column prop="SUMMARY" label="描述" width="300">
           <template v-if="scope.row.SUMMARY" slot-scope="scope">
@@ -150,9 +160,10 @@
 </template>
 
 <script>
-import { auditList, audit } from '@/api/entry/index.js'
-import { parseTimeYMD } from '@/utils/commonMethod.js'
-import { categoryTree } from '@/api/classifyManager/index.js'
+import { auditList, audit } from '@/api/entry'
+import { parseTimeYMD } from '@/utils/commonMethod'
+import { categoryTree } from '@/api/classifyManager'
+
 export default {
   name: 'entryVersionExamine',
   data() {
@@ -205,14 +216,19 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
+    hideTree() {
+      setTimeout(() => {
+        this.showTree = false
+      }, 200)
+    },
     changeTreeShow() {
-      this.showTree = !this.showTree
+      this.showTree = true
     },
     clearTree() {
       this.showTree = false
       this.checkedCategoryName = ''
     },
-    handleNodeClick(data, checked, node) {
+    handleNodeClick(data) {
       console.log(data)
       this.categoryId = data.id
       this.checkedCategoryName = data.name
@@ -234,7 +250,7 @@ export default {
         versionId: this.modifyID,
         auditContent: this.modifyReason,
         state: this.modifyCode
-      }).then(res => {
+      }).then(() => {
         this.$message('词条状态修改成功')
         this.auditList()
       })
@@ -249,7 +265,7 @@ export default {
         .then(() => {
           deleteSource({
             id: item.id
-          }).then(res => {
+          }).then(() => {
             this.$message('删除成功')
             this.pagination.page = 1
             this.list()
@@ -334,12 +350,27 @@ export default {
           viewType: 'preview'
         }
       })
+    },
+    getSelectedRow(selected) {
+      // TODO 工作计划32，批量选中词条进行审核（等待接口联调）
+      const h = this.$createElement
+      this.$msgbox({
+        title: '消息',
+        message: h('div', null, [
+          h('span', null, '选中的节点是'),
+          h('span', null, JSON.stringify(selected))
+        ])
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.entry-version-wrapper {
+  height: 100%;
+}
+
 .el-card {
   overflow: visible;
 }

@@ -22,10 +22,10 @@
           :src="baseUrlConfig.IMG_PREFIX + item.img"
           alt=""
         />
-        <img v-else src="/static/image/tank.png" />
+        <img v-else src="/static/image/tank.png" alt="" />
         <div>
           <p class="entry-title">{{ item.ENTRY_NAME }}</p>
-          <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary">{{ item.text }}</div>
+          <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" v-html="item.text"></div>
         </div>
       </li>
     </ul>
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { entryList } from '@/api/onlyShowData'
 import { categoryTree } from '@/api/classifyManager'
 import { getEntryDetail } from '@/api/onlyShowData'
 export default {
@@ -107,8 +106,8 @@ export default {
     * 重新刷新
     * */
     categoryTree() {
-      categoryTree({}).then(res =>{
-        var obj = JSON.parse(sessionStorage.getItem('choosedCategoryInfo'))
+      categoryTree().then(res => {
+        const obj = JSON.parse(sessionStorage.getItem('choosedCategoryInfo'))
         if (res.data.children) {
           res.data.children.map((item)=>{
             if (item.id === obj.thirdAry[0].parentId) {
@@ -124,9 +123,9 @@ export default {
           this.categoryId = obj.id2;
         }
       })
-              .catch(res=>{
-                console.log(res)
-              })
+      .catch(res=>{
+        console.log(res)
+      })
     },
 
     //根据分类id获取词条列表
@@ -169,10 +168,9 @@ export default {
     }*/
   },
   created() {
-    let vm = this
-    Cetc10Auth().init(function() {
+    Cetc10Auth().init(() => {
       // vm.getChoosedCategoryInfo()
-      vm.categoryTree()
+      this.categoryTree()
     })
   },
 }
@@ -181,8 +179,7 @@ export default {
 <style lang="scss" scoped>
 .entryList {
   width: 1210px;
-  margin: auto;
-  margin-top: 20px;
+  margin: 20px auto auto;
   li {
     display: inline-block;
     vertical-align: top;
@@ -247,9 +244,8 @@ export default {
   color: #7b7d7f;
   background: #eaf4fe;
   list-style: none;
-  margin: 0;
+  margin: 20px 0 0;
   padding: 0;
-  margin-top: 20px;
   li {
     display: inline-block;
     margin: 0;
