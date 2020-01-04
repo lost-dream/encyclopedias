@@ -24,7 +24,7 @@ export default {
         const token = sessionStorage.getItem('token')
         // todo ie8是否支持 async/await 函数测试
         // fixme 如果不支持，删掉这段，打开下一段
-        async function getUserInfo() {
+        ;(async function getUserInfo() {
           // 保存登录用户信息
           await userLogin({
             Authorization: token
@@ -53,72 +53,74 @@ export default {
                 backendData.map(value => {
                   if (value.name === '后台') {
                     backendMenu = value.childrenMenu
+
+                    const menuMap = backendMenu.reduce((arr, menuItem) => {
+                      arr.push(menuItem.value)
+                      return arr
+                    }, [])
+
+                    sessionStorage.setItem('user-menu', JSON.stringify(menuMap))
                   }
                   if (value.name.includes('内部词条')) {
                     backendEntry = '0'
                   }
                 })
 
-                const menuMap = backendMenu.reduce((arr, menuItem) => {
-                  arr.push(menuItem.value)
-                  return arr
-                }, [])
-                sessionStorage.setItem('user-menu', JSON.stringify(menuMap))
                 sessionStorage.setItem('nbct', backendEntry)
               }
             } else {
               this.$message.error(res.msg)
             }
           })
-        }
-
-        getUserInfo()
+        })()
 
         // 保存登录用户信息
-        // userLogin({
-        //   Authorization: sessionStorage.getItem('token')
-        // }).then(res => {
-        //   if (res.status === 'success') {
-        //     sessionStorage.setItem('user', JSON.stringify(res.data))
-        //     // 获取后台管理页可用的目录列表
-        //     getMenuTree({
-        //       Authorization: token
-        //     }).then(res => {
-        //       if (res.status === 0) {
-        //         const data = res.data
-        //         if (!(data.authTree && data.authTree.menu)) {
-        //           // empty data
-        //           $this.$message({
-        //             message: '目录列表暂无数据',
-        //             type: 'warning'
-        //           })
-        //         } else {
-        //           // 取用来判断目录权限的字段值（example:value）插入 map 中，用来判断本地 menu 是否有权限显示出来；取判断读取内部词条权限的字段，判断用户是否有资格操作内部词条（有：nbtc: 0;无：nbtc: 1）
-        //           const backendData = data.authTree.menu
-        //           let backendMenu,
-        //             backendEntry = '1'
-        //           backendData.map(value => {
-        //             if (value.name === '后台') {
-        //               backendMenu = value.childrenMenu
-        //             }
-        //             if (value.name.includes('内部词条')) {
-        //               backendEntry = '0'
-        //             }
-        //           })
-        //
-        //           const menuMap = backendMenu.reduce((arr, menuItem) => {
-        //             arr.push(menuItem.value)
-        //             return arr
-        //           }, [])
-        //           sessionStorage.setItem('user-menu', JSON.stringify(menuMap))
-        //           sessionStorage.setItem('nbct', backendEntry)
-        //         }
-        //       } else {
-        //         this.$message.error(res.msg)
-        //       }
-        //     })
-        //   }
-        // })
+        /* userLogin({
+          Authorization: sessionStorage.getItem('token')
+        }).then(res => {
+          if (res.status === 'success') {
+            sessionStorage.setItem('user', JSON.stringify(res.data))
+            // 获取后台管理页可用的目录列表
+            getMenuTree({
+              Authorization: token
+            }).then(res => {
+              if (res.status === 0) {
+                const data = res.data
+                if (!(data.authTree && data.authTree.menu)) {
+                  // empty data
+                  $this.$message({
+                    message: '目录列表暂无数据',
+                    type: 'warning'
+                  })
+                } else {
+                  // 取用来判断目录权限的字段值（example:value）插入 map 中，用来判断本地 menu 是否有权限显示出来；取判断读取内部词条权限的字段，判断用户是否有资格操作内部词条（有：nbtc: 0;无：nbtc: 1）
+                  const backendData = data.authTree.menu
+                  let backendMenu,
+                    backendEntry = '1'
+                  backendData.map(value => {
+                    if (value.name === '后台') {
+                      backendMenu = value.childrenMenu
+
+                      const menuMap = backendMenu.reduce((arr, menuItem) => {
+                        arr.push(menuItem.value)
+                        return arr
+                      }, [])
+
+                      sessionStorage.setItem('user-menu', JSON.stringify(menuMap))
+                    }
+                    if (value.name.includes('内部词条')) {
+                      backendEntry = '0'
+                    }
+                  })
+
+                  sessionStorage.setItem('nbct', backendEntry)
+                }
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          }
+        }) */
       }
     }
   },

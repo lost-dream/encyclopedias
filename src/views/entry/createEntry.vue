@@ -917,7 +917,8 @@
                     content:vm.submitList,
                     label: vm.tagList,
                     referrences: vm.quoteList,
-                    synonym: vm.synonymList
+                    synonym: vm.synonymList,
+                    nbct: sessionStorage.getItem('nbct')
                 }
                 // console.log(data)
                 vm.$axios.post('/wiki-backend/api/entry/save', data)

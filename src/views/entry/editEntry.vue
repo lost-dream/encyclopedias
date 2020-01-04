@@ -137,16 +137,16 @@
 								      >
 								    </el-date-picker>
 								</span>
-								
+
 							</div>
 							<div v-else>
 								<span>
 									<el-input type="text" v-model="item.val" clearable></el-input>
 								</span>
 							</div>
-							
-							
-							
+
+
+
 						</li>
 					</ul>
 					<!--手动添加属性-->
@@ -154,7 +154,7 @@
 						<span class="name">
 							<el-button @click="addClassifyFrom" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
 						</span>
-						
+
 					</div>
 					<!--选择属性模板-->
 					<div style="text-align: center;">
@@ -231,9 +231,9 @@
         <div>
             <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="目录模板" name="first">
-                    <el-tree 
+                    <el-tree
                         class="template-left"
-                        :data="categoryTreeData" 
+                        :data="categoryTreeData"
                         :props="{label: 'name'}"
                         @node-click="loadContent">
                     </el-tree>
@@ -255,7 +255,7 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                </template> 
+                                </template>
                                 <template v-else>
                                     {{item.contentName}}
                                 </template>
@@ -283,20 +283,20 @@
         title="选择分类"
         :visible.sync="dialogVisible"
         :before-close="handleCloseModel">
-            <tree-transfer 
+            <tree-transfer
                 ref="treeTransfer"
                 width="85%"
                 height="540px"
-                :title="title" 
-                :from_data='categoryTreeData' 
+                :title="title"
+                :from_data='categoryTreeData'
                 :to_data='toData'
-                :defaultProps="{label:'name'}" 
-                pid="parentId" 
-                @addBtn='add' 
-                @removeBtn='remove' 
+                :defaultProps="{label:'name'}"
+                pid="parentId"
+                @addBtn='add'
+                @removeBtn='remove'
                 @left-check-change="checkLength"
-                :mode='mode' 
-                :addressOptions="{num: 1, connector: ''}" 
+                :mode='mode'
+                :addressOptions="{num: 1, connector: ''}"
                 style="margin: 0 auto;min-width: 740px"></tree-transfer>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -309,9 +309,9 @@
 		  :visible.sync="showChooseClassify"
 		  width="900px"
 		  >
-		  <el-tree 
+		  <el-tree
                 class="template-left template-leftDialog"
-                :data="categoryTreeData" 
+                :data="categoryTreeData"
                 :props="{label: 'name'}"
                 @node-click="chooseClassifyItem">
             </el-tree>
@@ -373,8 +373,8 @@
 		    <!--<el-button type="primary" @click="chooseClassify">确 定</el-button>-->
 		  </span>
 		</el-dialog>
-        
-        
+
+
     </div>
 
 </template>
@@ -440,7 +440,7 @@
                 menuList: [],
                 submitList: [],
 
-                
+
                 // 分类部分
                 title: ["全部分类", "已选择"],
                 mode: "addressList", // transfer addressList
@@ -467,7 +467,7 @@
             }
         },
         created(){
-        	
+
         },
         mounted() {
             let vm = this
@@ -499,7 +499,7 @@
 	                                vm.initSummaryEditor()
 	                                vm.imageUrl = JSON.parse(item.summary).img
 	                            } else {
-	
+
 	                                let obj = {
 	                                    img : JSON.parse(item.summary).img,
 	                                    text : JSON.parse(item.summary).text,
@@ -549,7 +549,7 @@
 	                        })
 	                        vm.initCKEditor()
 	                        vm.setModel()
-	                        
+
 	                        data.entryAttributes.map((item,index)=>{
 								item.val = item.attributeValue
 								item.attributeType = item.attributeType
@@ -564,14 +564,14 @@
 								}
 								else{
 									vm.pickerOptionsList.push('')
-								}	
+								}
 							})
 	                        vm.classifyData = data.entryAttributes
 	                        console.log(vm.classifyData,'vm.classifyData')
-	
-	
+
+
 	                        vm.requestCount ++
-	
+
 	                        // if(vm.requestCount == 2){
 	                            // 处理已选分类
 	                            // console.log('tempData')
@@ -601,7 +601,7 @@
 	            // vm.initCKEditor()
 	            // vm.setModel()
 	    	});
-            
+
         },
         methods: {
             initSummaryEditor() {
@@ -629,7 +629,7 @@
                     console.error(error);
                 });
             },
-        	
+
         	categoryTree() {
 				categoryTree({}).then(res =>{
                     this.categoryTreeData = res.data.children
@@ -703,9 +703,9 @@
 						}
 						else{
 							this.pickerOptionsTemplateList.push('')
-						}	
+						}
 					})
-        		
+
                 	this.classifyTemplateData = res.data
         		})
 			},
@@ -725,16 +725,16 @@
 						}
 						else{
 							this.pickerOptionsList.push('')
-						}	
+						}
 					})
-        		
+
                 	this.classifyData = res.data
         		})
         	},
-        	
-        	
-        	
-        	
+
+
+
+
             setModel () {
                 let vm = this
                 let wiki = ''
@@ -1178,8 +1178,8 @@
 //                      clearTimeout(t)
 //                  })()
 //              }, 100)
-//              
-                
+//
+
                 this.toData = this.savedCategories.map(x => {x.pid = x.parentId; return x})
         		let vm = this
                 this.dialogVisible = true
@@ -1300,7 +1300,7 @@ h2,h3{
         min-width: 80px;
         text-align: center;
         font-size: 26px;
-    } 
+    }
     .el-tag + .el-tag, .button-new-category {
         margin-left: 10px;
     }
@@ -1406,7 +1406,7 @@ h2,h3{
 			}
 			div{
 				display: inline-block;
-				
+
 			}
 		}
    }
@@ -1430,7 +1430,7 @@ h2,h3{
 			}
 			div{
 				display: inline-block;
-				
+
 			}
 		}
 	}

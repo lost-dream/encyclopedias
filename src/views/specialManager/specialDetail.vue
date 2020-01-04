@@ -236,23 +236,25 @@
         ></el-pagination>
       </div>
       <div style="text-align: center;margin-top: 20px">
-        <!--                <el-button @click="dialogVisible = false" size="small">取 消</el-button>-->
+        <!--<el-button @click="dialogVisible = false" size="small">取 消</el-button>-->
         <el-button
           type="primary"
           @click="createNewSpecial"
           v-if="!isEdit"
           size="small"
-          style="background: rgb(86, 189, 157)"
-          >确 定</el-button
+          style="background: #56BD9D"
         >
+          确 定
+        </el-button>
         <el-button
           type="primary"
           @click="updateSpecial"
           size="small"
-          style="background: rgb(86, 189, 157)"
+          style="background: #56BD9D"
           v-else
-          >确 定</el-button
         >
+          确 定
+        </el-button>
       </div>
       <!-- 弹窗 -->
       <el-dialog
@@ -271,12 +273,13 @@
           style="width: 100%"
         >
           <el-table-column type="selection" width="55"> </el-table-column>
+
           <!--<el-table-column prop="ENTRY_NAME" label="词条名称" width="180"></el-table-column>
-                    <el-table-column label="词条描述">
-                        <template slot-scope="scope" v-for="item in entryListData.SUMMARY" v-if="item.dataType == 1">
-                            {{JSON.parse(item).text}}
-                        </template>
-                    </el-table-column>-->
+          <el-table-column label="词条描述">
+            <template slot-scope="scope" v-for="item in entryListData.SUMMARY" v-if="item.dataType == 1">
+              {{JSON.parse(item).text}}
+            </template>
+          </el-table-column>-->
 
           <el-table-column prop="title" label="词条名称" width="180"></el-table-column>
           <el-table-column prop="desc" label="词条描述"></el-table-column>
@@ -301,18 +304,11 @@
 </template>
 
 <script>
-import { categoryTree } from '@/api/classifyManager/index.js'
-import { parseTimeYMD } from '@/utils/commonMethod.js'
-import ElForm from '../../../node_modules/element-ui/packages/form/src/form.vue'
-import ElFormItem from '../../../node_modules/element-ui/packages/form/src/form-item.vue'
-import ElInput from '../../../node_modules/element-ui/packages/input/src/input.vue'
-import { entryList } from '@/api/onlyShowData/index.js'
+import { categoryTree } from '@/api/classifyManager'
+import { parseTimeYMD } from '@/utils/commonMethod'
+import { entryList } from '@/api/onlyShowData'
+
 export default {
-  components: {
-    ElInput,
-    ElFormItem,
-    ElForm
-  },
   name: 'specialManager',
   data() {
     return {
@@ -369,20 +365,14 @@ export default {
   },
   watch: {},
   created() {
-    let vm = this
-    Cetc10Auth().init(function() {
-      vm.specialId = vm.$route.query.id
-      if (vm.specialId == 'new') {
-        vm.isEdit = false
-      } else {
-        vm.isEdit = true
-      }
-      vm.getSpecialDetail(vm.$route.query.id)
-      vm.getSpecialEntryList()
+    Cetc10Auth().init(() => {
+      const id = this.$route.qyery.id
+      this.specialId = id
+      this.isEdit = this.specialId !== 'new'
+      this.getSpecialDetail(id)
+      this.getSpecialEntryList()
     })
   },
-  mounted() {},
-  destroyed() {},
   methods: {
     handleClose(tag, index) {
       if (index == 1) {
@@ -396,34 +386,31 @@ export default {
       this.getConditionEntryList()
     },
     addKeyword() {
-      let vm = this
-      if (vm.keywords.includes(vm.keyword)) {
+      if (this.keywords.includes(this.keyword)) {
         this.$message.error('该关键词已存在')
-      } else if (vm.keyword == '') {
+      } else if (this.keyword === '') {
         return
       } else {
-        vm.keywords.push(vm.keyword)
-        vm.keyword = ''
+        this.keywords.push(this.keyword)
+        this.keyword = ''
       }
       this.getConditionEntryList()
     },
     addLabel() {
-      let vm = this
-      if (vm.labels.includes(vm.label)) {
+      if (this.labels.includes(this.label)) {
         this.$message.error('该标签已存在')
-      } else if (vm.label == '') {
+      } else if (this.label === '') {
         return
       } else {
-        vm.labels.push(vm.label)
-        vm.label = ''
+        this.labels.push(this.label)
+        this.label = ''
       }
       this.getConditionEntryList()
     },
     changeTreeShow() {
       this.showTree = !this.showTree
     },
-    handleNodeClick(data, checked, node) {
-      console.log(data)
+    handleNodeClick(data) {
       if (this.categoryIds.includes(data.id)) {
         this.$message.error('专题已经拥有该分类')
       } else {
@@ -435,7 +422,7 @@ export default {
     },
     categoryTree() {
       let vm = this
-      categoryTree({})
+      categoryTree()
         .then(res => {
           res.data.children.map(item => {
             if (vm.form.categoryIds.includes(item.id)) vm.categoryName.push(item.name)
@@ -457,20 +444,18 @@ export default {
               })
             }
           })
-          console.log(res.data.children, '111')
           this.treeData = res.data.children
         })
-        .catch(res => {
-          console.log(res)
+        .catch(error => {
+          throw error
         })
     },
     handleSelectionChange(val) {
       this.entryIds = []
       val.map(item => {
-        //                  this.entryIds.push(item.ENTRY_ID)
+        // this.entryIds.push(item.ENTRY_ID)
         this.entryIds.push(item.itemid)
       })
-      console.log(this.entryIds)
     },
     parseTime(str) {
       return parseTimeYMD(str)
@@ -494,18 +479,16 @@ export default {
       this.getConditionEntryList()
     },
     getConditionEntryList() {
-      let vm = this
-      vm.$axios
-        .post('/wiki-backend/api/entry/list', {
-          pageNumber: vm.paginationEntry.page,
-          pageSize: vm.paginationEntry.limit,
-          categoryIds: vm.categoryIds.join(','),
-          keywords: vm.keywords.join(','),
-          labels: vm.labels.join(',')
-        })
-        .then(res => {
-          vm.conditionList = res.data.records
-          vm.conditionPagination.count = res.data.total
+      // todo 换成 api 里的函数
+      entryList({
+        pageNumber: this.paginationEntry.page,
+        pageSize: this.paginationEntry.limit,
+        categoryIds: this.categoryIds.join(','),
+        keywords: this.keywords.join(','),
+        labels: this.labels.join(',')
+      }).then(res => {
+          this.conditionList = res.data.records
+          this.conditionPagination.count = res.data.total
         })
     },
     getSpecialEntryList() {
@@ -533,7 +516,7 @@ export default {
     getSpecialDetail(index) {
       let vm = this
       console.log(vm.form)
-      if (index == 'new') {
+      if (index === 'new') {
         vm.categoryTree()
       } else {
         this.$axios
@@ -554,7 +537,7 @@ export default {
           })
       }
     },
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess(res) {
       this.form.specialCoverUrl = res.url
     },
     addToSpecial() {
@@ -569,7 +552,7 @@ export default {
           entryIds: vm.entryIds.join(','),
           sorts: sort.join(',')
         })
-        .then(res => {
+        .then(() => {
           vm.$message({
             showClose: true,
             message: '添加成功',
@@ -585,7 +568,7 @@ export default {
         .post('/wiki-backend/api/specialDemandEntry/delete', {
           id: index.id
         })
-        .then(res => {
+        .then(() => {
           vm.$message({
             showClose: true,
             message: '删除成功',
