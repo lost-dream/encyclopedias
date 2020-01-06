@@ -87,7 +87,7 @@ export default {
     * 初始化
     * */
     init(taskId) {
-
+        alert(taskId);
     },
 
     /*

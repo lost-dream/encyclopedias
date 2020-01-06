@@ -118,16 +118,16 @@ export default {
      * 打开弹窗
      * */
     checkLaunch(row) {
+      this.launchDialog = true
       this.$nextTick(() => {
         this.$refs.launchDialog.init(row.id)
       })
-      this.launchDialog = true
     },
     associationLaunch(row) {
+      this.associationDialog = true
       this.$nextTick(() => {
         this.$refs.associationDialog.init(row.id)
       })
-      this.associationDialog = true
     },
     /*
      * 关闭弹窗

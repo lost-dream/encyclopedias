@@ -84,6 +84,13 @@ export default {
   },
   methods: {
     /*
+    * 初始化
+    * */
+    init(taskId) {
+      alert(taskId);
+    },
+
+    /*
      * 单条审核入库
      * */
     singleInputDatabase(row) {},
