@@ -5,7 +5,7 @@
     </h2>
     <div class="flex-box">
       <div class="left myTree" v-loading="isLoading">
-        <h3>词条类目</h3>
+        <h3>外部词条</h3>
         <el-tree
           ref="tree"
           :props="defaultProps"
@@ -15,6 +15,19 @@
           @node-click="handleNodeClick"
           :expand-on-click-node="true"
           highlight-current
+        >
+        </el-tree>
+        <h3 v-if="permission === '0'">内部词条</h3>
+        <el-tree
+            v-if="permission === '0'"
+            ref="tree"
+            :props="defaultProps"
+            current-node-key="1"
+            :data="innerTree"
+            node-key="space_id"
+            @node-click="handleNodeClick"
+            :expand-on-click-node="true"
+            highlight-current
         >
         </el-tree>
       </div>
@@ -224,18 +237,15 @@
 </template>
 
 <script>
-import { categoryTree, save, list } from '@/api/classifyManager/index.js'
-import { attributeTypeAry, editTypeAry, editSourceAry } from '@/enumeration/classify.js'
-// import treemenu from '@/components/treeMenu'
-import { parseTime } from '@/utils/commonMethod.js'
+import { categoryTree, save, list, getInternalEntryList } from '@/api/classifyManager'
+import { attributeTypeAry, editTypeAry, editSourceAry } from '@/enumeration/classify'
+import { parseTime } from '@/utils/commonMethod'
 
 export default {
   name: 'classifyManage',
-  components: {
-    // treemenu
-  },
   data() {
     return {
+      permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
       datetimeObj: {
         7: 'datetime',
         6: 'date',
@@ -245,7 +255,8 @@ export default {
       checkedId: '',
       checkedParentId: '',
       checkedParentItem: {},
-      treeData: [],
+      treeData: [], // 外部词条
+      innerTree: [], // 内部词条
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -368,15 +379,6 @@ export default {
     cancelModify() {
       this.dialogVisible = false
       this.list()
-
-      // list({ id: this.checkedId })
-      //   .then(res => {
-      //     console.log(res)
-      //     this.classifyData = [res.data]
-      //   })
-      //   .catch(res => {
-      //     console.log(res)
-      //   })
     },
     save() {
       let ary = []
@@ -426,11 +428,11 @@ export default {
         categoryId: this.checkedId,
         categoryAttributeTemplates: ary
       })
-        .then(res => {
+        .then(() => {
           this.$message('保存成功')
         })
-        .catch(res => {
-          console.log(res)
+        .catch(error => {
+          throw error
         })
     },
     list() {
@@ -442,14 +444,14 @@ export default {
         .then(res => {
           this.classifyData = res.data.records
         })
-        .catch(res => {
-          console.log(res)
+        .catch(error => {
+          throw error
         })
     },
-
+    // 获取外部词条目录
     categoryTree() {
       this.isLoading = true
-      categoryTree({})
+      categoryTree()
         .then(res => {
           res.data.children.map(item => {
             if (!item.children.length) {
@@ -468,15 +470,49 @@ export default {
               })
             }
           })
-          console.log(res.data.children, '111')
           this.treeData = res.data.children
           this.checkedParentItem = this.treeData[0]
           this.checkedId = this.treeData[0].id
           this.checkedParentId = this.treeData[0].parentId
+
+          if (this.permission === '0') {
+            this.getInnerTreeData()
+          } else {
+            this.isLoading = false
+          }
+        })
+        .catch(error => {
+          throw error
+        })
+    },
+    // 获取内部词条目录
+    getInnerTreeData() {
+      getInternalEntryList().then(res => {
+          res.data.children.map(item => {
+            if (!item.children.length) {
+              delete item.children
+            } else {
+              item.children.map(item1 => {
+                if (!item1.children.length) {
+                  delete item1.children
+                } else {
+                  item1.children.map(item2 => {
+                    if (!item2.children.length) {
+                      delete item2.children
+                    }
+                  })
+                }
+              })
+            }
+          })
+          this.innerTree = res.data.children
+          // this.checkedParentItem = this.treeData[0]
+          // this.checkedId = this.treeData[0].id
+          // this.checkedParentId = this.treeData[0].parentId
           this.isLoading = false
         })
-        .catch(res => {
-          console.log(res)
+        .catch(error => {
+          throw error
         })
     },
     handleNodeClick(data) {
@@ -519,15 +555,12 @@ export default {
   .left {
     width: 300px;
     height: calc(100% - 52px);
-    // margin-right: 60px;
+    overflow: auto;
+    background: #fff;
     padding: 0 16px;
     position: absolute;
     box-sizing: border-box;
     border-right: 10px solid #f6fafb;
-    .el-tree {
-      height: calc(100% - 50px);
-      overflow: auto;
-    }
   }
 
   h3 {
@@ -562,10 +595,10 @@ export default {
     max-width: unset;
     max-height: unset;
     margin-left: 300px;
-    // border-left: 10px solid #F6FAFB;
     height: 100%;
     font-size: 26px;
     padding: 0 16px;
+    background: #fff;
   }
 }
 

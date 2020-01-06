@@ -10,70 +10,140 @@
         </el-button>
       </div>
       <!-- tree -->
-      <el-tree
-        ref="SlotTree"
-        :data="setTree"
-        :props="defaultProps"
-        :expand-on-click-node="false"
-        highlight-current
-        :node-key="NODE_KEY"
-        :default-expanded-keys="expanded"
-      >
-        <div class="comp-tr-node" slot-scope="{ node, data }">
-          <!-- 编辑状态 -->
-          <template v-if="node.isEdit">
-            <el-input
-              v-model="data.name"
-              autofocus
-              size="mini"
-              :ref="'slotTreeInput' + data[NODE_KEY]"
-              @blur.stop="handleInput(node, data)"
-              @keyup.enter.native="handleInput(node, data)"
-            ></el-input>
-          </template>
+      <div class="tree-wrapper">
+        <h3>外部词条</h3>
+        <el-tree
+            ref="SlotTree"
+            :data="setTree"
+            :props="defaultProps"
+            :expand-on-click-node="false"
+            highlight-current
+            :node-key="NODE_KEY"
+            :default-expanded-keys="expanded"
+        >
+          <div class="comp-tr-node" slot-scope="{ node, data }">
+            <!-- 编辑状态 -->
+            <template v-if="node.isEdit">
+              <el-input
+                  v-model="data.name"
+                  autofocus
+                  size="mini"
+                  :ref="'slotTreeInput' + data[NODE_KEY]"
+                  @blur.stop="handleInput(node, data)"
+                  @keyup.enter.native="handleInput(node, data)"
+              ></el-input>
+            </template>
 
-          <!-- 非编辑状态 -->
-          <template v-else>
-            <!-- 名称： 新增节点增加class（is-new） -->
-            <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
+            <!-- 非编辑状态 -->
+            <template v-else>
+              <!-- 名称： 新增节点增加class（is-new） -->
+              <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
               {{ node.label }}
             </span>
 
-            <!-- 按钮 -->
-            <span class="comp-tr-node--btns">
+              <!-- 按钮 -->
+              <span class="comp-tr-node--btns">
               <!-- 新增 -->
               <el-button
-                icon="el-icon-plus"
-                size="mini"
-                circle
-                type="primary"
-                title="新增"
-                @click="handleAdd(node, data)"
+                  icon="el-icon-plus"
+                  size="mini"
+                  circle
+                  type="primary"
+                  title="新增"
+                  @click="handleAdd(node, data)"
               ></el-button>
 
-              <!-- 编辑 -->
+                <!-- 编辑 -->
               <el-button
-                icon="el-icon-edit"
-                size="mini"
-                circle
-                type="info"
-                title="修改"
-                @click="handleEdit(node, data)"
+                  icon="el-icon-edit"
+                  size="mini"
+                  circle
+                  type="info"
+                  title="修改"
+                  @click="handleEdit(node, data)"
               ></el-button>
 
-              <!-- 删除 -->
+                <!-- 删除 -->
               <el-button
-                icon="el-icon-delete"
-                size="mini"
-                circle
-                type="danger"
-                title="删除"
-                @click="handleDelete(node, data)"
+                  icon="el-icon-delete"
+                  size="mini"
+                  circle
+                  type="danger"
+                  title="删除"
+                  @click="handleDelete(node, data)"
               ></el-button>
             </span>
-          </template>
-        </div>
-      </el-tree>
+            </template>
+          </div>
+        </el-tree>
+
+        <h3 v-if="permission === '0'">内部词条</h3>
+        <el-tree
+            v-if="permission === '0'"
+            ref="SlotTree"
+            :data="innerTree"
+            :props="defaultProps"
+            :expand-on-click-node="false"
+            highlight-current
+            :node-key="NODE_KEY"
+            :default-expanded-keys="expanded"
+        >
+          <div class="comp-tr-node" slot-scope="{ node, data }">
+            <!-- 编辑状态 -->
+            <template v-if="node.isEdit">
+              <el-input
+                  v-model="data.name"
+                  autofocus
+                  size="mini"
+                  :ref="'slotTreeInput' + data[NODE_KEY]"
+                  @blur.stop="handleInput(node, data)"
+                  @keyup.enter.native="handleInput(node, data)"
+              ></el-input>
+            </template>
+
+            <!-- 非编辑状态 -->
+            <template v-else>
+              <!-- 名称： 新增节点增加class（is-new） -->
+              <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
+              {{ node.label }}
+            </span>
+
+              <!-- 按钮 -->
+              <span class="comp-tr-node--btns">
+              <!-- 新增 -->
+              <el-button
+                  icon="el-icon-plus"
+                  size="mini"
+                  circle
+                  type="primary"
+                  title="新增"
+                  @click="handleAdd(node, data)"
+              ></el-button>
+
+                <!-- 编辑 -->
+              <el-button
+                  icon="el-icon-edit"
+                  size="mini"
+                  circle
+                  type="info"
+                  title="修改"
+                  @click="handleEdit(node, data)"
+              ></el-button>
+
+                <!-- 删除 -->
+              <el-button
+                  icon="el-icon-delete"
+                  size="mini"
+                  circle
+                  type="danger"
+                  title="删除"
+                  @click="handleDelete(node, data)"
+              ></el-button>
+            </span>
+            </template>
+          </div>
+        </el-tree>
+      </div>
     </div>
 
     <div class="right-form">
@@ -90,7 +160,6 @@
             v-model="form.parentId"
             :options="options"
             :props="cascaderProps"
-            @change="handleChange"
           ></el-cascader>
         </el-form-item>
         <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
@@ -137,16 +206,19 @@
 </template>
 
 <script>
-import api from '@/api/categoryManager/index.js'
+import api from '@/api/categoryManager'
+import { getInternalEntryList } from '@/api/classifyManager'
 import _ from 'lodash'
 
 export default {
   name: 'categoryManager',
   data() {
     return {
+      permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
       loading: false, // 保存点击后的加载效果
       isLoading: false, // 是否加载
-      setTree: [],
+      setTree: [], // 外部词条
+      innerTree: [], // 内部词条
       NODE_KEY: 'id', // id对应字段
       MAX_LEVEL: 3, // 设定最大层级
       NODE_ID_START: 0, // 新增节点id，逐次递减
@@ -304,20 +376,15 @@ export default {
     },
     // 添加一级category
     handleAddTop() {
-      // let obj = JSON.parse(JSON.stringify(this.initParam));// copy参数
-      // obj[this.NODE_KEY] = --this.startId;// categoryid：逐次递减id
-      // this.setTree.push(obj)
       this.form = {}
       this.clickSlot('add', { id: '', grade: 0 })
     },
-    // 拉取树形数据，带后续处理
+    // 获取外部词条分类
     getTreeData() {
-      let vm = this
-      vm.isLoading = true
+      this.isLoading = true
       api
         .getTreeData()
         .then(res => {
-          // console.log('success:', res);
           if (res.status === 'success') {
             let data = res.data && (_.cloneDeep(res.data.children) || [])
 
@@ -327,16 +394,6 @@ export default {
                 x.disabled = false
                 if (x.children && x.children.length) {
                   x.children.forEach(y => {
-                    // 第二级
-                    // if(y.children && y.children.length){
-                    //   y.children.forEach(z => {
-                    //     // 第三级
-                    //     z.children  && (delete z.children)
-                    //   })
-                    // }
-                    // else{
-                    //   y.children && (delete y.children)
-                    // }
                     y.disabled = false
                     y.children && delete y.children
                   })
@@ -347,22 +404,55 @@ export default {
 
               this.setTree = res.data.children
             }
-
-            this.options = [{ children: data || [], id: 'ROOT', name: '根目录', disabled: false }]
-
-            vm.isLoading = false
+            // id 值和接口返回 id 的值保持一致
+            this.options.push({ children: data || [], id: 'ROOT', name: '外部词条', disabled: false })
+            if (this.permission === '0') {
+              this.getInnerTreeData()
+            } else {
+              this.isLoading = false
+            }
           } else {
             this.$message.error('获取分类信息失败，请稍后重试！')
           }
         })
-        .catch(res => {
-          // console.log('error: ', res)
-          this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+        .catch(error => {
+          this.$message.error(`请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`)
         })
     },
-    // 级联选择父级category
-    handleChange(e) {
-      console.log(e)
+    // 获取内部词条分类
+    getInnerTreeData() {
+      getInternalEntryList().then(res => {
+          if (res.status === 'success') {
+            let data = res.data && (_.cloneDeep(res.data.children) || [])
+
+            if (data.length) {
+              data.forEach(x => {
+                // 第一级
+                x.disabled = false
+                if (x.children && x.children.length) {
+                  x.children.forEach(y => {
+                    y.disabled = false
+                    y.children && delete y.children
+                  })
+                } else {
+                  x.children && delete x.children
+                }
+              })
+
+              this.innerTree = res.data.children
+            }
+
+            // id 值和接口返回 id 的值保持一致
+            this.options.push({ children: data || [], id: 'INNER_ROOT', name: '内部词条', disabled: false })
+
+            this.isLoading = false
+          } else {
+            this.$message.error('获取分类信息失败，请稍后重试！')
+          }
+        })
+        .catch(error => {
+          this.$message.error(`请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`)
+        })
     },
     // 处理category事件
     clickSlot(type, _data) {
@@ -375,7 +465,6 @@ export default {
           this.form = _.pick(this.form, [
             'id',
             'parentId',
-            // 'code',
             'name',
             'grade',
             'sort',
@@ -444,7 +533,7 @@ export default {
           id: id
         })
         .then(res => {
-          if (res.status == 'success') {
+          if (res.status === 'success') {
             this.getTreeData()
             this.$message.success('删除成功！')
           } else {
@@ -478,8 +567,6 @@ export default {
 /deep/ .comp-tr-node--name {
   font-size: 26px !important;
 }
-
-/* common */
 
 // 显示按钮
 .show-btns {
@@ -524,8 +611,6 @@ export default {
   height: calc(100% - 90px);
 }
 
-/* common end */
-
 .comp-tree {
   width: 100%;
   max-width: 300px;
@@ -533,16 +618,24 @@ export default {
   overflow: visible;
   position: absolute;
 
+  .tree-wrapper {
+    height: calc(100% - 64px);
+    overflow: auto;
+    padding: 0 16px;
+    h3 {
+      font-weight: 400;
+      font-size: 26px;
+      margin: 0 0 5px;
+      padding: 20px 0 10px;
+      border-bottom: 1px solid #e4e4e4;
+    }
+  }
+
   &/deep/ .el-tree-node {
     padding: 2px 16px;
     .el-tree-node {
       padding-right: 0;
     }
-  }
-
-  .el-tree {
-    height: calc(100% - 64px);
-    overflow: auto;
   }
 
   .el-tree::-webkit-scrollbar {

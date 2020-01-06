@@ -13,14 +13,14 @@
                 <el-input v-model="form.specialName" style="width: 200px"></el-input>
               </el-form-item>
 
-              <el-form-item v-if="permission === '1'" label="词条类别：" style="display: flex">
-                <el-select size="small" v-model="form.region" placeholder="请选择活动区域">
+              <el-form-item v-if="permission === '0'" label="词条类别：" style="display: flex">
+                <el-select size="small" v-model="form.region">
                   <el-option label="外部词条" value="outer"></el-option>
                   <el-option label="内部词条" value="inner"></el-option>
                 </el-select>
               </el-form-item>
 
-              <el-form-item v-else-if="permission === '0'" label="词条类别：" style="display: flex">
+              <el-form-item v-else-if="permission === '1'" label="词条类别：" style="display: flex">
                 <el-select size="small" v-model="form.region">
                   <el-option label="外部词条" value="outer"></el-option>
                 </el-select>
@@ -170,7 +170,7 @@
           size="small"
           type="primary"
           style="float:right;background: #ef5d5d !important;color: white;"
-          @click="dialogVisible = true"
+          @click="addEntry"
           >新增<i class="el-icon-plus el-icon--right"></i
         ></el-button>
       </div>
@@ -311,6 +311,7 @@ export default {
   data() {
     return {
       permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
+      createEntryId: null, // 新创建的词条生成的 id
       entrySearch: '',
       dialogVisible: false, // 弹窗显隐
       entryList: [],
@@ -365,7 +366,7 @@ export default {
   watch: {},
   created() {
     Cetc10Auth().init(() => {
-      const id = this.$route.qyery.id
+      const id = this.$route.query.id
       this.specialId = id
       this.isEdit = this.specialId !== 'new'
       this.getSpecialDetail(id)
@@ -632,30 +633,92 @@ export default {
       })
     },
     createNewSpecial() {
-      let vm = this
-      vm.form.keyWords = vm.keywords.join(',')
-      vm.form.labels = vm.labels.join(',')
-      vm.form.categoryIds = vm.categoryIds.join(',')
-      if (vm.form.id) delete vm.from.id
-      console.log(vm.form, 'create')
-      this.$axios.post('/wiki-backend/api/special/save', vm.form).then(res => {
-        vm.$router.replace({ name: 'specialManager' })
-        vm.getSpecialEntryList()
-        vm.$message({
+      if (this.form.specialName === '') {
+        this.$message.error('请填写专题名称')
+        return
+      }
+      if (!this.form.region || this.form.region === '') {
+        this.$message.error('请选择词条类别')
+        return
+      }
+      if (this.form.specialCoverUrl === '') {
+        this.$message.error('请上传专题封面')
+        return
+      }
+      if (this.form.specialDesc === '') {
+        this.$message.error('请填写专题描述')
+        return
+      }
+
+
+
+      this.form.keyWords = this.keywords.join(',')
+      this.form.labels = this.labels.join(',')
+      this.form.categoryIds = this.categoryIds.join(',')
+      if (this.form.id) delete this.from.id
+
+      this.$axios.post('/wiki-backend/api/special/save', this.form).then(res => {
+        this.$router.replace({ name: 'specialManager' })
+        this.getSpecialEntryList()
+        this.$message({
           showClose: true,
           message: '添加成功',
           type: 'success'
         })
-        vm.dialogVisible = false
-        vm.keywords = []
-        vm.labels = []
-        vm.form = {
+        this.dialogVisible = false
+        this.keywords = []
+        this.labels = []
+        this.form = {
           specialName: '',
           specialDesc: '',
           categoryIds: '',
           keyWords: '',
           labels: '',
           specialCoverUrl: ''
+        }
+      })
+    },
+    addEntry() {
+      if (this.form.specialName === '') {
+        this.$message.error('请填写专题名称')
+        return
+      }
+      if (!this.form.region || this.form.region === '') {
+        this.$message.error('请选择词条类别')
+        return
+      }
+      if (this.form.specialCoverUrl === '') {
+        this.$message.error('请上传专题封面')
+        return
+      }
+      if (this.form.specialDesc === '') {
+        this.$message.error('请填写专题描述')
+        return
+      }
+
+      this.form.keyWords = this.keywords.join(',')
+      this.form.labels = this.labels.join(',')
+      this.form.categoryIds = this.categoryIds.join(',')
+      if (this.form.id) delete this.from.id
+
+      this.$axios.post('/wiki-backend/api/special/save', this.form).then(res => {
+
+        if (res.status === 'success') {
+          this.keywords = []
+          this.labels = []
+          this.form = {
+            specialName: '',
+            specialDesc: '',
+            categoryIds: '',
+            keyWords: '',
+            labels: '',
+            specialCoverUrl: ''
+          }
+
+          this.dialogVisible = true
+          this.createEntryId = res.data // 创建的词条生成的 id
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },

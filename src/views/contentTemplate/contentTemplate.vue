@@ -5,8 +5,10 @@
     </h2>
     <div class="flex-box">
       <div class="left myTree" v-loading="isLoading">
-        <h3>词条类目</h3>
+        <h3>外部词条</h3>
         <el-tree :data="categoryTree" :props="categoryProps" @node-click="selectCategory"></el-tree>
+        <h3 v-if="permission === '0'">内部词条</h3>
+        <el-tree v-if="permission === '0'" :data="innerTree" :props="categoryProps" @node-click="selectCategory"></el-tree>
       </div>
 
       <div v-show="showContent" v-loading="rightLoading" class="comp-tree">
@@ -117,19 +119,22 @@
 </template>
 
 <script>
-import templateApi from '@/api/contentTemplate/index.js'
-import categoryApi from '@/api/categoryManager/index.js'
+import templateApi from '@/api/contentTemplate'
+import categoryApi from '@/api/categoryManager'
+import { getInternalEntryList } from '@/api/classifyManager'
 import _ from 'lodash'
 
 export default {
   name: 'contentTemplate',
   data() {
     return {
+      permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
       dialogVisible: false,
       isLoading: false, // 是否加载
       rightLoading: false,
       setTree: [], // 目录树
-      categoryTree: [], //
+      categoryTree: [], // 外部词条目录
+      innerTree: [], // 内部词条目录
       NODE_KEY: 'categoryId', // id对应字段
       MAX_LEVEL: 3, // 设定最大层级    todo: 确认最大级别
       NODE_ID_START: 0, // 新增节点id，逐次递减
@@ -250,34 +255,58 @@ export default {
       // obj[this.NODE_KEY] = --this.startId;// 节点id：逐次递减id
       this.setTree.push(obj)
     },
-    // 拉取categoryTree数据，带后续处理
+    // 获取外部词条目录
     getCategoryTreeData() {
-      let vm = this
-      vm.isLoading = true
+      this.isLoading = true
       categoryApi
         .getTreeData()
         .then(res => {
-          console.log('success:', res)
-          // return;
           if (res.status === 'success') {
             let data = res.data && (_.cloneDeep(res.data.children) || [])
-            vm.categoryTree = data
-            vm.fromData = data
-            vm.isLoading = false
+            this.categoryTree = data
+            this.fromData = data
 
             let first = data[0].children.length
               ? data[0].children[0].children.length
                 ? data[0].children[0].children[0]
                 : data[0].children[0]
               : data[0]
-            vm.selectCategory(first)
+            this.selectCategory(first)
+
+            if (this.permission === '0') {
+              this.getInnerTreeData()
+            } else {
+              this.isLoading = false
+            }
           } else {
             this.$message.error('获取分类信息失败，请稍后重试！')
           }
         })
-        .catch(res => {
-          // console.log('error: ', res)
-          vm.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+        .catch(err => {
+          this.$message.error(`请求出错，错误原因: ${err.msg ? err.msg : JSON.stringify(err)}`)
+        })
+    },
+    // 获取内部词条目录
+    getInnerTreeData() {
+      getInternalEntryList().then(res => {
+          if (res.status === 'success') {
+            let data = res.data && (_.cloneDeep(res.data.children) || [])
+            this.innerTree = data
+            // this.fromData = data
+            this.isLoading = false
+
+            // let first = data[0].children.length
+            //   ? data[0].children[0].children.length
+            //     ? data[0].children[0].children[0]
+            //     : data[0].children[0]
+            //   : data[0]
+            // this.selectCategory(first)
+          } else {
+            this.$message.error('获取分类信息失败，请稍后重试！')
+          }
+        })
+        .catch(error => {
+          this.$message.error(`请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`)
         })
     },
     // 获取templateTree数据
@@ -434,22 +463,6 @@ export default {
       }
     }
   }
-  // 高亮显示按钮
-  // .is-selected{
-  // 	&>.el-tree-node__content{
-  // 		.comp-tr-node--btns{
-  // 			@extend .show-btns;
-  // 		}
-  // 	}
-  // }
-  // 悬浮显示按钮
-  /*.el-tree-node__content{
-			&:hover{
-				.comp-tr-node--btns{
-					@extend .show-btns;
-				}
-			}
-		}*/
 }
 
 .flex-box {
@@ -462,15 +475,12 @@ export default {
   .left {
     width: 300px;
     height: calc(100% - 52px);
-    // margin-right: 60px;
+    background: #fff;
+    overflow: auto;
     padding: 0 16px;
     position: absolute;
     box-sizing: border-box;
     border-right: 10px solid #f6fafb;
-    .el-tree {
-      height: calc(100% - 80px);
-      overflow: auto;
-    }
   }
 
   h3 {
@@ -527,7 +537,6 @@ export default {
 .myTree .el-tree {
   min-height: 200px !important;
   max-height: 600px !important;
-  overflow: auto;
 }
 
 .el-tree /deep/ .el-tree-node__content {

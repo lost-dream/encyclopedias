@@ -318,7 +318,7 @@
                     })
             },
             routeToSpecial (index) {
-                if(index == 'new') {
+                if(index === 'new') {
                     this.$router.push({
                         path: '/specialDetail',
                         query: {

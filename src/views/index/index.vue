@@ -19,7 +19,7 @@
                   <el-image
                     class="carousel-image"
                     v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
+                    :src="JSON.parse(item.SUMMARY[0].summary).img"
                   >
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
