@@ -11,7 +11,7 @@
 			  </el-form-item>
 			  <el-form-item label="数据源：" prop="dataSourceId">
 			    <el-select style="width: 300px;" v-model="ruleForm.dataSourceId" placeholder="请选择数据源">
-			    	<el-option :label="item.dataSourceName" :value="item.id" v-for="item in dataSourceList"></el-option>
+			    	<el-option :label="item.dataSourceName" :value="item.id" v-for="(item, index) in dataSourceList" :key="index"></el-option>
 			    </el-select>
 			  </el-form-item>
 			  <el-form-item style="display: inline-block;width: 50%;vertical-align: top;" label="时间（每天）：" prop="taskScheduleTime">
@@ -39,10 +39,10 @@
 			  <el-form-item></el-form-item>
 			  
 			  <el-form-item label-width="80px" v-show="rules.tableName[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="表：" prop="tableName">
-			  	<el-radio style="display: block;margin: 0;" v-for="item in tableNameList" v-model="ruleForm.tableName" :label="item" border>{{item}}</el-radio>
+			  	<el-radio style="display: block;margin: 0;" v-for="(item, index) in tableNameList" :key="index" v-model="ruleForm.tableName" :label="item" border>{{item}}</el-radio>
 			  </el-form-item>
 			  <el-form-item label-width="50px" v-show="rules.columns[0].required" style="display: inline-block;width: 50%;vertical-align: top;" label="列：" prop="columns">
-			    <el-radio style="display: block;margin: 0;" v-for="item in columnNameList" v-model="ruleForm.columns" :label="item" border>{{item}}</el-radio>
+			    <el-radio style="display: block;margin: 0;" v-for="(item, index) in columnNameList" :key="index" v-model="ruleForm.columns" :label="item" border>{{item}}</el-radio>
 			  </el-form-item>
 			  
 			  <!--<el-form-item v-if="type!=='see'" style="text-align: center;margin-top: 20px;margin-left: 0;">

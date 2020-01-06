@@ -37,7 +37,7 @@
 				
 				<span class="label">数据源</span>
 				<el-select style="width: 220px;margin-bottom: 20px;" v-model="dataSourceId" placeholder="请选择数据源">
-			      <el-option :label="item.dataSourceName" :value="item.id" v-for="item in sourceList"></el-option>
+			      <el-option :label="item.dataSourceName" :value="item.id" v-for="(item, index) in sourceList" :key="index"></el-option>
 			    </el-select>
 			    
 			    <el-button style="background: #587dda !important;color: white;margin-left: 35px;" @click="auditList" type="primary">查询</el-button>
