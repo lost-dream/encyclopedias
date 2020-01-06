@@ -13,22 +13,39 @@
       :header-cell-style="{ background: '#ecedf2', color: '#67686d' }"
       style="width: 100%"
     >
-      <el-table-column type="selection" width="100" label="全选"></el-table-column>
+      <el-table-column
+        type="selection"
+        width="100"
+        label="全选"
+        :selectable="selectable"
+      ></el-table-column>
       <el-table-column width="100" label="序号">
         <template slot-scope="scope">
           {{ (pageOption.page - 1) * pageOption.size + (scope.$index + 1) }}
         </template>
       </el-table-column>
-      <el-table-column show-overflow-tooltip prop="taskname" label="词条名称"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="addtime" label="词条来源url"></el-table-column>
-      <el-table-column prop="addtime" label="抓取时间"></el-table-column>
-      <el-table-column prop="taskname" width="150" label="抓取状态"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="ENTRYNAME" label="词条名称"></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        prop="SOURCEVALUE"
+        label="词条来源url"
+      ></el-table-column>
+      <el-table-column label="抓取时间">
+        <template slot-scope="scope">
+          {{ parseTime(scope.row.CREATETIME) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="taskname" width="150" label="抓取状态">
+        <template slot-scope="scope">
+          {{ getStatus(scope.row.STATUS) }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" style="color: #5b7dd8" @click="checkDetail(scope.row)"
             >查看详情</el-button
           >
-          <el-button type="text" style="color: #f49b9b" @click="singleInputDatabase(scope.row)"
+          <el-button :disabled="scope.row.VERIFYSTATUS !== 0" type="text" style="color: #f49b9b" @click="singleInputDatabase(scope.row)"
             >审核入库</el-button
           >
         </template>
@@ -61,19 +78,14 @@
 <script>
 import CheckDetail from './checkDetail'
 import reptileDataApi from '@/api/reptileData/index.js'
+import { parseTimeYMD } from '@/utils/commonMethod'
 export default {
   name: 'launchDialog',
   components: { CheckDetail },
   data() {
     return {
-      taskId: '',// 任务Id
-      launchData: [
-        {
-          number: 1,
-          taskname: 'abc',
-          addtime: '2020-01-02'
-        }
-      ], // 表格数据
+      taskId: '', // 任务Id
+      launchData: [], // 表格数据
       pageOption: {
         page: 1,
         size: 10,
@@ -86,22 +98,26 @@ export default {
   },
   methods: {
     /*
-    * 初始化
-    * */
+     * 初始化
+     * */
     init(taskId) {
-      this.taskId = taskId;
+      this.taskId = taskId
       let param = {
         taskId: taskId,
+        // taskId: '201911270001',
         pageNumber: this.pageOption.page,
         pageSize: this.pageOption.size
-      };
+      }
       reptileDataApi
         .listEntryStartWord(param)
         .then(res => {
-          if (res.status === 'success') {
-
-          } else {
-            this.$message.error('获取分类信息失败，请稍后重试！')
+          if (res.data) {
+            if (res.data.records) {
+              this.launchData = res.data.records
+            } else {
+              this.launchData = []
+            }
+            this.pageOption.count = res.data.total
           }
         })
         .catch(res => {
@@ -110,28 +126,108 @@ export default {
     },
 
     /*
+     * 转换时间戳
+     * */
+    parseTime(time) {
+      return parseTimeYMD(time)
+    },
+
+    /*
+     * 获取抓取状态
+     * */
+    getStatus(status) {
+      switch (status) {
+        case 2: {
+          return '待爬取'
+        }
+        case 3: {
+          return '爬取中'
+        }
+        case 4: {
+          return '成功'
+        }
+        case 5: {
+          return '失败'
+        }
+        default:
+          return '未知'
+      }
+    },
+
+    /*
+     * 是否可选
+     * */
+    selectable(row) {
+      if (row.VERIFYSTATUS === 0) {
+        return true
+      }
+      return false
+    },
+
+    /*
      * 单条审核入库
      * */
-    singleInputDatabase(row) {},
+    singleInputDatabase(row) {
+      let param = {
+        idList: row.ID
+      }
+      reptileDataApi
+        .registrySourceEntryWords(param)
+        .then(res => {
+          if (res.status === 'success') {
+            this.$message.success('数据入库成功')
+            this.init(this.taskId)
+          }
+        })
+        .catch(res => {
+          this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+        })
+    },
 
     /*
      * 多选
      * */
     handleSelectionChange(val) {
-      this.multipleSelection = val
+      /*let arr = []
+      val.forEach(item => {
+        arr.push(item.ID)
+      })
+      this.multipleSelection = arr*/
+
+      let arr = ''
+      val.forEach(item => {
+        arr += item.ID + ','
+      })
+      this.multipleSelection = arr
     },
 
     /*
      * 多条审核入库
      * */
-    multipleInputDatabase() {},
+    multipleInputDatabase() {
+      let param = {
+        // idList: JSON.stringify(this.multipleSelection)
+        idList: this.multipleSelection
+      }
+      reptileDataApi
+        .registrySourceEntryWords(param)
+        .then(res => {
+          if (res.status === 'success') {
+            this.$message.success('多条数据入库成功')
+            this.multipleSelection = []
+            this.init(this.taskId)
+          }
+        })
+        .catch(res => {
+          this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+        })
+    },
 
     /*
      * 查看详情
      * */
     checkDetail(row) {
-      // this.detailId = row.ENTRY_ID;
-      this.detailId = '204e57e6-2448-11ea-a0f7-0242ac120005'
+      this.detailId = row.ID
       this.detailDialog = true
     },
 
@@ -139,22 +235,24 @@ export default {
      * 改变每页容量
      * */
     handleConditionSizeChange(val) {
-      this.pageOption.size = val;
-      this.init(this.taskId);
+      this.pageOption.size = val
+      this.init(this.taskId)
     },
 
     /*
      * 改变页数
      * */
     handleConditionCurrentChange(val) {
-      this.pageOption.page = val;
-      this.init(this.taskId);
+      this.pageOption.page = val
+      this.init(this.taskId)
     },
 
     /*
      * 关闭弹框
      * */
     closeDetailDialog() {
+      this,launchData = []
+      this.multipleSelection = []
       this.detailDialog = false
     }
   }
