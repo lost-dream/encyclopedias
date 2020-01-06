@@ -8,6 +8,7 @@
       class="departTable"
       :data="launchData"
       border
+      fit
       @selection-change="handleSelectionChange"
       :header-cell-style="{ background: '#ecedf2', color: '#67686d' }"
       style="width: 100%"
@@ -15,11 +16,11 @@
       <el-table-column type="selection" width="100" label="全选"></el-table-column>
       <el-table-column width="100" label="序号">
         <template slot-scope="scope">
-          {{ (scope.$index * pageOption.page) / pageOption.size + 1 }}
+          {{ (pageOption.page - 1) * pageOption.size + (scope.$index + 1) }}
         </template>
       </el-table-column>
-      <el-table-column prop="taskname" label="词条名称"></el-table-column>
-      <el-table-column prop="addtime" label="词条来源url"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="taskname" label="词条名称"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="addtime" label="词条来源url"></el-table-column>
       <el-table-column prop="addtime" label="抓取时间"></el-table-column>
       <el-table-column prop="taskname" width="150" label="抓取状态"></el-table-column>
       <el-table-column label="操作">
@@ -47,7 +48,7 @@
     <!--详情弹框-->
     <el-dialog
       append-to-body
-      title="查看关联词详情"
+      title="查看启动词详情"
       :visible.sync="detailDialog"
       width="80%"
       :before-close="closeDetailDialog"
@@ -59,11 +60,13 @@
 
 <script>
 import CheckDetail from './checkDetail'
+import reptileDataApi from '@/api/reptileData/index.js'
 export default {
   name: 'launchDialog',
   components: { CheckDetail },
   data() {
     return {
+      taskId: '',// 任务Id
       launchData: [
         {
           number: 1,
@@ -82,6 +85,30 @@ export default {
     }
   },
   methods: {
+    /*
+    * 初始化
+    * */
+    init(taskId) {
+      this.taskId = taskId;
+      let param = {
+        taskId: taskId,
+        pageNumber: this.pageOption.page,
+        pageSize: this.pageOption.size
+      };
+      reptileDataApi
+        .listEntryStartWord(param)
+        .then(res => {
+          if (res.status === 'success') {
+
+          } else {
+            this.$message.error('获取分类信息失败，请稍后重试！')
+          }
+        })
+        .catch(res => {
+          this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+        })
+    },
+
     /*
      * 单条审核入库
      * */
@@ -111,12 +138,18 @@ export default {
     /*
      * 改变每页容量
      * */
-    handleConditionSizeChange() {},
+    handleConditionSizeChange(val) {
+      this.pageOption.size = val;
+      this.init(this.taskId);
+    },
 
     /*
      * 改变页数
      * */
-    handleConditionCurrentChange() {},
+    handleConditionCurrentChange(val) {
+      this.pageOption.page = val;
+      this.init(this.taskId);
+    },
 
     /*
      * 关闭弹框

@@ -306,7 +306,9 @@ export default {
         label: this.label
       })
         .then(res => {
-          this.dataSourceList = res.data.records
+          if (res.data.records && res.data.records.length) {
+            this.dataSourceList = res.data.records
+          }
           this.pagination.count = res.data.total
         })
         .catch(error => {
