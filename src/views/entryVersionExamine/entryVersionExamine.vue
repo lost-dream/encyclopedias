@@ -306,7 +306,9 @@ export default {
         label: this.label
       })
         .then(res => {
-          this.dataSourceList = res.data.records
+          if (res.data.records && res.data.records.length) {
+            this.dataSourceList = res.data.records
+          }
           this.pagination.count = res.data.total
         })
         .catch(res => {
@@ -333,7 +335,7 @@ export default {
               })
             }
           })
-          console.log(res.data.children, '111')
+          // console.log(res.data.children, '111')
           this.treeData = res.data.children
         })
         .catch(res => {
