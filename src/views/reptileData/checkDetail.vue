@@ -90,8 +90,8 @@
         <!-- 循环剩下的属性 -->
         <ul
           class="entry-attr"
-          v-for="i in Math.ceil(wikiContent.entryAttributes.length / 2) - 1"
-          :key="i"
+          v-for="(i, index) in Math.ceil(wikiContent.entryAttributes.length / 2) - 1"
+          :key="index"
         >
           <li v-if="i * 2 < wikiContent.entryAttributes.length">
             <div class="key">{{ wikiContent.entryAttributes[i * 2].key }}</div>
@@ -249,8 +249,8 @@
                 "
               ></div>
               <template v-if="item.children.length">
-                <template v-for="(key, i) in item.children">
-                  <div class="text-indent" :key="i">
+                <template v-for="(key, index) in item.children">
+                  <div class="text-indent" :key="index">
                     <h3
                       :id="key.id"
                       v-if="key.contentTitle !== null && key.contentTitle !== 'null'"
@@ -268,8 +268,8 @@
                     <div v-else><p>&nbsp;</p></div>
                   </div>
                   <template v-if="key.children.length">
-                    <template v-for="(v, k) in key.children">
-                      <div class="text-indent" :key="k">
+                    <template v-for="(v, index) in key.children">
+                      <div class="text-indent" :key="index">
                         <h4 :id="v.id" v-if="v.contentTitle !== null && v.contentTitle !== 'null'">
                           &nbsp;&nbsp;&nbsp;&nbsp;{{ v.contentTitle }}
                         </h4>

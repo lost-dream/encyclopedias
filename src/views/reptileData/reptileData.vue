@@ -22,12 +22,12 @@
         <el-table-column prop="taskname" label="任务名称"></el-table-column>
         <el-table-column prop="addtime" label="生成时间"></el-table-column>
         <el-table-column label="操作">
-          <template>
+          <template slot-scope="scope">
             <el-button type="text" style="color: #f49b9b" size="small">重新抓取</el-button>
-            <el-button type="text" style="color: #5b7dd8" @click="checkLaunch" size="small"
+            <el-button type="text" style="color: #5b7dd8" @click="checkLaunch(scope.row)" size="small"
               >查看启动词条</el-button
             >
-            <el-button type="text" style="color: #53bb9a" @click="associationLaunch" size="small"
+            <el-button type="text" style="color: #53bb9a" @click="associationLaunch(scope.row)" size="small"
               >查看关联词条</el-button
             >
           </template>
@@ -55,7 +55,7 @@
          <span class="leftBorder"></span>
          <span class="titleWord">关联词列表</span>
       </span>
-      <associationDialog :associationDialog="associationDialog"></associationDialog>
+      <associationDialog ref="associationDialog"></associationDialog>
     </el-dialog>
     <el-dialog
       title="启动词列表"
@@ -67,7 +67,7 @@
          <span class="leftBorder"></span>
          <span class="titleWord">启动词列表</span>
       </span>
-      <launchDialog :launchDialog="launchDialog"></launchDialog>
+      <launchDialog ref="launchDialog"></launchDialog>
     </el-dialog>
   </div>
 </template>
@@ -101,10 +101,16 @@ export default {
   },
   methods: {
     // 打开弹窗
-    checkLaunch() {
+    checkLaunch(row) {
+      this.$nextTick(() => {
+        this.$refs.launchDialog.init(row.taskId);
+      });
       this.launchDialog = true
     },
-    associationLaunch() {
+    associationLaunch(row) {
+      this.$nextTick(() => {
+        this.$refs.associationDialog.init(row.taskId);
+      });
       this.associationDialog = true
     },
     // 关闭弹窗

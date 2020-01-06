@@ -8,6 +8,7 @@
       class="departTable"
       :data="associationData"
       border
+      fit
       @selection-change="handleSelectionChange"
       :header-cell-style="{ background: '#ecedf2', color: '#67686d' }"
       style="width: 100%"
@@ -15,11 +16,11 @@
       <el-table-column type="selection" width="100" label="全选"></el-table-column>
       <el-table-column width="100" label="序号">
         <template slot-scope="scope">
-          {{ (scope.$index * pageOption.page) / pageOption.size + 1 }}
+            {{ (pageOption.page - 1) * pageOption.size + (scope.$index + 1) }}
         </template>
       </el-table-column>
-      <el-table-column prop="taskname" label="词条名称"></el-table-column>
-      <el-table-column prop="addtime" label="词条来源url"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="taskname" label="词条名称"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="addtime" label="词条来源url"></el-table-column>
       <el-table-column prop="addtime" label="抓取时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -83,6 +84,13 @@ export default {
   },
   methods: {
     /*
+    * 初始化
+    * */
+    init(taskId) {
+
+    },
+
+    /*
      * 单条审核入库
      * */
     singleInputDatabase(row) {},
@@ -111,12 +119,16 @@ export default {
     /*
      * 改变每页容量
      * */
-    handleConditionSizeChange() {},
+    handleConditionSizeChange(val) {
+      this.pageOption.size = val;
+    },
 
     /*
      * 改变页数
      * */
-    handleConditionCurrentChange() {},
+    handleConditionCurrentChange(val) {
+      this.pageOption.page = val;
+    },
 
     /*
      * 关闭弹框
