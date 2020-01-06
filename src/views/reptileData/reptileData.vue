@@ -20,11 +20,15 @@
       >
         <el-table-column width="220px" label="序号">
           <template slot-scope="scope">
-            {{ (pagination.page - 1) * pagination.limit + (scope.$index + 1) }}
+            {{ (pagination.pageNumber - 1) * pagination.pageSize + (scope.$index + 1) }}
           </template>
         </el-table-column>
         <el-table-column prop="taskName" label="任务名称"></el-table-column>
-        <el-table-column prop="addTime" label="生成时间"></el-table-column>
+        <el-table-column prop="createTime" label="生成时间">
+          <template slot-scope="scope">
+            {{ parseTime(scope.row.createTime) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" style="color: #f49b9b" size="small" @click="freshGet(scope.row)"
@@ -51,10 +55,10 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="pagination.page"
-        :page-size="pagination.limit"
+        :current-page="pagination.pageNumber"
+        :page-size="pagination.pageSize"
         layout="total, sizes, prev, pager, next"
-        :total="pagination.count"
+        :total="pagination.total"
       ></el-pagination>
     </el-card>
 
@@ -83,12 +87,41 @@
       </span>
       <launchDialog ref="launchDialog"></launchDialog>
     </el-dialog>
+    <el-dialog
+      title="手动导入任务"
+      :visible.sync="importTaskDialog"
+      width="40%"
+      :before-close="CloseImportTaskDialog"
+    >
+      <span slot="title">
+        <span class="leftBorder"></span>
+        <span class="titleWord">手动导入任务</span>
+      </span>
+      <el-upload
+        class="upload-demo"
+        ref="upload"
+        :action="baseUrlConfig.UPLOAD_URL1"
+        :limit="1"
+        :on-exceed="handleExceed"
+        :on-success="handleSuccess"
+        :file-list="fileList"
+        :auto-upload="false"
+      >
+        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="importTaskDialog = false">关 闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import associationDialog from './associationDialog'
 import launchDialog from './launchDialog'
+import { taskList, reCrawl } from '@/api/reptileData/index.js'
+import { parseTimeYMD } from '@/utils/commonMethod.js'
 export default {
   name: 'reptileData',
   components: {
@@ -97,23 +130,33 @@ export default {
   },
   data() {
     return {
-      reptileData: [
-        {
-          id: '001',
-          taskName: 'abc',
-          addTime: '2020-01-02'
-        }
-      ],
+      reptileData: [],
+      fileList: [],
       associationDialog: false,
       launchDialog: false,
+      importTaskDialog: false,
       pagination: {
-        page: 1,
-        limit: 10,
-        count: 0
+        pageNumber: 1,
+        pageSize: 10,
+        total: 0
       }
     }
   },
   methods: {
+    /*
+     * 获取爬虫任务列表
+     * */
+    taskList() {
+      taskList({ pageNumber: this.pagination.pageNumber, pageSize: this.pagination.pageSize }).then(
+        res => {
+          this.reptileData = res.data.records
+          this.pagination.total = res.data.total
+        }
+      )
+    },
+    parseTime(str) {
+      return parseTimeYMD(str)
+    },
     /*
      * 打开弹窗
      * */
@@ -138,24 +181,52 @@ export default {
     CloseLaunchDialog() {
       this.launchDialog = false
     },
+    CloseImportTaskDialog() {
+      this.importTaskDialog = false
+    },
     /*
      * 手动导入任务
      * */
-    importTask() {},
+    importTask() {
+      this.importTaskDialog = true
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择1个文件上传`);
+    },
+    handleSuccess(res) {
+      this.taskList();
+      if (res.status = 'success') {
+        this.$message('导入成功');
+      }
+    },
     /*
      * 重新抓取
      * */
-    freshGet(row) {},
+    freshGet(row) {
+      reCrawl(row.id).then(res => {
+        if (res.status === 'success') {
+          this.$message('重新抓取成功')
+        }
+      })
+    },
     /*
      * 分页
      * */
     handleSizeChange(val) {
-      this.pagination.page = 1
-      this.pagination.limit = val
+      this.pagination.pageNumber = 1
+      this.pagination.pageSize = val
+      this.taskList()
     },
     handleCurrentChange(val) {
-      this.pagination.page = val
+      this.pagination.pageNumber = val
+      this.taskList()
     }
+  },
+  mounted() {
+    this.taskList()
   }
 }
 </script>
