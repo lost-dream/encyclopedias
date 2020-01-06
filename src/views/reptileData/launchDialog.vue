@@ -60,6 +60,7 @@
 
 <script>
 import CheckDetail from './checkDetail'
+import reptileDataApi from '@/api/reptileData/index.js'
 export default {
   name: 'launchDialog',
   components: { CheckDetail },
@@ -94,7 +95,18 @@ export default {
         pageNumber: this.pageOption.page,
         pageSize: this.pageOption.size
       };
+      reptileDataApi
+        .listEntryStartWord(param)
+        .then(res => {
+          if (res.status === 'success') {
 
+          } else {
+            this.$message.error('获取分类信息失败，请稍后重试！')
+          }
+        })
+        .catch(res => {
+          this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+        })
     },
 
     /*
