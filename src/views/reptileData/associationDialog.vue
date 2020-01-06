@@ -65,6 +65,7 @@ export default {
   components: { CheckDetail },
   data() {
     return {
+      taskId: '', // 任务Id
       associationData: [
         {
           number: 1,

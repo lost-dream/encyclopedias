@@ -65,6 +65,7 @@ export default {
   components: { CheckDetail },
   data() {
     return {
+      taskId: '',// 任务Id
       launchData: [
         {
           number: 1,
@@ -87,7 +88,13 @@ export default {
     * 初始化
     * */
     init(taskId) {
-      alert(taskId);
+      this.taskId = taskId;
+      let param = {
+        taskId: taskId,
+        pageNumber: this.pageOption.page,
+        pageSize: this.pageOption.size
+      };
+
     },
 
     /*
@@ -119,12 +126,18 @@ export default {
     /*
      * 改变每页容量
      * */
-    handleConditionSizeChange() {},
+    handleConditionSizeChange(val) {
+      this.pageOption.size = val;
+      this.init(this.taskId);
+    },
 
     /*
      * 改变页数
      * */
-    handleConditionCurrentChange() {},
+    handleConditionCurrentChange(val) {
+      this.pageOption.page = val;
+      this.init(this.taskId);
+    },
 
     /*
      * 关闭弹框
