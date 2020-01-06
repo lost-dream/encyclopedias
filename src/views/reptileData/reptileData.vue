@@ -114,7 +114,9 @@ export default {
     }
   },
   methods: {
-    // 打开弹窗
+    /*
+     * 打开弹窗
+     * */
     checkLaunch(row) {
       this.$nextTick(() => {
         this.$refs.launchDialog.init(row.id)
@@ -127,18 +129,26 @@ export default {
       })
       this.associationDialog = true
     },
-    // 关闭弹窗
+    /*
+     * 关闭弹窗
+     * */
     CloseAssociationDialog() {
       this.associationDialog = false
     },
     CloseLaunchDialog() {
       this.launchDialog = false
     },
-    // 手动导入任务
+    /*
+     * 手动导入任务
+     * */
     importTask() {},
-    // 重新抓取
+    /*
+     * 重新抓取
+     * */
     freshGet(row) {},
-    // 分页
+    /*
+     * 分页
+     * */
     handleSizeChange(val) {
       this.pagination.page = 1
       this.pagination.limit = val
