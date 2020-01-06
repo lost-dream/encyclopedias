@@ -27,7 +27,11 @@
                   </el-image>
                   <div>
                     <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
-                    <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis3" v-html="JSON.parse(item.SUMMARY[0].summary).text"></div>
+                    <div
+                      v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
+                      class="ellipsis3"
+                      v-html="JSON.parse(item.SUMMARY[0].summary).text"
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -39,16 +43,15 @@
             <div class="left">
               <div>
                 <p>
-                  <img src="../../assets/index/01.png" alt="" />
+                  <img src="@/assets/index/01.png" alt="" />
                   <span class="data">{{ toThousands(entryStatisticalData.totalEntry) }}</span>
                   <span>个词条</span>
                 </p>
               </div>
               <div>
                 <p>
-                  <img src="../../assets/index/02.png" alt="" />
+                  <img src="@/assets/index/02.png" alt="" />
                   <span class="data">{{ toThousands(entryStatisticalData.totalEntryEitor) }}</span>
-                  <!--<span class="data">0</span>-->
                   <span>个词条被编辑</span>
                 </p>
               </div>
@@ -62,25 +65,9 @@
             </div>
 
             <div class="rightBtnArea">
-              <el-button
-                type="primary"
-                style="font-weight: border;color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
-                @click="gotoCreate"
-              >
-                创建词条
-              </el-button>
-              <el-button
-                type="danger"
-                style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
-                @click="gotoMyEntry"
-                >我的词条</el-button
-              >
-              <el-button
-                type="danger"
-                style="color:#333;font-size:24px; margin-left: 20px;vertical-align: top; background-image: linear-gradient(#e6e6e6,#c8c8c8)"
-                @click="gotoManager"
-                >后台管理</el-button
-              >
+              <el-button @click="gotoCreate">创建词条</el-button>
+              <el-button @click="gotoMyEntry">我的词条</el-button>
+              <el-button @click="gotoManager">后台管理</el-button>
             </div>
           </div>
         </el-col>
@@ -97,7 +84,7 @@
         id="special-carousel"
         v-loading="!specialListData.length"
       >
-        <el-carousel-item v-for="item in specialListData" :key="item.id">
+        <el-carousel-item v-for="(item, index) in specialListData" :key="index">
           <div @click="routeToSpecial(item.id)" class="specialList">
             <el-image :fit="'cover'" :src="item.specialCoverUrl">
               <div slot="error" class="image-slot">
@@ -217,16 +204,16 @@
           >
             <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
-                  v-for="(item, i) in categoryList"
-                  :key="i"
-                  class="categoryListItem"
-                  style="width: 45%;display: flex;padding: 10px;"
-                  @click="seeEntry(item)"
+                v-for="(item, i) in categoryList"
+                :key="i"
+                class="categoryListItem"
+                style="width: 45%;display: flex;padding: 10px;"
+                @click="seeEntry(item)"
               >
                 <el-image
-                    class="cat-img"
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
+                  class="cat-img"
+                  v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
+                  :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -236,9 +223,11 @@
                   <p class="entry-title">
                     <span>{{ item.ENTRY_NAME }}</span>
                   </p>
-                  <div v-if="item.SUMMARY.length && item.SUMMARY[0].summary" class="ellipsis">
-                    {{ JSON.parse(item.SUMMARY[0].summary).text }}
-                  </div>
+                  <div
+                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
+                    class="ellipsis"
+                    v-html="JSON.parse(item.SUMMARY[0].summary).text"
+                  ></div>
                 </div>
               </div>
             </div>
@@ -250,7 +239,12 @@
 </template>
 
 <script>
-import { entryStatistical, getCarouselList, getEntryDetail, getRecommendClass } from '@/api/onlyShowData'
+import {
+  entryStatistical,
+  getCarouselList,
+  getEntryDetail,
+  getRecommendClass
+} from '@/api/onlyShowData'
 import { specialList } from '@/api/special'
 import { categoryTree, getInternalEntryList } from '@/api/classifyManager'
 
@@ -432,11 +426,9 @@ export default {
     },
     // 获取分类推荐列表 && 加载第一组数据
     getRecommendList() {
-      // api().then(res => { .....
       getRecommendClass({
         nbct: sessionStorage.getItem('nbct')
       }).then(res => {
-        console.log(res)
         if (res.status === 'success') {
           this.recommendList = res.data.reduce((arr, item) => {
             arr.push({
@@ -452,8 +444,6 @@ export default {
           this.$message.error(res.msg)
         }
       })
-
-
     }
   },
   created() {
@@ -465,10 +455,6 @@ export default {
       this.getEntryList()
       this.getRecommendList()
     })
-  },
-  mounted() {
-    let categoryOrigin = document.getElementsByClassName('categoryOrigin')
-    console.log(3123, categoryOrigin, categoryOrigin[0].innerHTML)
   }
 }
 </script>
@@ -919,7 +905,12 @@ export default {
     vertical-align: top;
     .el-button {
       display: block;
-      margin: 10px 0;
+      margin: 10px 0 10px 20px;
+      font-weight: bolder;
+      color:#333;
+      font-size:24px;
+      vertical-align: top;
+      background-image: linear-gradient(#e6e6e6,#c8c8c8)
     }
   }
 }

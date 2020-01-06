@@ -63,8 +63,9 @@
           style="background: #587dda !important;color: white;margin-left: 55px;"
           @click="auditList"
           type="primary"
-          >查询</el-button
         >
+          查询
+        </el-button>
       </el-row>
       <el-table
         class="departTable"
@@ -77,13 +78,11 @@
       >
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
-        <el-table-column prop="SUMMARY" label="描述" width="300">
-          <template v-if="scope.row.SUMMARY" slot-scope="scope">
-            <span
-              :title="JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g, '')"
-              class="summary"
-              v-html="JSON.parse(scope.row.SUMMARY.summary).text.replace(/<[^<>]+>/g, '')"
-            ></span>
+        <el-table-column label="描述" width="300">
+          <template slot-scope="scope">
+            <span class="summary">
+              {{ parseDec(scope.row.SUMMARY.summary) }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column prop="CREATOR" label="创建人员"></el-table-column>
@@ -229,7 +228,6 @@ export default {
       this.checkedCategoryName = ''
     },
     handleNodeClick(data) {
-      console.log(data)
       this.categoryId = data.id
       this.checkedCategoryName = data.name
       this.showTree = false
@@ -274,7 +272,6 @@ export default {
         .catch(() => {})
     },
     see(item) {
-      console.log(item)
       this.$router.push({
         name: 'dataSourceManager',
         query: {
@@ -286,6 +283,9 @@ export default {
 
     parseTime(str) {
       return parseTimeYMD(str)
+    },
+    parseDec(str) {
+      return JSON.parse(str).text
     },
     handleSizeChange(val) {
       this.pagination.page = 1
@@ -309,8 +309,8 @@ export default {
           this.dataSourceList = res.data.records
           this.pagination.count = res.data.total
         })
-        .catch(res => {
-          console.log(res)
+        .catch(error => {
+          throw error
         })
     },
     categoryTree() {
@@ -333,15 +333,13 @@ export default {
               })
             }
           })
-          console.log(res.data.children, '111')
           this.treeData = res.data.children
         })
-        .catch(res => {
-          console.log(res)
+        .catch(error => {
+          throw error
         })
     },
-    auditView(row, column, event) {
-      // console.log(row, column, event)
+    auditView(row) {
       this.$router.push({
         name: 'viewEntry',
         query: {
