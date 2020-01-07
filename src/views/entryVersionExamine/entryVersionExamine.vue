@@ -80,9 +80,7 @@
         <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
         <el-table-column label="描述" width="300">
           <template slot-scope="scope">
-            <span class="summary">
-              {{ parseDec(scope.row.SUMMARY.summary) }}
-            </span>
+            <span class="summary" v-html="parseDec(scope.row.SUMMARY.summary)"></span>
           </template>
         </el-table-column>
         <el-table-column prop="CREATOR" label="创建人员"></el-table-column>
@@ -294,7 +292,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.pagination.page = val
-      // this.auditList()
+      this.auditList()
     },
     auditList() {
       auditList({
@@ -308,6 +306,8 @@ export default {
         .then(res => {
           if (res.data.records && res.data.records.length) {
             this.dataSourceList = res.data.records
+          } else {
+            this.dataSourceList = []
           }
           this.pagination.count = res.data.total
         })

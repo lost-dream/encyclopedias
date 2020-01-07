@@ -907,10 +907,10 @@ export default {
       display: block;
       margin: 10px 0 10px 20px;
       font-weight: bolder;
-      color:#333;
-      font-size:24px;
+      color: #333;
+      font-size: 24px;
       vertical-align: top;
-      background-image: linear-gradient(#e6e6e6,#c8c8c8)
+      background-image: linear-gradient(#e6e6e6, #c8c8c8);
     }
   }
 }

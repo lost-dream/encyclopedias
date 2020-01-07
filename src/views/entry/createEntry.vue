@@ -983,7 +983,7 @@
             // 保存词条分类
             saveCategory(){
                 // 处理一下savedCategories数组, 提出来id，重新弄个数组就ok
-                console.log(this.savedMiddleCategories.length)
+                // console.log(this.savedMiddleCategories.length)
                 if (this.savedMiddleCategories.length <= 5) { 
                     this.savedCategories = this.savedMiddleCategories//将临时分类数组赋值给页面
                     this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
