@@ -40,12 +40,21 @@
           {{ getStatus(scope.row.STATUS) }}
         </template>
       </el-table-column>
+      <el-table-column prop="taskname" width="200" label="审核入库状态">
+        <template slot-scope="scope">
+          {{ scope.row.VERIFYSTATUS === 0 ? '未审核入库' : '已审核入库' }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" style="color: #5b7dd8" @click="checkDetail(scope.row)"
             >查看详情</el-button
           >
-          <el-button :disabled="scope.row.VERIFYSTATUS !== 0" type="text" style="color: #f49b9b" @click="singleInputDatabase(scope.row)"
+          <el-button
+            :disabled="scope.row.VERIFYSTATUS !== 0"
+            type="text"
+            style="color: #f49b9b"
+            @click="singleInputDatabase(scope.row)"
             >审核入库</el-button
           >
         </template>
@@ -89,9 +98,9 @@ export default {
       pageOption: {
         page: 1,
         size: 10,
-        count: 20
+        count: 0
       }, // 翻页
-      multipleSelection: [], // 多选项
+      multipleSelection: '', // 多选项
       detailDialog: false, // 弹框
       detailId: '' // 查看详情的id
     }
@@ -101,6 +110,8 @@ export default {
      * 初始化
      * */
     init(taskId) {
+      this.launchData = []
+      this.multipleSelection = ''
       this.taskId = taskId
       let param = {
         taskId: taskId,
@@ -177,6 +188,8 @@ export default {
           if (res.status === 'success') {
             this.$message.success('数据入库成功')
             this.init(this.taskId)
+          } else {
+            this.$message.error(res.msg)
           }
         })
         .catch(res => {
@@ -195,8 +208,12 @@ export default {
       this.multipleSelection = arr*/
 
       let arr = ''
-      val.forEach(item => {
-        arr += item.ID + ','
+      val.forEach((item, index) => {
+        if (index !== val.length - 1) {
+          arr += item.ID + ','
+        } else {
+          arr += item.ID
+        }
       })
       this.multipleSelection = arr
     },
@@ -205,22 +222,28 @@ export default {
      * 多条审核入库
      * */
     multipleInputDatabase() {
-      let param = {
-        // idList: JSON.stringify(this.multipleSelection)
-        idList: this.multipleSelection
+      if (this.multipleSelection !== '') {
+        let param = {
+          // idList: JSON.stringify(this.multipleSelection)
+          idList: this.multipleSelection
+        }
+        reptileDataApi
+          .registrySourceEntryWords(param)
+          .then(res => {
+            if (res.status === 'success') {
+              this.$message.success('多条数据入库成功')
+              this.multipleSelection = ''
+              this.init(this.taskId)
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+          .catch(res => {
+            this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
+          })
+      } else {
+        this.$message.warning('未选择任何数据')
       }
-      reptileDataApi
-        .registrySourceEntryWords(param)
-        .then(res => {
-          if (res.status === 'success') {
-            this.$message.success('多条数据入库成功')
-            this.multipleSelection = []
-            this.init(this.taskId)
-          }
-        })
-        .catch(res => {
-          this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
-        })
     },
 
     /*
@@ -251,8 +274,6 @@ export default {
      * 关闭弹框
      * */
     closeDetailDialog() {
-      this,launchData = []
-      this.multipleSelection = []
       this.detailDialog = false
     }
   }
@@ -348,6 +369,15 @@ export default {
     width: 22px;
     height: 22px;
     font-size: 16px;
+  }
+
+  .el-checkbox__inner::after {
+    left: 7px;
+    top: 5px;
+  }
+
+  .el-checkbox__input.is-indeterminate .el-checkbox__inner::before {
+    top: 9px;
   }
 }
 </style>

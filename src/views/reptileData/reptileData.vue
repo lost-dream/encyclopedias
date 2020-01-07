@@ -66,7 +66,7 @@
     <el-dialog
       title="关联词列表"
       :visible.sync="associationDialog"
-      width="80%"
+      width="90%"
       :before-close="CloseAssociationDialog"
     >
       <span slot="title">
@@ -78,7 +78,7 @@
     <el-dialog
       title="启动词列表"
       :visible.sync="launchDialog"
-      width="80%"
+      width="90%"
       :before-close="CloseLaunchDialog"
     >
       <span slot="title">
