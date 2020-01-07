@@ -13,133 +13,141 @@
       <div class="tree-wrapper">
         <h3>外部词条</h3>
         <el-tree
-            ref="SlotTree"
-            :data="setTree"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            highlight-current
-            :node-key="NODE_KEY"
-            :default-expanded-keys="expanded"
+          ref="SlotTree"
+          :data="setTree"
+          :props="defaultProps"
+          :expand-on-click-node="false"
+          highlight-current
+          :node-key="NODE_KEY"
+          :default-expanded-keys="expanded"
         >
           <div class="comp-tr-node" slot-scope="{ node, data }">
             <!-- 编辑状态 -->
             <template v-if="node.isEdit">
               <el-input
-                  v-model="data.name"
-                  autofocus
-                  size="mini"
-                  :ref="'slotTreeInput' + data[NODE_KEY]"
-                  @blur.stop="handleInput(node, data)"
-                  @keyup.enter.native="handleInput(node, data)"
+                v-model="data.name"
+                autofocus
+                size="mini"
+                :ref="'slotTreeInput' + data[NODE_KEY]"
+                @blur.stop="handleInput(node, data)"
+                @keyup.enter.native="handleInput(node, data)"
               ></el-input>
             </template>
 
             <!-- 非编辑状态 -->
             <template v-else>
               <!-- 名称： 新增节点增加class（is-new） -->
-              <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
-              {{ node.label }}
-            </span>
+              <span
+                :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']"
+                :title="node.label"
+                class="nodelabel"
+              >
+                {{ node.label }}
+              </span>
 
               <!-- 按钮 -->
               <span class="comp-tr-node--btns">
-              <!-- 新增 -->
-              <el-button
+                <!-- 新增 -->
+                <el-button
                   icon="el-icon-plus"
                   size="mini"
                   circle
                   type="primary"
                   title="新增"
                   @click="handleAdd(node, data)"
-              ></el-button>
+                ></el-button>
 
                 <!-- 编辑 -->
-              <el-button
+                <el-button
                   icon="el-icon-edit"
                   size="mini"
                   circle
                   type="info"
                   title="修改"
                   @click="handleEdit(node, data)"
-              ></el-button>
+                ></el-button>
 
                 <!-- 删除 -->
-              <el-button
+                <el-button
                   icon="el-icon-delete"
                   size="mini"
                   circle
                   type="danger"
                   title="删除"
                   @click="handleDelete(node, data)"
-              ></el-button>
-            </span>
+                ></el-button>
+              </span>
             </template>
           </div>
         </el-tree>
 
         <h3 v-if="permission === '0'">内部词条</h3>
         <el-tree
-            v-if="permission === '0'"
-            ref="SlotTree"
-            :data="innerTree"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            highlight-current
-            :node-key="NODE_KEY"
-            :default-expanded-keys="expanded"
+          v-if="permission === '0'"
+          ref="SlotTree"
+          :data="innerTree"
+          :props="defaultProps"
+          :expand-on-click-node="false"
+          highlight-current
+          :node-key="NODE_KEY"
+          :default-expanded-keys="expanded"
         >
           <div class="comp-tr-node" slot-scope="{ node, data }">
             <!-- 编辑状态 -->
             <template v-if="node.isEdit">
               <el-input
-                  v-model="data.name"
-                  autofocus
-                  size="mini"
-                  :ref="'slotTreeInput' + data[NODE_KEY]"
-                  @blur.stop="handleInput(node, data)"
-                  @keyup.enter.native="handleInput(node, data)"
+                v-model="data.name"
+                autofocus
+                size="mini"
+                :ref="'slotTreeInput' + data[NODE_KEY]"
+                @blur.stop="handleInput(node, data)"
+                @keyup.enter.native="handleInput(node, data)"
               ></el-input>
             </template>
 
             <!-- 非编辑状态 -->
             <template v-else>
               <!-- 名称： 新增节点增加class（is-new） -->
-              <span :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']" :title="node.label" class="nodelabel">
-              {{ node.label }}
-            </span>
+              <span
+                :class="[data[NODE_KEY] < NODE_ID_START ? 'is-new' : '', 'comp-tr-node--name']"
+                :title="node.label"
+                class="nodelabel"
+              >
+                {{ node.label }}
+              </span>
 
               <!-- 按钮 -->
               <span class="comp-tr-node--btns">
-              <!-- 新增 -->
-              <el-button
+                <!-- 新增 -->
+                <el-button
                   icon="el-icon-plus"
                   size="mini"
                   circle
                   type="primary"
                   title="新增"
                   @click="handleAdd(node, data)"
-              ></el-button>
+                ></el-button>
 
                 <!-- 编辑 -->
-              <el-button
+                <el-button
                   icon="el-icon-edit"
                   size="mini"
                   circle
                   type="info"
                   title="修改"
                   @click="handleEdit(node, data)"
-              ></el-button>
+                ></el-button>
 
                 <!-- 删除 -->
-              <el-button
+                <el-button
                   icon="el-icon-delete"
                   size="mini"
                   circle
                   type="danger"
                   title="删除"
                   @click="handleDelete(node, data)"
-              ></el-button>
-            </span>
+                ></el-button>
+              </span>
             </template>
           </div>
         </el-tree>
@@ -189,7 +197,7 @@
               form = {}
               formDisabled = true
             "
-            >
+          >
             取 消
           </el-button>
           <el-button
@@ -405,7 +413,12 @@ export default {
               this.setTree = res.data.children
             }
             // id 值和接口返回 id 的值保持一致
-            this.options.push({ children: data || [], id: 'ROOT', name: '外部词条', disabled: false })
+            this.options.push({
+              children: data || [],
+              id: 'ROOT',
+              name: '外部词条',
+              disabled: false
+            })
             if (this.permission === '0') {
               this.getInnerTreeData()
             } else {
@@ -416,12 +429,15 @@ export default {
           }
         })
         .catch(error => {
-          this.$message.error(`请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`)
+          this.$message.error(
+            `请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`
+          )
         })
     },
     // 获取内部词条分类
     getInnerTreeData() {
-      getInternalEntryList().then(res => {
+      getInternalEntryList()
+        .then(res => {
           if (res.status === 'success') {
             let data = res.data && (_.cloneDeep(res.data.children) || [])
 
@@ -443,7 +459,12 @@ export default {
             }
 
             // id 值和接口返回 id 的值保持一致
-            this.options.push({ children: data || [], id: 'INNER_ROOT', name: '内部词条', disabled: false })
+            this.options.push({
+              children: data || [],
+              id: 'INNER_ROOT',
+              name: '内部词条',
+              disabled: false
+            })
 
             this.isLoading = false
           } else {
@@ -451,7 +472,9 @@ export default {
           }
         })
         .catch(error => {
-          this.$message.error(`请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`)
+          this.$message.error(
+            `请求出错，错误原因: ${error.msg ? error.msg : JSON.stringify(error)}`
+          )
         })
     },
     // 处理category事件
@@ -462,14 +485,7 @@ export default {
       switch (type) {
         case 'edit': {
           _.merge(this.form, _data)
-          this.form = _.pick(this.form, [
-            'id',
-            'parentId',
-            'name',
-            'grade',
-            'sort',
-            'descM'
-          ])
+          this.form = _.pick(this.form, ['id', 'parentId', 'name', 'grade', 'sort', 'descM'])
 
           this.disableNode(_data.id)
 
@@ -498,7 +514,7 @@ export default {
       let apiFunc = this.diagTitle.text === '编辑分类' ? api.updateCategory : api.createCategory,
         vm = this,
         expanded = ''
-        vm.loading = true
+      vm.loading = true
       this.$refs['ruleForm'].validate(valid => {
         if (valid) {
           typeof vm.form.parentId == 'object' &&

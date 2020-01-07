@@ -8,9 +8,13 @@
       <el-row style="margin: 0 0 0 20px;">
         <div class="categoryChoose">
           <span class="label">分类</span>
-          <span @click="changeTreeShow" class="el-input__inner changeTreeShow">{{
-            checkedCategoryName
-          }}</span>
+          <el-input
+            @focus="changeTreeShow"
+            @blur="hideTree"
+            clearable
+            class="changeTreeShow"
+            v-model="checkedCategoryName"
+          ></el-input>
           <div v-show="showTree" class="myTree">
             <el-tree
               ref="tree"
@@ -224,7 +228,11 @@ export default {
     changeTreeShow() {
       this.showTree = !this.showTree
     },
-
+    hideTree() {
+      setTimeout(() => {
+        this.showTree = false
+      }, 200)
+    },
     handleNodeClick(data, checked, node) {
       console.log(data)
       this.categoryId = data.id
