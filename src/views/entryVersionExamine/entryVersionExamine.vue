@@ -80,7 +80,9 @@
         <el-table-column prop="ENTRY_NAME" label="名称"></el-table-column>
         <el-table-column label="描述" width="300">
           <template slot-scope="scope">
-            <span class="summary" v-html="parseDec(scope.row.SUMMARY.summary)"></span>
+            <span class="summary" v-html="parseDec(scope.row.SUMMARY.summary)">
+              <!--              {{ parseDec(scope.row.SUMMARY.summary) }}-->
+            </span>
           </template>
         </el-table-column>
         <el-table-column prop="CREATOR" label="创建人员"></el-table-column>

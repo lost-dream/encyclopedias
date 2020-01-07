@@ -523,6 +523,7 @@ export default {
               this.$message.error('请求出错，错误原因： ' + e.msg ? e.msg : JSON.stringify(e))
             })
         } else {
+          vm.loading = false
           return false
         }
       })

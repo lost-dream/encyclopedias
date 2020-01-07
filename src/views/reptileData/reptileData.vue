@@ -130,7 +130,7 @@ export default {
   },
   data() {
     return {
-      reptileData: [{}],
+      reptileData: [],
       fileList: [],
       associationDialog: false,
       launchDialog: false,

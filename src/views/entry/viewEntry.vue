@@ -532,8 +532,6 @@ export default {
         })
       }
     })
-    let lemma = document.getElementsByClassName('lemma-map')
-    console.log(9898, lemma)
   },
   updated() {
     this.$nextTick(() => {
