@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column prop="taskname" width="150" label="抓取状态">
         <template slot-scope="scope">
-          {{ getStatus(scope.row.STATUS) }}
+          {{ getStatus(scope.row.CRAWLINGSTATUS) }}
         </template>
       </el-table-column>
       <el-table-column prop="taskname" width="200" label="审核入库状态">
@@ -114,8 +114,8 @@ export default {
       this.multipleSelection = ''
       this.taskId = taskId
       let param = {
-        taskId: taskId,
-        // taskId: '201911270001',
+        // taskId: taskId,
+        taskId: '201911270001',
         pageNumber: this.pageOption.page,
         pageSize: this.pageOption.size
       }
