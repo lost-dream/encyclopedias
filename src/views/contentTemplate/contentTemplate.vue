@@ -4,7 +4,7 @@
       <span>目录模板管理</span>
     </h2>
     <div class="flex-box">
-      <div class="left myTree" v-loading="isLoading">
+      <div class="left myTree1" v-loading="isLoading">
         <h3>外部词条</h3>
         <el-tree :data="categoryTree" :props="categoryProps" @node-click="selectCategory"></el-tree>
         <h3 v-if="permission === '0'">内部词条</h3>
@@ -535,9 +535,10 @@ export default {
 /deep/ .comp-tr-node {
   position: relative;
 }
-.myTree .el-tree {
-  /*min-height: 200px !important;*/
-  /*max-height: 600px !important;*/
+.myTree {
+  height: 300px;
+  min-height: 200px !important;
+  max-height: 600px !important;
 }
 
 .el-tree /deep/ .el-tree-node__content {
