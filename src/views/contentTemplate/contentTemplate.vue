@@ -547,7 +547,7 @@ export default {
   position: relative;
 }
 .myTree {
-  height: 600px;
+  height: 500px;
   overflow: auto;
 /*  min-height: 200px !important;
   max-height: 600px !important;*/
