@@ -974,3 +974,19 @@ body {
   }
 }
 </style>
+
+<style lang="scss">
+.main-page {
+  .ellipsis3 {
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      word-wrap: break-word;
+    }
+  }
+}
+</style>
