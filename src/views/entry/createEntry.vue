@@ -113,7 +113,7 @@
 								      >
 								    </el-date-picker>
 								</span>
-								
+
 							</div>
 							<div v-else>
 								<span>
@@ -122,20 +122,20 @@
 							</div>
 						</li>
 					</ul>
-					
+
 					<!--手动添加属性-->
 					<div v-show="classifyData.length" class="addClassifyFrom">
 						<span class="name">
 							<el-button @click="addClassifyFrom" type="text">添加属性<i class="el-icon-plus el-icon--right"></i></el-button>
 						</span>
-						
+
 					</div>
 					<!--选择属性模板-->
 					<div class="choose-template">
 						<el-button @click="showChooseClassify=true" type="text">选择属性模板<i class="el-icon-plus el-icon--right"></i></el-button>
 					</div>
-					
-					
+
+
                 </div>
             </div>
             <!-- 正文 -->
@@ -207,9 +207,9 @@
         <div>
             <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="目录模板" name="first">
-                    <el-tree 
+                    <el-tree
                         class="template-left"
-                        :data="categoryTreeData" 
+                        :data="categoryTreeData"
                         :props="{label: 'name'}"
                         @node-click="loadContent">
                     </el-tree>
@@ -231,7 +231,7 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                </template> 
+                                </template>
                                 <template v-else>
                                     {{item.contentName}}
                                 </template>
@@ -258,20 +258,20 @@
         title="选择分类"
         :visible.sync="dialogVisible"
         :before-close="handleCloseModel">
-            <tree-transfer 
+            <tree-transfer
                 ref="treeTransfer"
                 width="85%"
                 height="540px"
-                :title="title" 
-                :from_data='categoryTreeData' 
-                :to_data='toData' 
-                :defaultProps="{label:'name'}" 
-                pid="parentId" 
-                @addBtn='add' 
-                @removeBtn='remove' 
+                :title="title"
+                :from_data='categoryTreeData'
+                :to_data='toData'
+                :defaultProps="{label:'name'}"
+                pid="parentId"
+                @addBtn='add'
+                @removeBtn='remove'
                 @left-check-change="checkLength"
-                :mode='mode' 
-                :addressOptions="{num: 1, connector: ''}" 
+                :mode='mode'
+                :addressOptions="{num: 1, connector: ''}"
                 filter
                 style="margin: 0 auto;min-width: 740px"></tree-transfer>
             <span slot="footer" class="dialog-footer">
@@ -285,9 +285,9 @@
 		  :visible.sync="showChooseClassify"
 		  width="900px"
 		  >
-		  <el-tree 
+		  <el-tree
                 class="template-left template-leftDialog"
-                :data="categoryTreeData" 
+                :data="categoryTreeData"
                 :props="{label: 'name'}"
                 @node-click="chooseClassifyItem">
             </el-tree>
@@ -349,9 +349,9 @@
 		    <!--<el-button type="primary" @click="chooseClassify">确 定</el-button>-->
 		  </span>
 		</el-dialog>
-        
-        
-        
+
+
+
     </div>
 </template>
 <script>
@@ -431,7 +431,7 @@
             }
         },
         created(){
-            
+
         },
         mounted() {
         		let vm = this
@@ -441,7 +441,7 @@
 	            vm.initCKEditor()
 	            vm.initSummaryEditor()
 			    	});
-            
+
         },
         methods: {
         	showCategoryChooseModel() {
@@ -518,9 +518,9 @@
 						}
 						else{
 							this.pickerOptionsTemplateList.push('')
-						}	
+						}
 					})
-        		
+
                 	this.classifyTemplateData = res.data
         		})
 			},
@@ -540,9 +540,9 @@
 						}
 						else{
 							this.pickerOptionsList.push('')
-						}	
+						}
 					})
-        		
+
                 	this.classifyData = res.data
         		})
         	},
@@ -552,7 +552,7 @@
                 this.imageUrl = res.url
                 // console.log(this.imageUrl)
             },
-        	
+
             setModel () {
                 document.getElementById('editor').innerHTML = ''
             },
@@ -862,7 +862,7 @@
                         })
                     })
                 })
-                
+
                 this.$confirm('生成模板将删除正文所有内容, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -889,15 +889,15 @@
                 	if(item.val&&item.val!==''){
                 		attributesAry.push({
                 			key: item.attributeName,
-							value: item.val,
-							attributeRangeBegin:item.attributeRangeBegin,
-							attributeRangeEnd:item.attributeRangeEnd,
-							attributeType:item.attributeType,
-							editSource:item.editSource,
-							editType:item.editType,
-							sourceType: '7',
-							sourceValue: null,
-							dataType:1
+                      value: item.val,
+                      attributeRangeBegin:item.attributeRangeBegin,
+                      attributeRangeEnd:item.attributeRangeEnd,
+                      attributeType:item.attributeType,
+                      editSource:item.editSource,
+                      editType:item.editType,
+                      sourceType: '7',
+                      sourceValue: null,
+                      dataType:1
                 		})
                 	}
                 })
@@ -905,13 +905,27 @@
                 	this.$message.warning('属性值输入不符合条件，请检查后重新输入');
                 	return
                 }
+
+                let imageUrlChunk
+                if (this.imageUrl === '') {
+                    imageUrlChunk = ''
+                } else {
+                    let chunk = this.imageUrl.split(':')[2]
+                    chunk = chunk.split('/').slice(1).join('/')
+                    imageUrlChunk = '/' + chunk
+                }
                 let data = {
                     operate: method,
                     editReson: '',
                     entryId: '',  // 返回值
                     versionId:'',
                     entryName: vm.entryName,
-                    summary: [{value:JSON.stringify({img: vm.imageUrl,text:vm.summaryEditor.getData()}),sourceType:7,sourceValue: null}],
+                    summary: [
+                      {
+                        value:JSON.stringify({
+                          img: imageUrlChunk,
+                          text:vm.summaryEditor.getData()
+                        }),sourceType:7,sourceValue: null}],
                     categorys: vm.savedCategoriesArr, // 欧阳 - [categoryId，categoryId]
                     attributes: attributesAry, // 进哥 - [{key: keyName,value: value}]
                     content:vm.submitList,
@@ -984,7 +998,7 @@
             saveCategory(){
                 // 处理一下savedCategories数组, 提出来id，重新弄个数组就ok
                 console.log(this.savedMiddleCategories.length)
-                if (this.savedMiddleCategories.length <= 5) { 
+                if (this.savedMiddleCategories.length <= 5) {
                     this.savedCategories = this.savedMiddleCategories//将临时分类数组赋值给页面
                     this.savedCategoriesArr = this.savedCategories.map(x => {return {'categoryId': x.id}})
                     this.savedCategoriesKeysAry = this.savedCategories.map(x => {return x.id})
@@ -1095,7 +1109,7 @@
     .el-tag,.button-new-category {
         min-width: 80px;
         text-align: center;
-    } 
+    }
     .el-tag + .el-tag, .button-new-category {
         margin-left: 10px;
     }
@@ -1200,7 +1214,7 @@
 			}
 			div{
 				display: inline-block;
-				
+
 			}
 		}
    }
@@ -1224,7 +1238,7 @@
 			}
 			div{
 				display: inline-block;
-				
+
 			}
 		}
 	}
@@ -1245,7 +1259,7 @@
 			overflow: hidden;
 		}
 	}
-	
+
     /*----------------------upload---------------------------------------*/
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;

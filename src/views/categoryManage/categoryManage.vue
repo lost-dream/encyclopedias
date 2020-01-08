@@ -503,18 +503,18 @@ export default {
         if (valid) {
           typeof vm.form.parentId == 'object' &&
             (vm.form.parentId = vm.form.parentId[vm.form.parentId.length - 1]) // 默认是数组，提交时取最后一个
-          expanded = [].concat(vm.form.parentId)
+          // expanded = [].concat(vm.form.parentId)
+          expanded = vm.form.parentId
           apiFunc(_.merge({}, vm.form))
             .then(res => {
+                vm.loading = false
               if (res.status === 'success') {
                 this.dialogFormVisible = false
                 this.form = {}
                 this.expanded = expanded
                 this.getTreeData()
-                vm.loading = false
                 this.$message.success('保存成功！')
               } else {
-                vm.loading = false
                 this.$message.error('保存失败，请稍后重试！')
               }
             })

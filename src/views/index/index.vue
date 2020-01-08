@@ -13,13 +13,14 @@
             style="height: 460px;overflow: hidden"
             v-loading="!entryListData.length"
           >
+            <template v-if="entryListData.length > 0">
             <el-carousel-item v-for="(key, i) in entryListData" :key="i" style="display: flex">
               <div v-for="(item, k) in key" :key="k">
                 <div @click="seeEntry(item)" class="entryList ">
                   <el-image
                     class="carousel-image"
                     v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    :src="JSON.parse(item.SUMMARY[0].summary).img"
+                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
                   >
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
@@ -36,6 +37,7 @@
                 </div>
               </div>
             </el-carousel-item>
+            </template>
           </el-carousel>
         </el-col>
         <el-col class="w480">
@@ -200,7 +202,7 @@
             v-for="(value, i) in recommendList"
             :key="i"
             :label="value.name"
-            :name="i + 1 + ''"
+            :name="value.id"
           >
             <div style="display: flex;flex-wrap: wrap" v-if="categoryList && categoryList.length">
               <div
@@ -387,7 +389,8 @@ export default {
         this.panelLoading = false
       })
     },
-    handleClick() {
+    handleClick(tab) {
+      console.log(tab)
       this.panelLoading = true
       this.getCategoryList(this.activeName)
     },
