@@ -425,12 +425,12 @@
 import { audit } from '@/api/entry'
 export default {
   name: 'checkDetail',
-  props: {
+  /*props: {
     detailId: {
       type: String,
       default: ''
     }
-  },
+  },*/
   data() {
     return {
       summaryEditor: '',
@@ -457,13 +457,13 @@ export default {
       viewType: ''
     }
   },
-  watch: {
+ /* watch: {
     detailId (oldVal, newVal) {
       this.init();
     }
-  },
+  },*/
   mounted() {
-    this.init()
+    // this.init()
   },
   updated() {
     this.$nextTick(() => {
@@ -502,18 +502,18 @@ export default {
     /*
     * 初始化
     * */
-    init () {
+    init (detailId) {
       let vm = this
       Cetc10Auth().init(function() {
         /* vm.entryId = vm.$route.query.entryId
         vm.versionId = vm.$route.query.versionId ? vm.$route.query.versionId : ''
         vm.auditShow = sessionStorage.getItem('auditShow') === 'true'*/
-        vm.$axios.post('/wiki-backend/api/entry/info', { id: vm.detailId }).then(res => {
+        vm.$axios.post('/wiki-backend/api/entry/info', { id: detailId }).then(res => {
           vm.wikiInfo = res.data
           vm.versionId = res.data.versionId
           vm.$axios
                   .post('/wiki-backend/api/entry/getByVersionId', {
-                    entryId: vm.detailId,
+                    entryId: detailId,
                     versionId: res.data.versionId
                   })
                   .then(res => {

@@ -79,7 +79,7 @@
       width="80%"
       :before-close="closeDetailDialog"
     >
-      <check-detail :detailId="detailId"></check-detail>
+      <check-detail ref="detailDialog"></check-detail>
     </el-dialog>
   </div>
 </template>
@@ -102,7 +102,7 @@ export default {
       }, // 翻页
       multipleSelection: '', // 多选项
       detailDialog: false, // 弹框
-      detailId: '' // 查看详情的id
+      /*detailId: '' // 查看详情的id*/
     }
   },
   methods: {
@@ -114,8 +114,8 @@ export default {
       this.multipleSelection = ''
       this.taskId = taskId
       let param = {
-        // taskId: taskId,
-        taskId: '201911270001',
+        taskId: taskId,
+        // taskId: '201911270001',
         pageNumber: this.pageOption.page,
         pageSize: this.pageOption.size
       }
@@ -250,7 +250,10 @@ export default {
      * 查看详情
      * */
     checkDetail(row) {
-      this.detailId = row.ID
+     /* this.detailId = row.ID*/
+      this.$nextTick(() => {
+        this.$refs.detailDialog.init(row.ID);
+      })
       this.detailDialog = true
     },
 
