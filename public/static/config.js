@@ -25,7 +25,7 @@ var baseUrlConfig = {
 
   //192
   serviceBaseUrl: 'http://192.168.1.186:8080',
-  // serviceBaseUrl: 'http://192.168.1.179:8080',
+  // serviceBaseUrl: 'http://192.168.1.189:8080',
   IMG_PREFIX: 'http://192.168.1.106:8888',
   UPLOAD_URL: 'http://192.168.1.82:8080/wiki-backend/upload/uploadImg',
   LOGIN_URL: 'http://192.168.1.186:8081/text/aa',

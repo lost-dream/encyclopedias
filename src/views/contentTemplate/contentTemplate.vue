@@ -130,6 +130,7 @@ export default {
     return {
       permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
       dialogVisible: false,
+      indexOfNew: 0, // 未命名新增文件夹个数
       isLoading: false, // 是否加载
       rightLoading: false,
       setTree: [], // 目录树
@@ -151,6 +152,7 @@ export default {
       dialogFormVisible: false, // diag可见性
       initParam: {
         // 新增参数
+        id: '',
         contentName: '新增目录',
         children: []
       },
@@ -163,6 +165,7 @@ export default {
   created() {
     // 初始值
     this.startId = this.NODE_ID_START
+    this.indexOfNew = 0
     this.getCategoryTreeData()
   },
   methods: {
@@ -235,6 +238,8 @@ export default {
         return false
       }
       // 参数修改
+      this.indexOfNew += 1
+      this.initParam.id = this.indexOfNew
       let obj = JSON.parse(JSON.stringify(this.initParam)) // copy参数
       // obj.pid = _data[this.NODE_KEY];// 父id
       // obj[this.NODE_KEY] = --this.startId;// 节点id：逐次递减id
@@ -251,6 +256,8 @@ export default {
     },
     handleAddTop() {
       // 添加顶部节点
+      this.indexOfNew += 1
+      this.initParam.id = this.indexOfNew
       let obj = JSON.parse(JSON.stringify(this.initParam)) // copy参数
       // obj[this.NODE_KEY] = --this.startId;// 节点id：逐次递减id
       this.setTree.push(obj)
@@ -318,7 +325,11 @@ export default {
         })
         .then(res => {
           // console.log(res);
-          res.data && (this.setTree = res.data)
+         if (res.data ) {
+           this.setTree = res.data
+         } else {
+           this.setTree = []
+         }
           this.rightLoading = false
         })
         .catch(e => {
@@ -359,7 +370,6 @@ export default {
     },
     selectTreeNode(obj) {
       // console.log('test',obj,node,vue_comp);
-
       this.currentNode = this.currentNode == obj.id ? '' : obj.id
     }
   }
@@ -519,8 +529,9 @@ export default {
 
     .el-tree {
       padding: 0 20%;
-      height: calc(100% - 160px);
-      overflow: auto;
+      height: max-content;
+      /*height: calc(100% - 160px);
+      overflow: auto;*/
     }
   }
 
@@ -536,9 +547,10 @@ export default {
   position: relative;
 }
 .myTree {
-  height: 300px;
-  min-height: 200px !important;
-  max-height: 600px !important;
+  height: 600px;
+  overflow: auto;
+/*  min-height: 200px !important;
+  max-height: 600px !important;*/
 }
 
 .el-tree /deep/ .el-tree-node__content {
