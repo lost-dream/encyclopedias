@@ -198,8 +198,11 @@ export default {
     },
     handleSuccess(res) {
       this.taskList();
-      if (res.status = 'success') {
-        this.$message('导入成功');
+      if (res.status === 'success') {
+        this.$message({
+          type: 'success',
+          message: '导入成功'
+        });
       }
     },
     /*
@@ -208,7 +211,10 @@ export default {
     freshGet(row) {
       reCrawl(row.id).then(res => {
         if (res.status === 'success') {
-          this.$message('重新抓取成功')
+          this.$message({
+            type: 'success',
+            message: '重新抓取成功'
+          });
         }
       })
     },
