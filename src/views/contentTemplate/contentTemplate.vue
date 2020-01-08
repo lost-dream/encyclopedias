@@ -4,7 +4,7 @@
       <span>目录模板管理</span>
     </h2>
     <div class="flex-box">
-      <div class="left myTree" v-loading="isLoading">
+      <div class="left myTree1" v-loading="isLoading">
         <h3>外部词条</h3>
         <el-tree :data="categoryTree" :props="categoryProps" @node-click="selectCategory"></el-tree>
         <h3 v-if="permission === '0'">内部词条</h3>
@@ -130,6 +130,7 @@ export default {
     return {
       permission: sessionStorage.getItem('nbct'), // 判断权限   0 -- 内部人员  1 -- 外部人员
       dialogVisible: false,
+      indexOfNew: 0, // 未命名新增文件夹个数
       isLoading: false, // 是否加载
       rightLoading: false,
       setTree: [], // 目录树
@@ -151,6 +152,7 @@ export default {
       dialogFormVisible: false, // diag可见性
       initParam: {
         // 新增参数
+        id: '',
         contentName: '新增目录',
         children: []
       },
@@ -163,6 +165,7 @@ export default {
   created() {
     // 初始值
     this.startId = this.NODE_ID_START
+    this.indexOfNew = 0
     this.getCategoryTreeData()
   },
   methods: {
@@ -235,6 +238,8 @@ export default {
         return false
       }
       // 参数修改
+      this.indexOfNew += 1
+      this.initParam.id = this.indexOfNew
       let obj = JSON.parse(JSON.stringify(this.initParam)) // copy参数
       // obj.pid = _data[this.NODE_KEY];// 父id
       // obj[this.NODE_KEY] = --this.startId;// 节点id：逐次递减id
@@ -251,6 +256,8 @@ export default {
     },
     handleAddTop() {
       // 添加顶部节点
+      this.indexOfNew += 1
+      this.initParam.id = this.indexOfNew
       let obj = JSON.parse(JSON.stringify(this.initParam)) // copy参数
       // obj[this.NODE_KEY] = --this.startId;// 节点id：逐次递减id
       this.setTree.push(obj)
@@ -318,7 +325,11 @@ export default {
         })
         .then(res => {
           // console.log(res);
-          res.data && (this.setTree = res.data)
+         if (res.data ) {
+           this.setTree = res.data
+         } else {
+           this.setTree = []
+         }
           this.rightLoading = false
         })
         .catch(e => {
@@ -359,7 +370,6 @@ export default {
     },
     selectTreeNode(obj) {
       // console.log('test',obj,node,vue_comp);
-
       this.currentNode = this.currentNode == obj.id ? '' : obj.id
     }
   }
@@ -380,6 +390,7 @@ export default {
   opacity: 1;
 }
 .pos-rltv {
+    height: 100%;
   position: relative;
 }
 .padding-20 {
@@ -487,7 +498,7 @@ export default {
     font-weight: 400;
     font-size: 26px;
     margin: 0;
-    padding: 20px 0 10px;
+    padding: 24px 0 10px;
     border-bottom: 1px solid #e4e4e4;
   }
 
@@ -518,8 +529,9 @@ export default {
 
     .el-tree {
       padding: 0 20%;
-      height: calc(100% - 160px);
-      overflow: auto;
+      height: max-content;
+      /*height: calc(100% - 160px);
+      overflow: auto;*/
     }
   }
 
@@ -534,9 +546,11 @@ export default {
 /deep/ .comp-tr-node {
   position: relative;
 }
-.myTree .el-tree {
-  min-height: 200px !important;
-  max-height: 600px !important;
+.myTree {
+  height: 500px;
+  overflow: auto;
+/*  min-height: 200px !important;
+  max-height: 600px !important;*/
 }
 
 .el-tree /deep/ .el-tree-node__content {

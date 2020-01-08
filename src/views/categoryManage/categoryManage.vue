@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-rltv  bg-fff">
+  <div class="pos-rltv  bg-fff ctfl">
     <h2 class="page-title">
       <span>词条分类维护</span>
     </h2>
@@ -390,6 +390,7 @@ export default {
     // 获取外部词条分类
     getTreeData() {
       this.isLoading = true
+      this.options = []
       api
         .getTreeData()
         .then(res => {
@@ -586,7 +587,6 @@ export default {
 /deep/ .comp-tr-node--name {
   font-size: 26px !important;
 }
-
 // 显示按钮
 .show-btns {
   opacity: 1;
@@ -627,7 +627,8 @@ export default {
   margin-left: 300px;
   padding-top: 40px;
   border-left: 10px solid #f6fafb;
-  height: calc(100% - 90px);
+  /*height: calc(100% - 90px);*/
+  height: 100%;
 }
 
 .comp-tree {
@@ -675,12 +676,12 @@ export default {
   // 自定义节点
   .comp-tr-node {
     // label
-    .nodelabel {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      width: 110px;
-    }
+    /*.nodelabel {*/
+    /*  overflow: hidden;*/
+    /*  white-space: nowrap;*/
+    /*  text-overflow: ellipsis;*/
+    /*  width: 110px;*/
+    /*}*/
     .comp-tr-node--name {
       display: inline-block;
       line-height: 40px;
@@ -724,4 +725,11 @@ export default {
     }
   }
 }
+</style>
+<style lang="scss">
+  .ctfl{
+    .el-tree-node > .el-tree-node__children{
+      overflow: unset!important;
+    }
+  }
 </style>

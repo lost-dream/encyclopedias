@@ -504,6 +504,10 @@ export default {
     font-size: 26px;
     color: #5a5a5a;
     margin-bottom: 10px;
+    width: 370px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .text-desc {
     padding: 0 0 0 40px;
@@ -971,6 +975,34 @@ body {
   /deep/ .el-tabs__item.is-active {
     background: #eee;
     color: #333333;
+  }
+}
+</style>
+
+<style lang="scss">
+.main-page {
+  .ellipsis3 {
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      word-wrap: break-word;
+    }
+  }
+
+  .ellipsis {
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      word-wrap: break-word;
+    }
   }
 }
 </style>
