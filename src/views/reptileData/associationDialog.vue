@@ -9,6 +9,10 @@
       :data="associationData"
       border
       fit
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
       @selection-change="handleSelectionChange"
       :header-cell-style="{ background: '#ecedf2', color: '#67686d' }"
       style="width: 100%"
@@ -90,6 +94,7 @@ export default {
   data() {
     return {
       taskId: '', // 任务Id
+      loading: true, // 控制加载
       associationData: [], // 表格数据
       pageOption: {
         page: 1,
@@ -109,6 +114,7 @@ export default {
       this.associationData = []
       this.multipleSelection = ''
       this.taskId = taskId
+      this.loading = true
       let param = {
         taskId: taskId,
         // taskId: '201911270001',
@@ -126,8 +132,10 @@ export default {
             }
             this.pageOption.count = res.data.total
           }
+          this.loading = false
         })
         .catch(res => {
+          this.loading = false
           this.$message.error('请求出错，错误原因： ' + res.msg ? res.msg : JSON.stringify(res))
         })
     },
@@ -247,10 +255,10 @@ export default {
      * */
     checkDetail(row) {
       /* this.detailId = row.ID*/
+      this.detailDialog = true
       this.$nextTick(() => {
         this.$refs.detailDialog.init(row.ID);
       })
-      this.detailDialog = true
     },
 
     /*
