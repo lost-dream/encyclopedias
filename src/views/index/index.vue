@@ -14,29 +14,29 @@
             v-loading="!entryListData.length"
           >
             <template v-if="entryListData.length > 0">
-            <el-carousel-item v-for="(key, i) in entryListData" :key="i" style="display: flex">
-              <div v-for="(item, k) in key" :key="k">
-                <div @click="seeEntry(item)" class="entryList ">
-                  <el-image
-                    class="carousel-image"
-                    v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
-                  >
-                    <div slot="error" class="image-slot">
-                      <i class="el-icon-picture-outline"></i>
-                    </div>
-                  </el-image>
-                  <div>
-                    <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
-                    <div
+              <el-carousel-item v-for="(key, i) in entryListData" :key="i" style="display: flex">
+                <div v-for="(item, k) in key" :key="k">
+                  <div @click="seeEntry(item)" class="entryList ">
+                    <el-image
+                      class="carousel-image"
                       v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                      class="ellipsis3"
-                      v-html="JSON.parse(item.SUMMARY[0].summary).text"
-                    ></div>
+                      :src="baseUrlConfig.IMG_PREFIX + JSON.parse(item.SUMMARY[0].summary).img"
+                    >
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
+                    <div>
+                      <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
+                      <div
+                        v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
+                        class="ellipsis3 part-only"
+                        v-html="JSON.parse(item.SUMMARY[0].summary).text"
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </el-carousel-item>
+              </el-carousel-item>
             </template>
           </el-carousel>
         </el-col>
@@ -222,12 +222,10 @@
                   </div>
                 </el-image>
                 <div class="text-desc">
-                  <p class="entry-title">
-                    <span>{{ item.ENTRY_NAME }}</span>
-                  </p>
+                  <p class="entry-title ellipsis1">{{ item.ENTRY_NAME }}</p>
                   <div
                     v-if="item.SUMMARY.length && item.SUMMARY[0].summary"
-                    class="ellipsis"
+                    class="ellipsis part-only"
                     v-html="JSON.parse(item.SUMMARY[0].summary).text"
                   ></div>
                 </div>
@@ -582,18 +580,18 @@ export default {
 }
 .category-item {
   /*padding: 10px 0 10px 15px;*/
-  padding: 17px 0 10px 0px;
+  padding: 17px 0 10px 0;
   border-top: 1px solid #9cc6ec;
   &:nth-child(5) {
     /*border-bottom: none;*/
-    padding-top: 0px;
+    padding-top: 0;
   }
   &:nth-child(6) {
-    padding-top: 0px;
+    padding-top: 0;
     /*border-bottom: none;*/
   }
   &:nth-child(4) {
-    padding-top: 0px;
+    padding-top: 0;
     /*border-bottom: none;*/
   }
   .categoryTreeList {
@@ -656,7 +654,6 @@ export default {
     }
 
     li {
-      font-size: 24px;
       margin: 0;
       padding: 0 12px;
       /*display: inline-block;

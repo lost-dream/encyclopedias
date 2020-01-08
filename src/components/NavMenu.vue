@@ -4,8 +4,6 @@
       <el-menu
         router
         unique-opened
-        @open="handleOpen"
-        @close="handleClose"
         background-color="#5b7dd8"
         text-color="white"
         active-text-color="#ffffff"
@@ -13,13 +11,11 @@
       >
         <!--一级路由-->
         <template v-for="(item, index) in menu">
-          <el-menu-item :key="index" :index="item.componentName">
-            <!-- <el-menu-item
+            <el-menu-item
             :key="index"
             v-if="menuMap.includes(item.value)"
             :index="item.componentName"
-          > -->
-            <!-- TODO 后台管理侧边栏 -->
+          >
             <template slot="title">
               <img style="margin-right: 10px;" :src="item.icon" alt="" />
               <span v-text="item.title"></span>
@@ -33,8 +29,8 @@
             <template slot="title">
               <span v-text="item.name"></span>
             </template>
-            <el-menu-item-group class="over-hide" v-for="sub in item.sub" :key="sub.componentName">
-              <el-menu-item :index="sub.componentName" v-text="sub.name"> </el-menu-item>
+            <el-menu-item-group class="over-hide" v-for="(item, index) in item.sub" :key="index">
+              <el-menu-item :index="item.componentName" v-text="item.name"> </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </template>
@@ -106,14 +102,6 @@ export default {
       ],
       menuMap: JSON.parse(sessionStorage.getItem('user-menu')), // 用来存储有权限展示的 menuList
       currentIndex: ''
-    }
-  },
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath)
     }
   },
   created() {

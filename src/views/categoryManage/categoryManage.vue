@@ -519,8 +519,7 @@ export default {
         if (valid) {
           typeof vm.form.parentId == 'object' &&
             (vm.form.parentId = vm.form.parentId[vm.form.parentId.length - 1]) // 默认是数组，提交时取最后一个
-          // expanded = [].concat(vm.form.parentId)
-          expanded = vm.form.parentId
+          expanded = [].concat(vm.form.parentId)
           apiFunc(_.merge({}, vm.form))
             .then(res => {
                 vm.loading = false
@@ -528,6 +527,7 @@ export default {
                 this.dialogFormVisible = false
                 this.form = {}
                 this.expanded = expanded
+                this.options = [] // 清空级联选择器，以免多次 push
                 this.getTreeData()
                 this.$message.success('保存成功！')
               } else {
@@ -552,6 +552,7 @@ export default {
         })
         .then(res => {
           if (res.status === 'success') {
+            this.options = [] // 清空级联选择器以免多次 push
             this.getTreeData()
             this.$message.success('删除成功！')
           } else {

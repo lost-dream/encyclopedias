@@ -12,7 +12,6 @@
           src="./admin.png"
           alt=""
         />
-        <!-- todo 姓名取那个字段-->
         你好，{{ user.userChineseName }}同志
       </a>
       <a href=""><i class="el-icon-s-home"></i>首页</a>

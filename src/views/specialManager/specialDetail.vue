@@ -194,34 +194,6 @@
       </ul>
 
       <!-- 手动添加 -->
-      <div v-show="activeTab == 2">
-        <el-table class="departTable" :data="entryList" border style="width: 100%">
-          <el-table-column prop="entryName" label="词条名称"></el-table-column>
-          <el-table-column prop="summarys" label="描述"></el-table-column>
-          <el-table-column prop="creator" label="创建人"></el-table-column>
-          <el-table-column label="创建时间">
-            <template slot-scope="scope">
-              {{ parseTime(scope.row.createTime) }}
-            </template>
-          </el-table-column>
-          <el-table-column fixed="right" label="操作">
-            <template slot-scope="scope">
-              <el-button @click="deleteFromSpecial(scope.row)" type="text" size="small"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pagination.page"
-          :page-size="pagination.limit"
-          layout="total, sizes, prev, pager, next"
-          :total="pagination.count"
-        ></el-pagination>
-      </div>
       <div v-show="activeTab == 1">
         <el-table class="departTable" :data="conditionList" border style="width: 100%">
           <el-table-column prop="ENTRY_NAME" label="词条名称"></el-table-column>
@@ -241,6 +213,35 @@
             :page-size="conditionPagination.limit"
             layout="total, sizes, prev, pager, next"
             :total="conditionPagination.count"
+        ></el-pagination>
+      </div>
+
+      <div v-show="activeTab == 2">
+        <el-table class="departTable" :data="entryList" border style="width: 100%">
+          <el-table-column prop="entryName" label="词条名称"></el-table-column>
+          <el-table-column prop="summarys" label="描述"></el-table-column>
+          <el-table-column prop="creator" label="创建人"></el-table-column>
+          <el-table-column label="创建时间">
+            <template slot-scope="scope">
+              {{ parseTime(scope.row.createTime) }}
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="操作">
+            <template slot-scope="scope">
+              <el-button @click="deleteFromSpecial(scope.row)" type="text" size="small"
+              >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pagination.page"
+            :page-size="pagination.limit"
+            layout="total, sizes, prev, pager, next"
+            :total="pagination.count"
         ></el-pagination>
       </div>
       <div style="text-align: center;margin-top: 20px">
@@ -290,7 +291,11 @@
           </el-table-column>-->
 
           <el-table-column prop="title" label="词条名称" width="180"></el-table-column>
-          <el-table-column prop="desc" label="词条描述"></el-table-column>
+          <el-table-column prop="desc" label="词条描述">
+            <template slot-scope="scope">
+              <span v-html="scope.row.desc"></span>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           background
@@ -315,6 +320,8 @@
 import { categoryTree } from '@/api/classifyManager'
 import { parseTimeYMD } from '@/utils/commonMethod'
 import { entryList } from '@/api/onlyShowData'
+import { specialSave } from '@/api/special'
+
 export default {
   name: 'specialManager',
   data() {
@@ -366,10 +373,10 @@ export default {
       showTree: false,
       isEdit: false,
       statusList: [
-        { id: '1', name: '推荐新闻', chosen: true },
-        { id: '2', name: '固有词条' }
+        { id: '2', name: '固有词条',chosen: true },
+        { id: '1', name: '推荐新闻',  }
       ],
-      activeTab: '1'
+      activeTab: '2'
     }
   },
   watch: {},
@@ -523,7 +530,6 @@ export default {
     },
     getSpecialDetail(index) {
       let vm = this
-      console.log(vm.form)
       if (index === 'new') {
         vm.categoryTree()
       } else {
@@ -549,26 +555,24 @@ export default {
       this.form.specialCoverUrl = res.url
     },
     addToSpecial() {
-      let vm = this
       let sort = []
-      vm.entryIds.map((item, index) => {
+      this.entryIds.map((item, index) => {
         sort.push(index + 1)
       })
-      vm.$axios
+      this.$axios
         .post('/wiki-backend/api/specialDemandEntry/save', {
           specialId: this.createEntryId ? this.createEntryId : this.$route.query.id,
           entryIds: this.entryIds.join(','),
           sorts: sort.join(',')
         })
         .then(() => {
-          vm.$message({
+          this.$message({
             showClose: true,
             message: '添加成功',
             type: 'success'
           })
-          vm.getSpecialDetail(vm.specialId)
-          vm.dialogVisible = false
-
+          this.getSpecialDetail(this.specialId)
+          this.dialogVisible = false
         })
     },
     deleteFromSpecial(index) {
@@ -620,7 +624,6 @@ export default {
       vm.form.keyWords = vm.keywords.join(',')
       vm.form.labels = vm.labels.join(',')
       vm.form.categoryIds = vm.categoryIds.join(',')
-      console.log(vm.form, 'update')
       this.$axios.post('/wiki-backend/api/special/update', vm.form).then(res => {
         vm.$router.replace({ name: 'specialManager' })
         vm.getSpecialEntryList()
@@ -632,14 +635,14 @@ export default {
         vm.dialogVisible = false
         vm.keywords = []
         vm.labels = []
-        vm.form = {
-          specialName: '',
-          specialDesc: '',
-          categoryIds: '',
-          keyWords: '',
-          labels: '',
-          specialCoverUrl: ''
-        }
+        // vm.form = {
+        //   specialName: '',
+        //   specialDesc: '',
+        //   categoryIds: '',
+        //   keyWords: '',
+        //   labels: '',
+        //   specialCoverUrl: ''
+        // }
       })
     },
     createNewSpecial() {
@@ -655,10 +658,10 @@ export default {
       //   this.$message.error('请上传专题封面')
       //   return
       // }
-      if (this.form.specialDesc === '') {
-        this.$message.error('请填写专题描述')
-        return
-      }
+      // if (this.form.specialDesc === '') {
+      //   this.$message.error('请填写专题描述')
+      //   return
+      // }
 
 
 
@@ -667,7 +670,7 @@ export default {
       this.form.categoryIds = this.categoryIds.join(',')
       if (this.form.id) delete this.from.id
 
-      this.$axios.post('/wiki-backend/api/special/save', this.form).then(res => {
+      specialSave(this.form).then(() => {
         this.$router.replace({ name: 'specialManager' })
         this.getSpecialEntryList()
         this.$message({
@@ -678,14 +681,14 @@ export default {
         this.dialogVisible = false
         this.keywords = []
         this.labels = []
-        this.form = {
-          specialName: '',
-          specialDesc: '',
-          categoryIds: '',
-          keyWords: '',
-          labels: '',
-          specialCoverUrl: ''
-        }
+        // this.form = {
+        //   specialName: '',
+        //   specialDesc: '',
+        //   categoryIds: '',
+        //   keyWords: '',
+        //   labels: '',
+        //   specialCoverUrl: ''
+        // }
       })
     },
     addEntry() {
@@ -701,10 +704,10 @@ export default {
       //   this.$message.error('请上传专题封面')
       //   return
       // }
-      if (this.form.specialDesc === '') {
-        this.$message.error('请填写专题描述')
-        return
-      }
+      // if (this.form.specialDesc === '') {
+      //   this.$message.error('请填写专题描述')
+      //   return
+      // }
 
       this.form.keyWords = this.keywords.join(',')
       this.form.labels = this.labels.join(',')
@@ -719,14 +722,14 @@ export default {
           if (res.status === 'success') {
             this.keywords = []
             this.labels = []
-            this.form = {
-              specialName: '',
-              specialDesc: '',
-              categoryIds: '',
-              keyWords: '',
-              labels: '',
-              specialCoverUrl: ''
-            }
+            // this.form = {
+            //   specialName: '',
+            //   specialDesc: '',
+            //   categoryIds: '',
+            //   keyWords: '',
+            //   labels: '',
+            //   specialCoverUrl: ''
+            // }
 
             this.dialogVisible = true
             this.createEntryId = res.data // 创建的词条生成的 id
@@ -739,14 +742,14 @@ export default {
           if (res.status === 'success') {
             this.keywords = []
             this.labels = []
-            this.form = {
-              specialName: '',
-              specialDesc: '',
-              categoryIds: '',
-              keyWords: '',
-              labels: '',
-              specialCoverUrl: ''
-            }
+            // this.form = {
+            //   specialName: '',
+            //   specialDesc: '',
+            //   categoryIds: '',
+            //   keyWords: '',
+            //   labels: '',
+            //   specialCoverUrl: ''
+            // }
 
             this.dialogVisible = true
             this.createEntryId = res.data // 创建的词条生成的 id
