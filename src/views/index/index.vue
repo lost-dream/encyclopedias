@@ -506,6 +506,10 @@ export default {
     font-size: 26px;
     color: #5a5a5a;
     margin-bottom: 10px;
+    width: 370px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .text-desc {
     padding: 0 0 0 40px;
