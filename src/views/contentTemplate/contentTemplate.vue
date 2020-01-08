@@ -380,6 +380,7 @@ export default {
   opacity: 1;
 }
 .pos-rltv {
+    height: 100%;
   position: relative;
 }
 .padding-20 {
