@@ -487,7 +487,7 @@ export default {
     font-weight: 400;
     font-size: 26px;
     margin: 0;
-    padding: 20px 0 10px;
+    padding: 24px 0 10px;
     border-bottom: 1px solid #e4e4e4;
   }
 
@@ -535,8 +535,8 @@ export default {
   position: relative;
 }
 .myTree .el-tree {
-  min-height: 200px !important;
-  max-height: 600px !important;
+  /*min-height: 200px !important;*/
+  /*max-height: 600px !important;*/
 }
 
 .el-tree /deep/ .el-tree-node__content {
