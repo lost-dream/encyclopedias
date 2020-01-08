@@ -83,10 +83,17 @@
         <!-- 词条属性的前两个，写死-->
         <ul class="entry-attr">
           <li v-for="i in 2" :key="i">
-            <div class="key">{{ wikiContent.entryAttributes[i-1].key }}</div>
-            <div class="value">{{ wikiContent.entryAttributes[i-1].value }}</div>
+            <div class="key">{{ wikiContent.entryAttributes[i - 1].key }}</div>
+            <div class="value">{{ wikiContent.entryAttributes[i - 1].value }}</div>
           </li>
         </ul>
+
+        <!--                <ul class="entry-attr">-->
+        <!--                  <li v-for="(item, i) in wikiContent.entryAttributes" :key="i">-->
+        <!--                    <div class="key">{{ item.key }}</div>-->
+        <!--                    <div class="value">{{ item.value }}</div>-->
+        <!--                  </li>-->
+        <!--                </ul>-->
         <!-- 循环剩下的属性 -->
         <ul
           class="entry-attr"
@@ -390,7 +397,6 @@
             <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
           </div>
           <div id="rightNav" class="rightNav" style="max-height: 310px;overflow-y: scroll">
-
             <!--<a @click="slideToAnchor('summary')" class="catalogue pd-left-10">摘要</a>
             <a @click="slideToAnchor('catalogue')" class="catalogue pd-left-10">目录</a>
             <a @click="slideToAnchor('attribute')" class="catalogue pd-left-10">词条属性</a>-->
@@ -526,8 +532,6 @@ export default {
         })
       }
     })
-    let lemma = document.getElementsByClassName('lemma-map')
-    console.log(9898, lemma)
   },
   updated() {
     this.$nextTick(() => {

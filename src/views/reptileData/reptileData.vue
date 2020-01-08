@@ -66,7 +66,7 @@
     <el-dialog
       title="关联词列表"
       :visible.sync="associationDialog"
-      width="80%"
+      width="90%"
       :before-close="CloseAssociationDialog"
     >
       <span slot="title">
@@ -78,7 +78,7 @@
     <el-dialog
       title="启动词列表"
       :visible.sync="launchDialog"
-      width="80%"
+      width="90%"
       :before-close="CloseLaunchDialog"
     >
       <span slot="title">
@@ -130,7 +130,7 @@ export default {
   },
   data() {
     return {
-      reptileData: [],
+      reptileData: [{}],
       fileList: [],
       associationDialog: false,
       launchDialog: false,
@@ -198,8 +198,11 @@ export default {
     },
     handleSuccess(res) {
       this.taskList();
-      if (res.status = 'success') {
-        this.$message('导入成功');
+      if (res.status === 'success') {
+        this.$message({
+          type: 'success',
+          message: '导入成功'
+        });
       }
     },
     /*
@@ -208,7 +211,10 @@ export default {
     freshGet(row) {
       reCrawl(row.id).then(res => {
         if (res.status === 'success') {
-          this.$message('重新抓取成功')
+          this.$message({
+            type: 'success',
+            message: '重新抓取成功'
+          });
         }
       })
     },

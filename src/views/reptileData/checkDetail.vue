@@ -425,12 +425,12 @@
 import { audit } from '@/api/entry'
 export default {
   name: 'checkDetail',
-  props: {
+  /*props: {
     detailId: {
       type: String,
       default: ''
     }
-  },
+  },*/
   data() {
     return {
       summaryEditor: '',
@@ -457,28 +457,13 @@ export default {
       viewType: ''
     }
   },
+ /* watch: {
+    detailId (oldVal, newVal) {
+      this.init();
+    }
+  },*/
   mounted() {
-    let vm = this
-    Cetc10Auth().init(function() {
-      /* vm.entryId = vm.$route.query.entryId
-      vm.versionId = vm.$route.query.versionId ? vm.$route.query.versionId : ''
-      vm.auditShow = sessionStorage.getItem('auditShow') === 'true'*/
-
-      vm.$axios.post('/wiki-backend/api/entry/info', { id: vm.detailId }).then(res => {
-        vm.wikiInfo = res.data
-        vm.versionId = res.data.versionId
-        vm.$axios
-          .post('/wiki-backend/api/entry/getByVersionId', {
-            entryId: vm.detailId,
-            versionId: res.data.versionId
-          })
-          .then(res => {
-            vm.handleEntryDetail(res)
-          })
-      })
-    })
-    let lemma = document.getElementsByClassName('lemma-map')
-    console.log(9898, lemma)
+    // this.init()
   },
   updated() {
     this.$nextTick(() => {
@@ -514,6 +499,31 @@ export default {
     next()
   },
   methods: {
+    /*
+    * 初始化
+    * */
+    init (detailId) {
+      let vm = this
+      Cetc10Auth().init(function() {
+        /* vm.entryId = vm.$route.query.entryId
+        vm.versionId = vm.$route.query.versionId ? vm.$route.query.versionId : ''
+        vm.auditShow = sessionStorage.getItem('auditShow') === 'true'*/
+        vm.$axios.post('/wiki-backend/api/entry/info', { id: detailId }).then(res => {
+          vm.wikiInfo = res.data
+          vm.versionId = res.data.versionId
+          vm.$axios
+                  .post('/wiki-backend/api/entry/getByVersionId', {
+                    entryId: detailId,
+                    versionId: res.data.versionId
+                  })
+                  .then(res => {
+                    vm.handleEntryDetail(res)
+                  })
+        })
+      })
+      let lemma = document.getElementsByClassName('lemma-map')
+    },
+
     //处理词条详情
     handleEntryDetail(res) {
       let vm = this

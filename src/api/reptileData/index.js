@@ -22,6 +22,17 @@ export function listEntryAssWord(data) {
 }
 
 /*
+ * 获取关联词列表
+ * */
+export function registrySourceEntryWords(data) {
+  return request({
+    url: '/wiki-backend/api/sourceEntry/registrySourceEntryWords',
+    method: 'post',
+    data
+  })
+}
+
+/*
  * 获取爬虫任务管理列表
  * */
 export function taskList(data) {
@@ -43,6 +54,8 @@ export function reCrawl(data) {
 }
 export default {
   listEntryStartWord,
+  listEntryAssWord,
   taskList,
-  reCrawl,
+  registrySourceEntryWords,
+  reCrawl
 }

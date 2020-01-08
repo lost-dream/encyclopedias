@@ -306,6 +306,8 @@ export default {
         .then(res => {
           if (res.data.records && res.data.records.length) {
             this.dataSourceList = res.data.records
+          } else {
+            this.dataSourceList = []
           }
           this.pagination.count = res.data.total
         })
