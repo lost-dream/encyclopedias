@@ -1,3 +1,3 @@
 .part-only p:nth-child(n+2){
-  display: none;
+  display: none !important;
 }

@@ -632,7 +632,6 @@ export default {
     line-height: 1.5;
     color: white;
     text-align: center;
-    /*box-shadow: 0 2px 5px 1px #848484;*/
     margin-left: 10px;
     margin-bottom: 5px;
     margin-top: 10px;
@@ -641,19 +640,16 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: inline-block;
+    display: flex;
     height: 165px;
-    // height: 200px;
     width: 400px;
-    /*border-right: 1px solid #ccc;*/
 
     ul {
       height: 165px;
-      display: inline-block;
-      width: calc(33% - 1px);
+      flex: 1;
       border-right: 1px solid #c9cdce;
-      &:nth-child(2n + 3) {
-        border-right: none;
+      &:last-child {
+        border: none;
       }
     }
 
@@ -961,8 +957,7 @@ body {
   overflow-x: hidden;
 }
 .el-tabs {
-  height: 354px;
-  padding-bottom: 40px;
+  padding-bottom: 0;
   /deep/ .el-tabs__item {
     // margin-top: 15px;
     font-weight: bold;

@@ -629,8 +629,6 @@ export default {
       }
     },
     initSummaryEditor() {
-      var vm = this
-      // const ft = new FocusTracker()
       CKEditor.create(document.querySelector('#summaryEditor'), {
         language: 'zh-cn',
         ckfinder: {
@@ -654,34 +652,32 @@ export default {
       });
     },
     initCKEditor() {
-      var vm = this
-      // const ft = new FocusTracker()
-      if (!this.isInit) {
-        CKEditor.create(document.querySelector('#editor'), {
-          language: 'zh-cn',
-          ckfinder: {
-            uploadUrl: this.baseUrlConfig.UPLOAD_URL
-            //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
+      const vm = this
+      if (this.isInit) return
+
+      CKEditor.create(document.querySelector('#editor'), {
+        language: 'zh-cn',
+        ckfinder: {
+          uploadUrl: this.baseUrlConfig.UPLOAD_URL
+          //后端处理上传逻辑返回json数据,包括uploaded(选项true/false)和url两个字段
+        }
+      }).then(editor => {
+        const toolbarContainer = document.querySelector('#toolbar');
+        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+        this.editor = editor //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
+        vm.updateEditorContent()
+        editor.editing.view.document.on("change:isFocused", (evt, name, value) => {
+          if (value) {
+            return false
+          } else {
+            vm.updateEditorContent()
           }
-        }).then(editor => {
-          const toolbarContainer = document.querySelector('#toolbar');
-          toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-          this.editor = editor //将编辑器保存起来，用来随时获取编辑器中的内容等，执行一些操作
-          vm.updateEditorContent()
-          editor.editing.view.document.on("change:isFocused", (evt, name, value) => {
-            if (value) {
-              return false
-            } else {
-              vm.updateEditorContent()
-            }
-          })
-        }).catch(error => {
-          console.error(error);
-        });
-        this.isInit = true
-      } else {
-        return false
-      }
+        })
+      }).catch(error => {
+        throw error
+      });
+      this.isInit = true
+
     },
     updateEditorContent(){
       let vm = this

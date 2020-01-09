@@ -21,8 +21,9 @@
             type="primary"
             size="small"
             @click="handleAddTop"
-            >添加一级目录<i class="el-icon-plus el-icon--right"></i
-          ></el-button>
+          >
+            添加一级目录<i class="el-icon-plus el-icon--right"></i>
+          </el-button>
         </div>
         <!-- tree -->
         <div class="myTree">
@@ -80,7 +81,8 @@
 	                  @click="handleDelete(node, data)"></el-button>
 	              </span>-->
                 <!--换成弹窗形式-->
-                <span class="comp-tr-node--btns" v-show="currentNode == data.id">
+                <span class="comp-tr-node--btns" v-show="currentNode === data.id">
+<!--                <span class="comp-tr-node&#45;&#45;btns" v-show="currentNode - data.id === 0">-->
                   <i class="el-icon-caret-left el-icon--left"></i>
                   <span class="btn" @click="handleAdd(node, data)">添加子目录</span>
                   <span class="btn" @click="handleEdit(node, data)">修改目录</span>
@@ -95,8 +97,9 @@
             style="background: #cccccc !important;color: black;border: none;margin-right: 40px;"
             @click="dialogVisible = true"
             type="primary"
-            >取消</el-button
           >
+            取消
+          </el-button>
           <el-button
             style="background: #587dda !important;color: white;"
             type="success"
