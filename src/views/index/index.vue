@@ -147,7 +147,7 @@
             </div>
 
             <!-- 内部词条 -->
-            <div v-if="innerTreeList && innerTreeList.length > 0">
+            <div v-if="permission === '0' && innerTreeList && innerTreeList.length > 0">
               <p class="categoryOrigin">
                 <i class="el-icon-caret-bottom el-icon--left"></i>内部词条
               </p>
@@ -252,6 +252,7 @@ export default {
   name: 'index',
   data() {
     return {
+      permission: sessionStorage.getItem('nbct'),
       loading: true,
       panelLoading: true,
       userData: JSON.parse(sessionStorage.getItem('user')),

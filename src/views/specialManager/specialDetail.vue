@@ -506,11 +506,11 @@ export default {
       //     this.conditionPagination.count = res.data.total
       //   })
     },
-    getSpecialEntryList() {
+    getSpecialEntryList(id) {
       let vm = this
       this.$axios
         .post('/wiki-backend/api/specialDemandEntry/list', {
-          specialId: vm.specialId,
+          specialId: id ? id : vm.specialId,
           pageNumber: vm.pagination.page,
           pageSize: vm.pagination.limit
         })
@@ -571,15 +571,20 @@ export default {
             message: '添加成功',
             type: 'success'
           })
+
+          const id = this.createEntryId ? this.createEntryId : this.$route.query.id
+          this.getSpecialEntryList(id)
           this.getSpecialDetail(this.specialId)
           this.dialogVisible = false
         })
     },
     deleteFromSpecial(index) {
       let vm = this
+      const id = this.createEntryId ? this.createEntryId : this.$route.query.id
       vm.$axios
         .post('/wiki-backend/api/specialDemandEntry/delete', {
-          id: index.id
+          id: index.id,
+          specialId: id
         })
         .then(() => {
           vm.$message({
@@ -587,7 +592,7 @@ export default {
             message: '删除成功',
             type: 'success'
           })
-          vm.getSpecialEntryList(vm.specialId)
+          vm.getSpecialEntryList(id)
         })
     },
     entrySearchList() {
