@@ -46,7 +46,7 @@ export function getRecommendClass(data) {
 //获取词条详情
 export function getEntryDetail(data) {
   return request({
-    url: '/wiki-backend/api/entry/list2',
+    url: '/wiki-backend/api/entry/list4',
     method: 'post',
     data
   })

@@ -387,8 +387,7 @@ export default {
         this.panelLoading = false
       })
     },
-    handleClick(tab) {
-      console.log(tab)
+    handleClick() {
       this.panelLoading = true
       this.getCategoryList(this.activeName)
     },

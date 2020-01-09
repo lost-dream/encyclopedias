@@ -1,3 +1,26 @@
-.part-only p:nth-child(n+2){
+/* 词条描述可能出现多段的情况，添加 .part-only 让他只显示第一段文字 */
+.part-only p:nth-child(n+2) {
   display: none !important;
+}
+
+/* 富文本编辑器 -- 转为对应的 ul / ol 时需要原生的列表样式，添加 .rich-text-wrapper 使初始化样式失效 */
+.rich-text-wrapper ul {
+  list-style: disc;
+  margin: 1em 0;
+  padding-left: 40px;
+}
+.rich-text-wrapper ul li {
+  list-style: disc;
+  margin: 1em 0;
+}
+
+.rich-text-wrapper ol {
+  list-style: decimal;
+  margin: 1em 0;
+  padding-left: 40px;
+}
+
+.rich-text-wrapper ol li {
+  list-style: decimal;
+  margin: 1em 0;
 }

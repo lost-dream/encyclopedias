@@ -274,6 +274,7 @@ h2 {
 }
 
 ul,
+ol,
 li,
 p {
   list-style: none;

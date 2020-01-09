@@ -60,7 +60,7 @@
             </el-upload>
             <span style="text-align: center;color: #aaa;font-size: 14px;padding-top: 10px">词条主图片</span>
           </div>
-          <div style="display: flex;flex-direction: column;margin-left: 10px">
+          <div class="rich-text-wrapper" style="display: flex;flex-direction: column;margin-left: 10px">
             <div id="summaryToolbar"></div>
             <div id="summaryEditor" class="ck-summary"></div>
           </div>
@@ -161,8 +161,10 @@
       <!-- 正文 -->
       <div class="mg-top-20">
         <h4 class="block">正文</h4>
-        <div id="toolbar"></div>
-        <div id="editor"></div>
+        <div class="rich-text-wrapper">
+          <div id="toolbar"></div>
+          <div id="editor"></div>
+        </div>
       </div>
       <!-- 引用 -->
       <div class="mg-top-20">
