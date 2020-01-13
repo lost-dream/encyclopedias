@@ -54,7 +54,7 @@ export default {
   },
   created() {
     this.content = sessionStorage.getItem('searchContent')
-    this.userName = sessionStorage.getItem('userName')
+    this.userName = JSON.parse(sessionStorage.getItem('userName')).userChineseName
   },
 
   methods: {

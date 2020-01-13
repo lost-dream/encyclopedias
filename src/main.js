@@ -9,10 +9,6 @@ import axios from './utils/axios'
 //import '@ckeditor/ckeditor5-build-decoupled-document'
 //import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
 
-import CKEditor from '@ckeditor/ckeditor5-vue'
-
-Vue.use( CKEditor )
-
 Vue.prototype.baseUrlConfig = window.baseUrlConfig
 
 Vue.prototype.$axios = axios

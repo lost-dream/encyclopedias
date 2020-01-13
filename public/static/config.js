@@ -28,8 +28,8 @@ var baseUrlConfig = {
   // CETC
   // serviceBaseUrl: 'http://192.168.0.35:8080',
   // IMG_PREFIX: 'http://192.168.0.35:8888',
-  // UPLOAD_URL: 'http://192.168.0.35:22122/wiki-backend/upload/uploadImg',
-  // LOGIN_URL: 'http://192.168.1.186:8081/text/aa'
+  // UPLOAD_URL: 'http://192.168.0.35:8080/wiki-backend/upload/uploadImg',
+  // LOGIN_URL: 'http://192.168.0.31:10002/#/login'
 
   // TEST
   // serviceBaseUrl: 'http://192.168.1.82:8080',
@@ -37,5 +37,4 @@ var baseUrlConfig = {
   // UPLOAD_URL: 'http://192.168.1.82:8080/wiki-backend/upload/uploadImg',
   // LOGIN_URL: 'http://192.168.1.186:8081/text/aa',
   // UPLOAD_URL1: 'http://192.168.1.189:8080/wiki-backend/api/backendTask/importTask'
-
 }

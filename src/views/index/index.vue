@@ -69,7 +69,7 @@
             <div class="rightBtnArea">
               <el-button @click="gotoCreate">创建词条</el-button>
               <el-button @click="gotoMyEntry">我的词条</el-button>
-              <el-button @click="gotoManager">后台管理</el-button>
+              <el-button @click="gotoManager" v-if="permission === '0'">后台管理</el-button>
             </div>
           </div>
         </el-col>
@@ -246,13 +246,14 @@ import {
   getRecommendClass
 } from '@/api/onlyShowData'
 import { specialList } from '@/api/special'
+import { getMenuTree } from '@/api/user'
 import { categoryTree, getInternalEntryList } from '@/api/classifyManager'
 
 export default {
   name: 'index',
   data() {
     return {
-      permission: sessionStorage.getItem('nbct'),
+      permission: null,
       loading: true,
       panelLoading: true,
       userData: JSON.parse(sessionStorage.getItem('user')),
@@ -275,7 +276,7 @@ export default {
         pageSize: '9',
         categoryId: '',
         keyword: '',
-        nbct: sessionStorage.getItem('nbct')
+        nbct: this.permission
       }).then(res => {
         for (let i = 0; i < res.data.records.length; i += 3) {
           this.entryListData.push(res.data.records.slice(i, i + 3))
@@ -352,14 +353,14 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         keyword: '',
-        nbct: sessionStorage.getItem('nbct')
+        nbct: this.permission
       }).then(res => {
         this.specialListData = res.data.records
       })
     },
     entryStatistical() {
       entryStatistical({
-        nbct: sessionStorage.getItem('nbct')
+        nbct: '0'
       }).then(res => {
         this.entryStatisticalData = res.data
         this.$nextTick(() => {
@@ -428,7 +429,7 @@ export default {
     // 获取分类推荐列表 && 加载第一组数据
     getRecommendList() {
       getRecommendClass({
-        nbct: sessionStorage.getItem('nbct')
+        nbct: this.permission
       }).then(res => {
         if (res.status === 'success') {
           this.recommendList = res.data.reduce((arr, item) => {
@@ -448,13 +449,36 @@ export default {
     }
   },
   created() {
-    Cetc10Auth().init(() => {
-      this.entryStatistical()
-      this.specialList()
-      this.categoryTree()
-      this.getInternalEntryListData()
-      this.getEntryList()
-      this.getRecommendList()
+    const token = sessionStorage.getItem('token')
+
+    Cetc10Auth().init()
+    getMenuTree({
+      Authorization: token
+    }).then(res => {
+      if (res.status === 0) {
+        const data = res.data
+        // 取用来判断目录权限的字段值（example:value）插入 map 中，用来判断本地 menu 是否有权限显示出来；取判断读取内部词条权限的字段，判断用户是否有资格操作内部词条（有：nbtc: 0;无：nbtc: 1）
+        const backendData = data.authTree.menu
+        let backendMenu,
+          backendEntry = '1'
+        backendData.map(value => {
+          if (value.name.includes('内部词条')) {
+            backendEntry = '0'
+          }
+        })
+
+        sessionStorage.setItem('nbct', backendEntry)
+        this.permission = backendEntry
+
+        this.entryStatistical()
+        this.specialList()
+        this.categoryTree()
+        this.getInternalEntryListData()
+        this.getEntryList()
+        this.getRecommendList()
+      } else {
+        this.$message.error(res.msg)
+      }
     })
   }
 }
@@ -506,7 +530,7 @@ export default {
     margin-bottom: 10px;
     width: 370px;
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
   .text-desc {
@@ -794,6 +818,8 @@ export default {
   /*background: #f6fafb;*/
   margin: auto;
   position: relative;
+  display: flex;
+  justify-content: center;
   &/deep/ img {
     width: 100%;
     height: 200px;
